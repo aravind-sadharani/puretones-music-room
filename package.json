@@ -27,11 +27,14 @@
     "gatsby-plugin-sharp": "^3.8.0",
     "gatsby-plugin-sitemap": "^4.4.0",
     "gatsby-plugin-styled-components": "^4.8.0",
+    "gatsby-plugin-typography": "^3.8.0",
     "gatsby-source-filesystem": "^3.8.0",
     "gatsby-transformer-sharp": "^3.8.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-helmet": "^6.1.0",
-    "styled-components": "^5.3.0"
+    "react-typography": "^0.16.20",
+    "styled-components": "^5.3.0",
+    "typography": "^0.16.21"
   }
 }
