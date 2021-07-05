@@ -9,12 +9,9 @@ const HeaderElement = styled.header`
     border-radius: 1vmin;
     h1 {
         margin: 0;
-        padding: 0.18em;
+        padding: 0.22em;
         color: #F76F8E;
-        font-size: 2.7em;
-    }
-    a {
-        text-decoration: none;
+        font-size: 3em;
     }
     h1 img {
         margin-right: 10px;
