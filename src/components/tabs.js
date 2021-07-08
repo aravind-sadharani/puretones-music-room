@@ -57,7 +57,10 @@ class TabNav extends React.Component {
     }
 
     activateTab = (e) => {
-        let activeIndex = this.props.tablist.findIndex((s) => (s===e.target.id))
+        let activeIndex = this.props.tablist.findIndex((s) => {
+            let key = s.type ? s.type.name : s
+            return `tab_${key}` === e.target.id
+        })
         this.setState({activeTab: this.props.tablist[activeIndex], activePage: this.props.pagelist[activeIndex]})
     }
 
@@ -65,15 +68,17 @@ class TabNav extends React.Component {
         let tablist = this.props.tablist
         let TabComponentList = tablist.map(s => {
             let active = (s === this.state.activeTab) ? "active" : ""
+            let key = s.type ? s.type.name : s
             return (
-                <TabElement className={active} key={s} id={s} onClick={(e) => this.activateTab(e)}>{s}</TabElement>
+                <TabElement className={active} key={`tab_${key}`} id={`tab_${key}`} onClick={(e) => this.activateTab(e)}>{s}</TabElement>
             )
         })
         let pagelist = this.props.pagelist
         let TabPageList = pagelist.map(s => {
             let active = (s === this.state.activePage) ? "active" : ""
+            let key = s.type ? s.type.name : s
             return (
-                <TabPageElement className={active} key={s} id={s}>{s}</TabPageElement>
+                <TabPageElement className={active} key={`page_${key}`} id={`page_${key}`}>{s}</TabPageElement>
             )
         })
         return(
