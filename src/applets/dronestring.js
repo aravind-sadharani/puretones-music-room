@@ -1,6 +1,8 @@
 import * as React from "react"
 import Selector from "../components/selector"
 import Slider from "../components/slider"
+import ShowHideControls from "../components/showhidecontrols"
+import DroneStringTimbre from "./dronestringtimbre"
 
 let stringSelectParams = {
     key: "Note",
@@ -100,6 +102,9 @@ const DroneString = ({title,note}) => {
             <Slider params={ultraFineTuneParams}></Slider>
             <Slider params={varianceParams}></Slider>
             <Slider params={gainParams}></Slider>
+            <ShowHideControls title="Timbre">
+              <DroneStringTimbre title={title}/>
+            </ShowHideControls>
         </>
     )
 }

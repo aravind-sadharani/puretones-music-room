@@ -64,7 +64,7 @@ class TabNav extends React.Component {
         this.setState({activeTab: this.props.tablist[activeIndex], activePage: this.props.pagelist[activeIndex]})
     }
 
-    render() {
+    render = () => {
         let tablist = this.props.tablist
         let TabComponentList = tablist.map(s => {
             let active = (s === this.state.activeTab) ? "active" : ""
@@ -80,7 +80,7 @@ class TabNav extends React.Component {
                 <TabPageElement className={active} key={`page_${s}`} id={`page_${s}`}>{tabPage}</TabPageElement>
             )
         })
-        return(
+        return (
             <>
                 <TabBarElement numtabs={tablist.length}>
                     {TabComponentList}
