@@ -15,6 +15,7 @@ const mainNavTabs = ['Drone', 'Scale', 'Sequencer']
 const mainNavPages = [<Drone /> , <Scale />, <Sequencer />]
 const selectProps = {
   key: "Key",
+  default: 3,
   options: [
     {
       value: "14",

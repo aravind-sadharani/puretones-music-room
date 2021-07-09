@@ -5,6 +5,7 @@ import Selector from "../components/selector"
 const stringTabs = ['String 1', 'String 2', 'String 3', 'String 4', 'String 5', 'String 6']
 const octaveList = {
     key: "Octave",
+    default: 0,
     options: [
         {
             value: -1,

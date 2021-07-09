@@ -55,17 +55,18 @@ const SliderKey = styled.span`
 class Slider extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {value: this.props.params.init}
+        this.state = {value: props.params.init}
     }
 
     changeValue = (value) => this.setState({value: value})
 
     render = () => {
+        let {key,max,min,step} = this.props.params
         return (
             <SliderContainer>
-                <SliderKey>{this.props.params.key}</SliderKey>
+                <SliderKey>{key}</SliderKey>
                 <SliderNumber type="number" value={this.state.value} onInput={(e) => this.changeValue(e.target.value)}></SliderNumber>
-                <SliderRange type="range" min={this.props.params.min} max={this.props.params.max} step={this.props.params.step} value={this.state.value} onInput={(e) => this.changeValue(e.target.value)}></SliderRange>
+                <SliderRange type="range" min={min} max={max} step={step} value={this.state.value} onInput={(e) => this.changeValue(e.target.value)}></SliderRange>
             </SliderContainer>
         )
     }

@@ -36,16 +36,26 @@ const OptionElement = styled.option`
 const SelectKey = styled.span`
 `
 
-const Selector = ({params}) => {
-    let options = params.options
-    let OptionList = options.map(option => <OptionElement key={`key_${option.text}`} value={option.value}>{option.text}</OptionElement>)
-    return (
-        <SelectContainer>
-            <SelectKey>{params.key}</SelectKey>
-            <SelectElement>
-                {OptionList}
-            </SelectElement>
-        </SelectContainer>
-    )
+class Selector extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {value: props.params.default}
+    }
+
+    changeValue = (value) => this.setState({value: value})
+
+    render = () => {
+        let {key,options} = this.props.params
+        let OptionList = options.map(option => <OptionElement key={`key_${option.text}`} value={option.value}>{option.text}</OptionElement>)
+        return (
+            <SelectContainer>
+                <SelectKey>{key}</SelectKey>
+                <SelectElement value={this.state.value} onChange={(e) => this.changeValue(e.target.value)}>
+                    {OptionList}
+                </SelectElement>
+            </SelectContainer>
+        )
+    }
 }
+
 export default Selector
