@@ -89,8 +89,11 @@ const IndexPage = () => (
         </h1>
       </Link>
     </Header>
+    <p><strong>Common Parameters</strong></p>
+    <br />
     <Selector params={selectProps}></Selector>
     <Slider params={sliderProps}></Slider>
+    <br />
     <TabNav tablist={mainNavTabs} pagelist={mainNavPages}></TabNav>
     <Footer>
       <p>Developed by <a href="https://www.sadharani.com">Sadharani</a></p>

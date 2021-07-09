@@ -2,8 +2,7 @@ import * as React from "react"
 
 const Sequencer = () => (
     <>
-        Sequencer Page
-        <br />
+        <p><strong>Sequencer Parameters</strong></p>
         <br />
     </>
 )

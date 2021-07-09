@@ -10,7 +10,7 @@ const ContainerElement = styled.div`
         padding: 0;
     }
     p {
-        padding: 1vmin 3vmin;
+        padding: 1vmin 2vmin;
     }
     a {
         font-weight: 700;

@@ -4,8 +4,7 @@ import TabNav from "../components/tabs"
 const scaleTabs = ['Sa', 're', 'Re', 'ga', 'Ga', 'ma', 'Ma', 'Pa', 'dha', 'Dha', 'ni', 'Ni', 'SA']
 const Scale = () => (
     <>
-        Scale Page
-        <br />
+        <p><strong>Scale Parameters</strong></p>
         <br />
         <TabNav tablist={scaleTabs} pagelist={scaleTabs}></TabNav>
     </>
