@@ -9,7 +9,7 @@ const SelectContainer = styled.div`
 `
 
 const SelectElement = styled.select`
-    padding: 0 4px;
+    padding: 0 6px;
     border-color: #e6e6eb;
     outline-color: #333366;
     -webkit-appearance: none;
