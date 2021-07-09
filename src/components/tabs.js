@@ -68,17 +68,16 @@ class TabNav extends React.Component {
         let tablist = this.props.tablist
         let TabComponentList = tablist.map(s => {
             let active = (s === this.state.activeTab) ? "active" : ""
-            let key = s.type ? s.type.name : s
             return (
-                <TabElement className={active} key={`tab_${key}`} id={`tab_${key}`} onClick={(e) => this.activateTab(e)}>{s}</TabElement>
+                <TabElement className={active} key={`tab_${s}`} id={`tab_${s}`} onClick={(e) => this.activateTab(e)}>{s}</TabElement>
             )
         })
         let pagelist = this.props.pagelist
-        let TabPageList = pagelist.map(s => {
-            let active = (s === this.state.activePage) ? "active" : ""
-            let key = s.type ? s.type.name : s
+        let TabPageList = tablist.map((s,index) => {
+            let active = (s === this.state.activeTab) ? "active" : ""
+            let tabPage = pagelist[index]
             return (
-                <TabPageElement className={active} key={`page_${key}`} id={`page_${key}`}>{s}</TabPageElement>
+                <TabPageElement className={active} key={`page_${s}`} id={`page_${s}`}>{tabPage}</TabPageElement>
             )
         })
         return(
