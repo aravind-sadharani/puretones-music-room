@@ -4,6 +4,7 @@ import Header from "../components/header"
 import Footer from "../components/footer"
 import TabNav from "../components/tabs"
 import Selector from "../components/selector"
+import Slider from "../components/slider"
 import Drone from "../applets/drone"
 import Scale from "../applets/scale"
 import Sequencer from "../applets/sequencer"
@@ -66,6 +67,14 @@ const selectProps = {
   ]
 }
 
+const sliderProps = {
+  key: "Offset",
+  init: 0,
+  max: 100,
+  min: -100,
+  step: 1
+}
+
 const IndexPage = () => (
   <Container>
     <Header>
@@ -80,6 +89,7 @@ const IndexPage = () => (
       </Link>
     </Header>
     <Selector params={selectProps}></Selector>
+    <Slider params={sliderProps}></Slider>
     <TabNav tablist={mainNavTabs} pagelist={mainNavPages}></TabNav>
     <Footer>
       <p>Developed by <a href="https://www.sadharani.com">Sadharani</a></p>
