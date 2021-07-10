@@ -3,6 +3,7 @@ import Selector from "../components/selector"
 import Slider from "../components/slider"
 import ShowHideControls from "../components/showhidecontrols"
 import DroneStringTimbre from "./dronestringtimbre"
+import Toggle from "../components/toggle"
 
 let stringSelectParams = {
     key: "Note",
@@ -97,6 +98,7 @@ const DroneString = ({title,note}) => {
         <>
             <p><strong>{`${title} Parameters`}</strong></p>
             <br />
+            <Toggle title="Loop"/>
             <Selector params={stringSelectParams}></Selector>
             <Slider params={fineTuneParams}></Slider>
             <Slider params={ultraFineTuneParams}></Slider>

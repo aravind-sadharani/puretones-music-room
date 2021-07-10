@@ -3,6 +3,7 @@ import TabNav from "../components/tabs"
 import Selector from "../components/selector"
 import Slider from "../components/slider"
 import DroneString from "./dronestring"
+import SessionControls from "../components/sessioncontrols"
 
 const stringTabs = ['String 1', 'String 2', 'String 3', 'String 4', 'String 5', 'String 6']
 const stringPages = [
@@ -48,6 +49,8 @@ const levelParams = {
 
 const Drone = () => (
     <>
+        <p><strong>Drone Controls</strong></p>
+        <SessionControls />
         <p><strong>Drone Parameters</strong></p>
         <br />
         <Selector params={octaveList}></Selector>

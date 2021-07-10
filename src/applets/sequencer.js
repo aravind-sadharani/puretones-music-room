@@ -2,6 +2,7 @@ import * as React from "react"
 import ShowHideControls from "../components/showhidecontrols"
 import Selector from "../components/selector"
 import Editor from "../components/editor"
+import SessionControls from "../components/sessioncontrols"
 
 const octaveList = {
     key: "Octave",
@@ -50,6 +51,8 @@ const voiceLabel = {
 
 const Sequencer = () => (
     <>
+        <p><strong>Sequencer Controls</strong></p>
+        <SessionControls />
         <p><strong>Sequencer Parameters</strong></p>
         <br />
         <ShowHideControls title="Voice 1" label={voiceLabel}>
