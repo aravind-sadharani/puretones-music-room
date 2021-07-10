@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 const SliderContainer = styled.div`
     padding: 0 0 12px 0;
-    margin: 0 2vmin;
+    margin: 0 12px;
     display: grid;
     grid-template-columns: 1fr 1fr;
 `

@@ -3,11 +3,12 @@ import styled from "styled-components"
 import ShowHideControls from "./showhidecontrols"
 
 const EditorElement = styled.textarea`
+    display: block;
     overflow: auto;
     outline-color: #333366;
     height: auto;
-    width: 100%;
-    margin-top: 1vmin;
+    width: calc(100% - 24px);
+    margin: 12px;
     border: 1px solid;
     border-radius: 5px;
     padding: 0 6px;

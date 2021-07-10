@@ -4,9 +4,9 @@ import styled from "styled-components"
 const HeaderElement = styled.header`
     text-align: center;
     background-color: #333366;
-    margin: 2vmin;
-    padding: 1vmin 0;
-    border-radius: 1vmin;
+    margin: 12px;
+    padding: 6px 0;
+    border-radius: 5px;
     h1 {
         margin: 0;
         padding: 0.22em;

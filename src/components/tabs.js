@@ -2,7 +2,7 @@ import * as React from "react"
 import styled from "styled-components"
 
 const TabBarElement = styled.div`
-    margin: 0 2vmin;
+    margin: 0 12px;
     overflow: hidden;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
@@ -39,8 +39,8 @@ const TabElement = styled.button`
 
 const TabPageElement = styled.div`
     display: none;
-    margin: 0 2vmin;
-    padding: 6px 12px;
+    margin: 0 12px 12px;
+    padding: 12px 0 0 0;
     border: 1px solid #e6e6eb;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
