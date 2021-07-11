@@ -60,7 +60,7 @@ const Toggle = ({title}) => {
             <ToggleKey>{title}</ToggleKey>
             <ToggleElement>
                 <ToggleState checked={checked} onChange={() => check(!checked)}/>
-                <ToggleSwitch checked={checked} onChange={() => check(!checked)}/>
+                <ToggleSwitch checked={checked} />
             </ToggleElement>
         </ToggleContainer>
     )
