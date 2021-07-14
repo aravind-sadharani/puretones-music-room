@@ -24,12 +24,16 @@ const ButtonElement = styled.button`
     }
 `
 
-const Button = ({stateful,title,children}) => {
+const Button = ({stateful,title,onClick,children}) => {
     const [active, setActive] = React.useState(false)
     let buttonState = (active && stateful) ? "active" : ""
     let label = (stateful && title) ? (active ? `${title.active}` : `${title.inactive}`) : children
     return (
-        <ButtonElement className={buttonState} onClick={()=>setActive(!active)}>{label}</ButtonElement>
+        <ButtonElement className={buttonState} onClick={()=>{
+            if(onClick)
+                onClick()
+            setActive(!active)
+        }}>{label}</ButtonElement>
     )
 }
 
