@@ -5,13 +5,13 @@ import Footer from "../components/footer"
 import TabNav from "../components/tabs"
 import Selector from "../components/selector"
 import Slider from "../components/slider"
-import Button from "../components/button"
 import Drone from "../applets/drone"
 import Scale from "../applets/scale"
 import Sequencer from "../applets/sequencer"
 import { Link } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
 import IncludeFaust from "../services/faust"
+import { AudioEnvProvider } from "../services/audioenv"
 
 const mainNavTabs = ['Drone', 'Scale', 'Sequencer']
 const mainNavPages = [<Drone /> , <Scale />, <Sequencer />]
@@ -79,82 +79,31 @@ const sliderProps = {
   step: 1
 }
 
-const composition = `import("stdfaust.lib");
-process = 0.3*os.osc(220) <: dm.zita_light;`
-
-const playStopTitle = {
-  active: "Stop",
-  inactive: "Play"
-}
-
-class IndexPage extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {faust: null, audioCtx: null, playing: false}
-  }
-
-  play = (composition) => {
-    let {faust, audioCtx, playing} = this.state
-    audioCtx = window.audioCtx
-    audioCtx = audioCtx ? audioCtx : new (window.AudioContext || window.webkitAudioContext)()
-    window.audioCtx = audioCtx
-    if(audioCtx.state === "suspended") {
-      audioCtx.resume()
-    }
-    if(!playing) {
-      console.log(`Getting Faust Ready...`)
-      if(!faust)
-        faust = new window.Faust2WebAudio.Faust({debug: false, wasmLocation: "/Faustlib/libfaust-wasm.wasm", dataLocation: "/Faustlib/libfaust-wasm.data"})
-      faust.ready.then(() => {
-        console.log(`Playing...`)
-        faust.getNode(composition, { audioCtx, useWorklet: false, bufferSize: 16384, args: { "-I": "libraries/"} }).then(node => {
-          window.node = node  
-          this.setState({faust: faust, audioCtx: audioCtx, playing: true})
-          node.connect(audioCtx.destination)
-        }, reason => {
-          console.log(composition)
-          console.log(reason)
-        })
-      }, reason => {
-        console.log(reason)
-      })
-    } else {
-      console.log(`Stopping...`)
-      let node = window.node
-      node.disconnect(audioCtx.destination)
-      node.destroy()
-      this.setState({faust: faust, audioCtx: this.state.audioCtx, playing: false})
-    }
-  }
-
-  render = () => {
-    return (
-      <Container>
-        <IncludeFaust />
-        <Header>
-          <Link to="/">
-            <h1>
-              <StaticImage
-                src="../images/puretones-logo.svg"
-                alt="PureTones Logo">
-              </StaticImage>
-              PureTones Music Room
-            </h1>
-          </Link>
-        </Header>
-        <p><strong>Common Parameters</strong></p>
-        <br />
-        <Selector params={selectProps}></Selector>
-        <Slider params={sliderProps}></Slider>
-        <Button stateful title={playStopTitle} onClick={() => this.play(composition)}>Play</Button>
-        <br />
-        <TabNav tablist={mainNavTabs} pagelist={mainNavPages}></TabNav>
-        <Footer>
-          <p>Developed by <a href="https://www.sadharani.com">Sadharani</a></p>
-        </Footer>
-      </Container>
-    )
-  }
-}
+const IndexPage = () => (
+  <Container>
+    <IncludeFaust />
+    <Header>
+      <Link to="/">
+        <h1>
+          <StaticImage
+            src="../images/puretones-logo.svg"
+            alt="PureTones Logo">
+          </StaticImage>
+          PureTones Music Room
+        </h1>
+      </Link>
+    </Header>
+    <AudioEnvProvider>
+      <p><strong>Common Parameters</strong></p>
+      <br />
+      <Selector params={selectProps}></Selector>
+      <Slider params={sliderProps}></Slider>
+      <TabNav tablist={mainNavTabs} pagelist={mainNavPages}></TabNav>
+    </AudioEnvProvider>
+    <Footer>
+      <p>Developed by <a href="https://www.sadharani.com">Sadharani</a></p>
+    </Footer>
+  </Container>
+)
 
 export default IndexPage

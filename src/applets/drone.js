@@ -50,7 +50,7 @@ const levelParams = {
 const Drone = () => (
     <>
         <p><strong>Drone Controls</strong></p>
-        <SessionControls />
+        <SessionControls appname='Drone' />
         <p><strong>Drone Parameters</strong></p>
         <br />
         <Selector params={octaveList}></Selector>

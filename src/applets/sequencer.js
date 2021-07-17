@@ -52,7 +52,7 @@ const voiceLabel = {
 const Sequencer = () => (
     <>
         <p><strong>Sequencer Controls</strong></p>
-        <SessionControls />
+        <SessionControls appname="Sequencer" />
         <p><strong>Sequencer Parameters</strong></p>
         <br />
         <ShowHideControls title="Voice 1" label={voiceLabel}>

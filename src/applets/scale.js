@@ -43,7 +43,7 @@ const levelParams = {
 const Scale = () => (
     <>
         <p><strong>Scale Controls</strong></p>
-        <SessionControls />
+        <SessionControls appname="Scale" />
         <p><strong>Scale Parameters</strong></p>
         <br />
         <Selector params={octaveList}></Selector>
