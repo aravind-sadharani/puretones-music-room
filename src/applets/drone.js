@@ -4,6 +4,7 @@ import Selector from "../components/selector"
 import Slider from "../components/slider"
 import DroneString from "./dronestring"
 import SessionControls from "../components/sessioncontrols"
+import { graphql, useStaticQuery } from "gatsby"
 
 const stringTabs = ['String 1', 'String 2', 'String 3', 'String 4', 'String 5', 'String 6']
 const stringPages = [
@@ -47,18 +48,32 @@ const levelParams = {
     step: 0.5
 }
 
-const Drone = () => (
-    <>
-        <p><strong>Drone Controls</strong></p>
-        <SessionControls appname='Drone' />
-        <p><strong>Drone Parameters</strong></p>
-        <br />
-        <Selector params={octaveList}></Selector>
-        <Slider params={periodParams}></Slider>
-        <Slider params={levelParams}></Slider>
-        <br />
-        <TabNav tablist={stringTabs} pagelist={stringPages}></TabNav>
-    </>
-)
+const Drone = () => {
+    const data = useStaticQuery(
+        graphql`
+            query DroneDSPQuery {
+                file(relativePath: {eq: "puretones.dsp"}) {
+                    childPlainText {
+                        content
+                    }
+                }
+            }
+        `
+    )
+    const droneDSPCode = data.file.childPlainText.content
+    return (
+        <>
+            <p><strong>Drone Controls</strong></p>
+            <SessionControls appname='Drone' code={droneDSPCode}/>
+            <p><strong>Drone Parameters</strong></p>
+            <br />
+            <Selector params={octaveList}></Selector>
+            <Slider params={periodParams}></Slider>
+            <Slider params={levelParams}></Slider>
+            <br />
+            <TabNav tablist={stringTabs} pagelist={stringPages}></TabNav>
+        </>
+    )
+}
 
 export default Drone

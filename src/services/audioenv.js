@@ -8,15 +8,13 @@ const initialState = {
     sequencerPlaying: false
 }
 
-const composition = `import("stdfaust.lib");
-process = 0.3*os.osc(440) <: dm.zita_light;`
-
 const AudioEnv = React.createContext(initialState)
 
 const AudioEnvProvider = ({children}) => {
     const [state, dispatch] = React.useReducer((state,action) => {
         switch(action.type) {
             case 'Play':
+                let composition = action.code
                 if(!state.audioContextReady) {
                     let audioCtx = new (window.AudioContext || window.webkitAudioContext)()
                     if(audioCtx.state === "suspended")

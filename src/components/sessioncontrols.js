@@ -14,13 +14,13 @@ const playStopTitle = {
     inactive: "Play"
 }
 
-const SessionControls = ({appname}) => {
+const SessionControls = ({appname,code}) => {
     const [active, setActive] = React.useState(false)
     let {dispatch} = React.useContext(AudioEnv)
     const playStop = () => {
         setActive(!active)
         let type = active ? "Stop" : "Play"
-        dispatch({type: type, appname: appname})
+        dispatch({type: type, appname: appname, code: code})
     }
     return (
         <SessionControlsContainer>
