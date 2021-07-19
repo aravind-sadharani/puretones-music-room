@@ -58,6 +58,9 @@ const AudioEnvProvider = ({children}) => {
                     node.destroy()
                 }
                 return state
+            case 'Configure':
+                console.log(action.code)
+                return state
             default:
                 return state
         }

@@ -2,7 +2,7 @@ import * as React from "react"
 import ShowHideControls from "../components/showhidecontrols"
 import Selector from "../components/selector"
 import Editor from "../components/editor"
-import SessionControls from "../components/sessioncontrols"
+import SessionControls from "./sessioncontrols"
 
 const octaveList = {
     key: "Octave",

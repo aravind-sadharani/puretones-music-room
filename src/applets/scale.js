@@ -3,7 +3,7 @@ import TabNav from "../components/tabs"
 import Selector from "../components/selector"
 import Slider from "../components/slider"
 import ScaleString from "./scalestring"
-import SessionControls from "../components/sessioncontrols"
+import SessionControls from "./sessioncontrols"
 
 const scaleTabs = ['Sa', 're', 'Re', 'ga', 'Ga', 'ma', 'Ma', 'Pa', 'dha', 'Dha', 'ni', 'Ni', 'SA']
 const scalePages = scaleTabs.map((s) => <ScaleString title={s} />)

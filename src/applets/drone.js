@@ -3,8 +3,9 @@ import TabNav from "../components/tabs"
 import Selector from "../components/selector"
 import Slider from "../components/slider"
 import DroneString from "./dronestring"
-import SessionControls from "../components/sessioncontrols"
+import SessionControls from "./sessioncontrols"
 import { graphql, useStaticQuery } from "gatsby"
+import { AudioEnv } from "../services/audioenv"
 
 const stringTabs = ['String 1', 'String 2', 'String 3', 'String 4', 'String 5', 'String 6']
 const stringPages = [
@@ -49,10 +50,15 @@ const levelParams = {
 }
 
 const Drone = () => {
-    const data = useStaticQuery(
+    const {dsp,prt} = useStaticQuery(
         graphql`
             query DroneDSPQuery {
-                file(relativePath: {eq: "puretones.dsp"}) {
+                dsp: file(relativePath: {eq: "puretones.dsp"}){
+                    childPlainText {
+                        content
+                    }
+                  },
+                prt: file(relativePath: {eq: "default.prt"}){
                     childPlainText {
                         content
                     }
@@ -60,7 +66,10 @@ const Drone = () => {
             }
         `
     )
-    const droneDSPCode = data.file.childPlainText.content
+    const droneDSPCode = dsp.childPlainText.content
+    const droneSettings = prt.childPlainText.content.replace(/puretones/g,'FaustDSP')
+    let {dispatch} = React.useContext(AudioEnv)
+    dispatch({type: 'Configure', appname: 'Drone', code: droneSettings})
     return (
         <>
             <p><strong>Drone Controls</strong></p>
