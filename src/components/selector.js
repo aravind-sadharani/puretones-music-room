@@ -42,7 +42,11 @@ class Selector extends React.Component {
         this.state = {value: props.params.default}
     }
 
-    changeValue = (value) => this.setState({value: value})
+    changeValue = (value) => {
+        this.setState({value: value})
+        if(this.props.onParamUpdate && this.props.path)
+            this.props.onParamUpdate(value, this.props.path)
+    }
 
     render = () => {
         let {key,options} = this.props.params

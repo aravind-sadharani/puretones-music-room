@@ -58,7 +58,11 @@ class Slider extends React.Component {
         this.state = {value: props.params.init}
     }
 
-    changeValue = (value) => this.setState({value: value})
+    changeValue = (value) => {
+        this.setState({value: value})
+        if(this.props.onParamUpdate && this.props.path)
+            this.props.onParamUpdate(value, this.props.path)
+    }
 
     render = () => {
         let {key,max,min,step} = this.props.params

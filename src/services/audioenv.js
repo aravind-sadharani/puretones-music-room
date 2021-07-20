@@ -29,6 +29,7 @@ const AudioEnvProvider = ({children}) => {
                         faust.getNode(composition, { audioCtx, useWorklet: false, bufferSize: 16384, args: { "-I": "libraries/"} }).then(node => {
                           window.node = node
                           node.connect(audioCtx.destination)
+                          Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
                         }, reason => {
                           console.log(composition)
                           console.log(reason)
@@ -38,16 +39,19 @@ const AudioEnvProvider = ({children}) => {
                     })
                     window.faust = faust
                     state.faustReady = true
+                    state.dronePlaying = true
                 } else {
                     let faust = window.faust
                     let audioCtx = window.audioCtx
                     faust.getNode(composition, { audioCtx, useWorklet: false, bufferSize: 16384, args: { "-I": "libraries/"} }).then(node => {
                         window.node = node
                         node.connect(audioCtx.destination)
+                        Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
                     }, reason => {
                         console.log(composition)
                         console.log(reason)
                     })
+                    state.dronePlaying = true
                 }
                 return state
             case 'Stop':
@@ -57,9 +61,13 @@ const AudioEnvProvider = ({children}) => {
                     node.disconnect(audioCtx.destination)
                     node.destroy()
                 }
+                state.dronePlaying = false
                 return state
             case 'Configure':
-                console.log(action.code)
+                if(state.dronePlaying) {
+                    let node = window.node
+                    Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
+                }
                 return state
             default:
                 return state
