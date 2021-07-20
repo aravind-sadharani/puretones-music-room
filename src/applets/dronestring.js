@@ -98,7 +98,7 @@ const DroneString = ({title,stringState,basePath,onParamUpdate}) => {
         <>
             <p><strong>{`${title} Parameters`}</strong></p>
             <br />
-            <Toggle title="Loop" initial={stringState[`${basePath}/Play_String/Loop`]} path={`${basePath}/Play_String/Loop`} onParamUpdate={(value,path) => onParamUpdate(value,path)}/>
+            <Toggle title="Loop" status={stringState[`${basePath}/Play_String/Loop`]} path={`${basePath}/Play_String/Loop`} onParamUpdate={(value,path) => onParamUpdate(value,path)}/>
             <Selector params={stringSelectParams} path={`${basePath}/Select_Note`} onParamUpdate={(value,path) => onParamUpdate(value,path)}></Selector>
             <Slider params={fineTuneParams} path={`${basePath}/Fine_Tune`} onParamUpdate={(value,path) => onParamUpdate(value,path)}></Slider>
             <Slider params={ultraFineTuneParams} path={`${basePath}/Ultrafine_Tune`} onParamUpdate={(value,path) => onParamUpdate(value,path)}></Slider>

@@ -40,7 +40,11 @@ const Drone = () => {
         dispatch({type: 'Configure', appname: 'drone', settings: updateParams})
         let newDroneState = droneState
         newDroneState[`${path}`] = value
-        configureDrone(newDroneState)
+        configureDrone({...newDroneState})
+    }
+    const resetDrone = () => {
+        dispatch({type: 'Configure', appname: 'drone', settings: defaultDroneState})
+        configureDrone({...defaultDroneState})
     }
     const stringTabs = ['String 1', 'String 2', 'String 3', 'String 4', 'String 5', 'String 6']
     const stringNames = ['1st_String', '2nd_String', '3rd_String', '4th_String', '5th_String', '6th_String']
@@ -82,11 +86,10 @@ const Drone = () => {
         min: -30,
         step: 0.5
     }
-    
     return (
         <>
             <p><strong>Drone Controls</strong></p>
-            <SessionControls appname='drone' code={droneDSPCode} settings={droneState} />
+            <SessionControls appname='drone' code={droneDSPCode} settings={droneState} reset={resetDrone} />
             <p><strong>Drone Parameters</strong></p>
             <br />
             <Selector params={octaveList} path="/FaustDSP/PureTones_v1.0/0x00/Octave_Selector" onParamUpdate={(value,path) => updateParameter(value,path)}></Selector>

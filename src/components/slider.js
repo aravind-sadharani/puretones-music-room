@@ -52,28 +52,19 @@ const SliderNumber = styled.input`
 const SliderKey = styled.span`
 `
 
-class Slider extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {value: props.params.init}
+const Slider = ({params,path,onParamUpdate}) =>  {
+    const changeValue = (value) => {
+        if(onParamUpdate && path)
+            onParamUpdate(value, path)
     }
-
-    changeValue = (value) => {
-        this.setState({value: value})
-        if(this.props.onParamUpdate && this.props.path)
-            this.props.onParamUpdate(value, this.props.path)
-    }
-
-    render = () => {
-        let {key,max,min,step} = this.props.params
-        return (
-            <SliderContainer>
-                <SliderKey>{key}</SliderKey>
-                <SliderNumber type="number" value={this.state.value} onInput={(e) => this.changeValue(e.target.value)}></SliderNumber>
-                <SliderRange type="range" min={min} max={max} step={step} value={this.state.value} onInput={(e) => this.changeValue(e.target.value)}></SliderRange>
-            </SliderContainer>
-        )
-    }
+    let {key,max,min,step} = params
+    return (
+        <SliderContainer>
+            <SliderKey>{key}</SliderKey>
+            <SliderNumber type="number" value={params.init} onInput={(e) => changeValue(e.target.value)}></SliderNumber>
+            <SliderRange type="range" min={min} max={max} step={step} value={params.init} onInput={(e) => changeValue(e.target.value)}></SliderRange>
+        </SliderContainer>
+    )
 }
 
 export default Slider

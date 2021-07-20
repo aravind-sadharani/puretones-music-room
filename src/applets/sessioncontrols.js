@@ -9,7 +9,7 @@ const SessionControlsContainer = styled.div`
     text-align: center;
 `
 
-const SessionControls = ({appname,code,settings}) => {
+const SessionControls = ({appname,code,settings,reset}) => {
     const [title, updateTitle] = React.useState('Play')
     let {dispatch} = React.useContext(AudioEnv)
     const jobCompleted = (type) => {
@@ -25,7 +25,7 @@ const SessionControls = ({appname,code,settings}) => {
     return (
         <SessionControlsContainer>
             <Button stateful onClick={() => playStop()}>{title}</Button>
-            <Button>New</Button>
+            <Button onClick={() => reset()}>New</Button>
             <Button>Save</Button>
             <Button>Restore</Button>
         </SessionControlsContainer>
