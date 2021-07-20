@@ -33,12 +33,11 @@ const Drone = () => {
         if(value && path)
             defaultDroneState[`${path}`] = value
     })
-    //dispatch({type: 'Configure', appname: 'Drone', code: droneSettings})
     const [droneState, configureDrone] = React.useState(defaultDroneState)
     const updateParameter = (value, path) => {
         let updateParams = {}
         updateParams[`${path}`] = value
-        dispatch({type: 'Configure', appname: 'Drone', settings: updateParams})
+        dispatch({type: 'Configure', appname: 'drone', settings: updateParams})
         let newDroneState = droneState
         newDroneState[`${path}`] = value
         configureDrone(newDroneState)
@@ -87,7 +86,7 @@ const Drone = () => {
     return (
         <>
             <p><strong>Drone Controls</strong></p>
-            <SessionControls appname='Drone' code={droneDSPCode} settings={droneState} />
+            <SessionControls appname='drone' code={droneDSPCode} settings={droneState} />
             <p><strong>Drone Parameters</strong></p>
             <br />
             <Selector params={octaveList} path="/FaustDSP/PureTones_v1.0/0x00/Octave_Selector" onParamUpdate={(value,path) => updateParameter(value,path)}></Selector>
