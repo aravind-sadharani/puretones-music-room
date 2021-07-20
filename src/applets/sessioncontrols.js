@@ -9,22 +9,22 @@ const SessionControlsContainer = styled.div`
     text-align: center;
 `
 
-const playStopTitle = {
-    active: "Stop",
-    inactive: "Play"
-}
-
 const SessionControls = ({appname,code,settings}) => {
-    const [active, setActive] = React.useState(false)
+    const [title, updateTitle] = React.useState('Play')
     let {dispatch} = React.useContext(AudioEnv)
+    const jobCompleted = (type) => {
+        let newTitle = type === 'Stop' ? 'Play' : 'Stop'
+        updateTitle(newTitle)
+    }
     const playStop = () => {
-        setActive(!active)
-        let type = active ? "Stop" : "Play"
-        dispatch({type: type, appname: appname, code: code, settings: settings})
+        let type = title === 'Play' ? "Play" : "Stop"
+        let newTitle = title === 'Play' ? "Starting..." : "Stopping..."
+        updateTitle(newTitle)
+        dispatch({type: type, appname: appname, code: code, settings: settings, onJobComplete: jobCompleted})
     }
     return (
         <SessionControlsContainer>
-            <Button stateful title={playStopTitle} onClick={() => playStop()}>Play</Button>
+            <Button stateful onClick={() => playStop()}>{title}</Button>
             <Button>New</Button>
             <Button>Save</Button>
             <Button>Restore</Button>

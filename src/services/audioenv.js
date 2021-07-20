@@ -30,6 +30,7 @@ const AudioEnvProvider = ({children}) => {
                           window.node = node
                           node.connect(audioCtx.destination)
                           Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
+                          action.onJobComplete('Play')
                         }, reason => {
                           console.log(composition)
                           console.log(reason)
@@ -43,14 +44,22 @@ const AudioEnvProvider = ({children}) => {
                 } else {
                     let faust = window.faust
                     let audioCtx = window.audioCtx
-                    faust.getNode(composition, { audioCtx, useWorklet: false, bufferSize: 16384, args: { "-I": "libraries/"} }).then(node => {
-                        window.node = node
+                    let node = window.node
+                    if(node) {
                         node.connect(audioCtx.destination)
                         Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
-                    }, reason => {
-                        console.log(composition)
-                        console.log(reason)
-                    })
+                        action.onJobComplete('Play')
+                    } else {
+                        faust.getNode(composition, { audioCtx, useWorklet: false, bufferSize: 16384, args: { "-I": "libraries/"} }).then(node => {
+                            window.node = node
+                            node.connect(audioCtx.destination)
+                            Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
+                            action.onJobComplete('Play')
+                        }, reason => {
+                            console.log(composition)
+                            console.log(reason)
+                        })
+                    }
                     state.dronePlaying = true
                 }
                 return state
@@ -59,7 +68,7 @@ const AudioEnvProvider = ({children}) => {
                 let node = window.node
                 if(node) {
                     node.disconnect(audioCtx.destination)
-                    node.destroy()
+                    action.onJobComplete('Stop')
                 }
                 state.dronePlaying = false
                 return state
