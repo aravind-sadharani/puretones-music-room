@@ -15,13 +15,6 @@ const ultraFineTuneParams = {
     min: -100,
     step: 1
 }
-const varianceParams = {
-    key: "Variance",
-    init: 2,
-    max: 4,
-    min: 0,
-    step: 0.1
-}
 
 const ScaleString = ({title}) => {
     return (
@@ -30,7 +23,6 @@ const ScaleString = ({title}) => {
             <br />
             <Slider params={fineTuneParams}></Slider>
             <Slider params={ultraFineTuneParams}></Slider>
-            <Slider params={varianceParams}></Slider>
         </>
     )
 }

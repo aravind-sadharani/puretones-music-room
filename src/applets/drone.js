@@ -50,6 +50,7 @@ const Drone = ({droneDSPCode,droneState,onParamUpdate,resetDrone}) => {
         <>
             <p><strong>Drone Controls</strong></p>
             <SessionControls appname='drone' code={droneDSPCode} settings={droneState} reset={resetDrone} />
+            <br />
             <p><strong>Drone Parameters</strong></p>
             <br />
             <Selector params={octaveList} path="/FaustDSP/PureTones_v1.0/0x00/Octave_Selector" onParamUpdate={(value,path) => onParamUpdate(value,path)}></Selector>

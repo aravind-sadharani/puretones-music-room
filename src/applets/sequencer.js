@@ -53,6 +53,7 @@ const Sequencer = () => (
     <>
         <p><strong>Sequencer Controls</strong></p>
         <SessionControls appname="Sequencer" />
+        <br />
         <p><strong>Sequencer Parameters</strong></p>
         <br />
         <ShowHideControls title="Voice 1" label={voiceLabel}>
