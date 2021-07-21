@@ -6,6 +6,7 @@ import DroneString from "./dronestring"
 import SessionControls from "./sessioncontrols"
 import { graphql, useStaticQuery } from "gatsby"
 import { AudioEnv } from "../services/audioenv"
+import useLocalStore from "../services/localstore"
 
 const Drone = () => {
     const {dsp,prt} = useStaticQuery(
@@ -33,6 +34,8 @@ const Drone = () => {
         if(value && path)
             defaultDroneState[`${path}`] = value
     })
+    const [droneLocalState, setDroneLocalState] = useLocalStore('drone', defaultDroneState)
+    React.useEffect(() => configureDrone({...droneLocalState}), [])
     const [droneState, configureDrone] = React.useState(defaultDroneState)
     const updateParameter = (value, path) => {
         let updateParams = {}
@@ -41,10 +44,12 @@ const Drone = () => {
         let newDroneState = droneState
         newDroneState[`${path}`] = value
         configureDrone({...newDroneState})
+        setDroneLocalState(newDroneState)
     }
     const resetDrone = () => {
         dispatch({type: 'Configure', appname: 'drone', settings: defaultDroneState})
         configureDrone({...defaultDroneState})
+        setDroneLocalState(defaultDroneState)
     }
     const stringTabs = ['String 1', 'String 2', 'String 3', 'String 4', 'String 5', 'String 6']
     const stringNames = ['1st_String', '2nd_String', '3rd_String', '4th_String', '5th_String', '6th_String']

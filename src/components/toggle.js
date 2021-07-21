@@ -54,16 +54,16 @@ const ToggleKey = styled.span`
 `
 
 const Toggle = ({title,status,path,onParamUpdate}) => {
-    let checked = status === '1.0' ? true : false
+    let checked = Number(status) ? true : false
     const changeToggle = (newStatus) => {
-        let value = newStatus ? 0 : 1
+        let value = newStatus ? 1 : 0
         onParamUpdate(value,path)
     }
     return (
         <ToggleContainer>
             <ToggleKey>{title}</ToggleKey>
             <ToggleElement>
-                <ToggleState checked={checked} onChange={(e) => changeToggle(e.target.value)}/>
+                <ToggleState checked={checked} onChange={(e) => changeToggle(e.target.checked)}/>
                 <ToggleSwitch checked={checked} />
             </ToggleElement>
         </ToggleContainer>
