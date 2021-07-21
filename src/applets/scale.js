@@ -63,11 +63,11 @@ const handleKeyStroke = (e) => {
         keyOff(notes[e.key])
     }
 }
-const Scale = () => {
+const Scale = ({scaleDSPCode, scaleState}) => {
     return (
         <>
             <p><strong>Scale Controls</strong></p>
-            <SessionControls appname="Scale" />
+            <SessionControls appname="Scale" code={scaleDSPCode} settings={scaleState} />
             <br />
             <Keyboard keyOn={keyOn} keyOff={keyOff} />
             <ListenToKeyStrokes handleKeyStroke={handleKeyStroke} />

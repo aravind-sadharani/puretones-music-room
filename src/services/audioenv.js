@@ -25,8 +25,13 @@ const AudioEnvProvider = ({children}) => {
                 if(!state.faustReady) {
                     let audioCtx = window.audioCtx
                     let faust = new window.Faust2WebAudio.Faust({debug: false, wasmLocation: "/Faustlib/libfaust-wasm.wasm", dataLocation: "/Faustlib/libfaust-wasm.data"})
+                    let faustArgs = { audioCtx, useWorklet: false, buffersize: 16384, args: {"-I": "libraries/"} }
+                    if(action.appname === 'Scale') {
+                        faustArgs['voices'] = 16
+                        faustArgs['buffersize'] = 1024
+                    }
                     faust.ready.then(() => {
-                        faust.getNode(composition, { audioCtx, useWorklet: false, bufferSize: 16384, args: { "-I": "libraries/"} }).then(node => {
+                        faust.getNode(composition, faustArgs).then(node => {
                           window[`${action.appname}node`] = node
                           node.connect(audioCtx.destination)
                           Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
@@ -45,12 +50,17 @@ const AudioEnvProvider = ({children}) => {
                     let faust = window.faust
                     let audioCtx = window.audioCtx
                     let node = window[`${action.appname}node`]
+                    let faustArgs = { audioCtx, useWorklet: false, buffersize: 16384, args: {"-I": "libraries/"} }
+                    if(action.appname === 'Scale') {
+                        faustArgs['voices'] = 16
+                        faustArgs['buffersize'] = 1024
+                    }
                     if(node) {
                         node.connect(audioCtx.destination)
                         Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
                         action.onJobComplete('Play')
                     } else {
-                        faust.getNode(composition, { audioCtx, useWorklet: false, bufferSize: 16384, args: { "-I": "libraries/"} }).then(node => {
+                        faust.getNode(composition, faustArgs).then(node => {
                             window[`${action.appname}node`] = node
                             node.connect(audioCtx.destination)
                             Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))

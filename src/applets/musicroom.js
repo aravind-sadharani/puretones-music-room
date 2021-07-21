@@ -10,15 +10,25 @@ import { graphql, useStaticQuery } from "gatsby"
 import useLocalStore from "../services/localstore"
 
 const MusicRoom = () => {
-    const {dsp,prt} = useStaticQuery(
+    const {dronedsp,prt,scaledsp,pkb} = useStaticQuery(
         graphql`
             query DroneDSPQuery {
-                dsp: file(relativePath: {eq: "puretones.dsp"}){
+                dronedsp: file(relativePath: {eq: "puretones.dsp"}) {
                     childPlainText {
                         content
                     }
-                  },
-                prt: file(relativePath: {eq: "default.prt"}){
+                },
+                prt: file(relativePath: {eq: "default.prt"}) {
+                    childPlainText {
+                        content
+                    }
+                },
+                scaledsp: file(relativePath: {eq: "musicscale.dsp"}) {
+                    childPlainText {
+                        content
+                    }
+                },
+                pkb: file(relativePath: {eq: "default.pkb"}) {
                     childPlainText {
                         content
                     }
@@ -26,14 +36,22 @@ const MusicRoom = () => {
             }
         `
     )
-    const droneDSPCode = dsp.childPlainText.content
+    const droneDSPCode = dronedsp.childPlainText.content
     const droneSettings = prt.childPlainText.content.replace(/puretones/g,'FaustDSP')
+    const scaleDSPCode = scaledsp.childPlainText.content
+    const scaleSettings = pkb.childPlainText.content.replace(/musicscale/g,'FaustDSP')
     const {dispatch} = React.useContext(AudioEnv)
     let defaultDroneState = {}
     droneSettings.split('\n').forEach((s) => {
         let [value, path] = s.split(' ')
         if(value && path)
             defaultDroneState[`${path}`] = value
+    })
+    let defaultScaleState = {}
+    scaleSettings.split('\n').forEach((s) => {
+        let [value, path] = s.split(' ')
+        if(value && path)
+            defaultScaleState[`${path}`] = value
     })
     const [droneLocalState, setDroneLocalState] = useLocalStore('drone', defaultDroneState)
     React.useEffect(() => configureDrone({...droneLocalState}), [droneLocalState])
@@ -116,7 +134,7 @@ const MusicRoom = () => {
     let mainNavTabs = ['Drone', 'Scale', 'Sequencer']
     let mainNavPages = [
         <Drone droneDSPCode={droneDSPCode} droneState={droneState} onParamUpdate={updateParameter} resetDrone={resetDrone} />, 
-        <Scale />,
+        <Scale scaleDSPCode={scaleDSPCode} scaleState={defaultScaleState} />,
         <Sequencer />
     ]
 
