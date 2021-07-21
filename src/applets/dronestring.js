@@ -11,56 +11,56 @@ const DroneString = ({title,stringState,basePath,onParamUpdate}) => {
       default: Number(stringState[`${basePath}/Select_Note`]),
       options: [
         {
-          value: "12",
-          text: "Sa"
-        },
-        {
-          value: "11",
-          text: "re"
-        },
-        {
-          value: "10",
-          text: "Re"
-        },
-        {
-          value: "9",
-          text: "ga"
-        },
-        {
-          value: "8",
-          text: "Ga"
-        },
-        {
-          value: "7",
-          text: "ma"
-        },
-        {
-          value: "6",
-          text: "Ma"
-        },
-        {
-          value: "5",
-          text: "Pa"
-        },
-        {
-          value: "4",
-          text: "dha"
-        },
-        {
-          value: "3",
-          text: "Dha"
-        },
-        {
-          value: "2",
-          text: "ni"
+          value: "0",
+          text: "SA"
         },
         {
           value: "1",
           text: "Ni"
         },
         {
-          value: "0",
-          text: "SA"
+          value: "2",
+          text: "ni"
+        },
+        {
+          value: "3",
+          text: "Dha"
+        },
+        {
+          value: "4",
+          text: "dha"
+        },
+        {
+          value: "5",
+          text: "Pa"
+        },
+        {
+          value: "6",
+          text: "Ma"
+        },
+        {
+          value: "7",
+          text: "ma"
+        },
+        {
+          value: "8",
+          text: "Ga"
+        },
+        {
+          value: "9",
+          text: "ga"
+        },
+        {
+          value: "10",
+          text: "Re"
+        },
+        {
+          value: "11",
+          text: "re"
+        },
+        {
+          value: "12",
+          text: "Sa"
         }
       ]
     }

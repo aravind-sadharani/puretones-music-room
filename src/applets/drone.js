@@ -35,7 +35,7 @@ const Drone = () => {
             defaultDroneState[`${path}`] = value
     })
     const [droneLocalState, setDroneLocalState] = useLocalStore('drone', defaultDroneState)
-    React.useEffect(() => configureDrone({...droneLocalState}), [])
+    React.useEffect(() => configureDrone({...droneLocalState}), [droneLocalState])
     const [droneState, configureDrone] = React.useState(defaultDroneState)
     const updateParameter = (value, path) => {
         let updateParams = {}
@@ -43,12 +43,10 @@ const Drone = () => {
         dispatch({type: 'Configure', appname: 'drone', settings: updateParams})
         let newDroneState = droneState
         newDroneState[`${path}`] = value
-        configureDrone({...newDroneState})
         setDroneLocalState(newDroneState)
     }
     const resetDrone = () => {
         dispatch({type: 'Configure', appname: 'drone', settings: defaultDroneState})
-        configureDrone({...defaultDroneState})
         setDroneLocalState(defaultDroneState)
     }
     const stringTabs = ['String 1', 'String 2', 'String 3', 'String 4', 'String 5', 'String 6']
