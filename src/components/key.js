@@ -39,12 +39,12 @@ const BlackKeyElement = styled.div`
     color: white;
 `
 
-const WhiteKey = ({children}) => (
-    <WhiteKeyElement>{children}</WhiteKeyElement>
+const WhiteKey = ({keyOn,keyOff,children}) => (
+    <WhiteKeyElement onTouchStart={keyOn} onTouchEnd={keyOff} onMouseDown={keyOn} onMouseUp={keyOff}>{children}</WhiteKeyElement>
 )
 
-const BlackKey = ({children}) => (
-    <BlackKeyElement>{children}</BlackKeyElement>
+const BlackKey = ({keyOn,keyOff,children}) => (
+    <BlackKeyElement onTouchStart={keyOn} onTouchEnd={keyOff} onMouseDown={keyOn} onMouseUp={keyOff}>{children}</BlackKeyElement>
 )
 
 export {WhiteKey, BlackKey}

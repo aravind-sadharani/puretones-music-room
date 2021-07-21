@@ -15,7 +15,7 @@ const KeyContainer = styled.li`
     position: relative;
 `
 
-const Keyboard = () => {
+const Keyboard = ({keyOn,keyOff}) => {
     let notes = [
         {white: "Sa", black: "re"},
         {white: "Re", black: "ga"},
@@ -27,9 +27,9 @@ const Keyboard = () => {
         {white: "SA"},
     ]
     let keys = notes.map(note => (
-        <KeyContainer>
-            <WhiteKey>{note.white}</WhiteKey>
-            {note.black && <BlackKey>{note.black}</BlackKey>}
+        <KeyContainer key={`${note.white}-${note.black}`}>
+            <WhiteKey keyOn={()=>keyOn(note.white)} keyOff={()=>keyOff(note.white)}>{note.white}</WhiteKey>
+            {note.black && <BlackKey keyOn={()=>keyOn(note.black)} keyOff={()=>keyOff(note.black)}>{note.black}</BlackKey>}
         </KeyContainer>
     ))
     return (
