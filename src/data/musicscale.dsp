@@ -60,4 +60,5 @@ with {
     };
 };
 
-process = String1Tone(realFreq,gate)*gain*gate <: dm.zita_light;
+process = String1Tone(realFreq,gate)*gain*gate : fi.lowpass(3,4000) <: _,_;
+effect = dm.zita_light;

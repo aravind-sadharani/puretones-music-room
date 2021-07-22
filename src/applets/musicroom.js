@@ -97,12 +97,12 @@ const MusicRoom = () => {
                 dispatch({type: 'Configure', appname: appname, settings: defaultDroneState})
                 setDroneLocalState(defaultDroneState)
                 break
-            case 'Scale':
+            case 'scale':
                 dispatch({type: 'Configure', appname: appname, settings: defaultScaleState})
-                setDroneLocalState(defaultScaleState)
+                setScaleLocalState(defaultScaleState)
                 break
             default:
-                console.log('Reset: Incorrect appname!')
+                console.log(`Reset: Incorrect appname ${appname}!`)
         }
 
     }

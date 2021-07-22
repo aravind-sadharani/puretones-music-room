@@ -55,13 +55,6 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset}) 
         min: -30,
         step: 0.5
     }
-    let varianceParams = {
-        key: "Variance",
-        init: 2,
-        max: 4,
-        min: 0,
-        step: 0.1
-    }
     const [keyState,setKeyState] = React.useState(Array(13).fill(0))
     const keyOn = (keyName) => {
         if(keyState[note2Offset[`${keyName}`]] === 0) {
@@ -112,7 +105,6 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset}) 
             <Selector params={octaveList} path="/FaustDSP/Common_Parameters/Octave" onParamUpdate={(value,path) => onParamUpdate(value,path)}></Selector>
             <Slider params={sustainParams} path="/FaustDSP/Common_Parameters/Period" onParamUpdate={(value,path) => onParamUpdate(value,path)}></Slider>
             <Slider params={levelParams} path="/FaustDSP/Zita_Light/Level" onParamUpdate={(value,path) => onParamUpdate(value,path)}></Slider>
-            <Slider params={varianceParams}></Slider>
             <br />
             <TabNav tablist={scaleTabs} pagelist={scalePages}></TabNav>
         </>
