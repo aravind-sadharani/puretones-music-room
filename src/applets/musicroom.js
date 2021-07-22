@@ -85,7 +85,7 @@ const MusicRoom = () => {
                 setScaleLocalState(newScaleState)
                 break
             default:
-                console.log('Update Parameters: Incorrect appname!')
+                console.log(`Update Parameters: Incorrect appname ${appname}!`)
         }
     }
     const sendMIDIMessage = (msg) => {
@@ -180,8 +180,8 @@ const MusicRoom = () => {
         <>
             <p><strong>Common Parameters</strong></p>
             <br />
-            <Selector params={commonFreqParams} path='/FaustDSP/PureTones_v1.0/0x00/Common_Frequency' onParamUpdate={updateParameter}></Selector>
-            <Slider params={offsetParams} path='/FaustDSP/PureTones_v1.0/0x00/Fine_Tune' onParamUpdate={updateParameter} ></Slider>
+            <Selector params={commonFreqParams} path='/FaustDSP/PureTones_v1.0/0x00/Common_Frequency' onParamUpdate={(value,path) => updateParameter('drone',value,path)}></Selector>
+            <Slider params={offsetParams} path='/FaustDSP/PureTones_v1.0/0x00/Fine_Tune' onParamUpdate={(value,path) => updateParameter('drone',value,path)} ></Slider>
             <br />
             <TabNav tablist={mainNavTabs} pagelist={mainNavPages}></TabNav>
         </>

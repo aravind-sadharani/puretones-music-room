@@ -20,16 +20,24 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset}) 
         default: Number(scaleState['/FaustDSP/Common_Parameters/Octave']),
         options: [
             {
-                value: -1,
-                text: "Low"
+                value: 2,
+                text: "Highest"
+            },
+            {
+                value: 1,
+                text: "High"
             },
             {
                 value: 0,
                 text: "Medium"
             },
             {
-                value: 1,
-                text: "High"
+                value: -1,
+                text: "Low"
+            },
+            {
+                value: -2,
+                text: "Lowest"
             }
         ]
     }
@@ -71,6 +79,12 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset}) 
             onMIDIMessage([144,`${key2Midi(keyName)}`,0])
         }
     }
+    const octaveChange = (key) => {
+        if(key === 'z')
+            onParamUpdate(Math.max(Number(scaleState['/FaustDSP/Common_Parameters/Octave'])-1,-2) ,'/FaustDSP/Common_Parameters/Octave')
+        if(key === 'x')
+            onParamUpdate(Math.min(Number(scaleState['/FaustDSP/Common_Parameters/Octave'])+1,2) ,'/FaustDSP/Common_Parameters/Octave')
+    }
     const note2Offset = {'Sa': 0, 're': 1, 'Re': 2, 'ga': 3, 'Ga': 4, 'ma': 5, 'Ma': 6, 'Pa': 7, 'dha': 8, 'Dha': 9, 'ni': 10, 'Ni': 11, 'SA': 12}
     const key2Midi = (keyName) => (Number(scaleState['/FaustDSP/Common_Parameters/Pitch']) - 3 + note2Offset[`${keyName}`] + 48 + Number(scaleState['/FaustDSP/Common_Parameters/Octave'])*12)
     const handleKeyStroke = (e) => {
@@ -79,7 +93,11 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset}) 
             if(e.type === "keydown" && notes[e.key])
                 keyOn(notes[e.key])
             if(e.type === "keyup" && notes[e.key])
-            keyOff(notes[e.key])
+                keyOff(notes[e.key])
+            if(e.type === "keydown" && e.key === 'z')
+                octaveChange(e.key)
+            if(e.type === "keydown" && e.key === 'x')
+                octaveChange(e.key)
         }
     }
     return (
