@@ -26,7 +26,7 @@ const AudioEnvProvider = ({children}) => {
                     let audioCtx = window.audioCtx
                     let faust = new window.Faust2WebAudio.Faust({debug: false, wasmLocation: "/Faustlib/libfaust-wasm.wasm", dataLocation: "/Faustlib/libfaust-wasm.data"})
                     let faustArgs = { audioCtx, useWorklet: false, buffersize: 16384, args: {"-I": "libraries/"} }
-                    if(action.appname === 'Scale') {
+                    if(action.appname === 'scale') {
                         faustArgs['voices'] = 16
                         faustArgs['buffersize'] = 1024
                     }
@@ -51,7 +51,7 @@ const AudioEnvProvider = ({children}) => {
                     let audioCtx = window.audioCtx
                     let node = window[`${action.appname}node`]
                     let faustArgs = { audioCtx, useWorklet: false, buffersize: 16384, args: {"-I": "libraries/"} }
-                    if(action.appname === 'Scale') {
+                    if(action.appname === 'scale') {
                         faustArgs['voices'] = 16
                         faustArgs['buffersize'] = 1024
                     }
@@ -87,6 +87,10 @@ const AudioEnvProvider = ({children}) => {
                     let node = window[`${action.appname}node`]
                     Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
                 }
+                return state
+            case 'MIDI':
+                if(state['scalePlaying'])
+                    window['scalenode'].midiMessage(action.message)
                 return state
             default:
                 return state

@@ -54,19 +54,57 @@ const MusicRoom = () => {
             defaultScaleState[`${path}`] = value
     })
     const [droneLocalState, setDroneLocalState] = useLocalStore('drone', defaultDroneState)
-    React.useEffect(() => configureDrone({...droneLocalState}), [droneLocalState])
     const [droneState, configureDrone] = React.useState(defaultDroneState)
-    const updateParameter = (value, path) => {
+    const [scaleLocalState, setScaleLocalState] = useLocalStore('scale', defaultScaleState)
+    const [scaleState, configureScale] = React.useState(defaultScaleState)
+    scaleLocalState['/FaustDSP/Common_Parameters/Pitch'] = droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency']
+    scaleLocalState['/FaustDSP/Common_Parameters/Fine_Tune'] = droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune']
+    React.useEffect(() => {
+        configureDrone({...droneLocalState})
+        configureScale({...scaleLocalState})
+    }, [droneLocalState,scaleLocalState])
+    const updateParameter = (appname, value, path) => {
         let updateParams = {}
         updateParams[`${path}`] = value
-        dispatch({type: 'Configure', appname: 'drone', settings: updateParams})
-        let newDroneState = droneState
-        newDroneState[`${path}`] = value
-        setDroneLocalState(newDroneState)
+        dispatch({type: 'Configure', appname: appname, settings: updateParams})
+        switch(appname) {
+            case 'drone':
+                let newDroneState = droneState
+                newDroneState[`${path}`] = value
+                setDroneLocalState(newDroneState)
+                if(path === '/FaustDSP/PureTones_v1.0/0x00/Common_Frequency' || path === '/FaustDSP/PureTones_v1.0/0x00/Fine_Tune') {
+                    let scalePath = path.includes('Common_Frequency') ? '/FaustDSP/Common_Parameters/Pitch' : '/FaustDSP/Common_Parameters/Fine_Tune'
+                    let newScaleState = scaleState
+                    newScaleState[`${scalePath}`] = value
+                    setScaleLocalState(newScaleState)                    
+                }
+                break
+            case 'scale':
+                let newScaleState = scaleState
+                newScaleState[`${path}`] = value
+                setScaleLocalState(newScaleState)
+                break
+            default:
+                console.log('Update Parameters: Incorrect appname!')
+        }
     }
-    const resetDrone = () => {
-        dispatch({type: 'Configure', appname: 'drone', settings: defaultDroneState})
-        setDroneLocalState(defaultDroneState)
+    const sendMIDIMessage = (msg) => {
+        dispatch({type: 'MIDI', appname: 'scale', message: msg})
+    }
+    const reset = (appname) => {
+        switch(appname) {
+            case 'drone':
+                dispatch({type: 'Configure', appname: appname, settings: defaultDroneState})
+                setDroneLocalState(defaultDroneState)
+                break
+            case 'Scale':
+                dispatch({type: 'Configure', appname: appname, settings: defaultScaleState})
+                setDroneLocalState(defaultScaleState)
+                break
+            default:
+                console.log('Reset: Incorrect appname!')
+        }
+
     }
     const commonFreqParams = {
         key: "Key",
@@ -133,8 +171,8 @@ const MusicRoom = () => {
 
     let mainNavTabs = ['Drone', 'Scale', 'Sequencer']
     let mainNavPages = [
-        <Drone droneDSPCode={droneDSPCode} droneState={droneState} onParamUpdate={updateParameter} resetDrone={resetDrone} />, 
-        <Scale scaleDSPCode={scaleDSPCode} scaleState={defaultScaleState} />,
+        <Drone droneDSPCode={droneDSPCode} droneState={droneState} onParamUpdate={(value,path) => updateParameter('drone',value,path)} reset={()=>reset('drone')} />, 
+        <Scale scaleDSPCode={scaleDSPCode} scaleState={scaleState} onParamUpdate={(value,path) => updateParameter('scale',value,path)} onMIDIMessage={sendMIDIMessage} reset={()=>reset('scale')} />,
         <Sequencer />
     ]
 

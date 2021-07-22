@@ -6,9 +6,9 @@ gate = button("gate");
 cperiod = hslider("Common_Parameters/Period",2,0,3,0.1);
 
 midiKey = ba.hz2midikey(freq);
-rootKey = hslider("[0][style:radio{'B':14;'A#':13;'A':12;'G#':11;'G':10;'F#':9;'F':8;'E':7;'D#':6;'D':5;'C#':4;'C':3}]Common_Parameters/Pitch",0,0,11,1);
+rootKey = hslider("[0][style:radio{'B':14;'A#':13;'A':12;'G#':11;'G':10;'F#':9;'F':8;'E':7;'D#':6;'D':5;'C#':4;'C':3}]Common_Parameters/Pitch",0,0,11,1) - 3;
 octave = hslider("Common_Parameters/Octave",0,-1,1,1);
-noteId = (midiKey + octave*12 - rootKey + 3) : %(12);
+noteId = (midiKey + octave*12 - rootKey) : %(12);
 fineTune = hslider("Common_Parameters/Fine_Tune",0,-100,100,1);
 
 offsetSa = 0 + hslider("Common_Parameters/12_Note_Scale/Sa/Cent",0,-120,120,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/Sa/0.01_Cent",0,-100,100,1);
