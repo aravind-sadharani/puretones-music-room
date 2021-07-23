@@ -173,7 +173,7 @@ const MusicRoom = () => {
     let mainNavPages = [
         <Drone droneDSPCode={droneDSPCode} droneState={droneState} onParamUpdate={(value,path) => updateParameter('drone',value,path)} reset={()=>reset('drone')} />, 
         <Scale scaleDSPCode={scaleDSPCode} scaleState={scaleState} onParamUpdate={(value,path) => updateParameter('scale',value,path)} onMIDIMessage={sendMIDIMessage} reset={()=>reset('scale')} />,
-        <Sequencer />
+        <Sequencer scaleState={scaleState} />
     ]
 
     return (

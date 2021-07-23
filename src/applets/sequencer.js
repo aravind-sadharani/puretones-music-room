@@ -3,8 +3,9 @@ import ShowHideControls from "../components/showhidecontrols"
 import Selector from "../components/selector"
 import Editor from "../components/editor"
 import SessionControls from "./sessioncontrols"
+import generateDSP from "../utils/generatedsp"
 
-const Sequencer = () => {
+const Sequencer = ({scaleState}) => {
     const initialState = {
         octave: 0,
         tone: 0,
@@ -60,7 +61,7 @@ const Sequencer = () => {
         newSequencerState[`${path}`] = value
         updateSequencerState({...newSequencerState})   
     }
-    const generate = () => sequencerState
+    const generate = () => generateDSP(sequencerState,scaleState)
     return (
         <>
             <p><strong>Sequencer Controls</strong></p>

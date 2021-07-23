@@ -17,14 +17,11 @@ const SessionControls = ({appname,code,settings,reset,generate}) => {
         updateTitle(newTitle)
     }
     const playStop = () => {
-        if(generate) {
-            console.log(generate())
-            return
-        }
+        let DSPCode = (!code && generate) ? generate() : code
         let type = title === 'Start' ? "Play" : "Stop"
         let newTitle = title === 'Start' ? "Starting..." : "Stopping..."
         updateTitle(newTitle)
-        dispatch({type: type, appname: appname, code: code, settings: settings, onJobComplete: jobCompleted})
+        dispatch({type: type, appname: appname, code: DSPCode, settings: settings, onJobComplete: jobCompleted})
     }
     return (
         <SessionControlsContainer>

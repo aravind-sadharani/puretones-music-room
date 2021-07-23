@@ -34,7 +34,8 @@ const AudioEnvProvider = ({children}) => {
                         faust.getNode(composition, faustArgs).then(node => {
                           window[`${action.appname}node`] = node
                           node.connect(audioCtx.destination)
-                          Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
+                          if(action.settings)
+                              Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
                           action.onJobComplete('Play')
                         }, reason => {
                           console.log(composition)
@@ -57,13 +58,15 @@ const AudioEnvProvider = ({children}) => {
                     }
                     if(node) {
                         node.connect(audioCtx.destination)
-                        Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
+                        if(action.settings)
+                            Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
                         action.onJobComplete('Play')
                     } else {
                         faust.getNode(composition, faustArgs).then(node => {
                             window[`${action.appname}node`] = node
                             node.connect(audioCtx.destination)
-                            Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
+                            if(action.settings)
+                                Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
                             action.onJobComplete('Play')
                         }, reason => {
                             console.log(composition)
