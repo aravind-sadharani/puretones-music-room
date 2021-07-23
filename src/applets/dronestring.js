@@ -94,6 +94,8 @@ const DroneString = ({title,stringState,basePath,onParamUpdate}) => {
     }
     let timbreState = {}
     Object.entries(stringState).filter(item => item[0].includes(`${basePath}/Octave`)).forEach(item => timbreState[`${item[0]}`] = item[1])
+    const [timbreVisibility, setTimbreVisibility] = React.useState(false)
+    const toggleTimbreVisibility = () => setTimbreVisibility(!timbreVisibility)
     return (
         <>
             <p><strong>{`${title} Parameters`}</strong></p>
@@ -104,7 +106,7 @@ const DroneString = ({title,stringState,basePath,onParamUpdate}) => {
             <Slider params={ultraFineTuneParams} path={`${basePath}/Ultrafine_Tune`} onParamUpdate={(value,path) => onParamUpdate(value,path)}></Slider>
             <Slider params={varianceParams} path={`${basePath}/Variance`} onParamUpdate={(value,path) => onParamUpdate(value,path)}></Slider>
             <Slider params={gainParams} path={`${basePath}/Gain`} onParamUpdate={(value,path) => onParamUpdate(value,path)}></Slider>
-            <ShowHideControls title="Timbre">
+            <ShowHideControls title="Timbre" visibility={timbreVisibility} onShowHide={toggleTimbreVisibility}>
               <DroneStringTimbre title={title} timbreState={timbreState} basePath={basePath} onParamUpdate={(value,path) => onParamUpdate(value,path)}/>
             </ShowHideControls>
         </>

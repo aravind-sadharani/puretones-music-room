@@ -54,15 +54,7 @@ const ShowHideChildren = styled.div`
     grid-column-end: 3;
 `
 
-const ShowHideControls = ({title,label,initial,onShowHide,children}) => {
-    let initialVisibility = initial || false
-    const [visibility, setVisibility] = React.useState(initialVisibility)
-
-    const showhide = () => {
-        if(onShowHide)
-            onShowHide(!visibility)
-        setVisibility(!visibility)
-    }
+const ShowHideControls = ({title,label,visibility,onShowHide,children}) => {
     let active = visibility ? "active" : ""
     let tabTitle = visibility ? "Hide" : "Show"
     if (label)
@@ -70,7 +62,7 @@ const ShowHideControls = ({title,label,initial,onShowHide,children}) => {
     return (
         <ShowHideContainer>
             <ShowHideKey>{title}</ShowHideKey>
-            <ShowHideButton className={active} onClick={() => showhide()}>{tabTitle}</ShowHideButton>
+            <ShowHideButton className={active} onClick={onShowHide}>{tabTitle}</ShowHideButton>
             <ShowHideChildren className={active}>
                 {children}
             </ShowHideChildren>

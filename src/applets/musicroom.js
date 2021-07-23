@@ -53,6 +53,34 @@ const MusicRoom = () => {
         if(value && path)
             defaultScaleState[`${path}`] = value
     })
+    const defaultSequencerState = [
+        {
+            voiceName: '_voice_1',
+            enabled: true,
+            octave: 0,
+            tone: 0,
+            editorExpanded: true,
+            composition: 'Sa 2'
+        },
+        {
+            voiceName: '_voice_2',
+            enabled: false,
+            octave: 0,
+            tone: 0,
+            editorExpanded: false,
+            composition: ''
+        },
+        {
+            voiceName: '_voice_3',
+            enabled: false,
+            octave: 0,
+            tone: 0,
+            editorExpanded: false,
+            composition: ''
+        }
+    ]
+    const [sequencerLocalState, setSequencerLocalState] = useLocalStore('sequencer', defaultSequencerState)
+    const [sequencerState, updateSequencerState] = React.useState({...defaultSequencerState})
     const [droneLocalState, setDroneLocalState] = useLocalStore('drone', defaultDroneState)
     const [droneState, configureDrone] = React.useState(defaultDroneState)
     const [scaleLocalState, setScaleLocalState] = useLocalStore('scale', defaultScaleState)
@@ -62,7 +90,8 @@ const MusicRoom = () => {
     React.useEffect(() => {
         configureDrone({...droneLocalState})
         configureScale({...scaleLocalState})
-    }, [droneLocalState,scaleLocalState])
+        updateSequencerState({...sequencerLocalState})
+    }, [droneLocalState,scaleLocalState,sequencerLocalState])
     const updateParameter = (appname, value, path) => {
         let updateParams = {}
         updateParams[`${path}`] = value
@@ -88,6 +117,11 @@ const MusicRoom = () => {
                 console.log(`Update Parameters: Incorrect appname ${appname}!`)
         }
     }
+    const updateVoiceParameters = (index, value, path) => {
+        let newSequencerState = sequencerState
+        newSequencerState[index][`${path}`] = value
+        setSequencerLocalState({...newSequencerState})   
+    }
     const sendMIDIMessage = (msg) => {
         dispatch({type: 'MIDI', appname: 'scale', message: msg})
     }
@@ -100,6 +134,9 @@ const MusicRoom = () => {
             case 'scale':
                 dispatch({type: 'Configure', appname: appname, settings: defaultScaleState})
                 setScaleLocalState(defaultScaleState)
+                break
+            case 'sequencer':
+                setSequencerLocalState({...defaultSequencerState})
                 break
             default:
                 console.log(`Reset: Incorrect appname ${appname}!`)
@@ -173,7 +210,7 @@ const MusicRoom = () => {
     let mainNavPages = [
         <Drone droneDSPCode={droneDSPCode} droneState={droneState} onParamUpdate={(value,path) => updateParameter('drone',value,path)} reset={()=>reset('drone')} />, 
         <Scale scaleDSPCode={scaleDSPCode} scaleState={scaleState} onParamUpdate={(value,path) => updateParameter('scale',value,path)} onMIDIMessage={sendMIDIMessage} reset={()=>reset('scale')} />,
-        <Sequencer scaleState={scaleState} />
+        <Sequencer scaleState={scaleState} sequencerState={sequencerState} onVoiceParamUpdate={updateVoiceParameters} reset={()=>reset('sequencer')} />
     ]
 
     return (
