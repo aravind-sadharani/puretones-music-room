@@ -292,7 +292,7 @@ const getPluckTiming = (tokens) => {
 
 const printNoteId = (voiceName, id) => `${voiceName}ratio_${id}`
 
-const printPitch = (voiceName,pitch,finetune,octave) => `${voiceName}cpitch = 220*(2^(${pitch}/12))*(2^(${finetune}/1200))*(2^(${octave}));\n`
+const printPitch = (voiceName,pitch,finetune,octave) => `${voiceName}cpitch = 110*(2^(${pitch}/12))*(2^(${finetune}/1200))*(2^(${octave}));\n`
 
 const printNoteSpec = (voiceName, noteStr, id, noteOffsets) => `${voiceName}ratio_${id} = (${baseValue(noteStr)}) * (${octaveValue(noteStr)}) * (2^(${getFineTune(noteStr,noteOffsets)}/1200))${printGamaka(voiceName, noteStr)}  //${noteStr}\n`
 
@@ -344,17 +344,16 @@ const generateDSP = (sequencerState,scaleState) => {
     let pitch = scaleState['/FaustDSP/Common_Parameters/Pitch']
     let finetune = scaleState['/FaustDSP/Common_Parameters/Fine_Tune']
     let octave = sequencerState['octave']
-    let noteOffsets = Object.entries(baseRatio).map(note => 
-        note[0] !== 'Q' ? Number.parseInt(scaleState[`/FaustDSP/Common_Parameters/12_Note_Scale/${note[0]}/Cent`])+0.01*Number.parseInt(scaleState[`/FaustDSP/Common_Parameters/12_Note_Scale/${note[0]}/0.01_Cent`]) : '0')
+    let noteOffsets = Object.entries(baseRatio).map(note => note[0] !== 'Q' ? Number.parseInt(scaleState[`/FaustDSP/Common_Parameters/12_Note_Scale/${note[0]}/Cent`])+0.01*Number.parseInt(scaleState[`/FaustDSP/Common_Parameters/12_Note_Scale/${note[0]}/0.01_Cent`]) : '0')
     let toneName = toneNames[sequencerState['tone']]
     let voiceCode = getVoice(voiceName,tokens,pitch,finetune,octave,noteOffsets,toneName)
     let toneCode = dspToneTemplates[sequencerState['tone']]
-    let composition = `${dspTemplateTop}
+    let fullDSPCode = `${dspTemplateTop}
     ${toneCode}
     ${voiceCode}
     ${dspTemplateBottom}
     `
-    return composition
+    return fullDSPCode
 }
 
 export default generateDSP

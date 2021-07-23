@@ -11,21 +11,26 @@ const SessionControlsContainer = styled.div`
 
 const SessionControls = ({appname,code,settings,reset,generate}) => {
     const [title, updateTitle] = React.useState('Start')
+    const [active, setActive] = React.useState(false)
     let {dispatch} = React.useContext(AudioEnv)
     const jobCompleted = (type) => {
-        let newTitle = type === 'Stop' ? 'Start' : 'Stop'
+        let newTitle = type === 'Error' ? 'Error! Retry' : type === 'Stop' ? 'Start' : 'Stop'
+        let newState = type !== 'Stop'
         updateTitle(newTitle)
+        setActive(newState)
     }
     const playStop = () => {
         let DSPCode = (!code && generate) ? generate() : code
-        let type = title === 'Start' ? "Play" : "Stop"
-        let newTitle = title === 'Start' ? "Starting..." : "Stopping..."
+        let type = title === 'Stop' ? "Stop" : "Play"
+        let newTitle = title === 'Stop' ? "Stopping..." : "Starting..."
+        let newState = title !== 'Stop'
         updateTitle(newTitle)
+        setActive(newState)
         dispatch({type: type, appname: appname, code: DSPCode, settings: settings, onJobComplete: jobCompleted})
     }
     return (
         <SessionControlsContainer>
-            <Button stateful onClick={() => playStop()}>{title}</Button>
+            <Button active={active} onClick={() => playStop()}>{title}</Button>
             <Button onClick={() => reset()}>Reset</Button>
             <Button>Save</Button>
             <Button>Restore</Button>

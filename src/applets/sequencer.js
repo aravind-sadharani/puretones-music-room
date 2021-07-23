@@ -61,11 +61,14 @@ const Sequencer = ({scaleState}) => {
         newSequencerState[`${path}`] = value
         updateSequencerState({...newSequencerState})   
     }
+    const reset = () => {
+        updateSequencerState({...initialState})
+    }
     const generate = () => generateDSP(sequencerState,scaleState)
     return (
         <>
             <p><strong>Sequencer Controls</strong></p>
-            <SessionControls appname='sequencer' generate={generate} />
+            <SessionControls appname='sequencer' reset={reset} generate={generate} />
             <br />
             <p><strong>Sequencer Parameters</strong></p>
             <br />
