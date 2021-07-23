@@ -50,45 +50,36 @@ const TabPageElement = styled.div`
     }
 `
 
-class TabNav extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {activeTab: props.tablist[0], activePage: props.pagelist[0]}
-    }
-
-    activateTab = (e) => {
-        let activeIndex = this.props.tablist.findIndex((s) => {
+const TabNav = ({tablist,pagelist}) => {
+    const [state,setState] = React.useState({activeTab: tablist[0], activePage: pagelist[0]})
+    const activateTab = (e) => {
+        let activeIndex = tablist.findIndex((s) => {
             let key = s.type ? s.type.name : s
             return `tab_${key}` === e.target.id
         })
-        this.setState({activeTab: this.props.tablist[activeIndex], activePage: this.props.pagelist[activeIndex]})
+        setState({activeTab: tablist[activeIndex], activePage: pagelist[activeIndex]})
     }
-
-    render = () => {
-        let tablist = this.props.tablist
-        let TabComponentList = tablist.map(s => {
-            let active = (s === this.state.activeTab) ? "active" : ""
-            return (
-                <TabElement className={active} key={`tab_${s}`} id={`tab_${s}`} onClick={(e) => this.activateTab(e)}>{s}</TabElement>
-            )
-        })
-        let pagelist = this.props.pagelist
-        let TabPageList = tablist.map((s,index) => {
-            let active = (s === this.state.activeTab) ? "active" : ""
-            let tabPage = pagelist[index]
-            return (
-                <TabPageElement className={active} key={`page_${s}`} id={`page_${s}`}>{tabPage}</TabPageElement>
-            )
-        })
+    let TabComponentList = tablist.map(s => {
+        let active = (s === state.activeTab) ? "active" : ""
         return (
-            <>
-                <TabBarElement numtabs={tablist.length}>
-                    {TabComponentList}
-                </TabBarElement>
-                {TabPageList}
-            </>
+            <TabElement className={active} key={`tab_${s}`} id={`tab_${s}`} onClick={(e) => activateTab(e)}>{s}</TabElement>
         )
-    }
+    })
+    let TabPageList = tablist.map((s,index) => {
+        let active = (s === state.activeTab) ? "active" : ""
+        let tabPage = pagelist[index]
+        return (
+            <TabPageElement className={active} key={`page_${s}`} id={`page_${s}`}>{tabPage}</TabPageElement>
+        )
+    })
+    return (
+        <>
+            <TabBarElement numtabs={tablist.length}>
+                {TabComponentList}
+            </TabBarElement>
+            {TabPageList}
+        </>
+    )
 }
 
 export default TabNav

@@ -54,31 +54,28 @@ const ShowHideChildren = styled.div`
     grid-column-end: 3;
 `
 
-class ShowHideControls extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {visibility: false}
-    }
+const ShowHideControls = ({title,label,initial,onShowHide,children}) => {
+    let initialVisibility = initial || false
+    const [visibility, setVisibility] = React.useState(initialVisibility)
 
-    showhide = () => this.setState({visibility: !(this.state.visibility)})
-
-    render = () => {
-        let children = this.props.children
-        let active = this.state.visibility ? "active" : ""
-        let label = this.state.visibility ? "Hide" : "Show"
-        if (this.props.label)
-            label = this.state.visibility ? this.props.label.inactive : this.props.label.active
-        let title = this.props.title
-        return (
-            <ShowHideContainer>
-                <ShowHideKey>{title}</ShowHideKey>
-                <ShowHideButton className={active} onClick={() => this.showhide()}>{label}</ShowHideButton>
-                <ShowHideChildren className={active}>
-                    {children}
-                </ShowHideChildren>
-            </ShowHideContainer>
-        )
+    const showhide = () => {
+        if(onShowHide)
+            onShowHide(!visibility)
+        setVisibility(!visibility)
     }
+    let active = visibility ? "active" : ""
+    let tabTitle = visibility ? "Hide" : "Show"
+    if (label)
+        tabTitle = visibility ? label.inactive : label.active
+    return (
+        <ShowHideContainer>
+            <ShowHideKey>{title}</ShowHideKey>
+            <ShowHideButton className={active} onClick={() => showhide()}>{tabTitle}</ShowHideButton>
+            <ShowHideChildren className={active}>
+                {children}
+            </ShowHideChildren>
+        </ShowHideContainer>
+    )
 }
 
 export default ShowHideControls

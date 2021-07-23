@@ -1,64 +1,39 @@
 import * as React from "react"
-import ShowHideControls from "../components/showhidecontrols"
-import Selector from "../components/selector"
-import Editor from "../components/editor"
 import SessionControls from "./sessioncontrols"
+import SequencerVoice from "./sequencervoice"
 import generateDSP from "../utils/generatedsp"
 
 const Sequencer = ({scaleState}) => {
-    const initialState = {
-        octave: 0,
-        tone: 0,
-        composition: ''
-    }
+    const initialState = [
+        {
+            voiceName: '_voice_1',
+            enabled: true,
+            octave: 0,
+            tone: 0,
+            editorExpanded: true,
+            composition: 'Sa 2'
+        },
+        {
+            voiceName: '_voice_2',
+            enabled: false,
+            octave: 0,
+            tone: 0,
+            editorExpanded: false,
+            composition: ''
+        },
+        {
+            voiceName: '_voice_3',
+            enabled: false,
+            octave: 0,
+            tone: 0,
+            editorExpanded: false,
+            composition: ''
+        }
+    ]
     const [sequencerState, updateSequencerState] = React.useState({...initialState})
-    let octaveList = {
-        key: "Octave",
-        default: sequencerState['octave'],
-        options: [
-            {
-                value: 1,
-                text: "High"
-            },
-            {
-                value: 0,
-                text: "Medium"
-            },
-            {
-                value: -1,
-                text: "Low"
-            }
-        ]
-    }
-    let toneList = {
-        key: "Tone",
-        default: sequencerState['tone'],
-        options: [
-            {
-                value: 0,
-                text: "String 1"
-            },
-            {
-                value: 1,
-                text: "String 2"
-            },
-            {
-                value: 2,
-                text: "Bow"
-            },
-            {
-                value: 3,
-                text: "Reed"
-            }
-        ]
-    }
-    const voiceLabel = {
-        inactive: "Disable",
-        active: "Enable"
-    }
-    const updateVoiceParameters = (value, path) => {
+    const updateVoiceParameters = (index, value, path) => {
         let newSequencerState = sequencerState
-        newSequencerState[`${path}`] = value
+        newSequencerState[index][`${path}`] = value
         updateSequencerState({...newSequencerState})   
     }
     const reset = () => {
@@ -72,12 +47,9 @@ const Sequencer = ({scaleState}) => {
             <br />
             <p><strong>Sequencer Parameters</strong></p>
             <br />
-            <ShowHideControls title="Voice 1" label={voiceLabel}>
-                <br />
-                <Selector params={octaveList} path='octave' onParamUpdate={updateVoiceParameters}></Selector>
-                <Selector params={toneList} path='tone' onParamUpdate={updateVoiceParameters}></Selector>
-                <Editor composition={`${sequencerState['composition']}`} onCompositionChange={(composition) => updateVoiceParameters(composition,'composition')} />
-            </ShowHideControls>
+            <SequencerVoice index='0' title='Voice 1' sequencerVoiceState={sequencerState[0]} onVoiceParamUpdate={updateVoiceParameters} />
+            <SequencerVoice index='1' title='Voice 2' sequencerVoiceState={sequencerState[1]} onVoiceParamUpdate={updateVoiceParameters} />
+            <SequencerVoice index='2' title='Voice 3' sequencerVoiceState={sequencerState[2]} onVoiceParamUpdate={updateVoiceParameters} />
         </>
     )
 }

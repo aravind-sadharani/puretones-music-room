@@ -13,8 +13,7 @@ ramp(x) = ba.time : *(x);
 
 const dspTemplateBottom = `
 mix(a,b) = 0.7*a+0.3*b,0.3*a+0.7*b;
-//concert = hgroup("[00]Motif",2*cgain*(0.7*_voice_1notes + 0.9*_voice_2notes),2*cgain*(0.7*_voice_1notes + 0.9*_voice_3notes));
-concert = hgroup("[00]Motif",2*cgain*(0.7*_voice_1notes),2*cgain*(0.7*_voice_1notes));
+concert = hgroup("[00]Motif",2*cgain*(0.7*_voice_1notes + 0.9*_voice_2notes),2*cgain*(0.7*_voice_1notes + 0.9*_voice_3notes));
 process = concert : mix : dm.zita_light;
 `
 
@@ -339,15 +338,27 @@ ${voiceName}notes = ${toneName}Tone(${voiceName}cpitch,${voiceName}noteratio,${v
 }
 
 const generateDSP = (sequencerState,scaleState) => {
-    let voiceName = '_voice_1'
-    let tokens = tokenize(sequencerState['composition'])
-    let pitch = scaleState['/FaustDSP/Common_Parameters/Pitch']
-    let finetune = scaleState['/FaustDSP/Common_Parameters/Fine_Tune']
-    let octave = sequencerState['octave']
-    let noteOffsets = Object.entries(baseRatio).map(note => note[0] !== 'Q' ? Number.parseInt(scaleState[`/FaustDSP/Common_Parameters/12_Note_Scale/${note[0]}/Cent`])+0.01*Number.parseInt(scaleState[`/FaustDSP/Common_Parameters/12_Note_Scale/${note[0]}/0.01_Cent`]) : '0')
-    let toneName = toneNames[sequencerState['tone']]
-    let voiceCode = getVoice(voiceName,tokens,pitch,finetune,octave,noteOffsets,toneName)
-    let toneCode = dspToneTemplates[sequencerState['tone']]
+    const generateVoiceCode = (sequencerVoiceState) => {
+        let voiceName = sequencerVoiceState['voiceName']
+
+        if(!sequencerVoiceState['enabled'])
+            return `${voiceName}notes = 0;\n`
+        
+        let tokens = tokenize(sequencerVoiceState['composition'])
+        let pitch = scaleState['/FaustDSP/Common_Parameters/Pitch']
+        let finetune = scaleState['/FaustDSP/Common_Parameters/Fine_Tune']
+        let octave = sequencerVoiceState['octave']
+        let noteOffsets = Object.entries(baseRatio).map(note => note[0] !== 'Q' ? Number.parseInt(scaleState[`/FaustDSP/Common_Parameters/12_Note_Scale/${note[0]}/Cent`])+0.01*Number.parseInt(scaleState[`/FaustDSP/Common_Parameters/12_Note_Scale/${note[0]}/0.01_Cent`]) : '0')
+        let toneName = toneNames[sequencerVoiceState['tone']]
+        return getVoice(voiceName,tokens,pitch,finetune,octave,noteOffsets,toneName)
+    }
+
+    let voiceCode = [0, 1, 2].map((i) => generateVoiceCode(sequencerState[i])).join('\n')
+    let toneCode = dspToneTemplates.filter((template,index) => {
+        let present = [0, 1, 2].map((i) => sequencerState[i]['tone']).filter((toneIndex,index) => sequencerState[index]['enabled']).find(toneIndex => Number(toneIndex) === index)
+        return (present !== undefined)
+    }).join('\n')
+    
     let fullDSPCode = `${dspTemplateTop}
     ${toneCode}
     ${voiceCode}

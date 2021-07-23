@@ -16,8 +16,8 @@ const EditorElement = styled.textarea`
     resize: vertical;
 `
 
-const Editor = ({composition,onCompositionChange}) => (
-    <ShowHideControls title="Composition Editor">
+const Editor = ({composition,onCompositionChange,expanded,onExpand}) => (
+    <ShowHideControls title="Composition Editor" initial={expanded || false} onShowHide={(state) => {if(onExpand) {onExpand(state)}}}>
         <EditorElement rows="8" placeholder="Type your composition here..." value={composition} onChange={(e) => onCompositionChange(e.target.value)} />
     </ShowHideControls>
 )
