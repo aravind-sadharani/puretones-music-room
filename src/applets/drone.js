@@ -5,7 +5,7 @@ import Slider from "../components/slider"
 import DroneString from "./dronestring"
 import SessionControls from "./sessioncontrols"
 
-const Drone = ({droneDSPCode,droneState,onParamUpdate,reset}) => {
+const Drone = ({droneDSPCode,droneState,onParamUpdate,reset,save,restore}) => {
     const stringTabs = ['String 1', 'String 2', 'String 3', 'String 4', 'String 5', 'String 6']
     const stringNames = ['1st_String', '2nd_String', '3rd_String', '4th_String', '5th_String', '6th_String']
     let stringPages = stringNames.map((s,index) => {
@@ -49,7 +49,7 @@ const Drone = ({droneDSPCode,droneState,onParamUpdate,reset}) => {
     return (
         <>
             <p><strong>Drone Controls</strong></p>
-            <SessionControls appname='drone' code={droneDSPCode} settings={droneState} reset={reset} />
+            <SessionControls appname='drone' code={droneDSPCode} settings={droneState} reset={reset} save={save} restore={restore}/>
             <br />
             <p><strong>Drone Parameters</strong></p>
             <br />

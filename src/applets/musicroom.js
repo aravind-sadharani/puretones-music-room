@@ -143,6 +143,58 @@ const MusicRoom = () => {
         }
 
     }
+    const saveSnapshot = (appname) => {
+        switch(appname) {
+            case 'drone':
+                return Object.entries(droneLocalState).map(item => `${item[1]} ${item[0]}`).join('\n').replace(/FaustDSP/g,'puretones')
+            case 'scale':
+                return Object.entries(scaleLocalState).map(item => `${item[1]} ${item[0]}`).join('\n').replace(/FaustDSP/g,'musicscale')
+            case 'sequencer':
+                return JSON.stringify(sequencerLocalState)
+            default:
+                console.log(`Save: Incorrect appname ${appname}!`)
+                return null
+        }
+    }
+    const restoreSnapshot = (snapshot,appname) => {
+        let newDroneState = {}
+        let newScaleState = {}
+        switch(appname) {
+            case 'drone':
+                snapshot = snapshot.replace(/puretones/g,'FaustDSP')
+                snapshot.split('\n').forEach((s) => {
+                    let [value, path] = s.split(' ')
+                    if(value && path)
+                        newDroneState[`${path.trim()}`] = value.trim()
+                })
+                dispatch({type: 'Configure', appname: appname, settings: newDroneState})
+                setDroneLocalState({...newDroneState})
+                newScaleState = scaleLocalState
+                newScaleState['/FaustDSP/Common_Parameters/Pitch'] = newDroneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency']
+                newScaleState['/FaustDSP/Common_Parameters/Fine_Tune'] = newDroneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune']
+                dispatch({type: 'Configure', appname: appname, settings: newScaleState})
+                setScaleLocalState({...newScaleState})
+                break
+            case 'scale':
+                snapshot = snapshot.replace(/musicscale/g,'FaustDSP')
+                snapshot.split('\n').forEach((s) => {
+                    let [value, path] = s.split(' ')
+                    if(value && path)
+                        newScaleState[`${path.trim()}`] = value.trim()
+                })
+                newScaleState['/FaustDSP/Common_Parameters/Pitch'] = droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency']
+                newScaleState['/FaustDSP/Common_Parameters/Fine_Tune'] = droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune']
+                dispatch({type: 'Configure', appname: appname, settings: newScaleState})
+                setScaleLocalState({...newScaleState})
+                break
+            case 'sequencer':
+                setSequencerLocalState({...JSON.parse(snapshot)})
+                break
+            default:
+                console.log(`Restore: Incorrect appname ${appname}!`)
+                return
+        }
+    }
     const commonFreqParams = {
         key: "Key",
         default: Number(droneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency']),
@@ -208,9 +260,9 @@ const MusicRoom = () => {
 
     let mainNavTabs = ['Drone', 'Scale', 'Sequencer']
     let mainNavPages = [
-        <Drone droneDSPCode={droneDSPCode} droneState={droneState} onParamUpdate={(value,path) => updateParameter('drone',value,path)} reset={()=>reset('drone')} />, 
-        <Scale scaleDSPCode={scaleDSPCode} scaleState={scaleState} onParamUpdate={(value,path) => updateParameter('scale',value,path)} onMIDIMessage={sendMIDIMessage} reset={()=>reset('scale')} />,
-        <Sequencer scaleState={scaleState} sequencerState={sequencerState} onVoiceParamUpdate={updateVoiceParameters} reset={()=>reset('sequencer')} />
+        <Drone droneDSPCode={droneDSPCode} droneState={droneState} onParamUpdate={(value,path) => updateParameter('drone',value,path)} reset={()=>reset('drone')} save={(()=>saveSnapshot('drone'))} restore={(snapshot) => restoreSnapshot(snapshot,'drone')}/>, 
+        <Scale scaleDSPCode={scaleDSPCode} scaleState={scaleState} onParamUpdate={(value,path) => updateParameter('scale',value,path)} onMIDIMessage={sendMIDIMessage} reset={()=>reset('scale')} save={(()=>saveSnapshot('scale'))} restore={(snapshot) => restoreSnapshot(snapshot,'scale')}/>,
+        <Sequencer scaleState={scaleState} sequencerState={sequencerState} onVoiceParamUpdate={updateVoiceParameters} reset={()=>reset('sequencer')} save={(()=>saveSnapshot('sequencer'))} restore={(snapshot) => restoreSnapshot(snapshot,'sequencer')}/>
     ]
 
     return (

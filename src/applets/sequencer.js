@@ -3,12 +3,12 @@ import SessionControls from "./sessioncontrols"
 import SequencerVoice from "./sequencervoice"
 import generateDSP from "../utils/generatedsp"
 
-const Sequencer = ({sequencerState,scaleState,onVoiceParamUpdate,reset}) => {
+const Sequencer = ({sequencerState,scaleState,onVoiceParamUpdate,reset,save,restore}) => {
     const generate = () => generateDSP(sequencerState,scaleState)
     return (
         <>
             <p><strong>Sequencer Controls</strong></p>
-            <SessionControls appname='sequencer' reset={reset} generate={generate} />
+            <SessionControls appname='sequencer' reset={reset} generate={generate} save={save} restore={restore}/>
             <br />
             <p><strong>Sequencer Parameters</strong></p>
             <br />

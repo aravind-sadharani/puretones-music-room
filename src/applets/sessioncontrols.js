@@ -1,6 +1,7 @@
 import * as React from "react"
-import Button from "../components/button"
 import styled from "styled-components"
+import Button from "../components/button"
+import SaveRestore from "../components/saverestore"
 import { AudioEnv } from "../services/audioenv"
 
 const SessionControlsContainer = styled.div`
@@ -9,7 +10,13 @@ const SessionControlsContainer = styled.div`
     text-align: center;
 `
 
-const SessionControls = ({appname,code,settings,reset,generate}) => {
+const FileExtn = {
+    drone: 'prt',
+    scale: 'pkb',
+    sequencer: 'psq'
+}
+
+const SessionControls = ({appname,code,settings,reset,generate,save,restore}) => {
     const [title, updateTitle] = React.useState('Start')
     const [active, setActive] = React.useState(false)
     let {dispatch} = React.useContext(AudioEnv)
@@ -28,12 +35,17 @@ const SessionControls = ({appname,code,settings,reset,generate}) => {
         setActive(newState)
         dispatch({type: type, appname: appname, code: DSPCode, settings: settings, onJobComplete: jobCompleted})
     }
+    const stopAndRestore = (result) => {
+        if(title === 'Stop') {
+            playStop()
+        }
+        restore(result)
+    }
     return (
         <SessionControlsContainer>
             <Button active={active} onClick={() => playStop()}>{title}</Button>
             <Button onClick={() => reset()}>Reset</Button>
-            <Button>Save</Button>
-            <Button>Restore</Button>
+            <SaveRestore extn={FileExtn[`${appname}`]} save={save} restore={stopAndRestore}/>
         </SessionControlsContainer>
     )
 }

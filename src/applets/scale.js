@@ -7,7 +7,7 @@ import SessionControls from "./sessioncontrols"
 import Keyboard from "./keyboard"
 import ListenToKeyStrokes from "../services/keystroke"
 
-const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset}) => {
+const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset, save, restore}) => {
     const scaleTabs = ['Sa', 're', 'Re', 'ga', 'Ga', 'ma', 'Ma', 'Pa', 'dha', 'Dha', 'ni', 'Ni', 'SA']
     let scalePages = scaleTabs.map((s) => {
         let basePath = `/FaustDSP/Common_Parameters/12_Note_Scale/${s}`
@@ -96,7 +96,7 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset}) 
     return (
         <>
             <p><strong>Scale Controls</strong></p>
-            <SessionControls appname="scale" code={scaleDSPCode} settings={scaleState} reset={reset}/>
+            <SessionControls appname="scale" code={scaleDSPCode} settings={scaleState} reset={reset} save={save} restore={restore}/>
             <br />
             <Keyboard keyOn={keyOn} keyOff={keyOff} />
             <ListenToKeyStrokes handleKeyStroke={handleKeyStroke} />
