@@ -36,7 +36,7 @@ const AudioEnvProvider = ({children}) => {
                     state.audioContextReady = true
                 }
                 audioCtx = window.audioCtx
-                let faustArgs = { audioCtx, useWorklet: true, buffersize: 16384, args: {"-I": "libraries/"} }
+                let faustArgs = { audioCtx, useWorklet: false, buffersize: 16384, args: {"-I": "libraries/"} }
                 if(action.appname === 'scale') {
                     faustArgs['voices'] = 16
                     faustArgs['buffersize'] = 1024
