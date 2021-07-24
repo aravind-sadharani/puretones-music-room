@@ -8,20 +8,30 @@ const initialState = {
     sequencerPlaying: false
 }
 
+const apps = ['drone', 'scale', 'sequencer']
+
 const AudioEnv = React.createContext(initialState)
 
 const AudioEnvProvider = ({children}) => {
     const playDSP = (audioCtx,faust,DSPCode,faustArgs,action) => {
+        apps.forEach((otherapp) => {
+            if(otherapp !== action.appname && state[`${otherapp}Playing`])
+                window[`${otherapp}node`].disconnect(audioCtx.destination)
+        })
         faust.getNode(DSPCode, faustArgs).then(node => {
+            apps.forEach((otherapp) => {
+                if(otherapp !== action.appname && state[`${otherapp}Playing`])
+                    window[`${otherapp}node`].connect(audioCtx.destination)
+            })
             window[`${action.appname}node`] = node
             node.connect(audioCtx.destination)
             if(action.settings)
                 Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
             action.onJobComplete('Play')
-          }, reason => {
+        }, reason => {
             console.log(reason)
             action.onJobComplete('Error')
-          })
+        })
     }
     const [state, dispatch] = React.useReducer((state,action) => {
         let audioCtx
