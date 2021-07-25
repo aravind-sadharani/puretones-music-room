@@ -172,7 +172,7 @@ const MusicRoom = () => {
                 newScaleState = scaleLocalState
                 newScaleState['/FaustDSP/Common_Parameters/Pitch'] = newDroneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency']
                 newScaleState['/FaustDSP/Common_Parameters/Fine_Tune'] = newDroneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune']
-                dispatch({type: 'Configure', appname: appname, settings: newScaleState})
+                dispatch({type: 'Configure', appname: 'scale', settings: newScaleState})
                 setScaleLocalState({...newScaleState})
                 break
             case 'scale':

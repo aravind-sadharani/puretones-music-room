@@ -19,6 +19,7 @@ const FileExtn = {
 const SessionControls = ({appname,code,settings,reset,generate,save,restore}) => {
     const [title, updateTitle] = React.useState('Start')
     const [active, setActive] = React.useState(false)
+    const [DSPCode, setDSPCode] = React.useState(code || '')
     let {dispatch} = React.useContext(AudioEnv)
     const jobCompleted = (type) => {
         let newTitle = type === 'Error' ? 'Error! Retry' : type === 'Stop' ? 'Start' : 'Stop'
@@ -27,25 +28,21 @@ const SessionControls = ({appname,code,settings,reset,generate,save,restore}) =>
         setActive(newState)
     }
     const playStop = () => {
-        let DSPCode = (!code && generate) ? generate() : code
-        let type = title === 'Stop' ? "Stop" : "Play"
+        setDSPCode((!code && generate) ? generate() : code)
         let newTitle = title === 'Stop' ? "Stopping..." : "Starting..."
         let newState = title !== 'Stop'
         updateTitle(newTitle)
         setActive(newState)
-        dispatch({type: type, appname: appname, code: DSPCode, settings: settings, onJobComplete: jobCompleted})
     }
-    const stopAndRestore = (result) => {
-        if(title === 'Stop') {
-            playStop()
-        }
-        restore(result)
-    }
+    React.useEffect(()=>{
+        if(title === 'Starting...' || title === 'Stopping...')
+            dispatch({type: `${title === 'Starting...' ? 'Play' : 'Stop'}`, appname: appname, code: DSPCode, settings: settings, onJobComplete: jobCompleted})
+    })
     return (
         <SessionControlsContainer>
             <Button active={active} onClick={() => playStop()}>{title}</Button>
             <Button onClick={() => reset()}>Reset</Button>
-            <SaveRestore extn={FileExtn[`${appname}`]} save={save} restore={stopAndRestore}/>
+            <SaveRestore extn={FileExtn[`${appname}`]} save={save} restore={restore}/>
         </SessionControlsContainer>
     )
 }
