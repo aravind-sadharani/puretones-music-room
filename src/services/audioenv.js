@@ -35,57 +35,62 @@ const AudioEnvProvider = ({children}) => {
     }
     const [state, dispatch] = React.useReducer((state,action) => {
         let audioCtx
+        if(!state.audioContextReady) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+            if(audioCtx.state === "suspended")
+                audioCtx.resume()
+            window.audioCtx = audioCtx
+            state.audioContextReady = true
+        }
+        audioCtx = window.audioCtx
         switch(action.type) {
             case 'Play':
-                let DSPCode = action.code
-                if(!state.audioContextReady) {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)()
-                    if(audioCtx.state === "suspended")
-                        audioCtx.resume()
-                    window.audioCtx = audioCtx
-                    state.audioContextReady = true
-                }
-                audioCtx = window.audioCtx
-                let faustArgs = { audioCtx, useWorklet: false, buffersize: 16384, args: {"-I": "libraries/"} }
-                if(action.appname === 'scale') {
-                    faustArgs['voices'] = 16
-                    faustArgs['buffersize'] = 1024
-                }
-                if(!state.faustReady) {
-                    let faust = new window.Faust2WebAudio.Faust({debug: false, wasmLocation: "/Faustlib/libfaust-wasm.wasm", dataLocation: "/Faustlib/libfaust-wasm.data"})
-                    faust.ready.then(() => {
-                        window.faust = faust
-                        state.faustReady = true    
-                        playDSP(audioCtx,faust,DSPCode,faustArgs,action)
-                    }, reason => {
-                        console.log(reason)
-                    })
-                } else {
-                    let faust = window.faust
-                    let node = window[`${action.appname}node`]
-                    if(node) {
-                        node.connect(audioCtx.destination)
-                        if(action.settings)
-                            Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
-                        action.onJobComplete('Play')
-                    } else {
-                        playDSP(audioCtx,faust,DSPCode,faustArgs,action)
+                if(!state[`${action.appname}Playing`]) {
+                    let DSPCode = action.code
+                    let faustArgs = { audioCtx, useWorklet: false, buffersize: 16384, args: {"-I": "libraries/"} }
+                    if(action.appname === 'scale') {
+                        faustArgs['voices'] = 16
+                        faustArgs['buffersize'] = 1024
                     }
+                    if(!state.faustReady) {
+                        let faust = new window.Faust2WebAudio.Faust({debug: false, wasmLocation: "/Faustlib/libfaust-wasm.wasm", dataLocation: "/Faustlib/libfaust-wasm.data"})
+                        faust.ready.then(() => {
+                            window.faust = faust
+                            state.faustReady = true    
+                            playDSP(audioCtx,faust,DSPCode,faustArgs,action)
+                        }, reason => {
+                            console.log(reason)
+                        })
+                    } else {
+                        let faust = window.faust
+                        let node = window[`${action.appname}node`]
+                        if(node) {
+                            node.connect(audioCtx.destination)
+                            if(action.settings)
+                                Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
+                            action.onJobComplete('Play')
+                        } else {
+                            playDSP(audioCtx,faust,DSPCode,faustArgs,action)
+                        }
+                    }
+                    state[`${action.appname}Playing`] = true
                 }
-                state[`${action.appname}Playing`] = true
                 return state
             case 'Stop':
-                audioCtx = window.audioCtx
-                let node = window[`${action.appname}node`]
-                if(node) {
-                    node.disconnect(audioCtx.destination)
-                    action.onJobComplete('Stop')
-                    if(action.appname === 'sequencer') {
-                        node.destroy()
-                        delete window[`${action.appname}node`]
+                if([`${action.appname}Playing`]) {
+                    audioCtx = window.audioCtx
+                    let node = window[`${action.appname}node`]
+                    if(node) {
+                        node.disconnect(audioCtx.destination)
+                        if(action.onJobComplete)
+                            action.onJobComplete('Stop')
+                        if(action.appname === 'sequencer') {
+                            node.destroy()
+                            delete window[`${action.appname}node`]
+                        }
                     }
+                    state[`${action.appname}Playing`] = false
                 }
-                state[`${action.appname}Playing`] = false
                 return state
             case 'Configure':
                 if(state[`${action.appname}Playing`]) {

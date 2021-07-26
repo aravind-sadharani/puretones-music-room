@@ -38,6 +38,9 @@ const SessionControls = ({appname,code,settings,reset,generate,save,restore}) =>
         if(title === 'Starting...' || title === 'Stopping...')
             dispatch({type: `${title === 'Starting...' ? 'Play' : 'Stop'}`, appname: appname, code: DSPCode, settings: settings, onJobComplete: jobCompleted})
     })
+    React.useEffect(() => {
+        dispatch({type: 'Stop', appname: appname})
+    },[appname,dispatch])
     return (
         <SessionControlsContainer>
             <Button active={active} onClick={() => playStop()}>{title}</Button>
