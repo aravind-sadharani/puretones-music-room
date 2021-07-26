@@ -8,6 +8,7 @@ import Sequencer from "../applets/sequencer"
 import { AudioEnv } from "../services/audioenv"
 import { graphql, useStaticQuery } from "gatsby"
 import useLocalStore from "../services/localstore"
+import { dspSettingsFromState, dspStateFromSettings } from "../utils/dspsettingsinterpreter"
 
 const MusicRoom = () => {
     const {dronedsp,prt,scaledsp,pkb} = useStaticQuery(
@@ -38,21 +39,11 @@ const MusicRoom = () => {
     )
     const droneDSPCode = dronedsp.childPlainText.content
     const droneSettings = prt.childPlainText.content.replace(/puretones/g,'FaustDSP')
+    let defaultDroneState = dspStateFromSettings('drone', droneSettings)
     const scaleDSPCode = scaledsp.childPlainText.content
     const scaleSettings = pkb.childPlainText.content.replace(/musicscale/g,'FaustDSP')
+    let defaultScaleState = dspStateFromSettings('scale', scaleSettings)
     const {dispatch} = React.useContext(AudioEnv)
-    let defaultDroneState = {}
-    droneSettings.split('\n').forEach((s) => {
-        let [value, path] = s.split(' ')
-        if(value && path)
-            defaultDroneState[`${path}`] = value
-    })
-    let defaultScaleState = {}
-    scaleSettings.split('\n').forEach((s) => {
-        let [value, path] = s.split(' ')
-        if(value && path)
-            defaultScaleState[`${path}`] = value
-    })
     const defaultSequencerState = [
         {
             voiceName: '_voice_1',
@@ -146,9 +137,9 @@ const MusicRoom = () => {
     const saveSnapshot = (appname) => {
         switch(appname) {
             case 'drone':
-                return Object.entries(droneLocalState).map(item => `${item[1]} ${item[0]}`).join('\n').replace(/FaustDSP/g,'puretones')
+                return dspSettingsFromState(appname,droneLocalState)
             case 'scale':
-                return Object.entries(scaleLocalState).map(item => `${item[1]} ${item[0]}`).join('\n').replace(/FaustDSP/g,'musicscale')
+                return dspSettingsFromState(appname,scaleLocalState)
             case 'sequencer':
                 return JSON.stringify(sequencerLocalState)
             default:
@@ -161,12 +152,7 @@ const MusicRoom = () => {
         let newScaleState = {}
         switch(appname) {
             case 'drone':
-                snapshot = snapshot.replace(/puretones/g,'FaustDSP')
-                snapshot.split('\n').forEach((s) => {
-                    let [value, path] = s.split(' ')
-                    if(value && path)
-                        newDroneState[`${path.trim()}`] = value.trim()
-                })
+                newDroneState = dspStateFromSettings(appname,snapshot)
                 dispatch({type: 'Configure', appname: appname, settings: newDroneState})
                 setDroneLocalState({...newDroneState})
                 newScaleState = scaleLocalState
@@ -176,12 +162,7 @@ const MusicRoom = () => {
                 setScaleLocalState({...newScaleState})
                 break
             case 'scale':
-                snapshot = snapshot.replace(/musicscale/g,'FaustDSP')
-                snapshot.split('\n').forEach((s) => {
-                    let [value, path] = s.split(' ')
-                    if(value && path)
-                        newScaleState[`${path.trim()}`] = value.trim()
-                })
+                newScaleState = dspStateFromSettings(appname,snapshot)
                 newScaleState['/FaustDSP/Common_Parameters/Pitch'] = droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency']
                 newScaleState['/FaustDSP/Common_Parameters/Fine_Tune'] = droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune']
                 dispatch({type: 'Configure', appname: appname, settings: newScaleState})
