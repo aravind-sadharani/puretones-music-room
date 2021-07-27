@@ -1,0 +1,36 @@
+---
+title: Raga Malkauns
+---
+
+import DSPPlayer from '../applets/dspplayer'
+import DefaultLayout from '../layouts/default-layout'
+import { graphql } from 'gatsby'
+
+export default ({children}) => <DefaultLayout title="PureTones Raga Page">{children}</DefaultLayout>
+
+# Raga Malkauns
+
+Raga Malkauns is blah, blah, blah...
+
+# Drone Track
+
+<DSPPlayer appname='drone' code={props.data.dronedsp.childPlainText.content} settings={props.data.malkaunsprt.childPlainText.content} />
+
+# Next Raga
+
+[Next Raga](/nextraga/)
+
+export const pageQuery = graphql`
+    query {
+        dronedsp: file(relativePath: {eq: "puretones.dsp"}) {
+            childPlainText {
+                content
+            }
+        },
+        malkaunsprt: file(relativePath: {eq: "malkauns.prt"}) {
+            childPlainText {
+                content
+            }
+        }
+    }
+`

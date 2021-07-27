@@ -26,7 +26,6 @@ module.exports = {
         icon: "src/images/icon.png",
       },
     },
-    "gatsby-plugin-mdx",
     "gatsby-plugin-sharp",
     "gatsby-transformer-sharp",
     {
@@ -54,6 +53,15 @@ module.exports = {
       },
       __key: "data",
     },
+    {
+      resolve: `gatsby-plugin-mdx`,
+      options: {
+        defaultLayouts: {
+          default: require.resolve("./src/layouts/default-layout.js"),
+        },
+      },
+    },
+    `gatsby-plugin-catch-links`
   ],
   flags: {
     DEV_SSR: false

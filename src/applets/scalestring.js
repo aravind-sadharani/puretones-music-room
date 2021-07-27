@@ -19,7 +19,6 @@ const ScaleString = ({title,stringState,basePath,onParamUpdate}) => {
     return (
         <>
             <p><strong>{`${title} Parameters`}</strong></p>
-            <br />
             <Slider params={fineTuneParams} path={`${basePath}/Cent`} onParamUpdate={onParamUpdate}></Slider>
             <Slider params={ultraFineTuneParams} path={`${basePath}/0.01_Cent`} onParamUpdate={onParamUpdate}></Slider>
         </>
