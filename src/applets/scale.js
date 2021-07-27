@@ -97,15 +97,12 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset, s
         <>
             <p><strong>Scale Controls</strong></p>
             <SessionControls appname="scale" code={scaleDSPCode} settings={scaleState} reset={reset} save={save} restore={restore}/>
-            <br />
             <Keyboard keyOn={keyOn} keyOff={keyOff} />
             <ListenToKeyStrokes handleKeyStroke={handleKeyStroke} />
             <p><strong>Scale Parameters</strong></p>
-            <br />
             <Selector params={octaveList} path="/FaustDSP/Common_Parameters/Octave" onParamUpdate={(value,path) => onParamUpdate(value,path)}></Selector>
             <Slider params={sustainParams} path="/FaustDSP/Common_Parameters/Period" onParamUpdate={(value,path) => onParamUpdate(value,path)}></Slider>
             <Slider params={levelParams} path="/FaustDSP/Zita_Light/Level" onParamUpdate={(value,path) => onParamUpdate(value,path)}></Slider>
-            <br />
             <TabNav tablist={scaleTabs} pagelist={scalePages}></TabNav>
         </>
     )

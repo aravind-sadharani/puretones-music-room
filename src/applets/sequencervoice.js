@@ -50,7 +50,6 @@ const SequencerVoice = ({index,title,sequencerVoiceState,onVoiceParamUpdate}) =>
     }
     return (
         <ShowHideControls title={title} label={voiceLabel} visibility={sequencerVoiceState['enabled']} onShowHide={() => onVoiceParamUpdate(Number(index),!sequencerVoiceState['enabled'],'enabled')}>
-            <br />
             <Selector params={octaveList} path='octave' onParamUpdate={(value,path) => onVoiceParamUpdate(Number(index),value,path)}></Selector>
             <Selector params={toneList} path='tone' onParamUpdate={(value,path) => onVoiceParamUpdate(Number(index),value,path)}></Selector>
             <Editor expanded={sequencerVoiceState['editorExpanded']} onExpand={() => onVoiceParamUpdate(Number(index),!sequencerVoiceState['editorExpanded'],'editorExpanded')} composition={`${sequencerVoiceState['composition']}`} onCompositionChange={(composition) => onVoiceParamUpdate(Number(index),composition,'composition')} />

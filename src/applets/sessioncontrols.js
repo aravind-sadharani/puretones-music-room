@@ -5,7 +5,7 @@ import SaveRestore from "../components/saverestore"
 import { AudioEnv } from "../services/audioenv"
 
 const SessionControlsContainer = styled.div`
-    padding: 0;
+    padding: 0 0 1em 0;
     margin: 0;
     text-align: center;
 `

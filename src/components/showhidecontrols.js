@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 const ShowHideContainer = styled.div`
     padding: 0 0 12px 0;
-    margin: 0 12px;
+    margin: 0;
     display: grid;
     grid-template-columns: 1fr 1fr;
 `
@@ -41,7 +41,7 @@ const ShowHideButton = styled.button`
 const ShowHideChildren = styled.div`
     display: none;
     margin: 0;
-    padding: 0px 0px;
+    padding: 12px 12px 0 12px;
     border: 1px solid #e6e6eb;
     border-top-left-radius: 5px;
     border-bottom-right-radius: 5px;

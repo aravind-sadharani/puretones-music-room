@@ -130,7 +130,7 @@ const SaveRestore = ({extn,save,restore}) => {
             <Button onClick={toggleDownloadDialog}>Save</Button>
             <Button onClick={toggleUploadDialog}>Restore</Button>
             <FileDownloadDialog className={activeDL}>
-                <label htmlFor={`snapshotDL${extn}`}><strong>Filename </strong></label>
+                <label htmlFor={`snapshotDL${extn}`}><strong>Name File ►</strong></label>
                 <FileName id={`snapshotDL${extn}`} type="text" placeholder="snapshot" ref={fileNameRef} onChange={(e) => updateFilenameDL(e.target.value)}></FileName>
                 <Button onClick={download}>Download</Button>
                 <Button onClick={toggleDownloadDialog}>Cancel</Button>
@@ -138,7 +138,7 @@ const SaveRestore = ({extn,save,restore}) => {
             </FileDownloadDialog>
             <FileUploadDialog className={activeUL}>
                 <label htmlFor={`snapshotUL${extn}`}>
-                    <strong>{filenameUL || 'None selected'}</strong>
+                    <strong>{filenameUL || 'Select File ►'}</strong>
                     <FileBrowser className={activeUL}>
                         Browse
                     </FileBrowser>

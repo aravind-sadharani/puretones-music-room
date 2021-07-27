@@ -4,12 +4,11 @@ import styled from "styled-components"
 const HeaderElement = styled.header`
     text-align: center;
     background-color: #333366;
-    margin: 12px;
-    padding: 6px 0;
     border-radius: 5px;
+    margin-bottom: 12px;
     h1 {
         margin: 0;
-        padding: 0.22em;
+        padding: 12px;
         color: #F76F8E;
         font-size: 3em;
     }

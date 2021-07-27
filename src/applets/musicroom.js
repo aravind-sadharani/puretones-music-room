@@ -249,10 +249,8 @@ const MusicRoom = () => {
     return (
         <>
             <p><strong>Common Parameters</strong></p>
-            <br />
             <Selector params={commonFreqParams} path='/FaustDSP/PureTones_v1.0/0x00/Common_Frequency' onParamUpdate={(value,path) => updateParameter('drone',value,path)}></Selector>
             <Slider params={offsetParams} path='/FaustDSP/PureTones_v1.0/0x00/Fine_Tune' onParamUpdate={(value,path) => updateParameter('drone',value,path)} ></Slider>
-            <br />
             <TabNav tablist={mainNavTabs} pagelist={mainNavPages}></TabNav>
         </>
     )

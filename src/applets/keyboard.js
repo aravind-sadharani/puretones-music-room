@@ -38,7 +38,6 @@ const Keyboard = ({keyOn,keyOff}) => {
             <KeyboardContainer>
                 {keys}
             </KeyboardContainer>
-            <br />
         </>
     )
 }

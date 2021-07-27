@@ -2,8 +2,8 @@ import * as React from "react"
 import styled from "styled-components"
 
 const SelectContainer = styled.div`
-    padding: 0 0 12px 0;
-    margin: 0 12px;
+    padding: 0 0 1em 0;
+    margin: 0;
     display: grid;
     grid-template-columns: 1fr 1fr;
 `

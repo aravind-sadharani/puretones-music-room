@@ -4,8 +4,7 @@ import styled from "styled-components"
 const FooterElement = styled.footer`
     background-color: #e6e6eb;
     color: #404047;
-    margin: 12px;
-    padding: 6px;
+    padding: 12px;
     border-radius: 5px;
 `
 

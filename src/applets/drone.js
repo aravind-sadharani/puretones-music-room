@@ -50,13 +50,10 @@ const Drone = ({droneDSPCode,droneState,onParamUpdate,reset,save,restore}) => {
         <>
             <p><strong>Drone Controls</strong></p>
             <SessionControls appname='drone' code={droneDSPCode} settings={droneState} reset={reset} save={save} restore={restore}/>
-            <br />
             <p><strong>Drone Parameters</strong></p>
-            <br />
             <Selector params={octaveList} path="/FaustDSP/PureTones_v1.0/0x00/Octave_Selector" onParamUpdate={(value,path) => onParamUpdate(value,path)}></Selector>
             <Slider params={periodParams} path="/FaustDSP/PureTones_v1.0/0x00/Period" onParamUpdate={(value,path) => onParamUpdate(value,path)}></Slider>
             <Slider params={levelParams} path="/FaustDSP/Zita_Light/Level" onParamUpdate={(value,path) => onParamUpdate(value,path)}></Slider>
-            <br />
             <TabNav tablist={stringTabs} pagelist={stringPages}></TabNav>
         </>
     )

@@ -22,7 +22,6 @@ const TimbreSliderElements = ({timbreState,basePath,onParamUpdate}) => (
 const DroneStringTimbre = ({title,timbreState,basePath,onParamUpdate}) => (
     <>
         <p><strong>{`${title} Timbre`}</strong></p>
-        <br />
         <TimbreSliderElements timbreState={timbreState} basePath={basePath} onParamUpdate={(value,path) => onParamUpdate(value,path)}/>
     </>
 )
