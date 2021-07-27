@@ -1,12 +1,7 @@
----
-title: Raga Yaman
----
+import droneCode from 'raw-loader!../data/puretones.dsp'
+import yamanDrone from 'raw-loader!../data/yaman.prt'
 
-import DSPPlayer from '../applets/dspplayer'
-import DefaultLayout from '../layouts/default-layout'
-import { graphql } from 'gatsby'
-
-export default ({children}) => <DefaultLayout title="PureTones Raga Page">{children}</DefaultLayout>
+export const title = "Raga Yaman"
 
 # Raga Yaman
 
@@ -14,23 +9,8 @@ Raga Yaman is blah, blah, blah...
 
 # Drone Track
 
-<DSPPlayer appname='drone' code={props.data.dronedsp.childPlainText.content} settings={props.data.yamanprt.childPlainText.content} />
+<DSPPlayer appname='drone' code={droneCode} settings={yamanDrone} />
 
 # Prev Raga
 
 [Prev Raga](/ragapage/)
-
-export const pageQuery = graphql`
-    query {
-        dronedsp: file(relativePath: {eq: "puretones.dsp"}) {
-            childPlainText {
-                content
-            }
-        },
-        yamanprt: file(relativePath: {eq: "yaman.prt"}) {
-            childPlainText {
-                content
-            }
-        }
-    }
-`

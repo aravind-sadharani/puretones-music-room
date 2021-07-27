@@ -6,42 +6,17 @@ import Drone from "../applets/drone"
 import Scale from "../applets/scale"
 import Sequencer from "../applets/sequencer"
 import { AudioEnv } from "../services/audioenv"
-import { graphql, useStaticQuery } from "gatsby"
 import useLocalStore from "../services/localstore"
 import { dspSettingsFromState, dspStateFromSettings } from "../utils/dspsettingsinterpreter"
+import droneDSPCode from 'raw-loader!../data/puretones.dsp'
+import dronePRT from 'raw-loader!../data/default.prt'
+import scaleDSPCode from 'raw-loader!../data/musicscale.dsp'
+import scalePKB from 'raw-loader!../data/default.pkb'
 
 const MusicRoom = () => {
-    const {dronedsp,prt,scaledsp,pkb} = useStaticQuery(
-        graphql`
-            query DroneDSPQuery {
-                dronedsp: file(relativePath: {eq: "puretones.dsp"}) {
-                    childPlainText {
-                        content
-                    }
-                },
-                prt: file(relativePath: {eq: "default.prt"}) {
-                    childPlainText {
-                        content
-                    }
-                },
-                scaledsp: file(relativePath: {eq: "musicscale.dsp"}) {
-                    childPlainText {
-                        content
-                    }
-                },
-                pkb: file(relativePath: {eq: "default.pkb"}) {
-                    childPlainText {
-                        content
-                    }
-                }
-            }
-        `
-    )
-    const droneDSPCode = dronedsp.childPlainText.content
-    const droneSettings = prt.childPlainText.content.replace(/puretones/g,'FaustDSP')
+    const droneSettings = dronePRT.replace(/puretones/g,'FaustDSP')
     let defaultDroneState = dspStateFromSettings('drone', droneSettings)
-    const scaleDSPCode = scaledsp.childPlainText.content
-    const scaleSettings = pkb.childPlainText.content.replace(/musicscale/g,'FaustDSP')
+    const scaleSettings = scalePKB.replace(/musicscale/g,'FaustDSP')
     let defaultScaleState = dspStateFromSettings('scale', scaleSettings)
     const {dispatch} = React.useContext(AudioEnv)
     const defaultSequencerState = [

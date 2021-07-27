@@ -1,50 +1,23 @@
----
-title: Raga Malkauns
----
+import droneCode from 'raw-loader!../data/puretones.dsp'
+import malkaunsDrone from 'raw-loader!../data/malkauns.prt'
+import malkaunsScale from 'raw-loader!../data/malkauns.pkb'
 
-import DSPPlayer from '../applets/dspplayer'
-import MotifPlayer from '../applets/motifplayer'
-import DefaultLayout from '../layouts/default-layout'
-import { graphql } from 'gatsby'
-
-export default ({children}) => <DefaultLayout title="PureTones Raga Page">{children}</DefaultLayout>
-
-# Raga Malkauns
+export const title = "Raga Malkauns"
 
 Raga Malkauns is blah, blah, blah...
 
 # Drone Track
 
-<DSPPlayer title='Drone for Raga Malkauns' appname='drone' code={props.data.dronedsp.childPlainText.content} settings={props.data.malkaunsprt.childPlainText.content} />
+<DSPPlayer title='Drone for Raga Malkauns' appname='drone' code={droneCode} settings={malkaunsDrone} />
 
 # Basic Motif
 
-<MotifPlayer motif='Sa ga ma dha ni SA 2' scale={props.data.malkaunspkb.childPlainText.content} drone={props.data.malkaunsprt.childPlainText.content} />
+<MotifPlayer motif='Sa ga ma dha ni SA 2' scale={malkaunsScale} drone={malkaunsDrone} />
 
 # Another Basic Motif
 
-<MotifPlayer motif='SA ni dha ma ga Sa 2' scale={props.data.malkaunspkb.childPlainText.content} drone={props.data.malkaunsprt.childPlainText.content} />
+<MotifPlayer motif='SA ni dha ma ga Sa 2' scale={malkaunsScale} drone={malkaunsDrone} />
 
 # Next Raga
 
 [Next Raga](/nextraga/)
-
-export const pageQuery = graphql`
-    query {
-        dronedsp: file(relativePath: {eq: "puretones.dsp"}) {
-            childPlainText {
-                content
-            }
-        },
-        malkaunsprt: file(relativePath: {eq: "malkauns.prt"}) {
-            childPlainText {
-                content
-            }
-        },
-        malkaunspkb: file(relativePath: {eq: "malkauns.pkb"}) {
-            childPlainText {
-                content
-            }
-        }
-    }
-`

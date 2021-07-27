@@ -44,7 +44,6 @@ module.exports = {
       },
       __key: "pages",
     },
-    `gatsby-transformer-plaintext`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
