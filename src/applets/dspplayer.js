@@ -5,30 +5,37 @@ import { AudioEnv } from "../services/audioenv"
 import { dspStateFromSettings } from "../utils/dspsettingsinterpreter"
 
 const DSPPlayerContainer = styled.div`
-    padding: 0;
+    padding: 12px;
     margin: 0;
     text-align: center;
+    border: 1px solid #e6e6eb;
+    border-radius: 5px;
 `
 
-const DSPPlayer = ({appname,code,settings}) => {
-    const [title, updateTitle] = React.useState('Start')
+const DSPTitleElement = styled.blockquote`
+    font-size: 1.2em;
+    margin: 0;
+`
+
+const DSPPlayer = ({appname,title,code,settings}) => {
+    const [buttonTitle, updateButtonTitle] = React.useState('Start')
     const [active, setActive] = React.useState(false)
     let {dispatch} = React.useContext(AudioEnv)
     const jobCompleted = (type) => {
-        let newTitle = type === 'Error' ? 'Error! Retry' : type === 'Stop' ? 'Start' : 'Stop'
+        let newButtonTitle = type === 'Error' ? 'Error! Retry' : type === 'Stop' ? 'Start' : 'Stop'
         let newState = type !== 'Stop'
-        updateTitle(newTitle)
+        updateButtonTitle(newButtonTitle)
         setActive(newState)
     }
     const playStop = () => {
-        let newTitle = title === 'Stop' ? "Stopping..." : "Starting..."
-        let newState = title !== 'Stop'
-        updateTitle(newTitle)
+        let newButtonTitle = buttonTitle === 'Stop' ? "Stopping..." : "Starting..."
+        let newState = buttonTitle !== 'Stop'
+        updateButtonTitle(newButtonTitle)
         setActive(newState)
     }
     React.useEffect(() => {
-        if(title === 'Starting...' || title === 'Stopping...')
-            dispatch({type: `${title === 'Starting...' ? 'Play' : 'Stop'}`, appname: appname, code: code, settings: dspStateFromSettings(appname,settings), onJobComplete: jobCompleted})
+        if(buttonTitle === 'Starting...' || buttonTitle === 'Stopping...')
+            dispatch({type: `${buttonTitle === 'Starting...' ? 'Play' : 'Stop'}`, appname: appname, code: code, settings: dspStateFromSettings(appname,settings), onJobComplete: jobCompleted})
     })
     React.useEffect(() => {
         dispatch({type: 'Stop', appname: 'drone'})
@@ -37,7 +44,8 @@ const DSPPlayer = ({appname,code,settings}) => {
     },[dispatch])
     return (
         <DSPPlayerContainer>
-            <Button active={active} onClick={() => playStop()}>{title}</Button>
+            <DSPTitleElement>{title}</DSPTitleElement>
+            <Button active={active} onClick={() => playStop()}>{buttonTitle}</Button>
         </DSPPlayerContainer>
     )
 }

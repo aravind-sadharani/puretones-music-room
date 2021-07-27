@@ -35,13 +35,13 @@ const AudioEnvProvider = ({children}) => {
     }
     const [state, dispatch] = React.useReducer((state,action) => {
         let audioCtx
-        if(!state.audioContextReady) {
+        if(!state.audioContextReady && !window.audioCtx) {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)()
             if(audioCtx.state === "suspended")
                 audioCtx.resume()
             window.audioCtx = audioCtx
-            state.audioContextReady = true
         }
+        state.audioContextReady = true
         audioCtx = window.audioCtx
         switch(action.type) {
             case 'Play':
@@ -77,11 +77,15 @@ const AudioEnvProvider = ({children}) => {
                 }
                 return state
             case 'Stop':
-                if([`${action.appname}Playing`]) {
+                if(state[`${action.appname}Playing`]) {
                     audioCtx = window.audioCtx
                     let node = window[`${action.appname}node`]
                     if(node) {
-                        node.disconnect(audioCtx.destination)
+                        try{
+                            node.disconnect(audioCtx.destination)
+                        } catch(err) {
+                            console.log(err,node,action)
+                        }
                         if(action.onJobComplete)
                             action.onJobComplete('Stop')
                         if(action.appname === 'sequencer') {

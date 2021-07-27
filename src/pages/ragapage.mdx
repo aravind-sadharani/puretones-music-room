@@ -3,6 +3,7 @@ title: Raga Malkauns
 ---
 
 import DSPPlayer from '../applets/dspplayer'
+import MotifPlayer from '../applets/motifplayer'
 import DefaultLayout from '../layouts/default-layout'
 import { graphql } from 'gatsby'
 
@@ -14,7 +15,15 @@ Raga Malkauns is blah, blah, blah...
 
 # Drone Track
 
-<DSPPlayer appname='drone' code={props.data.dronedsp.childPlainText.content} settings={props.data.malkaunsprt.childPlainText.content} />
+<DSPPlayer title='Drone for Raga Malkauns' appname='drone' code={props.data.dronedsp.childPlainText.content} settings={props.data.malkaunsprt.childPlainText.content} />
+
+# Basic Motif
+
+<MotifPlayer motif='Sa ga ma dha ni SA 2' scale={props.data.malkaunspkb.childPlainText.content} drone={props.data.malkaunsprt.childPlainText.content} />
+
+# Another Basic Motif
+
+<MotifPlayer motif='SA ni dha ma ga Sa 2' scale={props.data.malkaunspkb.childPlainText.content} drone={props.data.malkaunsprt.childPlainText.content} />
 
 # Next Raga
 
@@ -28,6 +37,11 @@ export const pageQuery = graphql`
             }
         },
         malkaunsprt: file(relativePath: {eq: "malkauns.prt"}) {
+            childPlainText {
+                content
+            }
+        },
+        malkaunspkb: file(relativePath: {eq: "malkauns.pkb"}) {
             childPlainText {
                 content
             }
