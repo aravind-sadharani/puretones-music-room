@@ -20,6 +20,7 @@ const TabElement = styled.button`
     padding: 4px 4px;
     transition: 0.3s;
     font-weight: normal;
+    font-size: calc(min(${props => `${(130/(props.numtabs*Math.max(3,props.children.length))).toFixed(1)}vw`},1em));
     &:hover {
         border-top-right-radius: 5px;
         border-top-left-radius: 5px;
@@ -62,7 +63,7 @@ const TabNav = ({tablist,pagelist}) => {
     let TabComponentList = tablist.map(s => {
         let active = (s === state.activeTab) ? "active" : ""
         return (
-            <TabElement className={active} key={`tab_${s}`} id={`tab_${s}`} onClick={(e) => activateTab(e)}>{s}</TabElement>
+            <TabElement numtabs={tablist.length} className={active} key={`tab_${s}`} id={`tab_${s}`} onClick={(e) => activateTab(e)}>{s}</TabElement>
         )
     })
     let TabPageList = tablist.map((s,index) => {

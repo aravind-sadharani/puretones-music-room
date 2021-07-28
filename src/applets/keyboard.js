@@ -9,7 +9,7 @@ const KeyboardContainer = styled.ul`
     list-style: none;
     padding: 0 0 1em 0;
     margin: 0;
-    font-size: calc(min(2vw,1.1em));
+    font-size: calc(min(3vw,1em));
 `
 
 const KeyContainer = styled.li`
