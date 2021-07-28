@@ -7,7 +7,7 @@ import { AudioEnv } from "../services/audioenv"
 
 const MotifPlayerContainer = styled.div`
     padding: 12px;
-    margin: 0;
+    margin: 0 0 1em 0;
     text-align: center;
     border: 1px solid #e6e6eb;
     border-radius: 5px;

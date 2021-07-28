@@ -6,11 +6,11 @@ import IncludeFaust from '../services/faust'
 import { StaticImage } from 'gatsby-plugin-image'
 import { AudioEnvProvider } from '../services/audioenv'
 import { Link } from 'gatsby'
-import DSPPlayer from '../applets/dspplayer'
+import DronePlayer from '../applets/droneplayer'
 import MotifPlayer from '../applets/motifplayer'
 import { MDXProvider } from "@mdx-js/react"
 
-const shortcodes = { DSPPlayer, MotifPlayer }
+const shortcodes = { DronePlayer, MotifPlayer }
 
 const DefaultLayout = ({title,children}) => {
   return (

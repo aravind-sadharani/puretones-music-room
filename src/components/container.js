@@ -12,7 +12,10 @@ const ContainerElement = styled.div`
         color: #F76F8E;
     }
     p {
-        margin-bottom: 1em;
+        margin: 0 0 1rem 0;
+    }
+    h1, h2, h3 {
+        margin: 0 0 1rem 0;
     }
 `
 

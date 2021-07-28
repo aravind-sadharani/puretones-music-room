@@ -1,6 +1,5 @@
-import droneCode from 'raw-loader!../data/puretones.dsp'
-import malkaunsDrone from 'raw-loader!../data/malkauns.prt'
-import malkaunsScale from 'raw-loader!../data/malkauns.pkb'
+import malkaunsDrone from 'raw-loader!./malkauns.prt'
+import malkaunsScale from 'raw-loader!./malkauns.pkb'
 
 export const title = "Raga Malkauns"
 
@@ -8,7 +7,7 @@ Raga Malkauns is blah, blah, blah...
 
 # Drone Track
 
-<DSPPlayer title='Drone for Raga Malkauns' appname='drone' code={droneCode} settings={malkaunsDrone} />
+<DronePlayer title='Drone for Raga Malkauns' settings={malkaunsDrone} />
 
 # Basic Motif
 
