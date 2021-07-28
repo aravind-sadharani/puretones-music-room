@@ -7,7 +7,8 @@ const KeyboardContainer = styled.ul`
     justify-content: center;
     align-items: center;
     list-style: none;
-    padding: 0;
+    padding: 0 0 1em 0;
+    margin: 0;
     font-size: calc(min(2vw,1.1em));
 `
 
