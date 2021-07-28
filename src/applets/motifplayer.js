@@ -1,9 +1,9 @@
 import * as React from "react"
 import styled from "styled-components"
-import Button from "../components/button"
-import generateDSP from "../utils/generatedsp"
-import { dspStateFromSettings } from "../utils/dspsettingsinterpreter"
-import { AudioEnv } from "../services/audioenv"
+import Button from "components/button"
+import generateDSP from "utils/generatedsp"
+import { dspStateFromSettings } from "utils/dspsettingsinterpreter"
+import { AudioEnv } from "services/audioenv"
 
 const MotifPlayerContainer = styled.div`
     padding: 12px;

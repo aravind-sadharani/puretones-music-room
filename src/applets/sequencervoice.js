@@ -1,7 +1,7 @@
 import * as React from "react"
-import ShowHideControls from "../components/showhidecontrols"
-import Selector from "../components/selector"
-import Editor from "../components/editor"
+import ShowHideControls from "components/showhidecontrols"
+import Selector from "components/selector"
+import Editor from "components/editor"
 
 const SequencerVoice = ({index,title,sequencerVoiceState,onVoiceParamUpdate}) => {
     let octaveList = {

@@ -1,5 +1,5 @@
 import * as React from "react"
-import Slider from "../components/slider"
+import Slider from "components/slider"
 
 const ScaleString = ({title,stringState,basePath,onParamUpdate}) => {
     const fineTuneParams = {

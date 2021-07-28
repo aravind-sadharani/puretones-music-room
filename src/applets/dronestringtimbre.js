@@ -1,5 +1,5 @@
 import * as React from "react"
-import Slider from "../components/slider"
+import Slider from "components/slider"
 
 const timbreSliderList = ['Octave 1', 'Octave 2', 'Octave 3', 'Octave 4', 'Octave 5', 'Octave 6']
 

@@ -1,6 +1,6 @@
 import * as React from "react"
 import styled from "styled-components"
-import ShowHideControls from "./showhidecontrols"
+import ShowHideControls from "components/showhidecontrols"
 
 const EditorElement = styled.textarea`
     display: block;

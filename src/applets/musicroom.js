@@ -1,17 +1,17 @@
 import * as React from "react"
-import TabNav from "../components/tabs"
-import Selector from "../components/selector"
-import Slider from "../components/slider"
-import Drone from "../applets/drone"
-import Scale from "../applets/scale"
-import Sequencer from "../applets/sequencer"
-import { AudioEnv } from "../services/audioenv"
-import useLocalStore from "../services/localstore"
-import { dspSettingsFromState, dspStateFromSettings } from "../utils/dspsettingsinterpreter"
-import droneDSPCode from 'raw-loader!../data/puretones.dsp'
-import dronePRT from 'raw-loader!../data/default.prt'
-import scaleDSPCode from 'raw-loader!../data/musicscale.dsp'
-import scalePKB from 'raw-loader!../data/default.pkb'
+import TabNav from "components/tabs"
+import Selector from "components/selector"
+import Slider from "components/slider"
+import Drone from "applets/drone"
+import Scale from "applets/scale"
+import Sequencer from "applets/sequencer"
+import { AudioEnv } from "services/audioenv"
+import useLocalStore from "services/localstore"
+import { dspSettingsFromState, dspStateFromSettings } from "utils/dspsettingsinterpreter"
+import droneDSPCode from 'data/puretones.dsp'
+import dronePRT from 'data/default.prt'
+import scaleDSPCode from 'data/musicscale.dsp'
+import scalePKB from 'data/default.pkb'
 
 const MusicRoom = () => {
     const droneSettings = dronePRT.replace(/puretones/g,'FaustDSP')

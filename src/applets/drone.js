@@ -1,9 +1,9 @@
 import * as React from "react"
-import TabNav from "../components/tabs"
-import Selector from "../components/selector"
-import Slider from "../components/slider"
-import DroneString from "./dronestring"
-import SessionControls from "./sessioncontrols"
+import TabNav from "components/tabs"
+import Selector from "components/selector"
+import Slider from "components/slider"
+import DroneString from "applets/dronestring"
+import SessionControls from "applets/sessioncontrols"
 
 const Drone = ({droneDSPCode,droneState,onParamUpdate,reset,save,restore}) => {
     const stringTabs = ['String 1', 'String 2', 'String 3', 'String 4', 'String 5', 'String 6']

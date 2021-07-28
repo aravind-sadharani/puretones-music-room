@@ -1,7 +1,7 @@
 import * as React from "react"
-import SessionControls from "./sessioncontrols"
-import SequencerVoice from "./sequencervoice"
-import generateDSP from "../utils/generatedsp"
+import SessionControls from "applets/sessioncontrols"
+import SequencerVoice from "applets/sequencervoice"
+import generateDSP from "utils/generatedsp"
 
 const Sequencer = ({sequencerState,scaleState,onVoiceParamUpdate,reset,save,restore}) => {
     const generate = () => generateDSP(sequencerState,scaleState)

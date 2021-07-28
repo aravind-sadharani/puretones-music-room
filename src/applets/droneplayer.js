@@ -1,9 +1,9 @@
 import * as React from "react"
 import styled from "styled-components"
-import Button from "../components/button"
-import { AudioEnv } from "../services/audioenv"
-import { dspStateFromSettings } from "../utils/dspsettingsinterpreter"
-import droneDSPCode from 'raw-loader!../data/puretones.dsp'
+import Button from "components/button"
+import { AudioEnv } from "services/audioenv"
+import { dspStateFromSettings } from "utils/dspsettingsinterpreter"
+import droneDSPCode from 'data/puretones.dsp'
 
 const DronePlayerContainer = styled.div`
     padding: 12px;

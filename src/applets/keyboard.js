@@ -1,6 +1,6 @@
 import * as React from "react"
 import styled from "styled-components"
-import { WhiteKey, BlackKey } from "../components/key"
+import { WhiteKey, BlackKey } from "components/keys"
 
 const KeyboardContainer = styled.ul`
     display: flex;

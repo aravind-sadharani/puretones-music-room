@@ -1,6 +1,6 @@
 import * as React from "react"
 import styled from "styled-components"
-import Button from "./button"
+import Button from "components/button"
 
 const FileDownloadDialog = styled.div`
     display: none;

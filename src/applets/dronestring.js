@@ -1,9 +1,9 @@
 import * as React from "react"
-import Selector from "../components/selector"
-import Slider from "../components/slider"
-import ShowHideControls from "../components/showhidecontrols"
-import DroneStringTimbre from "./dronestringtimbre"
-import Toggle from "../components/toggle"
+import Selector from "components/selector"
+import Slider from "components/slider"
+import ShowHideControls from "components/showhidecontrols"
+import Toggle from "components/toggle"
+import DroneStringTimbre from "applets/dronestringtimbre"
 
 const DroneString = ({title,stringState,basePath,onParamUpdate}) => {
     let stringSelectParams = {

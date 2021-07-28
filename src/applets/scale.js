@@ -1,11 +1,11 @@
 import * as React from "react"
-import TabNav from "../components/tabs"
-import Selector from "../components/selector"
-import Slider from "../components/slider"
-import ScaleString from "./scalestring"
-import SessionControls from "./sessioncontrols"
-import Keyboard from "./keyboard"
-import ListenToKeyStrokes from "../services/keystroke"
+import TabNav from "components/tabs"
+import Selector from "components/selector"
+import Slider from "components/slider"
+import ScaleString from "applets/scalestring"
+import SessionControls from "applets/sessioncontrols"
+import Keyboard from "applets/keyboard"
+import ListenToKeyStrokes from "services/keystroke"
 
 const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset, save, restore}) => {
     const scaleTabs = ['Sa', 're', 'Re', 'ga', 'Ga', 'ma', 'Ma', 'Pa', 'dha', 'Dha', 'ni', 'Ni', 'SA']

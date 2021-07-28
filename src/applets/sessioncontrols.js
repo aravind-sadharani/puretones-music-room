@@ -1,8 +1,8 @@
 import * as React from "react"
 import styled from "styled-components"
-import Button from "../components/button"
-import SaveRestore from "../components/saverestore"
-import { AudioEnv } from "../services/audioenv"
+import Button from "components/button"
+import SaveRestore from "components/saverestore"
+import { AudioEnv } from "services/audioenv"
 
 const SessionControlsContainer = styled.div`
     padding: 0 0 1em 0;

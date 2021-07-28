@@ -1,13 +1,13 @@
 import * as React from 'react'
-import Container from '../components/container'
-import Header from '../components/header'
-import Footer from '../components/footer'
-import IncludeFaust from '../services/faust'
+import Container from 'components/container'
+import Header from 'components/header'
+import Footer from 'components/footer'
+import IncludeFaust from 'services/faust'
 import { StaticImage } from 'gatsby-plugin-image'
-import { AudioEnvProvider } from '../services/audioenv'
+import { AudioEnvProvider } from 'services/audioenv'
 import { Link } from 'gatsby'
-import DronePlayer from '../applets/droneplayer'
-import MotifPlayer from '../applets/motifplayer'
+import DronePlayer from 'applets/droneplayer'
+import MotifPlayer from 'applets/motifplayer'
 import { MDXProvider } from "@mdx-js/react"
 
 const shortcodes = { DronePlayer, MotifPlayer }
