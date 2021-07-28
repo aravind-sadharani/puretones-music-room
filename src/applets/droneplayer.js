@@ -1,6 +1,5 @@
 import * as React from "react"
 import styled from "styled-components"
-import Button from "components/button"
 import { AudioEnv } from "services/audioenv"
 import { dspStateFromSettings } from "utils/dspsettingsinterpreter"
 import droneDSPCode from 'data/puretones.dsp'
@@ -8,14 +7,38 @@ import droneDSPCode from 'data/puretones.dsp'
 const DronePlayerContainer = styled.div`
     padding: 12px;
     margin: 0 0 1em 0;
-    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     border: 1px solid #e6e6eb;
     border-radius: 5px;
 `
 
 const DroneTitleElement = styled.blockquote`
-    font-size: 1.2em;
+    font-size: 1.1em;
     margin: 0;
+`
+
+const DroneButtonElement = styled.button`
+    padding: 0 6px;
+    border-color: #e6e6eb;
+    outline-color: #333366;
+    -webkit-appearance: none;
+    background-color: #e6e6eb;
+    border: 0;
+    border-radius: 5px;
+    margin: 0 0 0 auto;
+    width: 120px;
+    &:hover {
+        background-color: #333366;
+        color: white;
+        font-weight: 700;
+        opacity: 0.8;
+    }
+    &.active {
+        background-color: #333366;
+        color: white;
+        font-weight: 700;
+    }
 `
 
 const DronePlayer = ({title,settings}) => {
@@ -43,10 +66,11 @@ const DronePlayer = ({title,settings}) => {
         dispatch({type: 'Stop', appname: 'scale'})
         dispatch({type: 'Stop', appname: 'sequencer'})
     },[dispatch])
+    let buttonState = active ? "active" : ""
     return (
         <DronePlayerContainer>
             <DroneTitleElement>{title}</DroneTitleElement>
-            <Button active={active} onClick={() => playStop()}>{buttonTitle}</Button>
+            <DroneButtonElement className={buttonState} onClick={() => playStop()}>{buttonTitle}</DroneButtonElement>
         </DronePlayerContainer>
     )
 }

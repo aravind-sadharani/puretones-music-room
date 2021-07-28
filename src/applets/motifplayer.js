@@ -1,6 +1,5 @@
 import * as React from "react"
 import styled from "styled-components"
-import Button from "components/button"
 import generateDSP from "utils/generatedsp"
 import { dspStateFromSettings } from "utils/dspsettingsinterpreter"
 import { AudioEnv } from "services/audioenv"
@@ -8,15 +7,36 @@ import { AudioEnv } from "services/audioenv"
 const MotifPlayerContainer = styled.div`
     padding: 12px;
     margin: 0 0 1em 0;
-    text-align: center;
     border: 1px solid #e6e6eb;
     border-radius: 5px;
+    display: grid;
+    grid-template-columns: 1fr 52px 52px;
 `
 
-const MotifElement = styled.blockquote`
-    font-size: 1.2em;
-    font-family: monospace;
+const MotifElement = styled.pre`
     margin: 0;
+    border: 1px solid #e6e6eb;
+    border-radius: 5px;
+    padding: 0 12px;
+    overflow-x: scroll;
+`
+
+const MotifButtonElement = styled.button`
+    padding: 0 6px;
+    border-color: #e6e6eb;
+    outline-color: #333366;
+    -webkit-appearance: none;
+    background-color: #e6e6eb;
+    border: 0;
+    border-radius: 5px;
+    margin: auto 0 0 auto;
+    width: 40px;
+    &:hover {
+        background-color: #333366;
+        color: white;
+        font-weight: 700;
+        opacity: 0.8;
+    }
 `
 
 const defaultSequencerState = [
@@ -47,11 +67,11 @@ const defaultSequencerState = [
 ]
 
 const MotifPlayer = ({motif,scale,drone}) => {
-    const [title, updateTitle] = React.useState('Start')
+    const [title, updateTitle] = React.useState('▶')
     const [DSPCode, setDSPCode] = React.useState('')
     let {state,dispatch} = React.useContext(AudioEnv)
     const jobCompleted = (type) => {
-        let newTitle = type === 'Error' ? 'Error! Retry' : 'Start'
+        let newTitle = type === 'Error' ? '𝗫' : '▶'
         updateTitle(newTitle)
     }
     const generate = () => {
@@ -68,7 +88,7 @@ const MotifPlayer = ({motif,scale,drone}) => {
         if(state['sequencerPlaying'])
             dispatch({type: 'Stop', appname: 'sequencer'})
         generate()
-        let newTitle = "Starting..."
+        let newTitle = "..."
         updateTitle(newTitle)
     }
     const stop = () => {
@@ -76,14 +96,14 @@ const MotifPlayer = ({motif,scale,drone}) => {
            dispatch({type: 'Stop', appname: 'sequencer'})
     }
     React.useEffect(()=>{
-        if(title === 'Starting...')
+        if(title === '...')
             dispatch({type: 'Play', appname: 'sequencer', code: DSPCode, onJobComplete: jobCompleted})
     })
     return (
         <MotifPlayerContainer>
             <MotifElement>{motif}</MotifElement>
-            <Button onClick={() => play()}>{title}</Button>
-            <Button onClick={() => stop()}>Stop</Button>
+            <MotifButtonElement onClick={() => play()}><small>{title}</small></MotifButtonElement>
+            <MotifButtonElement onClick={() => stop()}>&#x25FC;</MotifButtonElement>
         </MotifPlayerContainer>
     )
 }

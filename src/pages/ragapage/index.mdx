@@ -2,6 +2,11 @@ import malkaunsDrone from './malkauns.prt'
 import malkaunsScale from './malkauns.pkb'
 
 export const title = "Raga Malkauns"
+const motif3 = `ma 2 dha 2 ni(G)(-182.4,0,-6,.45) 2 SA(G)(-203.91,0,-6,.45) 2
+ni(G)(-12,12,-2,2.5) 2 ma dha ga(G)(-12,12,-2,2.5) 2 Sa(G)(315.64,0,-12,.45) 2`
+const motif4 = `ni' ; Sa ; dha'(G)(182.4,0,12,.45) ; dha'(G)(182.4,0,12,.45) ; 
+ni'(G)(203.91,0,12,.45) ; ni'(G)(203.91,0,12,.45) ; Sa .
+ma(G)(-498.04,0,-4,.45) ga ; Sa`
 
 Raga Malkauns is blah, blah, blah...
 
@@ -17,6 +22,12 @@ Raga Malkauns is blah, blah, blah...
 
 <MotifPlayer motif='SA ni dha ma ga Sa 2' scale={malkaunsScale} drone={malkaunsDrone} />
 
-# Next Raga
+# Advanced Motif
+
+<MotifPlayer motif={motif3} scale={malkaunsScale} drone={malkaunsDrone} />
+
+# Another Advanced Motif
+
+<MotifPlayer motif={motif4} scale={malkaunsScale} drone={malkaunsDrone} />
 
 [Next Raga](/nextraga/)
