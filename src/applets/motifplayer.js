@@ -10,7 +10,7 @@ const MotifPlayerContainer = styled.div`
     border: 1px solid #e6e6eb;
     border-radius: 5px;
     display: grid;
-    grid-template-columns: 1fr 52px 52px;
+    grid-template-columns: 1fr 52px 40px;
 `
 
 const MotifElement = styled.pre`
@@ -21,21 +21,56 @@ const MotifElement = styled.pre`
     overflow-x: scroll;
 `
 
-const MotifButtonElement = styled.button`
+const MotifPlayButton = styled.button`
+    padding: 0 6px;
+    border-color: #e6e6eb;
+    outline-color: #333366;
+    -webkit-appearance: none;
+    background-color: #e6e6eb;
+    border-left: 0;
+    border-top: 0;
+    border-bottom: 0;
+    border-right: 1px solid white;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    margin: auto 0 0 auto;
+    width: 40px;
+    svg {
+        fill: black;
+    }
+    &:hover {
+        background-color: #333366;
+        color: white;
+        font-weight: 700;
+        opacity: 0.8;
+        svg {
+            fill: white;
+        }
+    }
+`
+
+const MotifStopButton = styled.button`
     padding: 0 6px;
     border-color: #e6e6eb;
     outline-color: #333366;
     -webkit-appearance: none;
     background-color: #e6e6eb;
     border: 0;
-    border-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
     margin: auto 0 0 auto;
     width: 40px;
+    svg {
+        fill: black;
+    }
     &:hover {
         background-color: #333366;
         color: white;
         font-weight: 700;
         opacity: 0.8;
+        svg {
+            fill: white;
+        }
     }
 `
 
@@ -67,11 +102,16 @@ const defaultSequencerState = [
 ]
 
 const MotifPlayer = ({motif,scale,drone}) => {
-    const [title, updateTitle] = React.useState('▶')
+    const initialTitle = () => (
+        <svg height='1em' xmlns="http://www.w3.org/2000/svg" viewBox='0 0 10 10'>
+            <polygon points="2,2 10,6 2,10" />
+        </svg>
+    )
+    const [title, updateTitle] = React.useState(initialTitle)
     const [DSPCode, setDSPCode] = React.useState('')
     let {state,dispatch} = React.useContext(AudioEnv)
     const jobCompleted = (type) => {
-        let newTitle = type === 'Error' ? '𝗫' : '▶'
+        let newTitle = type === 'Error' ? '𝗫' : initialTitle
         updateTitle(newTitle)
     }
     const generate = () => {
@@ -102,8 +142,12 @@ const MotifPlayer = ({motif,scale,drone}) => {
     return (
         <MotifPlayerContainer>
             <MotifElement>{motif}</MotifElement>
-            <MotifButtonElement onClick={() => play()}><small>{title}</small></MotifButtonElement>
-            <MotifButtonElement onClick={() => stop()}>&#x25FC;</MotifButtonElement>
+            <MotifPlayButton onClick={() => play()}>{title}</MotifPlayButton>
+            <MotifStopButton onClick={() => stop()}>
+                <svg height='1em' xmlns="http://www.w3.org/2000/svg" viewBox='0 0 10 10'>
+                    <polygon points="1,2 9,2 9,10 1,10" />
+                </svg>
+            </MotifStopButton>
         </MotifPlayerContainer>
     )
 }
