@@ -130,6 +130,8 @@ const MotifPlayer = ({motif,scale,drone}) => {
         generate()
         let newTitle = "..."
         updateTitle(newTitle)
+        if(!state.audioContextReady)
+            dispatch({type: 'Init'})
     }
     const stop = () => {
         if(state['sequencerPlaying'])

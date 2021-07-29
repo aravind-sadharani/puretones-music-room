@@ -44,7 +44,7 @@ const DroneButtonElement = styled.button`
 const DronePlayer = ({title,settings}) => {
     const [buttonTitle, updateButtonTitle] = React.useState('Start')
     const [active, setActive] = React.useState(false)
-    let {dispatch} = React.useContext(AudioEnv)
+    let {state,dispatch} = React.useContext(AudioEnv)
     const jobCompleted = (type) => {
         let newButtonTitle = type === 'Error' ? 'Error! Retry' : type === 'Stop' ? 'Start' : 'Stop'
         let newState = type !== 'Stop'
@@ -56,6 +56,8 @@ const DronePlayer = ({title,settings}) => {
         let newState = buttonTitle !== 'Stop'
         updateButtonTitle(newButtonTitle)
         setActive(newState)
+        if(!state.audioContextReady)
+            dispatch({type: 'Init'})
     }
     React.useEffect(() => {
         if(buttonTitle === 'Starting...' || buttonTitle === 'Stopping...')

@@ -20,7 +20,7 @@ const SessionControls = ({appname,code,settings,reset,generate,save,restore}) =>
     const [title, updateTitle] = React.useState('Start')
     const [active, setActive] = React.useState(false)
     const [DSPCode, setDSPCode] = React.useState(code || '')
-    let {dispatch} = React.useContext(AudioEnv)
+    let {state,dispatch} = React.useContext(AudioEnv)
     const jobCompleted = (type) => {
         let newTitle = type === 'Error' ? 'Error! Retry' : type === 'Stop' ? 'Start' : 'Stop'
         let newState = type !== 'Stop'
@@ -33,6 +33,8 @@ const SessionControls = ({appname,code,settings,reset,generate,save,restore}) =>
         let newState = title !== 'Stop'
         updateTitle(newTitle)
         setActive(newState)
+        if(!state.audioContextReady)
+            dispatch({type: 'Init'})
     }
     React.useEffect(()=>{
         if(title === 'Starting...' || title === 'Stopping...')

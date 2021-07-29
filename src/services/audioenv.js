@@ -35,17 +35,19 @@ const AudioEnvProvider = ({children}) => {
     }
     const [state, dispatch] = React.useReducer((state,action) => {
         let audioCtx
-        if(!state.audioContextReady && !window.audioCtx) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)()
-            if(audioCtx.state === "suspended")
-                audioCtx.resume()
-            window.audioCtx = audioCtx
-        }
-        state.audioContextReady = true
-        audioCtx = window.audioCtx
         switch(action.type) {
+            case 'Init':
+                if(!state.audioContextReady && !window.audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+                    if(audioCtx.state === "suspended")
+                        audioCtx.resume()
+                    window.audioCtx = audioCtx
+                    state.audioContextReady = true
+                }
+                return state
             case 'Play':
                 if(!state[`${action.appname}Playing`]) {
+                    audioCtx = window.audioCtx
                     let DSPCode = action.code
                     let faustArgs = { audioCtx, useWorklet: false, buffersize: 16384, args: {"-I": "libraries/"} }
                     if(action.appname === 'scale') {
