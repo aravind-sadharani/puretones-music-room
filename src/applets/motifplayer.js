@@ -3,9 +3,10 @@ import styled from "styled-components"
 import generateDSP from "utils/generatedsp"
 import { dspStateFromSettings } from "utils/dspsettingsinterpreter"
 import { AudioEnv } from "services/audioenv"
+import ShowHideControls from "components/showhidecontrols"
 
 const MotifPlayerContainer = styled.div`
-    padding: 12px;
+    padding: 12px 12px 0 12px;
     margin: 0 0 1em 0;
     border: 1px solid #e6e6eb;
     border-radius: 5px;
@@ -14,10 +15,7 @@ const MotifPlayerContainer = styled.div`
 `
 
 const MotifElement = styled.pre`
-    margin: 0;
-    border: 1px solid #e6e6eb;
-    border-radius: 5px;
-    padding: 0 12px;
+    margin: 0 0 1em 0;
     overflow-x: scroll;
 `
 
@@ -33,7 +31,7 @@ const MotifPlayButton = styled.button`
     border-right: 1px solid white;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
-    margin: auto 0 0 auto;
+    margin: 0 0 auto auto;
     width: 40px;
     svg {
         fill: black;
@@ -58,7 +56,7 @@ const MotifStopButton = styled.button`
     border: 0;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
-    margin: auto 0 0 auto;
+    margin: 0 0 auto auto;
     width: 40px;
     svg {
         fill: black;
@@ -101,7 +99,7 @@ const defaultSequencerState = [
     }
 ]
 
-const MotifPlayer = ({motif,scale,drone}) => {
+const MotifPlayer = ({label,motif,scale,drone}) => {
     const initialTitle = () => (
         <svg height='1em' xmlns="http://www.w3.org/2000/svg" viewBox='0 0 10 10'>
             <polygon points="2,2 10,6 2,10" />
@@ -109,6 +107,8 @@ const MotifPlayer = ({motif,scale,drone}) => {
     )
     const [title, updateTitle] = React.useState(initialTitle)
     const [DSPCode, setDSPCode] = React.useState('')
+    const [motifVisibility, setMotifVisibility] = React.useState(false)
+    const toggleMotifVisibility = () => setMotifVisibility(!motifVisibility)
     let {state,dispatch} = React.useContext(AudioEnv)
     const jobCompleted = (type) => {
         let newTitle = type === 'Error' ? '𝗫' : initialTitle
@@ -143,7 +143,9 @@ const MotifPlayer = ({motif,scale,drone}) => {
     })
     return (
         <MotifPlayerContainer>
-            <MotifElement>{motif}</MotifElement>
+            <ShowHideControls title={label} visibility={motifVisibility} onShowHide={toggleMotifVisibility}>
+                <MotifElement>{motif}</MotifElement>
+            </ShowHideControls>
             <MotifPlayButton onClick={() => play()}>{title}</MotifPlayButton>
             <MotifStopButton onClick={() => stop()}>
                 <svg height='1em' xmlns="http://www.w3.org/2000/svg" viewBox='0 0 10 10'>
