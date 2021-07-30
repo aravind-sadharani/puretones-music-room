@@ -171,20 +171,20 @@ with {
 ]
 
 const baseRatio = {
-    Sa: '1',
-    re: '256/243',
-    Re: '9/8',
-    ga: '32/27',
-    Ga: '81/64',
-    ma: '4/3',
-    Ma: '729/512',
-    Pa: '3/2',
-    dha: '128/81',
-    Dha: '27/16',
-    ni: '16/9',
-    Ni: '243/128',
-    SA: '2',
-    Q: '3'
+    Sa: 1,
+    re: 256/243,
+    Re: 9/8,
+    ga: 32/27,
+    Ga: 81/64,
+    ma: 4/3,
+    Ma: 729/512,
+    Pa: 3/2,
+    dha: 128/81,
+    Dha: 27/16,
+    ni: 16/9,
+    Ni: 243/128,
+    SA: 2,
+    Q: 3
 }
 
 const toneNames = ["String1", "String2", "Violin", "Reed"]
@@ -193,16 +193,16 @@ const tokenize = str => str.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u20
 
 const baseValue = (noteStr) => {
     let baseStr = noteStr.substring(0,3)
-    let value = Object.entries(baseRatio).map(note => (baseStr.includes(note[0]) ? note[1] : '-1')).filter(x => x !== '-1')
-    return (value.length ? value[0] : '-1')
+    let value = Object.entries(baseRatio).map(note => (baseStr.includes(note[0]) ? note[1] : -1)).filter(x => x !== -1)
+    return (value.length ? value[0] : -1)
 }
 
 const octaveValue = (noteStr) => {
     if(noteStr.includes('"'))
-        return "2"
+        return 2
     if(noteStr.includes("'"))
-        return "1/2"
-    return "1"
+        return 1/2
+    return 1
 }
 
 const gamakaValue = (noteStr) => {
@@ -222,7 +222,7 @@ const gamakaParams = (noteStr) => {
 
 const isEqual = (note1, note2) => (baseValue(note1) === baseValue(note2) && octaveValue(note1) === octaveValue(note2) && gamakaValue(note1) === gamakaValue(note2) && gamakaParams(note1) === gamakaParams(note2))
 
-const isNote = (token) => (baseValue(token) !== "-1")
+const isNote = (token) => (baseValue(token) !== -1)
 
 const findUniqueNotes = (tokens) => {
     let notes = tokens.filter(isNote)
@@ -293,12 +293,33 @@ const printNoteId = (voiceName, id) => `${voiceName}ratio_${id}`
 
 const printPitch = (voiceName,pitch,finetune,octave) => `${voiceName}cpitch = 110*(2^(${pitch}/12))*(2^(${finetune}/1200))*(2^(${octave}));\n`
 
-const printNoteSpec = (voiceName, noteStr, id, noteOffsets) => `${voiceName}ratio_${id} = (${baseValue(noteStr)}) * (${octaveValue(noteStr)}) * (2^(${getFineTune(noteStr,noteOffsets)}/1200))${printGamaka(voiceName, noteStr)}  //${noteStr}\n`
+const printNoteSpec = (voiceName, noteStr, id, noteOffsets) => `${voiceName}ratio_${id} = (${baseValue(noteStr)}) * (${octaveValue(noteStr)}) * (2^(${getFineTune(noteStr,noteOffsets)}/1200))${printGamaka(voiceName, noteStr, noteOffsets)}  //${noteStr}\n`
 
-const printGamaka = (voiceName, noteStr) => {
+const printGamaka = (voiceName, noteStr, noteOffsets) => {
     let params = gamakaParams(noteStr)
+    if(params !== 'none') {
+        params = evaluateGamakaParams(params, noteStr, noteOffsets)
+    }
     return (params === "none" ? `${(gamakaValue(noteStr) ? ` * (delta,(-1)*delta,rate,number,8*cperiod : ${voiceName}shake);` : ";")}` : ` * (${params},8*cperiod : ${voiceName}shake);`)
 }
+
+const evaluateGamakaParams = (params, noteStr, noteOffsets) => {
+    let paramList = params.split(',')
+    let startCents = isNote(paramList[0]) ? centsFromNotes(paramList[0],noteStr) + Number(getFineTune(paramList[0],noteOffsets)) - Number(getFineTune(noteStr,noteOffsets)) : paramList[0]
+    let endCents = isNote(paramList[1]) ? centsFromNotes(paramList[1],noteStr) + Number(getFineTune(paramList[1],noteOffsets)) - Number(getFineTune(noteStr,noteOffsets)) : paramList[1]
+    paramList[0] = Number(startCents).toFixed(2)
+    paramList[1] = Number(endCents).toFixed(2)
+    let evaluatedParams = paramList.join(',')
+    return evaluatedParams
+}
+
+const centsFromNotes = (noteStr, baseNoteStr) => {
+    let noteRatio = ratioFromNote(noteStr)
+    let baseNoteRatio = ratioFromNote(baseNoteStr)
+    return 1200*Math.log2(noteRatio/baseNoteRatio)
+}
+
+const ratioFromNote = (noteStr) => Number(baseValue(noteStr))*Number(octaveValue(noteStr))
 
 const printPluckTiming = (id, repeats) => (id.includes("Q") ? "0,0,".repeat(repeats-1).concat("0,0") : "1,1,".repeat(repeats-1).concat("1,0"))
 
