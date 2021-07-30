@@ -61,8 +61,8 @@ const Slider = ({params,path,onParamUpdate}) =>  {
     return (
         <SliderContainer>
             <SliderKey>{key}</SliderKey>
-            <SliderNumber type="number" value={params.init} onInput={(e) => changeValue(e.target.value)}></SliderNumber>
-            <SliderRange type="range" min={min} max={max} step={step} value={params.init} onInput={(e) => changeValue(e.target.value)}></SliderRange>
+            <SliderNumber type="number" value={params.init} onChange={(e) => changeValue(e.target.value)}></SliderNumber>
+            <SliderRange type="range" min={min} max={max} step={step} value={params.init} onChange={(e) => changeValue(e.target.value)}></SliderRange>
         </SliderContainer>
     )
 }

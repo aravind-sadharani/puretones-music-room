@@ -107,6 +107,7 @@ const MotifPlayer = ({label,motif,scale,drone}) => {
     )
     const [title, updateTitle] = React.useState(initialTitle)
     const [DSPCode, setDSPCode] = React.useState('')
+    const [DSPSettings, setDSPSettings] = React.useState({})
     const [motifVisibility, setMotifVisibility] = React.useState(false)
     const toggleMotifVisibility = () => setMotifVisibility(!motifVisibility)
     let {state,dispatch} = React.useContext(AudioEnv)
@@ -123,6 +124,10 @@ const MotifPlayer = ({label,motif,scale,drone}) => {
         sequencerState[0]['composition'] = motif
         let code = generateDSP(sequencerState,scaleState)
         setDSPCode(code)
+        let sequencerSettings = {}
+        sequencerSettings['/FaustDSP/Motif/Pitch'] = scaleState['/FaustDSP/Common_Parameters/Pitch']
+        sequencerSettings['/FaustDSP/Motif/Fine_Tune'] = scaleState['/FaustDSP/Common_Parameters/Fine_Tune']
+        setDSPSettings({...sequencerSettings})
     }
     const play = () => {
         if(state['sequencerPlaying'])
@@ -135,11 +140,11 @@ const MotifPlayer = ({label,motif,scale,drone}) => {
     }
     const stop = () => {
         if(state['sequencerPlaying'])
-           dispatch({type: 'Stop', appname: 'sequencer'})
+            dispatch({type: 'Stop', appname: 'sequencer'})
     }
     React.useEffect(()=>{
         if(title === '...')
-            dispatch({type: 'Play', appname: 'sequencer', code: DSPCode, onJobComplete: jobCompleted})
+            dispatch({type: 'Play', appname: 'sequencer', settings: DSPSettings, code: DSPCode, onJobComplete: jobCompleted})
     })
     return (
         <MotifPlayerContainer>

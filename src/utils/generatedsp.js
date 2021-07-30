@@ -1,5 +1,7 @@
 const dspTemplateTop = `import("stdfaust.lib");
 
+commonPitch = hslider("[0][style:radio{'B':14;'A#':13;'A':12;'G#':11;'G':10;'F#':9;'F':8;'E':7;'D#':6;'D':5;'C#':4;'C':3}]Pitch",0,0,11,1);
+fineTune = hslider("Fine_Tune",0,-100,100,1);
 cperiod = 2^(vslider("[01]Motif Tempo",1.0,-2,4,0.1) - 3);
 cgain = 10^(vslider("[02]Motif Gain",-9,-20,20,0.1) - 6 : /(20));
 delta = vslider("[04]Shake Variance", 10,0,120,1);  	
@@ -291,7 +293,7 @@ const getPluckTiming = (tokens) => {
 
 const printNoteId = (voiceName, id) => `${voiceName}ratio_${id}`
 
-const printPitch = (voiceName,pitch,finetune,octave) => `${voiceName}cpitch = 110*(2^(${pitch}/12))*(2^(${finetune}/1200))*(2^(${octave}));\n`
+const printPitch = (voiceName,octave) => `${voiceName}cpitch = 110*(2^(commonPitch/12))*(2^(fineTune/1200))*(2^(${octave}));\n`
 
 const printNoteSpec = (voiceName, noteStr, id, noteOffsets) => `${voiceName}ratio_${id} = (${baseValue(noteStr)}) * (${octaveValue(noteStr)}) * (2^(${getFineTune(noteStr,noteOffsets)}/1200))${printGamaka(voiceName, noteStr, noteOffsets)}  //${noteStr}\n`
 
@@ -325,7 +327,7 @@ const printPluckTiming = (id, repeats) => (id.includes("Q") ? "0,0,".repeat(repe
 
 const printNoteTiming = (id, repeats) => `${id},`.repeat(2*repeats-1).concat(`${id}`)
 
-const getVoice = (voiceName,tokens,pitch,finetune,octave,noteOffsets,toneName) => {
+const getVoice = (voiceName,tokens,octave,noteOffsets,toneName) => {
     let uniqueNotes = findUniqueNotes(tokens)
     let pluckTimes = getPluckTiming(tokens)
     let noteIds = tokens.filter(isNote).map(n => uniqueNotes.findIndex(t => isEqual(t,n)))
@@ -345,7 +347,7 @@ ${voiceName}noteindex = cperiod : ${voiceName}motifnotes;
 `
 
     let voiceComposition = `${dspVoiceTop}
-${printPitch(voiceName,pitch,finetune,octave)}
+${printPitch(voiceName,octave)}
 ${noteSpec}
 ${voiceName}gatewaveform = waveform{${pluckTiming}};
 
@@ -366,12 +368,10 @@ const generateDSP = (sequencerState,scaleState) => {
             return `${voiceName}notes = 0;\n`
         
         let tokens = tokenize(sequencerVoiceState['composition'])
-        let pitch = scaleState['/FaustDSP/Common_Parameters/Pitch']
-        let finetune = scaleState['/FaustDSP/Common_Parameters/Fine_Tune']
         let octave = sequencerVoiceState['octave']
         let noteOffsets = Object.entries(baseRatio).map(note => note[0] !== 'Q' ? Number.parseInt(scaleState[`/FaustDSP/Common_Parameters/12_Note_Scale/${note[0]}/Cent`])+0.01*Number.parseInt(scaleState[`/FaustDSP/Common_Parameters/12_Note_Scale/${note[0]}/0.01_Cent`]) : '0')
         let toneName = toneNames[sequencerVoiceState['tone']]
-        return getVoice(voiceName,tokens,pitch,finetune,octave,noteOffsets,toneName)
+        return getVoice(voiceName,tokens,octave,noteOffsets,toneName)
     }
 
     let voiceCode = [0, 1, 2].map((i) => generateVoiceCode(sequencerState[i])).join('\n')

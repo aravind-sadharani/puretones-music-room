@@ -71,7 +71,13 @@ const MusicRoom = () => {
                     let scalePath = path.includes('Common_Frequency') ? '/FaustDSP/Common_Parameters/Pitch' : '/FaustDSP/Common_Parameters/Fine_Tune'
                     let newScaleState = scaleState
                     newScaleState[`${scalePath}`] = value
-                    setScaleLocalState(newScaleState)                    
+                    setScaleLocalState(newScaleState)
+                    let scaleUpdateParams = {}
+                    scaleUpdateParams[`${scalePath}`] = value
+                    dispatch({type: 'Configure', appname: 'scale', settings: scaleUpdateParams})
+                    let sequencerUpdateParams = {}
+                    sequencerUpdateParams[`${scalePath}`.replace('Common_Parameters','Motif')] = value
+                    dispatch({type: 'Configure', appname: 'sequencer', settings: sequencerUpdateParams})
                 }
                 break
             case 'scale':
