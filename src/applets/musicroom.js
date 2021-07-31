@@ -1,7 +1,5 @@
 import * as React from "react"
 import TabNav from "components/tabs"
-import Selector from "components/selector"
-import Slider from "components/slider"
 import Drone from "applets/drone"
 import Scale from "applets/scale"
 import Sequencer from "applets/sequencer"
@@ -12,6 +10,7 @@ import droneDSPCode from 'data/puretones.dsp'
 import dronePRT from 'data/default.prt'
 import scaleDSPCode from 'data/musicscale.dsp'
 import scalePKB from 'data/default.pkb'
+import CommonPitch from "applets/commonpitch"
 
 const MusicRoom = () => {
     const droneSettings = dronePRT.replace(/puretones/g,'FaustDSP')
@@ -165,81 +164,16 @@ const MusicRoom = () => {
                 return
         }
     }
-    const commonFreqParams = {
-        key: "Key",
-        default: Number(droneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency']),
-        options: [
-            {
-                value: "14",
-                text: "B"
-            },
-            {
-                value: "13",
-                text: "A#"
-            },
-            {
-                value: "12",
-                text: "A"
-            },
-            {
-                value: "11",
-                text: "G#"
-            },
-            {
-                value: "10",
-                text: "G"
-            },
-            {
-                value: "9",
-                text: "F#"
-            },
-            {
-                value: "8",
-                text: "F"
-            },
-            {
-                value: "7",
-                text: "E"
-            },
-            {
-                value: "6",
-                text: "D#"
-            },
-            {
-                value: "5",
-                text: "D"
-            },
-            {
-                value: "4",
-                text: "C#"
-            },
-            {
-                value: "3",
-                text: "C"
-            }
-        ]
-    }
-    
-    let offsetParams = {
-        key: "Offset",
-        init: Number(droneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune']),
-        max: 100,
-        min: -100,
-        step: 1
-    }
-
     let mainNavTabs = ['Drone', 'Scale', 'Sequencer']
     let mainNavPages = [
         <Drone droneDSPCode={droneDSPCode} droneState={droneState} onParamUpdate={(value,path) => updateParameter('drone',value,path)} reset={()=>reset('drone')} save={(()=>saveSnapshot('drone'))} restore={(snapshot) => restoreSnapshot(snapshot,'drone')}/>, 
         <Scale scaleDSPCode={scaleDSPCode} scaleState={scaleState} onParamUpdate={(value,path) => updateParameter('scale',value,path)} onMIDIMessage={sendMIDIMessage} reset={()=>reset('scale')} save={(()=>saveSnapshot('scale'))} restore={(snapshot) => restoreSnapshot(snapshot,'scale')}/>,
         <Sequencer scaleState={scaleState} sequencerState={sequencerState} onVoiceParamUpdate={updateVoiceParameters} reset={()=>reset('sequencer')} save={(()=>saveSnapshot('sequencer'))} restore={(snapshot) => restoreSnapshot(snapshot,'sequencer')}/>
     ]
-
     return (
         <>
             <p><strong>Common Parameters</strong></p>
-            <Selector params={commonFreqParams} path='/FaustDSP/PureTones_v1.0/0x00/Common_Frequency' onParamUpdate={(value,path) => updateParameter('drone',value,path)}></Selector>
-            <Slider params={offsetParams} path='/FaustDSP/PureTones_v1.0/0x00/Fine_Tune' onParamUpdate={(value,path) => updateParameter('drone',value,path)} ></Slider>
+            <CommonPitch />
             <TabNav tablist={mainNavTabs} pagelist={mainNavPages}></TabNav>
         </>
     )

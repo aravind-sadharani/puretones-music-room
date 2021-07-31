@@ -3,16 +3,18 @@ import { CommonPitchEnv } from 'services/commonpitch'
 import { AudioEnv } from "services/audioenv"
 import Selector from 'components/selector'
 import Slider from 'components/slider'
+import useLocalStore from "services/localstore"
 
-const CommonPitchApplet = () => {
+const CommonPitch = () => {
     const {commonPitch, setCommonPitch} = React.useContext(CommonPitchEnv)
     const {state, dispatch} = React.useContext(AudioEnv)
     const [proxyPitch, setProxyPitch] = React.useState(commonPitch)
+    const [localCommonPitch, setLocalCommonPitch] = useLocalStore('commonpitch',commonPitch)
     const onParamUpdate = (value,path) => {
-        let newPitch = commonPitch
+        let newPitch = proxyPitch
         newPitch[`${path}`] = value
         setCommonPitch(newPitch)
-        setProxyPitch({...newPitch})
+        setLocalCommonPitch({...newPitch})
         let newDroneState = {}
         let newScaleState = {}
         let newSequencerState = {}
@@ -38,9 +40,14 @@ const CommonPitchApplet = () => {
         if(state['sequencerPlaying'])
             dispatch({type: 'Configure', appname: 'sequencer', settings: newSequencerState}) 
     }
+
+    React.useEffect(() => {
+        setProxyPitch({...localCommonPitch})
+    },[localCommonPitch])
+
     let commonFreqParams = {
         key: "Key",
-        default: Number(proxyPitch['pitch']),
+        default: Number(localCommonPitch['pitch']),
         options: [
             {
                 value: "14",
@@ -95,7 +102,7 @@ const CommonPitchApplet = () => {
     
     let offsetParams = {
         key: "Offset",
-        init: Number(proxyPitch['offSet']),
+        init: Number(localCommonPitch['offSet']),
         max: 100,
         min: -100,
         step: 1
@@ -108,4 +115,4 @@ const CommonPitchApplet = () => {
     )
 }
 
-export default CommonPitchApplet
+export default CommonPitch

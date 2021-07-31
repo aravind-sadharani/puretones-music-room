@@ -9,10 +9,10 @@ import { CommonPitchEnvProvider } from 'services/commonpitch'
 import { Link } from 'gatsby'
 import DronePlayer from 'applets/droneplayer'
 import MotifPlayer from 'applets/motifplayer'
-import CommonPitchApplet from 'applets/commonpitchapplet'
+import CommonPitch from 'applets/commonpitch'
 import { MDXProvider } from "@mdx-js/react"
 
-const shortcodes = { DronePlayer, MotifPlayer, CommonPitchApplet }
+const shortcodes = { DronePlayer, MotifPlayer, CommonPitch }
 
 const DefaultLayout = ({title,children}) => {
   return (
