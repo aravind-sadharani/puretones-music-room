@@ -3,6 +3,7 @@ import styled from "styled-components"
 import generateDSP from "utils/generatedsp"
 import { dspStateFromSettings } from "utils/dspsettingsinterpreter"
 import { AudioEnv } from "services/audioenv"
+import { CommonPitchEnv } from 'services/commonpitch'
 import ShowHideControls from "components/showhidecontrols"
 
 const MotifPlayerContainer = styled.div`
@@ -99,7 +100,7 @@ const defaultSequencerState = [
     }
 ]
 
-const MotifPlayer = ({label,motif,scale,drone}) => {
+const MotifPlayer = ({label,motif,scale}) => {
     const initialTitle = () => (
         <svg height='1em' xmlns="http://www.w3.org/2000/svg" viewBox='0 0 10 10'>
             <polygon points="2,2 10,6 2,10" />
@@ -111,22 +112,20 @@ const MotifPlayer = ({label,motif,scale,drone}) => {
     const [motifVisibility, setMotifVisibility] = React.useState(false)
     const toggleMotifVisibility = () => setMotifVisibility(!motifVisibility)
     let {state,dispatch} = React.useContext(AudioEnv)
+    const {commonPitch} = React.useContext(CommonPitchEnv)
     const jobCompleted = (type) => {
         let newTitle = type === 'Error' ? '𝗫' : initialTitle
         updateTitle(newTitle)
     }
     const generate = () => {
         let scaleState = dspStateFromSettings('scale',scale)
-        let droneState = dspStateFromSettings('drone',drone)
-        scaleState['/FaustDSP/Common_Parameters/Pitch'] = droneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency']
-        scaleState['/FaustDSP/Common_Parameters/Fine_Tune'] = droneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune']
         let sequencerState = defaultSequencerState
         sequencerState[0]['composition'] = motif
         let code = generateDSP(sequencerState,scaleState)
         setDSPCode(code)
         let sequencerSettings = {}
-        sequencerSettings['/FaustDSP/Motif/Pitch'] = scaleState['/FaustDSP/Common_Parameters/Pitch']
-        sequencerSettings['/FaustDSP/Motif/Fine_Tune'] = scaleState['/FaustDSP/Common_Parameters/Fine_Tune']
+        sequencerSettings['/FaustDSP/Motif/Pitch'] = commonPitch['pitch']
+        sequencerSettings['/FaustDSP/Motif/Fine_Tune'] = commonPitch['offSet']
         setDSPSettings({...sequencerSettings})
     }
     const play = () => {

@@ -102,6 +102,14 @@ const MusicRoom = () => {
             case 'drone':
                 dispatch({type: 'Configure', appname: appname, settings: defaultDroneState})
                 setDroneLocalState(defaultDroneState)
+                scaleLocalState['/FaustDSP/Common_Parameters/Pitch'] = defaultDroneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency']
+                scaleLocalState['/FaustDSP/Common_Parameters/Fine_Tune'] = defaultDroneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune']
+                setScaleLocalState(scaleLocalState)
+                dispatch({type: 'Configure', appname: 'scale', settings: scaleLocalState})
+                let sequencerUpdateParams = {}
+                sequencerUpdateParams['/FaustDSP/Motif/Pitch'] = defaultDroneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency']
+                sequencerUpdateParams['/FaustDSP/Motif/Fine_Tune'] = defaultDroneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune']
+                dispatch({type: 'Configure', appname: 'sequencer', settings: sequencerUpdateParams})
                 break
             case 'scale':
                 dispatch({type: 'Configure', appname: appname, settings: defaultScaleState})

@@ -1,6 +1,7 @@
 import * as React from "react"
 import styled from "styled-components"
 import { AudioEnv } from "services/audioenv"
+import { CommonPitchEnv } from 'services/commonpitch'
 import { dspStateFromSettings } from "utils/dspsettingsinterpreter"
 import droneDSPCode from 'data/puretones.dsp'
 
@@ -44,7 +45,9 @@ const DroneButtonElement = styled.button`
 const DronePlayer = ({title,settings}) => {
     const [buttonTitle, updateButtonTitle] = React.useState('Start')
     const [active, setActive] = React.useState(false)
-    let {state,dispatch} = React.useContext(AudioEnv)
+    const {state,dispatch} = React.useContext(AudioEnv)
+    const {commonPitch} = React.useContext(CommonPitchEnv)
+    const [droneState,setDroneState] = React.useState(dspStateFromSettings('drone',settings))
     const jobCompleted = (type) => {
         let newButtonTitle = type === 'Error' ? 'Error! Retry' : type === 'Stop' ? 'Start' : 'Stop'
         let newState = type !== 'Stop'
@@ -56,12 +59,16 @@ const DronePlayer = ({title,settings}) => {
         let newState = buttonTitle !== 'Stop'
         updateButtonTitle(newButtonTitle)
         setActive(newState)
+        let newDroneState = droneState
+        droneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency'] = commonPitch['pitch']
+        droneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune'] = commonPitch['offSet']
+        setDroneState({...newDroneState})
         if(!state.audioContextReady)
             dispatch({type: 'Init'})
     }
     React.useEffect(() => {
         if(buttonTitle === 'Starting...' || buttonTitle === 'Stopping...')
-            dispatch({type: `${buttonTitle === 'Starting...' ? 'Play' : 'Stop'}`, appname: 'drone', code: droneDSPCode, settings: dspStateFromSettings('drone',settings), onJobComplete: jobCompleted})
+            dispatch({type: `${buttonTitle === 'Starting...' ? 'Play' : 'Stop'}`, appname: 'drone', code: droneDSPCode, settings: droneState, onJobComplete: jobCompleted})
     })
     React.useEffect(() => {
         dispatch({type: 'Stop', appname: 'drone'})
