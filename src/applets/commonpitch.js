@@ -13,7 +13,6 @@ const CommonPitch = () => {
     const onParamUpdate = (value,path) => {
         let newPitch = proxyPitch
         newPitch[`${path}`] = value
-        setCommonPitch(newPitch)
         setLocalCommonPitch({...newPitch})
         let newDroneState = {}
         let newScaleState = {}
@@ -42,8 +41,9 @@ const CommonPitch = () => {
     }
 
     React.useEffect(() => {
+        setCommonPitch(localCommonPitch)
         setProxyPitch({...localCommonPitch})
-    },[localCommonPitch])
+    },[localCommonPitch,setCommonPitch])
 
     let commonFreqParams = {
         key: "Key",

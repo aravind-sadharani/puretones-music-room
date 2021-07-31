@@ -11,12 +11,18 @@ import dronePRT from 'data/default.prt'
 import scaleDSPCode from 'data/musicscale.dsp'
 import scalePKB from 'data/default.pkb'
 import CommonPitch from "applets/commonpitch"
+import { CommonPitchEnv } from 'services/commonpitch'
 
 const MusicRoom = () => {
+    const {commonPitch} = React.useContext(CommonPitchEnv)
     const droneSettings = dronePRT.replace(/puretones/g,'FaustDSP')
     let defaultDroneState = dspStateFromSettings('drone', droneSettings)
+    defaultDroneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency'] = commonPitch['pitch']
+    defaultDroneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune'] = commonPitch['offSet']
     const scaleSettings = scalePKB.replace(/musicscale/g,'FaustDSP')
     let defaultScaleState = dspStateFromSettings('scale', scaleSettings)
+    defaultScaleState['/FaustDSP/Common_Parameters/Pitch'] = commonPitch['pitch']
+    defaultScaleState['/FaustDSP/Common_Parameters/Fine_Tune'] = commonPitch['offSet']
     const {dispatch} = React.useContext(AudioEnv)
     const defaultSequencerState = [
         {
@@ -45,42 +51,24 @@ const MusicRoom = () => {
         }
     ]
     const [sequencerLocalState, setSequencerLocalState] = useLocalStore('sequencer', defaultSequencerState)
-    const [sequencerState, updateSequencerState] = React.useState({...defaultSequencerState})
     const [droneLocalState, setDroneLocalState] = useLocalStore('drone', defaultDroneState)
-    const [droneState, configureDrone] = React.useState(defaultDroneState)
+    droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency'] = commonPitch['pitch']
+    droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune'] = commonPitch['offSet']
     const [scaleLocalState, setScaleLocalState] = useLocalStore('scale', defaultScaleState)
-    const [scaleState, configureScale] = React.useState(defaultScaleState)
-    scaleLocalState['/FaustDSP/Common_Parameters/Pitch'] = droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency']
-    scaleLocalState['/FaustDSP/Common_Parameters/Fine_Tune'] = droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune']
-    React.useEffect(() => {
-        configureDrone({...droneLocalState})
-        configureScale({...scaleLocalState})
-        updateSequencerState({...sequencerLocalState})
-    }, [droneLocalState,scaleLocalState,sequencerLocalState])
+    scaleLocalState['/FaustDSP/Common_Parameters/Pitch'] = commonPitch['pitch']
+    scaleLocalState['/FaustDSP/Common_Parameters/Fine_Tune'] = commonPitch['offSet']
     const updateParameter = (appname, value, path) => {
         let updateParams = {}
         updateParams[`${path}`] = value
         dispatch({type: 'Configure', appname: appname, settings: updateParams})
         switch(appname) {
             case 'drone':
-                let newDroneState = droneState
+                let newDroneState = droneLocalState
                 newDroneState[`${path}`] = value
                 setDroneLocalState(newDroneState)
-                if(path === '/FaustDSP/PureTones_v1.0/0x00/Common_Frequency' || path === '/FaustDSP/PureTones_v1.0/0x00/Fine_Tune') {
-                    let scalePath = path.includes('Common_Frequency') ? '/FaustDSP/Common_Parameters/Pitch' : '/FaustDSP/Common_Parameters/Fine_Tune'
-                    let newScaleState = scaleState
-                    newScaleState[`${scalePath}`] = value
-                    setScaleLocalState(newScaleState)
-                    let scaleUpdateParams = {}
-                    scaleUpdateParams[`${scalePath}`] = value
-                    dispatch({type: 'Configure', appname: 'scale', settings: scaleUpdateParams})
-                    let sequencerUpdateParams = {}
-                    sequencerUpdateParams[`${scalePath}`.replace('Common_Parameters','Motif')] = value
-                    dispatch({type: 'Configure', appname: 'sequencer', settings: sequencerUpdateParams})
-                }
                 break
             case 'scale':
-                let newScaleState = scaleState
+                let newScaleState = scaleLocalState
                 newScaleState[`${path}`] = value
                 setScaleLocalState(newScaleState)
                 break
@@ -89,7 +77,7 @@ const MusicRoom = () => {
         }
     }
     const updateVoiceParameters = (index, value, path) => {
-        let newSequencerState = sequencerState
+        let newSequencerState = sequencerLocalState
         newSequencerState[index][`${path}`] = value
         setSequencerLocalState({...newSequencerState})   
     }
@@ -101,14 +89,6 @@ const MusicRoom = () => {
             case 'drone':
                 dispatch({type: 'Configure', appname: appname, settings: defaultDroneState})
                 setDroneLocalState(defaultDroneState)
-                scaleLocalState['/FaustDSP/Common_Parameters/Pitch'] = defaultDroneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency']
-                scaleLocalState['/FaustDSP/Common_Parameters/Fine_Tune'] = defaultDroneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune']
-                setScaleLocalState(scaleLocalState)
-                dispatch({type: 'Configure', appname: 'scale', settings: scaleLocalState})
-                let sequencerUpdateParams = {}
-                sequencerUpdateParams['/FaustDSP/Motif/Pitch'] = defaultDroneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency']
-                sequencerUpdateParams['/FaustDSP/Motif/Fine_Tune'] = defaultDroneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune']
-                dispatch({type: 'Configure', appname: 'sequencer', settings: sequencerUpdateParams})
                 break
             case 'scale':
                 dispatch({type: 'Configure', appname: appname, settings: defaultScaleState})
@@ -120,7 +100,6 @@ const MusicRoom = () => {
             default:
                 console.log(`Reset: Incorrect appname ${appname}!`)
         }
-
     }
     const saveSnapshot = (appname) => {
         switch(appname) {
@@ -141,18 +120,15 @@ const MusicRoom = () => {
         switch(appname) {
             case 'drone':
                 newDroneState = dspStateFromSettings(appname,snapshot)
+                newDroneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency'] = commonPitch['pitch']
+                newDroneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune'] = commonPitch['offSet']
                 dispatch({type: 'Configure', appname: appname, settings: newDroneState})
                 setDroneLocalState({...newDroneState})
-                newScaleState = scaleLocalState
-                newScaleState['/FaustDSP/Common_Parameters/Pitch'] = newDroneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency']
-                newScaleState['/FaustDSP/Common_Parameters/Fine_Tune'] = newDroneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune']
-                dispatch({type: 'Configure', appname: 'scale', settings: newScaleState})
-                setScaleLocalState({...newScaleState})
                 break
             case 'scale':
                 newScaleState = dspStateFromSettings(appname,snapshot)
-                newScaleState['/FaustDSP/Common_Parameters/Pitch'] = droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency']
-                newScaleState['/FaustDSP/Common_Parameters/Fine_Tune'] = droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune']
+                newScaleState['/FaustDSP/Common_Parameters/Pitch'] = commonPitch['pitch']
+                newScaleState['/FaustDSP/Common_Parameters/Fine_Tune'] = commonPitch['offSet']
                 dispatch({type: 'Configure', appname: appname, settings: newScaleState})
                 setScaleLocalState({...newScaleState})
                 break
@@ -166,9 +142,9 @@ const MusicRoom = () => {
     }
     let mainNavTabs = ['Drone', 'Scale', 'Sequencer']
     let mainNavPages = [
-        <Drone droneDSPCode={droneDSPCode} droneState={droneState} onParamUpdate={(value,path) => updateParameter('drone',value,path)} reset={()=>reset('drone')} save={(()=>saveSnapshot('drone'))} restore={(snapshot) => restoreSnapshot(snapshot,'drone')}/>, 
-        <Scale scaleDSPCode={scaleDSPCode} scaleState={scaleState} onParamUpdate={(value,path) => updateParameter('scale',value,path)} onMIDIMessage={sendMIDIMessage} reset={()=>reset('scale')} save={(()=>saveSnapshot('scale'))} restore={(snapshot) => restoreSnapshot(snapshot,'scale')}/>,
-        <Sequencer scaleState={scaleState} sequencerState={sequencerState} onVoiceParamUpdate={updateVoiceParameters} reset={()=>reset('sequencer')} save={(()=>saveSnapshot('sequencer'))} restore={(snapshot) => restoreSnapshot(snapshot,'sequencer')}/>
+        <Drone droneDSPCode={droneDSPCode} droneState={droneLocalState} onParamUpdate={(value,path) => updateParameter('drone',value,path)} reset={()=>reset('drone')} save={(()=>saveSnapshot('drone'))} restore={(snapshot) => restoreSnapshot(snapshot,'drone')}/>, 
+        <Scale scaleDSPCode={scaleDSPCode} scaleState={scaleLocalState} onParamUpdate={(value,path) => updateParameter('scale',value,path)} onMIDIMessage={sendMIDIMessage} reset={()=>reset('scale')} save={(()=>saveSnapshot('scale'))} restore={(snapshot) => restoreSnapshot(snapshot,'scale')}/>,
+        <Sequencer scaleState={scaleLocalState} sequencerState={sequencerLocalState} onVoiceParamUpdate={updateVoiceParameters} reset={()=>reset('sequencer')} save={(()=>saveSnapshot('sequencer'))} restore={(snapshot) => restoreSnapshot(snapshot,'sequencer')}/>
     ]
     return (
         <>
