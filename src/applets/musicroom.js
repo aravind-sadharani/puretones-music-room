@@ -65,12 +65,12 @@ const MusicRoom = () => {
             case 'drone':
                 let newDroneState = droneLocalState
                 newDroneState[`${path}`] = value
-                setDroneLocalState(newDroneState)
+                setDroneLocalState({...newDroneState})
                 break
             case 'scale':
                 let newScaleState = scaleLocalState
                 newScaleState[`${path}`] = value
-                setScaleLocalState(newScaleState)
+                setScaleLocalState({...newScaleState})
                 break
             default:
                 console.log(`Update Parameters: Incorrect appname ${appname}!`)
@@ -88,11 +88,11 @@ const MusicRoom = () => {
         switch(appname) {
             case 'drone':
                 dispatch({type: 'Configure', appname: appname, settings: defaultDroneState})
-                setDroneLocalState(defaultDroneState)
+                setDroneLocalState({...defaultDroneState})
                 break
             case 'scale':
                 dispatch({type: 'Configure', appname: appname, settings: defaultScaleState})
-                setScaleLocalState(defaultScaleState)
+                setScaleLocalState({...defaultScaleState})
                 break
             case 'sequencer':
                 setSequencerLocalState({...defaultSequencerState})

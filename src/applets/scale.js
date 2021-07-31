@@ -82,7 +82,7 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset, s
     const key2Midi = (keyName) => (Number(scaleState['/FaustDSP/Common_Parameters/Pitch']) - 3 + note2Offset[`${keyName}`] + 48 + Number(scaleState['/FaustDSP/Common_Parameters/Octave'])*12)
     const handleKeyStroke = (e) => {
         let notes = {a: "Sa", w: "re", s: "Re", e: "ga", d: "Ga", f: "ma", t: "Ma", g: "Pa", y: "dha", h: "Dha", u: "ni", j: "Ni", k: "SA"}
-        if(e.target.localName === "div" || e.target.localName === "body") {
+        if(e.target.type !== "text") {
             if(e.type === "keydown" && notes[e.key])
                 keyOn(notes[e.key])
             if(e.type === "keyup" && notes[e.key])
