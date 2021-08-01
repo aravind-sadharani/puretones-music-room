@@ -12,7 +12,7 @@ const MotifPlayerContainer = styled.div`
     border: 1px solid #e6e6eb;
     border-radius: 5px;
     display: grid;
-    grid-template-columns: 1fr 52px 40px;
+    grid-template-columns: 1fr 52px;
 `
 
 const MotifElement = styled.pre`
@@ -22,16 +22,11 @@ const MotifElement = styled.pre`
 
 const MotifPlayButton = styled.button`
     padding: 0 6px;
-    border-color: #e6e6eb;
     outline-color: #333366;
     -webkit-appearance: none;
     background-color: #e6e6eb;
-    border-left: 0;
-    border-top: 0;
-    border-bottom: 0;
-    border-right: 1px solid white;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+    border: 0;
+    border-radius: 5px;
     margin: 0 0 auto auto;
     width: 40px;
     svg {
@@ -50,26 +45,20 @@ const MotifPlayButton = styled.button`
 
 const MotifStopButton = styled.button`
     padding: 0 6px;
-    border-color: #e6e6eb;
     outline-color: #333366;
     -webkit-appearance: none;
-    background-color: #e6e6eb;
     border: 0;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-radius: 5px;
     margin: 0 0 auto auto;
     width: 40px;
+    background-color: #333366;
+    color: white;
+    font-weight: 700;
     svg {
-        fill: black;
+        fill: white;
     }
     &:hover {
-        background-color: #333366;
-        color: white;
-        font-weight: 700;
         opacity: 0.8;
-        svg {
-            fill: white;
-        }
     }
 `
 
@@ -101,20 +90,25 @@ const defaultSequencerState = [
 ]
 
 const MotifPlayer = ({label,motif,scale}) => {
-    const initialTitle = () => (
+    const PlayTitle = () => (
         <svg height='1em' xmlns="http://www.w3.org/2000/svg" viewBox='0 0 10 10'>
             <polygon points="2,2 10,6 2,10" />
         </svg>
     )
-    const [title, updateTitle] = React.useState(initialTitle)
+    const StopTitle = () => (
+        <svg height='1em' xmlns="http://www.w3.org/2000/svg" viewBox='0 0 10 10'>
+            <polygon points="1,2 9,2 9,10 1,10" />
+        </svg>
+    )
+    const [title, updateTitle] = React.useState(PlayTitle)
     const [DSPCode, setDSPCode] = React.useState('')
     const [DSPSettings, setDSPSettings] = React.useState({})
     const [motifVisibility, setMotifVisibility] = React.useState(false)
     const toggleMotifVisibility = () => setMotifVisibility(!motifVisibility)
     let {state,dispatch} = React.useContext(AudioEnv)
-    const {commonPitch} = React.useContext(CommonPitchEnv)
+    const {commonPitch,setCommonPitch} = React.useContext(CommonPitchEnv)
     const jobCompleted = (type) => {
-        let newTitle = type === 'Error' ? '𝗫' : initialTitle
+        let newTitle = type === 'Error' ? '𝗫' : PlayTitle
         updateTitle(newTitle)
     }
     const generate = () => {
@@ -134,12 +128,18 @@ const MotifPlayer = ({label,motif,scale}) => {
         generate()
         let newTitle = "..."
         updateTitle(newTitle)
+        let newPitch = commonPitch
+        newPitch['currentMotif'] = label
+        setCommonPitch({...newPitch})
         if(!state.audioContextReady)
             dispatch({type: 'Init'})
     }
     const stop = () => {
         if(state['sequencerPlaying'])
             dispatch({type: 'Stop', appname: 'sequencer'})
+        let newPitch = commonPitch
+        newPitch['currentMotif'] = 'sequencer'
+        setCommonPitch({...newPitch})
     }
     React.useEffect(()=>{
         if(title === '...')
@@ -150,12 +150,8 @@ const MotifPlayer = ({label,motif,scale}) => {
             <ShowHideControls title={label} visibility={motifVisibility} onShowHide={toggleMotifVisibility}>
                 <MotifElement>{motif}</MotifElement>
             </ShowHideControls>
-            <MotifPlayButton onClick={() => play()}>{title}</MotifPlayButton>
-            <MotifStopButton onClick={() => stop()}>
-                <svg height='1em' xmlns="http://www.w3.org/2000/svg" viewBox='0 0 10 10'>
-                    <polygon points="1,2 9,2 9,10 1,10" />
-                </svg>
-            </MotifStopButton>
+            {(commonPitch['currentMotif'] !== label) && <MotifPlayButton onClick={() => play()}>{title}</MotifPlayButton>}
+            {(commonPitch['currentMotif'] === label) && <MotifStopButton onClick={() => stop()}><StopTitle /></MotifStopButton>}
         </MotifPlayerContainer>
     )
 }

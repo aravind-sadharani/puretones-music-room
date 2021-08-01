@@ -2,7 +2,8 @@ import * as React from 'react'
 
 const initialCommonPitch = {
     pitch: "3",
-    offSet: "0"
+    offSet: "0",
+    currentMotif: 'MusicRoom Sequencer'
 }
 
 const CommonPitchEnv = React.createContext(initialCommonPitch)
