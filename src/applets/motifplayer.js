@@ -89,17 +89,19 @@ const defaultSequencerState = [
     }
 ]
 
+const PlayTitle = () => (
+    <svg height='1em' xmlns="http://www.w3.org/2000/svg" viewBox='0 0 10 10'>
+        <polygon points="2,2 10,6 2,10" />
+    </svg>
+)
+
+const StopTitle = () => (
+    <svg height='1em' xmlns="http://www.w3.org/2000/svg" viewBox='0 0 10 10'>
+        <polygon points="1,2 9,2 9,10 1,10" />
+    </svg>
+)
+
 const MotifPlayer = ({label,motif,scale}) => {
-    const PlayTitle = () => (
-        <svg height='1em' xmlns="http://www.w3.org/2000/svg" viewBox='0 0 10 10'>
-            <polygon points="2,2 10,6 2,10" />
-        </svg>
-    )
-    const StopTitle = () => (
-        <svg height='1em' xmlns="http://www.w3.org/2000/svg" viewBox='0 0 10 10'>
-            <polygon points="1,2 9,2 9,10 1,10" />
-        </svg>
-    )
     const [title, updateTitle] = React.useState(PlayTitle)
     const [DSPCode, setDSPCode] = React.useState('')
     const [DSPSettings, setDSPSettings] = React.useState({})
@@ -110,6 +112,9 @@ const MotifPlayer = ({label,motif,scale}) => {
     const jobCompleted = (type) => {
         let newTitle = type === 'Error' ? '𝗫' : PlayTitle
         updateTitle(newTitle)
+        let newPitch = commonPitch
+        newPitch['currentMotif'] = type === 'Error' ? 'MusicRoom Sequencer' : label
+        setCommonPitch({...newPitch})
     }
     const generate = () => {
         let scaleState = dspStateFromSettings('scale',scale)
@@ -123,18 +128,22 @@ const MotifPlayer = ({label,motif,scale}) => {
         setDSPSettings({...sequencerSettings})
     }
     const play = () => {
+        if(commonPitch['currentMotif'] === 'Busy')
+            return
         if(state['sequencerPlaying'])
             dispatch({type: 'Stop', appname: 'sequencer'})
         generate()
         let newTitle = "..."
         updateTitle(newTitle)
         let newPitch = commonPitch
-        newPitch['currentMotif'] = label
+        newPitch['currentMotif'] = 'Busy'
         setCommonPitch({...newPitch})
         if(!state.audioContextReady)
             dispatch({type: 'Init'})
     }
     const stop = () => {
+        if(commonPitch['currentMotif'] === 'Busy')
+            return
         if(state['sequencerPlaying'])
             dispatch({type: 'Stop', appname: 'sequencer'})
         let newPitch = commonPitch
