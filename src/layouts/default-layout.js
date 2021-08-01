@@ -5,7 +5,7 @@ import Footer from 'components/footer'
 import IncludeFaust from 'services/faust'
 import { StaticImage } from 'gatsby-plugin-image'
 import { AudioEnvProvider } from 'services/audioenv'
-import { CommonPitchEnvProvider } from 'services/commonpitch'
+import { CommonSettingsEnvProvider } from 'services/commonsettings'
 import { Link } from 'gatsby'
 import DronePlayer from 'applets/droneplayer'
 import MotifPlayer from 'applets/motifplayer'
@@ -30,11 +30,11 @@ const DefaultLayout = ({title,children}) => {
         </Link>
       </Header>
       <AudioEnvProvider>
-        <CommonPitchEnvProvider>
+        <CommonSettingsEnvProvider>
           <MDXProvider components={shortcodes}>
             {children}
           </MDXProvider>
-        </CommonPitchEnvProvider>
+        </CommonSettingsEnvProvider>
       </AudioEnvProvider>
       <Footer>
         Developed by <a href="https://www.sadharani.com">Sadharani</a>

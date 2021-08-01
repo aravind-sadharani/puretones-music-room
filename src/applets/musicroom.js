@@ -11,18 +11,18 @@ import dronePRT from 'data/default.prt'
 import scaleDSPCode from 'data/musicscale.dsp'
 import scalePKB from 'data/default.pkb'
 import CommonPitch from "applets/commonpitch"
-import { CommonPitchEnv } from 'services/commonpitch'
+import { CommonSettingsEnv } from 'services/commonsettings'
 
 const MusicRoom = () => {
-    const {commonPitch} = React.useContext(CommonPitchEnv)
+    const {commonSettings} = React.useContext(CommonSettingsEnv)
     const droneSettings = dronePRT.replace(/puretones/g,'FaustDSP')
     let defaultDroneState = dspStateFromSettings('drone', droneSettings)
-    defaultDroneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency'] = commonPitch['pitch']
-    defaultDroneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune'] = commonPitch['offSet']
+    defaultDroneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency'] = commonSettings['pitch']
+    defaultDroneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune'] = commonSettings['offSet']
     const scaleSettings = scalePKB.replace(/musicscale/g,'FaustDSP')
     let defaultScaleState = dspStateFromSettings('scale', scaleSettings)
-    defaultScaleState['/FaustDSP/Common_Parameters/Pitch'] = commonPitch['pitch']
-    defaultScaleState['/FaustDSP/Common_Parameters/Fine_Tune'] = commonPitch['offSet']
+    defaultScaleState['/FaustDSP/Common_Parameters/Pitch'] = commonSettings['pitch']
+    defaultScaleState['/FaustDSP/Common_Parameters/Fine_Tune'] = commonSettings['offSet']
     const {dispatch} = React.useContext(AudioEnv)
     const defaultSequencerState = [
         {
@@ -52,11 +52,11 @@ const MusicRoom = () => {
     ]
     const [sequencerLocalState, setSequencerLocalState] = useLocalStore('sequencer', defaultSequencerState)
     const [droneLocalState, setDroneLocalState] = useLocalStore('drone', defaultDroneState)
-    droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency'] = commonPitch['pitch']
-    droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune'] = commonPitch['offSet']
+    droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency'] = commonSettings['pitch']
+    droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune'] = commonSettings['offSet']
     const [scaleLocalState, setScaleLocalState] = useLocalStore('scale', defaultScaleState)
-    scaleLocalState['/FaustDSP/Common_Parameters/Pitch'] = commonPitch['pitch']
-    scaleLocalState['/FaustDSP/Common_Parameters/Fine_Tune'] = commonPitch['offSet']
+    scaleLocalState['/FaustDSP/Common_Parameters/Pitch'] = commonSettings['pitch']
+    scaleLocalState['/FaustDSP/Common_Parameters/Fine_Tune'] = commonSettings['offSet']
     const updateParameter = (appname, value, path) => {
         let updateParams = {}
         updateParams[`${path}`] = value
@@ -120,15 +120,15 @@ const MusicRoom = () => {
         switch(appname) {
             case 'drone':
                 newDroneState = dspStateFromSettings(appname,snapshot)
-                newDroneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency'] = commonPitch['pitch']
-                newDroneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune'] = commonPitch['offSet']
+                newDroneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency'] = commonSettings['pitch']
+                newDroneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune'] = commonSettings['offSet']
                 dispatch({type: 'Configure', appname: appname, settings: newDroneState})
                 setDroneLocalState({...newDroneState})
                 break
             case 'scale':
                 newScaleState = dspStateFromSettings(appname,snapshot)
-                newScaleState['/FaustDSP/Common_Parameters/Pitch'] = commonPitch['pitch']
-                newScaleState['/FaustDSP/Common_Parameters/Fine_Tune'] = commonPitch['offSet']
+                newScaleState['/FaustDSP/Common_Parameters/Pitch'] = commonSettings['pitch']
+                newScaleState['/FaustDSP/Common_Parameters/Fine_Tune'] = commonSettings['offSet']
                 dispatch({type: 'Configure', appname: appname, settings: newScaleState})
                 setScaleLocalState({...newScaleState})
                 break

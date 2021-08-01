@@ -1,19 +1,19 @@
 import * as React from 'react'
-import { CommonPitchEnv } from 'services/commonpitch'
+import { CommonSettingsEnv } from 'services/commonsettings'
 import { AudioEnv } from "services/audioenv"
 import Selector from 'components/selector'
 import Slider from 'components/slider'
 import useLocalStore from "services/localstore"
 
 const CommonPitch = () => {
-    const {commonPitch, setCommonPitch} = React.useContext(CommonPitchEnv)
+    const {commonSettings, setCommonSettings} = React.useContext(CommonSettingsEnv)
     const {state, dispatch} = React.useContext(AudioEnv)
-    const [proxyPitch, setProxyPitch] = React.useState(commonPitch)
-    const [localCommonPitch, setLocalCommonPitch] = useLocalStore('commonpitch',commonPitch)
+    const [proxyPitch, setProxyPitch] = React.useState(commonSettings)
+    const [localCommonSettings, setLocalCommonSettings] = useLocalStore('commonsettings',commonSettings)
     const onParamUpdate = (value,path) => {
         let newPitch = proxyPitch
         newPitch[`${path}`] = value
-        setLocalCommonPitch({...newPitch})
+        setLocalCommonSettings({...newPitch})
         let newDroneState = {}
         let newScaleState = {}
         let newSequencerState = {}
@@ -41,13 +41,13 @@ const CommonPitch = () => {
     }
 
     React.useEffect(() => {
-        setCommonPitch(localCommonPitch)
-        setProxyPitch({...localCommonPitch})
-    },[localCommonPitch,setCommonPitch])
+        setCommonSettings(localCommonSettings)
+        setProxyPitch({...localCommonSettings})
+    },[localCommonSettings,setCommonSettings])
 
     let commonFreqParams = {
         key: "Key",
-        default: Number(localCommonPitch['pitch']),
+        default: Number(localCommonSettings['pitch']),
         options: [
             {
                 value: "14",
@@ -102,7 +102,7 @@ const CommonPitch = () => {
     
     let offsetParams = {
         key: "Offset",
-        init: Number(localCommonPitch['offSet']),
+        init: Number(localCommonSettings['offSet']),
         max: 100,
         min: -100,
         step: 1

@@ -3,7 +3,7 @@ import styled from "styled-components"
 import generateDSP from "utils/generatedsp"
 import { dspStateFromSettings } from "utils/dspsettingsinterpreter"
 import { AudioEnv } from "services/audioenv"
-import { CommonPitchEnv } from 'services/commonpitch'
+import { CommonSettingsEnv } from 'services/commonsettings'
 import ShowHideControls from "components/showhidecontrols"
 
 const MotifPlayerContainer = styled.div`
@@ -108,13 +108,13 @@ const MotifPlayer = ({label,motif,scale}) => {
     const [motifVisibility, setMotifVisibility] = React.useState(false)
     const toggleMotifVisibility = () => setMotifVisibility(!motifVisibility)
     let {state,dispatch} = React.useContext(AudioEnv)
-    const {commonPitch,setCommonPitch} = React.useContext(CommonPitchEnv)
+    const {commonSettings,setCommonSettings} = React.useContext(CommonSettingsEnv)
     const jobCompleted = (type) => {
         let newTitle = type === 'Error' ? '𝗫' : PlayTitle
         updateTitle(newTitle)
-        let newPitch = commonPitch
+        let newPitch = commonSettings
         newPitch['currentMotif'] = type === 'Error' ? 'MusicRoom Sequencer' : label
-        setCommonPitch({...newPitch})
+        setCommonSettings({...newPitch})
     }
     const generate = () => {
         let scaleState = dspStateFromSettings('scale',scale)
@@ -123,32 +123,32 @@ const MotifPlayer = ({label,motif,scale}) => {
         let code = generateDSP(sequencerState,scaleState)
         setDSPCode(code)
         let sequencerSettings = {}
-        sequencerSettings['/FaustDSP/Motif/Pitch'] = commonPitch['pitch']
-        sequencerSettings['/FaustDSP/Motif/Fine_Tune'] = commonPitch['offSet']
+        sequencerSettings['/FaustDSP/Motif/Pitch'] = commonSettings['pitch']
+        sequencerSettings['/FaustDSP/Motif/Fine_Tune'] = commonSettings['offSet']
         setDSPSettings({...sequencerSettings})
     }
     const play = () => {
-        if(commonPitch['currentMotif'] === 'Busy')
+        if(commonSettings['currentMotif'] === 'Busy')
             return
         if(state['sequencerPlaying'])
             dispatch({type: 'Stop', appname: 'sequencer'})
         generate()
         let newTitle = "..."
         updateTitle(newTitle)
-        let newPitch = commonPitch
+        let newPitch = commonSettings
         newPitch['currentMotif'] = 'Busy'
-        setCommonPitch({...newPitch})
+        setCommonSettings({...newPitch})
         if(!state.audioContextReady)
             dispatch({type: 'Init'})
     }
     const stop = () => {
-        if(commonPitch['currentMotif'] === 'Busy')
+        if(commonSettings['currentMotif'] === 'Busy')
             return
         if(state['sequencerPlaying'])
             dispatch({type: 'Stop', appname: 'sequencer'})
-        let newPitch = commonPitch
+        let newPitch = commonSettings
         newPitch['currentMotif'] = 'sequencer'
-        setCommonPitch({...newPitch})
+        setCommonSettings({...newPitch})
     }
     React.useEffect(()=>{
         if(title === '...')
@@ -159,8 +159,8 @@ const MotifPlayer = ({label,motif,scale}) => {
             <ShowHideControls title={label} visibility={motifVisibility} onShowHide={toggleMotifVisibility}>
                 <MotifElement>{motif}</MotifElement>
             </ShowHideControls>
-            {(commonPitch['currentMotif'] !== label) && <MotifPlayButton onClick={() => play()}>{title}</MotifPlayButton>}
-            {(commonPitch['currentMotif'] === label) && <MotifStopButton onClick={() => stop()}><StopTitle /></MotifStopButton>}
+            {(commonSettings['currentMotif'] !== label) && <MotifPlayButton onClick={() => play()}>{title}</MotifPlayButton>}
+            {(commonSettings['currentMotif'] === label) && <MotifStopButton onClick={() => stop()}><StopTitle /></MotifStopButton>}
         </MotifPlayerContainer>
     )
 }

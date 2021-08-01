@@ -28,6 +28,8 @@ const SessionControls = ({appname,code,settings,reset,generate,save,restore}) =>
         setActive(newState)
     }
     const playStop = () => {
+        if(title === 'Starting...' || title === 'Stopping...')
+            return
         setDSPCode((!code && generate) ? generate() : code)
         let newTitle = title === 'Stop' ? "Stopping..." : "Starting..."
         let newState = title !== 'Stop'
