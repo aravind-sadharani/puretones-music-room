@@ -11,55 +11,11 @@ const MotifPlayerContainer = styled.div`
     margin: 0 0 1em 0;
     border: 1px solid #e6e6eb;
     border-radius: 5px;
-    display: grid;
-    grid-template-columns: 1fr 52px;
 `
 
 const MotifElement = styled.pre`
     margin: 0 0 1em 0;
     overflow-x: scroll;
-`
-
-const MotifPlayButton = styled.button`
-    padding: 0 6px;
-    outline-color: #333366;
-    -webkit-appearance: none;
-    background-color: #e6e6eb;
-    border: 0;
-    border-radius: 5px;
-    margin: 0 0 auto auto;
-    width: 40px;
-    svg {
-        fill: black;
-    }
-    &:hover {
-        background-color: #333366;
-        color: white;
-        font-weight: 700;
-        opacity: 0.8;
-        svg {
-            fill: white;
-        }
-    }
-`
-
-const MotifStopButton = styled.button`
-    padding: 0 6px;
-    outline-color: #333366;
-    -webkit-appearance: none;
-    border: 0;
-    border-radius: 5px;
-    margin: 0 0 auto auto;
-    width: 40px;
-    background-color: #333366;
-    color: white;
-    font-weight: 700;
-    svg {
-        fill: white;
-    }
-    &:hover {
-        opacity: 0.8;
-    }
 `
 
 const defaultSequencerState = [
@@ -89,31 +45,27 @@ const defaultSequencerState = [
     }
 ]
 
-const PlayTitle = () => (
-    <svg height='1em' xmlns="http://www.w3.org/2000/svg" viewBox='0 0 10 10'>
-        <polygon points="2,2 10,6 2,10" />
-    </svg>
-)
-
-const StopTitle = () => (
-    <svg height='1em' xmlns="http://www.w3.org/2000/svg" viewBox='0 0 10 10'>
-        <polygon points="1,2 9,2 9,10 1,10" />
-    </svg>
-)
-
-const MotifPlayer = ({label,motif,scale}) => {
-    const [title, updateTitle] = React.useState(PlayTitle)
+const MotifPlayer = ({title,motif,scale}) => {
+    const [playState, updatePlayState] = React.useState('stopped')
     const [DSPCode, setDSPCode] = React.useState('')
     const [DSPSettings, setDSPSettings] = React.useState({})
     const [motifVisibility, setMotifVisibility] = React.useState(false)
-    const toggleMotifVisibility = () => setMotifVisibility(!motifVisibility)
+    const toggleMotifVisibility = () => {
+        if(motifVisibility && (commonSettings['currentMotif'] === title)) {
+            setMotifVisibility(false)
+            stop()
+        } else {
+            setMotifVisibility(true)
+            play()
+        }
+    }
     let {state,dispatch} = React.useContext(AudioEnv)
     const {commonSettings,setCommonSettings} = React.useContext(CommonSettingsEnv)
     const jobCompleted = (type) => {
-        let newTitle = type === 'Error' ? '𝗫' : PlayTitle
-        updateTitle(newTitle)
+        let newPlayState = type === 'Error' ? 'error' : 'stopped'
+        updatePlayState(newPlayState)
         let newSettings = commonSettings
-        newSettings['currentMotif'] = type === 'Error' ? 'MusicRoom Sequencer' : label
+        newSettings['currentMotif'] = type === 'Error' ? 'MusicRoom Sequencer' : title
         setCommonSettings(newSettings)
     }
     const generate = () => {
@@ -133,8 +85,8 @@ const MotifPlayer = ({label,motif,scale}) => {
         if(state['sequencerPlaying'])
             dispatch({type: 'Stop', appname: 'sequencer'})
         generate()
-        let newTitle = "..."
-        updateTitle(newTitle)
+        let newPlayState = "starting..."
+        updatePlayState(newPlayState)
         let newSettings = commonSettings
         newSettings['currentMotif'] = 'Busy'
         setCommonSettings(newSettings)
@@ -151,16 +103,18 @@ const MotifPlayer = ({label,motif,scale}) => {
         setCommonSettings(newSettings)
     }
     React.useEffect(()=>{
-        if(title === '...')
+        if(playState === 'starting...')
             dispatch({type: 'Play', appname: 'sequencer', settings: DSPSettings, code: DSPCode, onJobComplete: jobCompleted})
     })
+    let showHideLabel = {
+        active: playState === 'starting...' ? 'Starting...' : 'Start',
+        inactive: 'Stop'
+    }
     return (
         <MotifPlayerContainer>
-            <ShowHideControls title={label} visibility={motifVisibility} onShowHide={toggleMotifVisibility}>
+            <ShowHideControls title={title} label={showHideLabel} visibility={motifVisibility && (commonSettings['currentMotif'] === title)} onShowHide={toggleMotifVisibility}>
                 <MotifElement>{motif}</MotifElement>
             </ShowHideControls>
-            {(commonSettings['currentMotif'] !== label) && <MotifPlayButton onClick={() => play()}>{title}</MotifPlayButton>}
-            {(commonSettings['currentMotif'] === label) && <MotifStopButton onClick={() => stop()}><StopTitle /></MotifStopButton>}
         </MotifPlayerContainer>
     )
 }

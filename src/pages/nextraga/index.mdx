@@ -1,4 +1,27 @@
+import ScalePlayer from 'applets/scaleplayer'
 import yamanDrone from './yaman.prt'
+import yamanScale from './yaman.pkb'
+import samaGanaScale from 'data/default.pkb'
+const noteSpec = [
+    {white: "Sa", black: "fade"},
+    {white: "Re", black: "ga"},
+    {white: "fade"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "fade"},
+    {white: "Dha", black: "ni"},
+    {white: "fade"},
+    {white: "SA"},
+]
+const noteSpecYaman = [
+    {white: "Sa", black: "fade"},
+    {white: "Re", black: "fade"},
+    {white: "Ga"},
+    {white: "fade", black: "Ma"},
+    {white: "Pa", black: "fade"},
+    {white: "Dha", black: "fade"},
+    {white: "Ni"},
+    {white: "SA"},
+]
 
 export const title = "Raga Yaman"
 
@@ -12,6 +35,13 @@ Raga Yaman is blah, blah, blah...
 
 <DronePlayer title='Drone for Raga Yaman' settings={yamanDrone} />
 
+# Yaman Scale
+
+<ScalePlayer title='Basic Intervals' noteSpec={noteSpecYaman} scale={yamanScale} />
+
 # Prev Raga
 
 [Prev Raga](/ragapage/)
+
+## Sama Gana Scale
+<ScalePlayer title='Sama Gana Scale' noteSpec={noteSpec} scale={samaGanaScale}/>

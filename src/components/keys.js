@@ -17,6 +17,9 @@ const WhiteKeyElement = styled.div`
     align-items: flex-end;
     padding-bottom: 20%;
     font-weight: bold;
+    &.fade {
+        opacity: 0.5;
+    }
 `
 
 const BlackKeyElement = styled.div`
@@ -37,14 +40,17 @@ const BlackKeyElement = styled.div`
     align-items: flex-end;
     padding-bottom: 20%;
     color: white;
+    &.fade {
+        opacity: 0.5;
+    }
 `
 
 const WhiteKey = ({keyOn,keyOff,children}) => (
-    <WhiteKeyElement onTouchStart={keyOn} onTouchEnd={keyOff} onMouseDown={keyOn} onMouseUp={keyOff}>{children}</WhiteKeyElement>
+    <WhiteKeyElement className={`${children === 'fade' ? 'fade' : ''}`} onTouchStart={keyOn} onTouchEnd={keyOff} onMouseDown={keyOn} onMouseUp={keyOff}>{children !== 'fade' && children}</WhiteKeyElement>
 )
 
 const BlackKey = ({keyOn,keyOff,children}) => (
-    <BlackKeyElement onTouchStart={keyOn} onTouchEnd={keyOff} onMouseDown={keyOn} onMouseUp={keyOff}>{children}</BlackKeyElement>
+    <BlackKeyElement className={`${children === 'fade' ? 'fade' : ''}`} onTouchStart={keyOn} onTouchEnd={keyOff} onMouseDown={keyOn} onMouseUp={keyOff}>{children !== 'fade' && children}</BlackKeyElement>
 )
 
 export {WhiteKey, BlackKey}

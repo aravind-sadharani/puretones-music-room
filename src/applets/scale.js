@@ -97,7 +97,9 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset, s
         <>
             <p><strong>Scale Controls</strong></p>
             <SessionControls appname="scale" code={scaleDSPCode} settings={scaleState} reset={reset} save={save} restore={restore}/>
+            <p><strong>Keyboard Controls</strong></p>
             <Keyboard keyOn={keyOn} keyOff={keyOff} />
+            <p></p>
             <ListenToKeyStrokes handleKeyStroke={handleKeyStroke} />
             <p><strong>Scale Parameters</strong></p>
             <Selector params={octaveList} path="/FaustDSP/Common_Parameters/Octave" onParamUpdate={(value,path) => onParamUpdate(value,path)}></Selector>
