@@ -1,4 +1,5 @@
 import * as React from 'react'
+import useLocalStore from "services/localstore"
 
 const initialCommonSettings = {
     pitch: "3",
@@ -9,7 +10,15 @@ const initialCommonSettings = {
 const CommonSettingsEnv = React.createContext(initialCommonSettings)
 
 const CommonSettingsEnvProvider = ({children}) => {
-    const [commonSettings, setCommonSettings] = React.useState(initialCommonSettings)
+    const [localCommonSettings,setLocalCommonSettings] = useLocalStore('commonsettings',initialCommonSettings)
+    const [commonSettings,updateCommonSettings] = React.useState(localCommonSettings)
+    const setCommonSettings = (newSettings) => {
+        let localSettings = {}
+        Object.entries(newSettings).forEach((item) => localSettings[`${item[0]}`] = item[1])
+        localSettings['currentMotif'] = 'MusicRoom Sequencer'
+        setLocalCommonSettings({...localSettings})
+        updateCommonSettings({...newSettings})
+    }
     return (
         <CommonSettingsEnv.Provider value={{commonSettings,setCommonSettings}}>
             {children}

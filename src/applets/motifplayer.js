@@ -112,9 +112,9 @@ const MotifPlayer = ({label,motif,scale}) => {
     const jobCompleted = (type) => {
         let newTitle = type === 'Error' ? '𝗫' : PlayTitle
         updateTitle(newTitle)
-        let newPitch = commonSettings
-        newPitch['currentMotif'] = type === 'Error' ? 'MusicRoom Sequencer' : label
-        setCommonSettings({...newPitch})
+        let newSettings = commonSettings
+        newSettings['currentMotif'] = type === 'Error' ? 'MusicRoom Sequencer' : label
+        setCommonSettings(newSettings)
     }
     const generate = () => {
         let scaleState = dspStateFromSettings('scale',scale)
@@ -135,9 +135,9 @@ const MotifPlayer = ({label,motif,scale}) => {
         generate()
         let newTitle = "..."
         updateTitle(newTitle)
-        let newPitch = commonSettings
-        newPitch['currentMotif'] = 'Busy'
-        setCommonSettings({...newPitch})
+        let newSettings = commonSettings
+        newSettings['currentMotif'] = 'Busy'
+        setCommonSettings(newSettings)
         if(!state.audioContextReady)
             dispatch({type: 'Init'})
     }
@@ -146,9 +146,9 @@ const MotifPlayer = ({label,motif,scale}) => {
             return
         if(state['sequencerPlaying'])
             dispatch({type: 'Stop', appname: 'sequencer'})
-        let newPitch = commonSettings
-        newPitch['currentMotif'] = 'sequencer'
-        setCommonSettings({...newPitch})
+        let newSettings = commonSettings
+        newSettings['currentMotif'] = 'MusicRoom Sequencer'
+        setCommonSettings(newSettings)
     }
     React.useEffect(()=>{
         if(title === '...')

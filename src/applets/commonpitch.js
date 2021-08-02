@@ -3,17 +3,14 @@ import { CommonSettingsEnv } from 'services/commonsettings'
 import { AudioEnv } from "services/audioenv"
 import Selector from 'components/selector'
 import Slider from 'components/slider'
-import useLocalStore from "services/localstore"
 
 const CommonPitch = () => {
     const {commonSettings, setCommonSettings} = React.useContext(CommonSettingsEnv)
     const {state, dispatch} = React.useContext(AudioEnv)
-    const [proxyPitch, setProxyPitch] = React.useState(commonSettings)
-    const [localCommonSettings, setLocalCommonSettings] = useLocalStore('commonsettings',commonSettings)
     const onParamUpdate = (value,path) => {
-        let newPitch = proxyPitch
-        newPitch[`${path}`] = value
-        setLocalCommonSettings({...newPitch})
+        let newSettings = commonSettings
+        newSettings[`${path}`] = value
+        setCommonSettings(newSettings)
         let newDroneState = {}
         let newScaleState = {}
         let newSequencerState = {}
@@ -40,14 +37,9 @@ const CommonPitch = () => {
             dispatch({type: 'Configure', appname: 'sequencer', settings: newSequencerState}) 
     }
 
-    React.useEffect(() => {
-        setCommonSettings(localCommonSettings)
-        setProxyPitch({...localCommonSettings})
-    },[localCommonSettings,setCommonSettings])
-
     let commonFreqParams = {
         key: "Key",
-        default: Number(localCommonSettings['pitch']),
+        default: Number(commonSettings['pitch']),
         options: [
             {
                 value: "14",
@@ -102,7 +94,7 @@ const CommonPitch = () => {
     
     let offsetParams = {
         key: "Offset",
-        init: Number(localCommonSettings['offSet']),
+        init: Number(commonSettings['offSet']),
         max: 100,
         min: -100,
         step: 1
