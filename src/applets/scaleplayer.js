@@ -23,7 +23,7 @@ const ScalePlayer = ({title,noteSpec,scale}) => {
         let msg = [144,`${key2Midi(keyName)}`,50]
         dispatch({type: 'MIDI', appname: 'scale', message: msg})
         if(isBrowser) {
-            window.setTimeout(() => keyOff(keyName),2500)
+            window.setTimeout(() => keyOff(keyName),6000)
         }
     }
     const keyOff = (keyName) => {
