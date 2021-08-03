@@ -7,7 +7,7 @@ const TimbreSliderElements = ({timbreState,basePath,onParamUpdate}) => (
     timbreSliderList.map((s) => {
         let lastPath = s.replace(' ','_')
         let timbreSliderParams = {
-            init: Number(timbreState[`${basePath}/${lastPath}`]),
+            init: timbreState[`${basePath}/${lastPath}`],
             max: 10,
             min: 0,
             step: 0.1

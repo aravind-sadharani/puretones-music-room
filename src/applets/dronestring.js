@@ -8,7 +8,7 @@ import DroneStringTimbre from "applets/dronestringtimbre"
 const DroneString = ({title,stringState,basePath,onParamUpdate}) => {
     let stringSelectParams = {
       key: "Note",
-      default: Number(stringState[`${basePath}/Select_Note`]),
+      default: stringState[`${basePath}/Select_Note`],
       options: [
         {
           value: "0",
@@ -66,28 +66,28 @@ const DroneString = ({title,stringState,basePath,onParamUpdate}) => {
     }
     let fineTuneParams = {
         key: "Fine Tune",
-        init: Number(stringState[`${basePath}/Fine_Tune`]),
+        init: stringState[`${basePath}/Fine_Tune`],
         max: 100,
         min: -100,
         step: 1
     }
     let ultraFineTuneParams = {
         key: "Ultrafine Tune",
-        init: Number(stringState[`${basePath}/Ultrafine_Tune`]),
+        init: stringState[`${basePath}/Ultrafine_Tune`],
         max: 100,
         min: -100,
         step: 1
     }
     let varianceParams = {
         key: "Variance",
-        init: Number(stringState[`${basePath}/Variance`]),
+        init: stringState[`${basePath}/Variance`],
         max: 10,
         min: 0,
         step: 0.1
     }
     let gainParams = {
         key: "Gain",
-        init: Number(stringState[`${basePath}/Gain`]),
+        init: stringState[`${basePath}/Gain`],
         max: 20,
         min: -20,
         step: 0.1

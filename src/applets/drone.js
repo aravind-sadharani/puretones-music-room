@@ -16,7 +16,7 @@ const Drone = ({droneDSPCode,droneState,onParamUpdate,reset,save,restore}) => {
     })
     let octaveList = {
         key: "Octave",
-        default: Number(droneState['/FaustDSP/PureTones_v1.0/0x00/Octave_Selector']),
+        default: droneState['/FaustDSP/PureTones_v1.0/0x00/Octave_Selector'],
         options: [
             {
                 value: 1,
@@ -34,14 +34,14 @@ const Drone = ({droneDSPCode,droneState,onParamUpdate,reset,save,restore}) => {
     }
     let periodParams = {
         key: "Period",
-        init: Number(droneState['/FaustDSP/PureTones_v1.0/0x00/Period']),
+        init: droneState['/FaustDSP/PureTones_v1.0/0x00/Period'],
         max: 10,
         min: 4,
         step: 0.5
     }
     let levelParams = {
         key: "Level",
-        init: Number(droneState['/FaustDSP/Zita_Light/Level']),
+        init: droneState['/FaustDSP/Zita_Light/Level'],
         max: 30,
         min: -30,
         step: 0.5

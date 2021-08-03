@@ -47,7 +47,7 @@ const CommonPitch = () => {
 
     let commonFreqParams = {
         key: "Key",
-        default: Number(commonSettings['pitch']),
+        default: commonSettings['pitch'],
         options: [
             {
                 value: "14",
@@ -102,7 +102,7 @@ const CommonPitch = () => {
     
     let offsetParams = {
         key: "Offset",
-        init: Number(commonSettings['offSet']),
+        init: commonSettings['offSet'],
         max: 100,
         min: -100,
         step: 1

@@ -20,7 +20,7 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset, s
     })
     let octaveList = {
         key: "Octave",
-        default: Number(scaleState['/FaustDSP/Common_Parameters/Octave']),
+        default: scaleState['/FaustDSP/Common_Parameters/Octave'],
         options: [
             {
                 value: 2,
@@ -46,7 +46,7 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset, s
     }
     let initSustainParams = {
         key: "Sustain",
-        init: 2,
+        init: 2.0,
         max: 3,
         min: 0,
         step: 0.1
@@ -54,12 +54,12 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset, s
     const [sustainParams,setSustain] = React.useState(initSustainParams)
     const updateSustain = (value) => {
         let newParams = sustainParams
-        newParams['init'] = Number(value)
+        newParams['init'] = value
         setSustain({...newParams})
     }
     let levelParams = {
         key: "Level",
-        init: Number(scaleState['/FaustDSP/Zita_Light/Level']),
+        init: scaleState['/FaustDSP/Zita_Light/Level'],
         max: 30,
         min: -30,
         step: 0.5
