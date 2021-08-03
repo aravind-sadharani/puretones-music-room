@@ -19,16 +19,34 @@ const ScalePlayerContainer = styled.div`
 const ScalePlayer = ({title,noteSpec,scale}) => {
     const note2Offset = {'Sa': 0, 're': 1, 'Re': 2, 'ga': 3, 'Ga': 4, 'ma': 5, 'Ma': 6, 'Pa': 7, 'dha': 8, 'Dha': 9, 'ni': 10, 'Ni': 11, 'SA': 12}
     const key2Midi = (keyName) => (Number(commonSettings['pitch']) - 3 + note2Offset[`${keyName}`] + 48)
+    const [keyState,setKeyState] = React.useState(Array(13).fill(0))
     const keyOn = (keyName) => {
-        let msg = [144,`${key2Midi(keyName)}`,50]
-        dispatch({type: 'MIDI', appname: 'scale', message: msg})
-        if(isBrowser) {
-            window.setTimeout(() => keyOff(keyName),6000)
+        if(keyState[note2Offset[`${keyName}`]] === 0) {
+            let newKeyState = keyState
+            newKeyState[note2Offset[`${keyName}`]] = 1
+            setKeyState([...newKeyState])
+            let msg = [144,`${key2Midi(keyName)}`,50]
+            dispatch({type: 'MIDI', appname: 'scale', message: msg})
         }
     }
     const keyOff = (keyName) => {
-        let msg = [144,`${key2Midi(keyName)}`,0]
-        dispatch({type: 'MIDI', appname: 'scale', message: msg})
+        if(isBrowser) {
+            window.setTimeout(() => {
+                let newKeyState = keyState
+                newKeyState[note2Offset[`${keyName}`]] = 0
+                setKeyState([...newKeyState])
+            },100)
+            window.setTimeout(() => {
+                let msg = [144,`${key2Midi(keyName)}`,0]
+                dispatch({type: 'MIDI', appname: 'scale', message: msg})
+            },6000)
+        } else {
+            let newKeyState = keyState
+            newKeyState[note2Offset[`${keyName}`]] = 0
+            setKeyState([...newKeyState])
+            let msg = [144,`${key2Midi(keyName)}`,0]
+            dispatch({type: 'MIDI', appname: 'scale', message: msg})
+        }
     }
     const [playState, updatePlayState] = React.useState('stopped')
     const [DSPSettings, setDSPSettings] = React.useState({})
@@ -88,7 +106,7 @@ const ScalePlayer = ({title,noteSpec,scale}) => {
     return (
         <ScalePlayerContainer>
             <ShowHideControls title={title} label={showHideLabel} visibility={visibility && (commonSettings['currentScale'] === title)} onShowHide={toggleScaleVisibility}>
-                <Keyboard keyOn={keyOn} keyOff={()=>{}} noteSpec={noteSpec} />
+                <Keyboard keyOn={keyOn} keyOff={keyOff} noteSpec={noteSpec} />
             </ShowHideControls>
         </ScalePlayerContainer>
     )

@@ -3,7 +3,6 @@ import Container from 'components/container'
 import Header from 'components/header'
 import Footer from 'components/footer'
 import IncludeFaust from 'services/faust'
-import { StaticImage } from 'gatsby-plugin-image'
 import { AudioEnvProvider } from 'services/audioenv'
 import { CommonSettingsEnvProvider } from 'services/commonsettings'
 import { Link } from 'gatsby'
@@ -11,20 +10,21 @@ import DronePlayer from 'applets/droneplayer'
 import MotifPlayer from 'applets/motifplayer'
 import CommonPitch from 'applets/commonpitch'
 import { MDXProvider } from "@mdx-js/react"
+import pureTonesLogo from 'images/puretones-logo.svg'
 
 const shortcodes = { DronePlayer, MotifPlayer, CommonPitch }
 
 const DefaultLayout = ({title,children}) => {
   return (
     <Container>
-        <IncludeFaust />
-        <Header>
+      <IncludeFaust />
+      <Header>
         <Link to="/">
           <h1>
-            <StaticImage
-              src="../images/puretones-logo.svg"
+            <img
+              src={pureTonesLogo}
               alt="PureTones Logo">
-            </StaticImage>
+            </img>
             {title || 'PureTones'}
           </h1>
         </Link>

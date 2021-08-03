@@ -14,7 +14,7 @@ const HeaderElement = styled.header`
     }
     h1 img {
         margin-right: 10px;
-        width: 79px;
+        margin-bottom: -5px;
         height: 48px;
     }
 `

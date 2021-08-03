@@ -18,6 +18,8 @@ const ContainerElement = styled.div`
         margin: 0 0 1rem 0;
     }
     table {
+        width: calc(100% - 2px);
+        margin: 0 auto 1em;
         border-style: hidden;
         box-shadow: 0 1px 0 1px #e6e6eb;
         border-radius: 5px;
@@ -35,6 +37,7 @@ const ContainerElement = styled.div`
         border-bottom-right-radius: 5px;
     }
     th {
+        box-shadow: 0 -2px 0 1px #333366;
         background-color: #333366;
         color: white;
     }
