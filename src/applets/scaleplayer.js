@@ -77,7 +77,7 @@ const ScalePlayer = ({title,noteSpec,scale}) => {
         let scaleState = dspStateFromSettings('scale',scale)
         scaleState['/FaustDSP/Common_Parameters/Pitch'] = commonSettings['pitch']
         scaleState['/FaustDSP/Common_Parameters/Fine_Tune'] = commonSettings['offSet']
-        setDSPSettings({...scaleState})
+        setDSPSettings(scaleState)
         let newPlayState = "starting..."
         updatePlayState(newPlayState)
         let newSettings = commonSettings

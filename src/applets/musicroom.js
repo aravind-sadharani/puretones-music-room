@@ -63,14 +63,10 @@ const MusicRoom = () => {
         dispatch({type: 'Configure', appname: appname, settings: updateParams})
         switch(appname) {
             case 'drone':
-                let newDroneState = droneLocalState
-                newDroneState[`${path}`] = value
-                setDroneLocalState({...newDroneState})
+                setDroneLocalState(updateParams)
                 break
             case 'scale':
-                let newScaleState = scaleLocalState
-                newScaleState[`${path}`] = value
-                setScaleLocalState({...newScaleState})
+                setScaleLocalState(updateParams)
                 break
             default:
                 console.log(`Update Parameters: Incorrect appname ${appname}!`)
@@ -79,7 +75,7 @@ const MusicRoom = () => {
     const updateVoiceParameters = (index, value, path) => {
         let newSequencerState = sequencerLocalState
         newSequencerState[index][`${path}`] = value
-        setSequencerLocalState({...newSequencerState})   
+        setSequencerLocalState(newSequencerState)   
     }
     const sendMIDIMessage = (msg) => {
         dispatch({type: 'MIDI', appname: 'scale', message: msg})
@@ -88,14 +84,14 @@ const MusicRoom = () => {
         switch(appname) {
             case 'drone':
                 dispatch({type: 'Configure', appname: appname, settings: defaultDroneState})
-                setDroneLocalState({...defaultDroneState})
+                setDroneLocalState(defaultDroneState)
                 break
             case 'scale':
                 dispatch({type: 'Configure', appname: appname, settings: defaultScaleState})
-                setScaleLocalState({...defaultScaleState})
+                setScaleLocalState(defaultScaleState)
                 break
             case 'sequencer':
-                setSequencerLocalState({...defaultSequencerState})
+                setSequencerLocalState(defaultSequencerState)
                 break
             default:
                 console.log(`Reset: Incorrect appname ${appname}!`)
@@ -123,17 +119,17 @@ const MusicRoom = () => {
                 newDroneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency'] = commonSettings['pitch']
                 newDroneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune'] = commonSettings['offSet']
                 dispatch({type: 'Configure', appname: appname, settings: newDroneState})
-                setDroneLocalState({...newDroneState})
+                setDroneLocalState(newDroneState)
                 break
             case 'scale':
                 newScaleState = dspStateFromSettings(appname,snapshot)
                 newScaleState['/FaustDSP/Common_Parameters/Pitch'] = commonSettings['pitch']
                 newScaleState['/FaustDSP/Common_Parameters/Fine_Tune'] = commonSettings['offSet']
                 dispatch({type: 'Configure', appname: appname, settings: newScaleState})
-                setScaleLocalState({...newScaleState})
+                setScaleLocalState(newScaleState)
                 break
             case 'sequencer':
-                setSequencerLocalState({...JSON.parse(snapshot)})
+                setSequencerLocalState(JSON.parse(snapshot))
                 break
             default:
                 console.log(`Restore: Incorrect appname ${appname}!`)

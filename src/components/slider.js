@@ -53,16 +53,13 @@ const SliderKey = styled.span`
 `
 
 const Slider = ({params,path,onParamUpdate}) =>  {
-    const changeValue = (value) => {
-        if(onParamUpdate && path)
-            onParamUpdate(value, path)
-    }
-    let {key,max,min,step} = params
+    const changeValue = (value) => onParamUpdate(value, path)
+    let {key,max,min,step,init} = params
     return (
         <SliderContainer>
             <SliderKey>{key}</SliderKey>
-            <SliderNumber type="number" value={params.init} onChange={(e) => changeValue(e.target.value)}></SliderNumber>
-            <SliderRange type="range" min={min} max={max} step={step} value={params.init} onChange={(e) => changeValue(e.target.value)}></SliderRange>
+            <SliderNumber type="number" value={init} onChange={(e) => changeValue(e.target.value)}></SliderNumber>
+            <SliderRange type="range" min={min} max={max} step={step} value={init} onChange={(e) => changeValue(e.target.value)}></SliderRange>
         </SliderContainer>
     )
 }

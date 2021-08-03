@@ -47,7 +47,7 @@ const DronePlayer = ({title,settings}) => {
     const [active, setActive] = React.useState(false)
     const {state,dispatch} = React.useContext(AudioEnv)
     const {commonSettings} = React.useContext(CommonSettingsEnv)
-    const [droneState,setDroneState] = React.useState(dspStateFromSettings('drone',settings))
+    const [droneState,setDroneState] = React.useState({})
     const jobCompleted = (type) => {
         let newButtonTitle = type === 'Error' ? 'Error! Retry' : type === 'Stop' ? 'Start' : 'Stop'
         let newState = type !== 'Stop'
@@ -61,10 +61,10 @@ const DronePlayer = ({title,settings}) => {
         let newState = buttonTitle !== 'Stop'
         updateButtonTitle(newButtonTitle)
         setActive(newState)
-        let newDroneState = droneState
-        droneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency'] = commonSettings['pitch']
-        droneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune'] = commonSettings['offSet']
-        setDroneState({...newDroneState})
+        let newDroneState = dspStateFromSettings('drone',settings)
+        newDroneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency'] = commonSettings['pitch']
+        newDroneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune'] = commonSettings['offSet']
+        setDroneState(newDroneState)
         if(!state.audioContextReady)
             dispatch({type: 'Init'})
     }

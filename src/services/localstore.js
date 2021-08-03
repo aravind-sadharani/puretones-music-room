@@ -17,16 +17,13 @@ const useLocalStore = (key,initialValue) => {
 
     const [localValue, setValue] = useState(initialLocalValue())
 
-    const [throttle, setThrottle] = useState(false)
-
     const setLocalValue = (value) => {
         try {
             const evaluatedValue = value instanceof Function ? value(localValue) : value
-            setValue(evaluatedValue)
-            if(isBrowser && !throttle) {
-                window.localStorage.setItem(key, JSON.stringify(evaluatedValue))
-                setThrottle(true)
-                window.setTimeout(()=>setThrottle(false),1000)
+            let newValue = {...localValue, ...evaluatedValue}
+            setValue(newValue)
+            if(isBrowser) {
+                window.localStorage.setItem(key, JSON.stringify(newValue))
             }
         } catch(error) {
             console.log(error)

@@ -37,12 +37,8 @@ const SelectKey = styled.span`
 `
 
 const Selector = ({params,path,onParamUpdate}) => {
-    const changeValue = (value) => {
-        if(onParamUpdate && path)
-            onParamUpdate(value, path)
-    }
-
-    let {key,options} = params
+    const changeValue = (value) => onParamUpdate(value, path)
+    let { key,options} = params
     let OptionList = options.map(option => <OptionElement key={`key_${option.text}`} value={option.value}>{option.text}</OptionElement>)
     return (
         <SelectContainer>

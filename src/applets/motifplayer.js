@@ -77,7 +77,7 @@ const MotifPlayer = ({title,motif,scale}) => {
         let sequencerSettings = {}
         sequencerSettings['/FaustDSP/Motif/Pitch'] = commonSettings['pitch']
         sequencerSettings['/FaustDSP/Motif/Fine_Tune'] = commonSettings['offSet']
-        setDSPSettings({...sequencerSettings})
+        setDSPSettings(sequencerSettings)
     }
     const play = () => {
         if(commonSettings['currentMotif'] === 'Busy')

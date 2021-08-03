@@ -14,12 +14,11 @@ const CommonSettingsEnvProvider = ({children}) => {
     const [localCommonSettings,setLocalCommonSettings] = useLocalStore('commonsettings',initialCommonSettings)
     const [commonSettings,updateCommonSettings] = React.useState(localCommonSettings)
     const setCommonSettings = (newSettings) => {
-        let localSettings = {}
-        Object.entries(newSettings).forEach((item) => localSettings[`${item[0]}`] = item[1])
+        let localSettings = {...newSettings}
         localSettings['currentMotif'] = 'MusicRoom Sequencer'
         localSettings['currentScale'] = 'MusicRoom Scale'
-        setLocalCommonSettings({...localSettings})
-        updateCommonSettings({...newSettings})
+        setLocalCommonSettings(localSettings)
+        updateCommonSettings(newSettings)
     }
     return (
         <CommonSettingsEnv.Provider value={{commonSettings,setCommonSettings}}>
