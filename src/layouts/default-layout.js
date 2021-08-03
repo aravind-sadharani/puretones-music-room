@@ -10,11 +10,13 @@ import DronePlayer from 'applets/droneplayer'
 import MotifPlayer from 'applets/motifplayer'
 import ScalePlayer from 'applets/scaleplayer'
 import CommonPitch from 'applets/commonpitch'
+import Caption from 'components/caption'
+import Table from 'components/table'
 import Notice from 'components/notice'
 import { MDXProvider } from "@mdx-js/react"
 import pureTonesLogo from 'images/puretones-logo.svg'
 
-const shortcodes = { DronePlayer, MotifPlayer, ScalePlayer, CommonPitch, Notice }
+const shortcodes = { DronePlayer, MotifPlayer, ScalePlayer, CommonPitch, Notice, Caption, table: Table }
 
 const DefaultLayout = ({title,children}) => {
   return (
