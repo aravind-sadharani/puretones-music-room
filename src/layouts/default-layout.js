@@ -8,11 +8,13 @@ import { CommonSettingsEnvProvider } from 'services/commonsettings'
 import { Link } from 'gatsby'
 import DronePlayer from 'applets/droneplayer'
 import MotifPlayer from 'applets/motifplayer'
+import ScalePlayer from 'applets/scaleplayer'
 import CommonPitch from 'applets/commonpitch'
+import Notice from 'components/notice'
 import { MDXProvider } from "@mdx-js/react"
 import pureTonesLogo from 'images/puretones-logo.svg'
 
-const shortcodes = { DronePlayer, MotifPlayer, CommonPitch }
+const shortcodes = { DronePlayer, MotifPlayer, ScalePlayer, CommonPitch, Notice }
 
 const DefaultLayout = ({title,children}) => {
   return (

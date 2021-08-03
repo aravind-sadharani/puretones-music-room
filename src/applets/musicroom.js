@@ -148,7 +148,6 @@ const MusicRoom = () => {
     ]
     return (
         <>
-            <p><strong>Common Parameters</strong></p>
             <CommonPitch />
             <TabNav tablist={mainNavTabs} pagelist={mainNavPages}></TabNav>
         </>

@@ -1,0 +1,78 @@
+import scaleBasicIntervals from './basicIntervals.pkb'
+import scaleSamaGana from 'data/default.pkb'
+
+export const title = "PureTones"
+const notesBasicIntervals = [
+    {white: "Sa", black: "fade"},
+    {white: "fade", black: "fade"},
+    {white: "Ga"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "fade"},
+    {white: "fade", black: "fade"},
+    {white: "fade"},
+    {white: "SA"}
+]
+const notesSamaGana = [
+    {white: "Sa", black: "fade"},
+    {white: "Re", black: "ga"},
+    {white: "fade"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "fade"},
+    {white: "Dha", black: "ni"},
+    {white: "fade"},
+    {white: "SA"}
+]
+
+# Indian Tuning Systems
+
+To understand the role of harmonics, microtones and consonance in Indian Classical music, it is necessary to understand its underlying tuning systems. In this article, we reconstruct two significant tuning systems used in Indian Classical music:
+
+1.  The first is a 22 note scale whose earliest reference is due to [Bharat](https://en.wikipedia.org/wiki/Bharata_Muni) in [Natya Shastra](https://en.wikipedia.org/wiki/Natya_Shastra) and which was later documented by [Sarang Dev](https://en.wikipedia.org/wiki/%C5%9A%C4%81r%E1%B9%85gadeva) in [Sangeet Ratnakar](https://en.wikipedia.org/wiki/Sangita_Ratnakara). Note that [Dattilam](https://en.wikipedia.org/wiki/Dattilam) by **Dattila**, a contemporary or possibly earlier work compared to Natya Shastra, also refers to a division of an octave into 22 notes.
+2.  The second is a 12 note scale first devised by **Ramamatya** in [Svaramelakalanidhi](https://en.wikipedia.org/wiki/Svaramelakalanidhi) and which was later documented by [Venkatamakhin](https://en.wikipedia.org/wiki/Venkatamakhin) in [Chaturdanda Prakasika](https://en.wikipedia.org/wiki/Chaturdandiprakashika).
+
+In a couple of related articles, we cover how tuning systems influence [musical scales](/musicalscales/) and how this affects the [tuning of a Tanpura](/tanpuraworking/) to play these scales.
+
+## Reference Pitch, Basic Intervals and Ratios
+
+Before we begin reconstructing any tuning system, let us start with the concept of the fundamental note **Sa**. In Indian Classical music, all musical notes are defined based on their relationship with **Sa**. You can use the settings below to set the **Sa** to any pitch you prefer. All the demos on this page would play according to this setting.
+
+<CommonPitch />
+
+Next, it is useful to familiarize ourselves with the four basic intervals of *Dviguna*  (octave), *Pancham* (fifth), *Madhyam* (fourth) and *Gandhar* (major third). You can play and check these intervals using the keyboard below (just click on **Start** to activate and tap a key to play). Here **Sa** denotes the fundamental and **Ga, ma, Pa** and **SA** denote the Gandhar, Madhyam, Pancham and Dviguna respectively. Note that **Sa** is taken to be the pitch **C**, but the other notes do not match up with today's standard [12 tone equally tempered scale](https://en.wikipedia.org/wiki/12_equal_temperament).
+
+<ScalePlayer title='Demo 1. Basic Intervals' noteSpec={notesBasicIntervals} scale={scaleBasicIntervals} />
+
+<Notice>This article features high quality audio demonstrations which are an integral part of the narrative. For ease of understanding, these demos have been presented in the form of a musical keyboard which many would recognize. Simply click on <strong>Start</strong> to activate and tap a key to play. Please try and use a pair of headphones or good quality speakers to listen to the samples with maximum clarity.</Notice>
+
+As you can hear from Demo 1, Pancham, Madhyam and Gandhar are pleasant sounding intervals. For the musically inclined, they may be easy to recognise by ear. It is also possible to determine their frequency ratios in relation to the fundamental.
+
+One way in which this can be done is by comparing lengths. Firstly, we can observe that the pitch of a string is inversely proportional to its vibrating length. Secondly, taking a certain string length to represent the fundamental, we can observe that if we touch the string at a third of its length from one end and pluck the remaining two-thirds, it results in the string sounding the fifth. Similarly, touching it at a fourth of its length from one end results in the remaining three-fourths to sound the fourth, touching it at a fifth of its length results in the major third, and touching it at the midpoint results in either half to sound the octave.
+
+So by inverting these string lengths, we can infer that with **Sa = 1**, we have **SA = 2, Pa = 3/2, ma = 4/3** and **Ga = 5/4**. Try and remember these frequency ratios, as we will use them repeatedly.
+
+## Sama Gana Scale
+
+The first scale we will examine is the *Sama Gana* scale which was used to sing passages from the *Sama Veda*. Folk music or informal music was always around in India. But Indian music started to get formalized as the chants of *Rig Veda* evolved into a more sing-song way of rendering passages from Sama Veda. Rig Vedic chants already used three notes called  *Svarita* (neutral drone), *Udaatta* (higher note) and *Anudaatta* (lower note). This evolved further in Sama Gana.
+
+Sama Gana is the act of singing the Sama Veda. According to Ustad Zia Fariduddin Dagar, a typical arrangement employed three groups of singers with one group singing at the pitch **Sa**, the second at **ma** and the third at **Pa**. Each group in turn used three notes, a center note, a low note and a high note, similar to those used in Rig Vedic chants. The center note was whichever pitch they were singing, *i.e.,* Sa, ma or Pa. The high note was higher than the center note by a specific tone and the low note was lower than the center note by the same tone. Refer to Demo 2 below.
+
+Knowing the Pa and ma intervals, it is possible to derive the **ma-Pa** interval. For the musically inclined, you may be able to recognise it by ear. The size of the ma-Pa interval can be calculated as **3/2 ÷ 4/3 = 9/8**. This ma-Pa interval was used as the tone to derive the high and low notes from the center note. Note that the ma-Pa interval is different from the [whole tone](https://en.wikipedia.org/wiki/Major_second) used in today's standard [12 tone equally tempered scale](https://en.wikipedia.org/wiki/12_equal_temperament). The whole tone is 200 [cents](https://en.wikipedia.org/wiki/Cent_(music)) wide, while the ma-Pa interval is a bit wider at 203.9 cents.
+
+Using this, the Sama Gana scale as depicted in Table 1 can be derived. The method of derivation is given in the remarks column. The Sama Gana scale is discussed and documented in a number of references (for example, see *Lakshanagrandhas in Music* by Dr. Bhagyalekshmy).
+
+*Table 1. Illustration of Sama Gana Scale*
+
+| Note | Decimal Ratio | Symbolic Ratio | Remarks |
+| --- | --- | --- | --- |
+| Sa | 1 | 1 |   |
+| Re | 1.125 | 9/8 | ma-Pa Gap above Sa |
+| ga | 1.185185185 | 32/27 | ma-Pa Gap below ma |
+| ma | 1.333333333 | 4/3 | Fourth |
+| Pa | 1.5 | 3/2 | Fifth |
+| Dha | 1.6875 | 27/16 | ma-Pa Gap above Pa |
+| ni | 1.777777778 | 16/9 | ma-Pa Gap below SA |
+| SA | 2 | 2 | Octave |
+
+You can play and check how the Sama Gana scale sounds using Demo 3 below.
+
+<ScalePlayer title='Demo 3. Sama Gana Scale' noteSpec={notesSamaGana} scale={scaleSamaGana} />

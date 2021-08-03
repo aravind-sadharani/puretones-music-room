@@ -1,8 +1,16 @@
 import * as React from 'react'
+import styled from 'styled-components'
 import { CommonSettingsEnv } from 'services/commonsettings'
 import { AudioEnv } from "services/audioenv"
 import Selector from 'components/selector'
 import Slider from 'components/slider'
+
+const CommonPitchContainer = styled.div`
+    padding: 12px 12px 0 12px;
+    margin: 0 0 1em 0;
+    border: 1px solid #e6e6eb;
+    border-radius: 5px;
+`
 
 const CommonPitch = () => {
     const {commonSettings, setCommonSettings} = React.useContext(CommonSettingsEnv)
@@ -100,10 +108,11 @@ const CommonPitch = () => {
         step: 1
     }
     return (
-        <>
+        <CommonPitchContainer>
+            <p><strong>Common Parameters</strong></p>
             <Selector params={commonFreqParams} path='pitch' onParamUpdate={onParamUpdate}></Selector>
             <Slider params={offsetParams} path='offSet' onParamUpdate={onParamUpdate} ></Slider>
-        </>
+        </CommonPitchContainer>
     )
 }
 

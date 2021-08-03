@@ -37,14 +37,16 @@ const ContainerElement = styled.div`
         border-bottom-right-radius: 5px;
     }
     th {
-        box-shadow: 0 -2px 0 1px #333366;
+        padding: 6px 12px;
+        border: 1px solid #e6e6eb;
+        box-shadow: 0 -1px 0 1px #333366;
         background-color: #333366;
         color: white;
     }
     tr:nth-child(even) {
         background-color: #e6e6eb;
     }
-    td, th {
+    td {
         padding: 0 12px;
         border: 1px solid #e6e6eb;
     }
