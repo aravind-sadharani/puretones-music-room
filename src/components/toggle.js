@@ -62,7 +62,7 @@ const Toggle = ({title,status,path,onParamUpdate}) => {
     React.useEffect(()=>{
         let checkedFromStatus = Number(status) ? true : false
         check(checkedFromStatus)
-    })
+    },[status])
     return (
         <ToggleContainer>
             <ToggleKey>{title}</ToggleKey>
