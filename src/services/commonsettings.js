@@ -1,25 +1,35 @@
 import * as React from 'react'
 import useLocalStore from "services/localstore"
 
-const initialCommonSettings = {
+const initialCachedSettings = {
     pitch: "3",
-    offSet: "0",
+    offSet: "0"
+}
+
+const initialVolatileSettings = {
     currentMotif: 'MusicRoom Sequencer',
     currentScale: 'MusicRoom Scale'
 }
 
-const CommonSettingsEnv = React.createContext(initialCommonSettings)
+const CommonSettingsEnv = React.createContext({...initialCachedSettings, ...initialVolatileSettings})
 
 const CommonSettingsEnvProvider = ({children}) => {
-    const [localCommonSettings,setLocalCommonSettings] = useLocalStore('commonsettings',initialCommonSettings)
-    const [commonSettings,updateCommonSettings] = React.useState(localCommonSettings)
+    const [cachedSettings,setCachedSettings] = useLocalStore('commonsettings',initialCachedSettings)
+    const [volatileSettings,setVolatileSettings] = React.useState(initialVolatileSettings)
+    const [commonSettings,updateCommonSettings] = React.useState({...initialCachedSettings, ...initialVolatileSettings})
     const setCommonSettings = (newSettings) => {
-        let localSettings = {...newSettings}
-        localSettings['currentMotif'] = 'MusicRoom Sequencer'
-        localSettings['currentScale'] = 'MusicRoom Scale'
-        setLocalCommonSettings(localSettings)
-        updateCommonSettings(newSettings)
+        let newCachedSettings = {}
+        newCachedSettings['pitch'] = newSettings['pitch']
+        newCachedSettings['offSet'] = newSettings['offSet']
+        let newVolatileSettings = {}
+        newVolatileSettings['currentMotif'] = newSettings['currentMotif']
+        newVolatileSettings['currentScale'] = newSettings['currentScale']
+        setCachedSettings(newCachedSettings)
+        setVolatileSettings(newVolatileSettings)
     }
+    React.useEffect(()=>{
+        updateCommonSettings({...cachedSettings, ...volatileSettings})
+    },[updateCommonSettings,cachedSettings,volatileSettings])
     return (
         <CommonSettingsEnv.Provider value={{commonSettings,setCommonSettings}}>
             {children}

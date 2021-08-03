@@ -54,11 +54,15 @@ const ToggleKey = styled.span`
 `
 
 const Toggle = ({title,status,path,onParamUpdate}) => {
-    let checked = Number(status) ? true : false
+    const [checked,check] = React.useState(false)
     const changeToggle = (newStatus) => {
         let value = newStatus ? 1 : 0
         onParamUpdate(value,path)
     }
+    React.useEffect(()=>{
+        let checkedFromStatus = Number(status) ? true : false
+        check(checkedFromStatus)
+    })
     return (
         <ToggleContainer>
             <ToggleKey>{title}</ToggleKey>
