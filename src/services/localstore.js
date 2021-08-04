@@ -1,4 +1,4 @@
-import {useState} from "react"
+import {useReducer} from "react"
 
 const isBrowser = typeof window !== "undefined"
 
@@ -15,20 +15,19 @@ const useLocalStore = (key,initialValue) => {
         }
     }
 
-    const [localValue, setValue] = useState(initialLocalValue())
-
-    const setLocalValue = (value) => {
+    const [localValue, setLocalValue] = useReducer((localValue,value) => {
         try {
             const evaluatedValue = value instanceof Function ? value(localValue) : value
             let newValue = {...localValue, ...evaluatedValue}
-            setValue(newValue)
             if(isBrowser) {
                 window.localStorage.setItem(key, JSON.stringify(newValue))
             }
+            return newValue
         } catch(error) {
             console.log(error)
+            return localValue
         }
-    }
+    },initialLocalValue())
 
     return [localValue, setLocalValue]
 }

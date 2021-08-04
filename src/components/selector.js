@@ -37,13 +37,17 @@ const SelectKey = styled.span`
 `
 
 const Selector = ({params,path,onParamUpdate}) => {
+    const [value,setValue] = React.useState(params.options[0].value)
     const changeValue = (value) => onParamUpdate(value, path)
-    let { key,options} = params
+    let {key,options} = params
     let OptionList = options.map(option => <OptionElement key={`key_${option.text}`} value={option.value}>{option.text}</OptionElement>)
+    React.useEffect(() => {
+        setValue(params.default)
+    },[params])
     return (
         <SelectContainer>
             <SelectKey>{key}</SelectKey>
-            <SelectElement value={params.default} onChange={(e) => changeValue(e.target.value)}>
+            <SelectElement value={value} onChange={(e) => changeValue(e.target.value)}>
                 {OptionList}
             </SelectElement>
         </SelectContainer>

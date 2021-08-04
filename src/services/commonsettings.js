@@ -16,7 +16,6 @@ const CommonSettingsEnv = React.createContext({...initialCachedSettings, ...init
 const CommonSettingsEnvProvider = ({children}) => {
     const [cachedSettings,setCachedSettings] = useLocalStore('commonsettings',initialCachedSettings)
     const [volatileSettings,setVolatileSettings] = React.useState(initialVolatileSettings)
-    const [commonSettings,updateCommonSettings] = React.useState({...initialCachedSettings, ...initialVolatileSettings})
     const setCommonSettings = (newSettings) => {
         let newCachedSettings = {}
         newCachedSettings['pitch'] = newSettings['pitch']
@@ -27,9 +26,7 @@ const CommonSettingsEnvProvider = ({children}) => {
         setCachedSettings(newCachedSettings)
         setVolatileSettings(newVolatileSettings)
     }
-    React.useEffect(()=>{
-        updateCommonSettings({...cachedSettings, ...volatileSettings})
-    },[updateCommonSettings,cachedSettings,volatileSettings])
+    let commonSettings = {...cachedSettings, ...volatileSettings}
     return (
         <CommonSettingsEnv.Provider value={{commonSettings,setCommonSettings}}>
             {children}
