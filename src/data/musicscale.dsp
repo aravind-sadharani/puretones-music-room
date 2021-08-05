@@ -2,7 +2,7 @@ import("stdfaust.lib");
 freq = hslider("freq",200,50,1000,0.01);
 bend = ba.semi2ratio(hslider("bend[midi:pitchwheel]",0,-6,6,0.01)) : si.polySmooth(gate,0.999,1);
 gain = hslider("gain",0.5,0,1,0.01);
-gate = button("gate");
+gate = button("gate") : en.adsr(0,0,1,0.01);
 cperiod = hslider("Common_Parameters/Period",2,0,3,0.1);
 
 midiKey = ba.hz2midikey(freq);
