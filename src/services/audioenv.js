@@ -8,21 +8,29 @@ const initialState = {
     sequencerPlaying: false
 }
 
-//const apps = ['drone', 'scale', 'sequencer']
+const apps = ['drone', 'scale', 'sequencer']
+
+const isBrowser = typeof window !== "undefined"
+
+const isSafari = isBrowser && (navigator.userAgent.indexOf('Safari') > -1) && (navigator.userAgent.indexOf('Chrome') < 0)
 
 const AudioEnv = React.createContext(initialState)
 
 const AudioEnvProvider = ({children}) => {
     const playDSP = (audioCtx,faust,DSPCode,faustArgs,action) => {
-        /*apps.forEach((otherapp) => {
+        if(isSafari) {
+            apps.forEach((otherapp) => {
             if(otherapp !== action.appname && state[`${otherapp}Playing`])
                 window[`${otherapp}node`].disconnect(audioCtx.destination)
-        })*/
+            })
+        }
         faust.getNode(DSPCode, faustArgs).then(node => {
-            /*apps.forEach((otherapp) => {
-                if(otherapp !== action.appname && state[`${otherapp}Playing`])
-                    window[`${otherapp}node`].connect(audioCtx.destination)
-            })*/
+            if(isSafari) {
+                apps.forEach((otherapp) => {
+                    if(otherapp !== action.appname && state[`${otherapp}Playing`])
+                        window[`${otherapp}node`].connect(audioCtx.destination)
+                })
+            }
             window[`${action.appname}node`] = node
             node.connect(audioCtx.destination)
             if(action.settings)
@@ -49,7 +57,7 @@ const AudioEnvProvider = ({children}) => {
                 if(!state[`${action.appname}Playing`]) {
                     audioCtx = window.audioCtx
                     let DSPCode = action.code
-                    let faustArgs = { audioCtx, useWorklet: true, buffersize: 16384, args: {"-I": "libraries/"} }
+                    let faustArgs = { audioCtx, useWorklet: !isSafari, buffersize: 16384, args: {"-I": "libraries/"} }
                     if(action.appname === 'scale') {
                         faustArgs['voices'] = 16
                         faustArgs['buffersize'] = 1024
@@ -90,10 +98,10 @@ const AudioEnvProvider = ({children}) => {
                         }
                         if(action.onJobComplete)
                             action.onJobComplete('Stop')
-                        //if(action.appname === 'sequencer') {
+                        if(!isSafari || action.appname === 'sequencer') {
                             node.destroy()
                             delete window[`${action.appname}node`]
-                        //}
+                        }
                     }
                     state[`${action.appname}Playing`] = false
                 }
