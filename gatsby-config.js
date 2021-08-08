@@ -5,6 +5,21 @@ module.exports = {
   },
   plugins: [
     {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: `PureTones MusicRoom`,
+        short_name: `MusicRoom`,
+        start_url: `/`,
+        background_color: `white`,
+        theme_color: `#333366`,
+        display: `standalone`,
+        icon: `src/images/puretones.png`
+      },
+    },
+    {
+      resolve: `gatsby-plugin-offline`,
+    },
+    {
       resolve: `gatsby-plugin-typography`,
       options: {
         pathToConfigModule: `src/utils/typography`,
@@ -23,7 +38,7 @@ module.exports = {
     {
       resolve: "gatsby-plugin-manifest",
       options: {
-        icon: "src/images/icon.png",
+        icon: "src/images/puretones.png",
       },
     },
     "gatsby-plugin-sharp",
