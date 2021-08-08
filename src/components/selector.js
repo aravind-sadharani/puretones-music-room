@@ -42,7 +42,8 @@ const Selector = ({params,path,onParamUpdate}) => {
     let {key,options} = params
     let OptionList = options.map(option => <OptionElement key={`key_${option.text}`} value={option.value}>{option.text}</OptionElement>)
     React.useEffect(() => {
-        setValue(params.default)
+        let value = typeof(params.default) === 'string' ? params.default.replace('.0','') : `${Number(params.default).toFixed(0)}`
+        setValue(value)
     },[params])
     return (
         <SelectContainer>
