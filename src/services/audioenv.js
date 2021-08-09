@@ -10,21 +10,36 @@ const initialState = {
 
 const apps = ['drone', 'scale', 'sequencer']
 
-const isBrowser = typeof window !== "undefined"
+//const isBrowser = typeof window !== "undefined"
 
-const isSafari = isBrowser && (navigator.userAgent.indexOf('Safari') > -1) && (navigator.userAgent.indexOf('Chrome') < 0)
+const isSafari = true //isBrowser && (navigator.userAgent.indexOf('Safari') > -1) && (navigator.userAgent.indexOf('Chrome') < 0)
 
 const AudioEnv = React.createContext(initialState)
 
+const dspNames = {
+    drone: 'puretones',
+    scale: 'musicscale',
+    sequencer: 'FaustDSP'
+}
+
 const AudioEnvProvider = ({children}) => {
+    const applySettings = (appname,node,settings) => {
+        let dspName = dspNames[`${appname}`]
+        Object.entries(settings).forEach(s => node.setParamValue(s[0].replace(/FaustDSP/g,`${dspName}`),s[1]))
+    }
+    const handleMIDIMessage = (node,data) => {
+        const cmd = data[0] >> 4
+        const channel = data[0] & 0xf
+        const data1 = Number(data[1])
+        const data2 = data[2]
+        if (channel === 9) return undefined
+        if (cmd === 8 || (cmd === 9 && data2 === 0)) return node.keyOff(channel, data1, data2)
+        if (cmd === 9) return node.keyOn(channel, data1, data2)
+        if (cmd === 11) return node.ctrlChange(channel, data1, data2)
+        if (cmd === 14) return node.pitchWheel(channel, (data2 * 128.0 + data1))
+    }
     const playDSP = (audioCtx,faust,DSPCode,faustArgs,action) => {
-        if(isSafari) {
-            apps.forEach((otherapp) => {
-            if(otherapp !== action.appname && state[`${otherapp}Playing`])
-                window[`${otherapp}node`].disconnect(audioCtx.destination)
-            })
-        }
-        faust.getNode(DSPCode, faustArgs).then(node => {
+        const startDSPNode = (node) => {
             if(isSafari) {
                 apps.forEach((otherapp) => {
                     if(otherapp !== action.appname && state[`${otherapp}Playing`])
@@ -34,12 +49,28 @@ const AudioEnvProvider = ({children}) => {
             window[`${action.appname}node`] = node
             node.connect(audioCtx.destination)
             if(action.settings)
-                Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
+                applySettings(action.appname,node,action.settings)
             action.onJobComplete('Play')
-        }, reason => {
+        }
+        const unableToStartDSPNode = (reason) => {
             console.log(reason)
             action.onJobComplete('Error')
-        })
+        }
+        if(isSafari) {
+            apps.forEach((otherapp) => {
+            if(otherapp !== action.appname && state[`${otherapp}Playing`])
+                window[`${otherapp}node`].disconnect(audioCtx.destination)
+            })
+        }
+        if(action.appname === 'drone') {
+            let puretones = window.puretones
+            puretones.createDSP(audioCtx,faustArgs.buffersize).then(startDSPNode,unableToStartDSPNode)
+        } else if(action.appname === 'scale'){
+            let musicscale = window.musicscalePoly
+            musicscale.createDSP(audioCtx,faustArgs.buffersize,faustArgs.voices).then(startDSPNode,unableToStartDSPNode)
+        } else {
+            faust.getNode(DSPCode, faustArgs).then(startDSPNode,unableToStartDSPNode)
+        }
     }
     const [state, dispatch] = React.useReducer((state,action) => {
         let audioCtx
@@ -57,7 +88,7 @@ const AudioEnvProvider = ({children}) => {
                 if(!state[`${action.appname}Playing`]) {
                     audioCtx = window.audioCtx
                     let DSPCode = action.code
-                    let faustArgs = { audioCtx, useWorklet: !isSafari, buffersize: 16384, args: {"-I": "libraries/"} }
+                    let faustArgs = { audioCtx, useWorklet: !isSafari, buffersize: 1024, args: {"-I": "libraries/"} }
                     if(action.appname === 'scale') {
                         faustArgs['voices'] = 16
                         faustArgs['buffersize'] = 1024
@@ -77,7 +108,7 @@ const AudioEnvProvider = ({children}) => {
                         if(node) {
                             node.connect(audioCtx.destination)
                             if(action.settings)
-                                Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
+                                applySettings(action.appname,node,action.settings)
                             action.onJobComplete('Play')
                         } else {
                             playDSP(audioCtx,faust,DSPCode,faustArgs,action)
@@ -109,12 +140,13 @@ const AudioEnvProvider = ({children}) => {
             case 'Configure':
                 if(state[`${action.appname}Playing`]) {
                     let node = window[`${action.appname}node`]
-                    Object.entries(action.settings).forEach(s => node.setParamValue(s[0],s[1]))
+                    applySettings(action.appname,node,action.settings)
                 }
                 return state
             case 'MIDI':
                 if(state['scalePlaying'] && action.appname === 'scale')
-                    window['scalenode'].midiMessage(action.message)
+                    handleMIDIMessage(window['scalenode'],action.message)
+//                    window['scalenode'].midiMessage(action.message)
                 return state
             default:
                 return state
