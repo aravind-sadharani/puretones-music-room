@@ -93,7 +93,7 @@ const AudioEnvProvider = ({children}) => {
                         faustArgs['voices'] = 16
                         faustArgs['buffersize'] = 1024
                     }
-                    if(!state.faustReady) {
+                    if(!state.faustReady && action.appname === 'sequencer') {
                         let faust = new window.Faust2WebAudio.Faust({debug: false, wasmLocation: "/Faustlib/libfaust-wasm.wasm", dataLocation: "/Faustlib/libfaust-wasm.data"})
                         faust.ready.then(() => {
                             window.faust = faust
