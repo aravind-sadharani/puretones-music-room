@@ -64,7 +64,7 @@ const AudioEnvProvider = ({children}) => {
         }
         if(action.appname === 'drone') {
             let puretones = window.puretones
-            puretones.createDSP(audioCtx,faustArgs.buffersize).then(startDSPNode,unableToStartDSPNode)
+            puretones.createDSP(audioCtx,4096).then(startDSPNode,unableToStartDSPNode)
         } else if(action.appname === 'scale'){
             let musicscale = window.musicscalePoly
             musicscale.createDSP(audioCtx,faustArgs.buffersize,faustArgs.voices).then(startDSPNode,unableToStartDSPNode)
