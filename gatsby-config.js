@@ -68,6 +68,12 @@ module.exports = {
         defaultLayouts: {
           default: require.resolve("./src/layouts/default-layout.js"),
         },
+        remarkPlugins: [
+          require(`remark-math`),
+        ],
+        rehypePlugins: [
+          require(`rehype-katex`),
+        ],
       },
     },
     `gatsby-plugin-catch-links`

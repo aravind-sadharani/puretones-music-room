@@ -1,5 +1,6 @@
 import scaleBasicIntervals from './basicIntervals.pkb'
 import scaleSamaGana from 'data/default.pkb'
+import scaleShadajGram from './shadajGramR1.pkb'
 
 export const title = "PureTones"
 const notesBasicIntervals = [
@@ -19,6 +20,16 @@ const notesSamaGana = [
     {white: "ma", black: "fade"},
     {white: "Pa", black: "fade"},
     {white: "Dha", black: "ni"},
+    {white: "fade"},
+    {white: "SA"}
+]
+const notesShadajGram = [
+    {white: "Sa", black: "fade"},
+    {white: "Re♭", black: "ga"},
+    {white: "fade"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "fade"},
+    {white: "Dha♭", black: "ni"},
     {white: "fade"},
     {white: "SA"}
 ]
@@ -78,3 +89,90 @@ Table 1. Illustration of Sama Gana Scale
 You can play and check how the Sama Gana scale sounds using Demo 3 below.
 
 <ScalePlayer title='Demo 3. Sama Gana Scale' noteSpec={notesSamaGana} scale={scaleSamaGana} />
+
+In this scale, the intervals Re-ga and Dha-ni were regarded as *Vivadi* (dissonant). The concept of Vivadi notes is mentioned in Dattilam and Sangeet Ratnakar (see Chapter Sangita Ratnakara in Lakshanagrandhas in Music or Chapter Nada, Sruti and Svara in Sangeet Ratnakar, Part 1). The size of these intervals can be calculated to be $32/27 ÷ 9/8 = 256/243 = 1.053497942$. This interval $\frac{256}{243}$ was recognized and known as **Purna Shruti**. Note that the Purna Shruti is roughly comparable to the [semi-tone](https://en.wikipedia.org/wiki/Semitone) used in today's standard 12 tone equally tempered scale. The standard semi-tone is 100 cents wide, while the Re-ga interval is a bit narrower at 90.2 cents. This scale may have been appropriate for chanting, but as a musical scale, it was not considered appropriate. In order to make it musical, the musical scholars of the day felt that the Re-ga and Dha-ni intervals needed to be slightly increased.
+
+
+## Shadaj Gram (from Sama Gana Scale)
+
+The Shadaj Gram scale is cited as a 7 note scale and also as a 22 note scale (which includes the original 7 notes). Let us reconstruct the 7 note scale first.
+
+<Notice>Like the Shadaj Gram scale, an equally important scale called <strong>Madhyam Gram</strong> is also described by Bharat and by Sarang Dev. Later, we will note specifically how it differs from Shadaj Gram.</Notice>
+
+There are two ways in which Shadaj Gram can be understood. The first is to understand it as a derivative of the Sama Gana scale, to make it more musical by adjusting the Vivadi intervals of Re-ga and Dha-ni. The second is to understand it in terms of **Shruti Intervals** as specified by Bharat and Sarang Dev. Let us look at both explanations and see how they are mutually consistent.
+
+First, we have to re-trace the line of reasoning that might have been employed by the musical scholars of the day to derive the Shadaj Gram scale from the Sama Gana scale. There are two options to fix the dissonant Re-ga and Dha-ni intervals:
+
+1.  Increase the pitch of ga and ni slightly.
+2.  Decrease the pitch of Re and Dha slightly.
+
+The first option would result in losing the consonance between ma and ni (ni is the fourth of ma in Sama Gana scale), while the second option would result in losing the consonance between Re and Pa (Pa is the fourth of Re). We know that they chose the second option since Bharat and Sarang Dev have pointed out that Re and Pa are not consonant in Shadaj Gram.
+
+Let us try and determine specifically by how much Re and Dha were reduced in pitch. Look at the notes from ma to SA in Sama Gana scale (Demo 3). Look at the relationship between ma and Dha and note that the interval ma-Dha is a bit wider than the Gandhar (major third) interval (Demo 1). The ma-Dha interval consists of the ma-Pa interval applied twice. You can try to hear Demo 1 and Demo 3 and see how two ma-Pa intervals combined (407.8 cents) are bigger than a Gandhar interval (386.3 cents). In contrast, in today's standard 12 tone equally tempered scale, two whole tones (i.e 2 x 200 cents) is exactly equal to a major third (400 cents).
+
+In Shadaj Gram, the note Dha from Sama Gana scale was reduced in pitch to Dha♭ to maintain the Gandhar interval with respect to ma. The note Re from Sama Gana scale was reduced by a similar amount in pitch to Re♭ so that the Re♭-Dha♭ interval was maintained to be the Pancham.
+
+Before we analyse this any further, hear for yourself what this scale sounds like using Demo 4 below.
+
+<ScalePlayer title='Demo 4. Shadaj Gram Scale' noteSpec={notesShadajGram} scale={scaleShadajGram} />
+
+Let us calculate the precise amount by which Re and Dha were reduced in pitch to obtain Re♭ and Dha♭ respectively. The ma-Dha interval consists of the ma-Pa interval applied twice, which is $(9/8)^2 = 81/64$. Since the Gandhar interval is 5/4, the gap between the Gandhar and the ma-Dha interval can be calculated to be $81/64 ÷ 5/4 = 81/80$. This interval $\frac{81}{80}$ was recognized and known as **Pramana Shruti**.
+
+Knowing the Pramana Shruti, the dissonance in the Sama Gana scale can be removed and the Shadaj Gram scale can be derived by tuning the Re and Dha down in pitch by an amount equal to the Pramana Shruti. Again, the Shadaj Gram scale itself is discussed and documented in a number of references (see Lakshanagrandhas in Music or Sangeet Ratnakar). Here is the scale (see Table 2).
+
+<Caption>
+Table 2. Illustration of Shadaj Gram Scale
+</Caption>
+
+| Note | Decimal Ratio | Symbolic Ratio | Remarks |
+| --- | --- | --- | --- |
+| Sa | 1 | 1 |   |
+| Re♭ | 1.111111111 | 10/9 | 81/80 below Re |
+| ~~Re~~ | ~~1.125~~ | ~~9/8~~ | ~~9/8 above Sa~~ |
+| ga | 1.185185185 | 32/27 | 9/8 below ma |
+| ma | 1.333333333 | 4/3 | Fourth |
+| Pa | 1.5 | 3/2 | Fifth |
+| Dha♭ | 1.666666667 | 5/3 | 81/80 below Dha |
+| ~~Dha~~ | ~~1.6875~~ | ~~27/16~~ | ~~9/8 above Pa~~ |
+| ni | 1.777777778 | 16/9 | 9/8 below SA |
+| SA | 2 | 2 | Octave |
+
+## Shadaj Gram (from Shruti Intervals)
+
+Bharat in Natyashastra and Sarang Dev in Sangeet Ratnakar describe an experiment using an **Achal veena**, an instrument with a fixed tuning, and a **Chal veena**, an instrument whose tuning is varied through the course of the experiment. Although the term *veena* is used in their literature, it is likely that these instruments were constructed in the form of a harp rather than like present day veenas.
+
+These experiments require the Achal veena to be tuned according to the 7 note Shadaj gram scale. But here the Shadaj Gram scale is described in terms of intervals between notes. Each interval is described in terms of the number of Shrutis it spans. Here is the full description (Table 3) with the Sa beginning at the Shruti position of 4.
+
+<Caption>
+Table 3. Shadaj Gram scale defined by Shruti Intervals
+</Caption>
+
+| Shruti | String | Note | Remarks |
+| --- | --- | --- | --- |
+| 4 | First | Sa | Sa is taken to start at 4 |
+| 7 | Second | Re♭ | Sa-Re♭ spans 3 Shrutis |
+| 9 | Third | ga | Re♭-ga spans 2 Shrutis |
+| 13 | Fourth | ma | ga-ma spans 4 Shrutis |
+| 17 | Fifth | Pa | ma-Pa spans 4 Shrutis |
+| 20 | Sixth | Dha♭ | Pa-Dha♭ spans 3 Shrutis |
+| 22 | Seventh | ni | Dha♭-ni spans 2 Shrutis |
+| 4 | Eighth | SA | ni-SA spans 4 Shrutis |
+
+Without understanding what these Shruti intervals meant, it is difficult to understand what really Shadaj Gram was. But it is possible to derive the precise meaning of these Shruti intervals.
+
+Let us start with some observations from the above description of Shadaj Gram.
+
+1.  An octave spans 22 Shrutis. This can be checked by adding up the number of Shrutis from Sa to SA, using the fourth column of Table 3.
+2.  Pancham spans 13 Shrutis. This can be checked by adding up the number of Shrutis from Sa to Pa.
+3.  Madhyam spans 9 Shrutis. This can be checked similarly.
+4.  Gandhar spans 7 Shrutis. This does not follow from the above description. However, we know that Bharat defined two *Vikrit* (altered) notes in Shadaj Gram: **Antara Gandhar** and **Kakali Nishad** which had the Gandhar (major third) relationship with respect to Sa and Pa, respectively. Since, these were known to be situated at Shruti positions 11 and 2, we can deduce that Gandhar spans 7 Shrutis.
+
+Using these observations, we can calculate the size of the 2, 3 and 4 Shruti intervals as follows. For ease of explanation, let us refer to these intervals as $r_2$, $r_3$ and $r_4$, respectively.
+
+1.  A 4 Shruti interval can be determined as the gap between a 13 Shruti and a 9 Shruti interval. In other words, $r_4=\frac{3/2}{4/3}=\frac{9}{8}$.
+2.  A 3 Shruti interval can be determined as the gap between a 7 Shruti and a 4 Shruti interval. In other words, $r_3=\frac{5/4}{9/8}=\frac{10}{9}$.
+3.  A 2 Shruti interval can be determined as the gap between a 9 Shruti and a 7 Shruti interval. In other words, $r_2=\frac{4/3}{5/4}=\frac{16}{15}$.
+
+Now, it is easy to verify mathematically that the Shadaj Gram scales defined by Table 2 and Table 3 are identical. For example, since $r_3=10/9$, we know that Re♭ should be 10/9 which is consistent with Table 2. If you are keen, we encourage you to check the consistency of all the other notes in Shadaj Gram as well.
+
+<Notice>The Madhyam Gram scale as described by Bharat and by Sarang Dev, has the note Pa at Shruti #16, making the ma-Pa gap 3 Shrutis and the Pa-Dha♭ gap 4 Shrutis. Knowing the values of the 2, 3 and 4 Shruti intervals, you can determine the exact scale of Madhyam Gram too.</Notice>

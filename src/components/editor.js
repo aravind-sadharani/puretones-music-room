@@ -12,7 +12,7 @@ const EditorElement = styled.textarea`
     border: 1px solid;
     border-radius: 5px;
     padding: 0 6px;
-    font-family: monospace;
+    font-size: 0.85rem;
     resize: vertical;
 `
 

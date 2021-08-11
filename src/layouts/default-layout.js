@@ -15,6 +15,7 @@ import Table from 'components/table'
 import Notice from 'components/notice'
 import { MDXProvider } from "@mdx-js/react"
 import pureTonesLogo from 'images/puretones-logo.svg'
+import "katex/dist/katex.min.css"
 
 const shortcodes = { DronePlayer, MotifPlayer, ScalePlayer, CommonPitch, Notice, Caption, table: Table }
 
