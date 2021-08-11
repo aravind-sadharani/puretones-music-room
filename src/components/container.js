@@ -17,6 +17,9 @@ const ContainerElement = styled.div`
     h1, h2, h3 {
         margin: 0 0 1rem 0;
     }
+    .katex {
+        font: 100%/1.666 'Noto Sans', sans-serif !important;
+    } 
 `
 
 const Container = ({children}) => (

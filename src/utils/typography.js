@@ -21,7 +21,21 @@ const typography = new Typography({
               '700i',
           ],
       },
+      {
+          name: 'Roboto Mono',
+          styles: [
+              '400',
+          ]
+      },
   ],
+  overrideStyles: () => ({
+    pre: {
+      fontFamily: ['Roboto Mono', 'monospace'].join(','),
+    },
+    textarea: {
+      fontFamily: ['Roboto Mono', 'monospace'].join(','),
+    },
+  })
 })
 
 export default typography
