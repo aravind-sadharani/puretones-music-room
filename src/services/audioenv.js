@@ -10,10 +10,6 @@ const initialState = {
 
 const apps = ['drone', 'scale', 'sequencer']
 
-//const isBrowser = typeof window !== "undefined"
-
-const isSafari = true //isBrowser && (navigator.userAgent.indexOf('Safari') > -1) && (navigator.userAgent.indexOf('Chrome') < 0)
-
 const AudioEnv = React.createContext(initialState)
 
 const dspNames = {
@@ -40,12 +36,10 @@ const AudioEnvProvider = ({children}) => {
     }
     const playDSP = (audioCtx,faust,DSPCode,faustArgs,action) => {
         const startDSPNode = (node) => {
-            if(isSafari) {
-                apps.forEach((otherapp) => {
-                    if(otherapp !== action.appname && state[`${otherapp}Playing`])
-                        window[`${otherapp}node`].connect(audioCtx.destination)
-                })
-            }
+            apps.forEach((otherapp) => {
+                if(otherapp !== action.appname && state[`${otherapp}Playing`])
+                    window[`${otherapp}node`].connect(audioCtx.destination)
+            })
             window[`${action.appname}node`] = node
             node.connect(audioCtx.destination)
             if(action.settings)
@@ -56,15 +50,13 @@ const AudioEnvProvider = ({children}) => {
             console.log(reason)
             action.onJobComplete('Error')
         }
-        if(isSafari) {
-            apps.forEach((otherapp) => {
-            if(otherapp !== action.appname && state[`${otherapp}Playing`])
-                window[`${otherapp}node`].disconnect(audioCtx.destination)
-            })
-        }
+        apps.forEach((otherapp) => {
+        if(otherapp !== action.appname && state[`${otherapp}Playing`])
+            window[`${otherapp}node`].disconnect(audioCtx.destination)
+        })
         if(action.appname === 'drone') {
             let puretones = window.puretones
-            puretones.createDSP(audioCtx,4096).then(startDSPNode,unableToStartDSPNode)
+            puretones.createDSP(audioCtx,faustArgs.buffersize).then(startDSPNode,unableToStartDSPNode)
         } else if(action.appname === 'scale'){
             let musicscale = window.musicscalePoly
             musicscale.createDSP(audioCtx,faustArgs.buffersize,faustArgs.voices).then(startDSPNode,unableToStartDSPNode)
@@ -88,10 +80,9 @@ const AudioEnvProvider = ({children}) => {
                 if(!state[`${action.appname}Playing`]) {
                     audioCtx = window.audioCtx
                     let DSPCode = action.code
-                    let faustArgs = { audioCtx, useWorklet: !isSafari, buffersize: 1024, args: {"-I": "libraries/"} }
+                    let faustArgs = { audioCtx, useWorklet: false, buffersize: 1024, args: {"-I": "libraries/"} }
                     if(action.appname === 'scale') {
                         faustArgs['voices'] = 16
-                        faustArgs['buffersize'] = 1024
                     }
                     if(!state.faustReady && action.appname === 'sequencer') {
                         let faust = new window.Faust2WebAudio.Faust({debug: false, wasmLocation: "/Faustlib/libfaust-wasm.wasm", dataLocation: "/Faustlib/libfaust-wasm.data"})
@@ -129,10 +120,8 @@ const AudioEnvProvider = ({children}) => {
                         }
                         if(action.onJobComplete)
                             action.onJobComplete('Stop')
-                        if(!isSafari || action.appname === 'sequencer') {
-                            node.destroy()
-                            delete window[`${action.appname}node`]
-                        }
+                        node.destroy()
+                        delete window[`${action.appname}node`]
                     }
                     state[`${action.appname}Playing`] = false
                 }

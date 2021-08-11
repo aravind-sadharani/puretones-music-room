@@ -15,12 +15,10 @@ import { CommonSettingsEnv } from 'services/commonsettings'
 
 const MusicRoom = () => {
     const {commonSettings} = React.useContext(CommonSettingsEnv)
-    const droneSettings = dronePRT.replace(/puretones/g,'FaustDSP')
-    let defaultDroneState = dspStateFromSettings('drone', droneSettings)
+    let defaultDroneState = dspStateFromSettings('drone', dronePRT)
     defaultDroneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency'] = commonSettings['pitch']
     defaultDroneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune'] = commonSettings['offSet']
-    const scaleSettings = scalePKB.replace(/musicscale/g,'FaustDSP')
-    let defaultScaleState = dspStateFromSettings('scale', scaleSettings)
+    let defaultScaleState = dspStateFromSettings('scale', scalePKB)
     defaultScaleState['/FaustDSP/Common_Parameters/Pitch'] = commonSettings['pitch']
     defaultScaleState['/FaustDSP/Common_Parameters/Fine_Tune'] = commonSettings['offSet']
     const {dispatch} = React.useContext(AudioEnv)
