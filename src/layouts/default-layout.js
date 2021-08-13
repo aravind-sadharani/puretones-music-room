@@ -12,12 +12,13 @@ import ScalePlayer from 'applets/scaleplayer'
 import CommonPitch from 'applets/commonpitch'
 import Caption from 'components/caption'
 import Table from 'components/table'
+import FigCaption from 'components/figcaption'
 import Notice from 'components/notice'
 import { MDXProvider } from "@mdx-js/react"
 import pureTonesLogo from 'images/puretones-logo.svg'
 import "katex/dist/katex.min.css"
 
-const shortcodes = { DronePlayer, MotifPlayer, ScalePlayer, CommonPitch, Notice, Caption, table: Table }
+const shortcodes = { DronePlayer, MotifPlayer, ScalePlayer, CommonPitch, Notice, Caption, table: Table, FigCaption }
 
 const DefaultLayout = ({title,children}) => {
   return (

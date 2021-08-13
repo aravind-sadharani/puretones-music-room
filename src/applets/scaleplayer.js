@@ -17,7 +17,7 @@ const ScalePlayerContainer = styled.div`
 `
 
 const ScalePlayer = ({title,noteSpec,scale}) => {
-    const note2Offset = {'Sa': 0, 're': 1, 'Re': 2, 'Re♭': 2, 'ga': 3, 'Ga': 4, 'ma': 5, 'Ma': 6, 'Pa': 7, 'dha': 8, 'Dha': 9, 'Dha♭': 9, 'ni': 10, 'Ni': 11, 'SA': 12}
+    const note2Offset = {'Sa': 0, 're': 1, 'Re': 2, 'Re♭': 1, 'ga': 3, 'Ga': 4, 'ma': 5, 'Ma': 6, 'Pa': 7, 'dha': 8, 'Dha': 9, 'Dha♭': 8, 'ni': 10, 'Ni': 11, 'SA': 12}
     const key2Midi = (keyName) => (Number(commonSettings['pitch']) - 3 + note2Offset[`${keyName}`] + 48)
     const [keyState,setKeyState] = React.useState(Array(13).fill(0))
     const keyOn = (keyName) => {

@@ -74,6 +74,25 @@ module.exports = {
         rehypePlugins: [
           require(`rehype-katex`),
         ],
+        gatsbyRemarkPlugins: [
+          {
+            resolve: `gatsby-remark-images`,
+            options: {
+              // It's important to specify the maxWidth (in pixels) of
+              // the content container as this plugin uses this as the
+              // base for generating different widths of each image.
+              maxWidth: 720,
+              wrapperStyle: () => `
+                width: 100%;
+                overflow-x: auto;
+                border: 1px solid #e6e6eb;
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+                margin-bottom: -1rem;
+              `
+            },
+          },
+        ],
       },
     },
     `gatsby-plugin-catch-links`

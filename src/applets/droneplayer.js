@@ -15,7 +15,7 @@ const DronePlayerContainer = styled.div`
 `
 
 const DroneTitleElement = styled.blockquote`
-    font-size: 1.1em;
+    font-size: 1em;
     margin: 0;
 `
 
