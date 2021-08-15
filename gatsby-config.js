@@ -18,7 +18,6 @@ module.exports = {
     },
     {
       resolve: `gatsby-plugin-offline`,
-      precachePages: [`/`, `/Faustlib/*`]
     },
     {
       resolve: `gatsby-plugin-typography`,

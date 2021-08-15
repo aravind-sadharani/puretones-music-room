@@ -43,8 +43,10 @@ const SessionControls = ({appname,code,settings,reset,generate,save,restore}) =>
             dispatch({type: `${title === 'Starting...' ? 'Play' : 'Stop'}`, appname: appname, code: DSPCode, settings: settings, onJobComplete: jobCompleted})
     })
     React.useEffect(() => {
-        dispatch({type: 'Stop', appname: appname})
-    },[appname,dispatch])
+        dispatch({type: 'Stop', appname: 'drone'})
+        dispatch({type: 'Stop', appname: 'scale'})
+        dispatch({type: 'Stop', appname: 'sequencer'})
+    },[dispatch])
     return (
         <SessionControlsContainer>
             <Button active={active} onClick={() => playStop()}>{title}</Button>
