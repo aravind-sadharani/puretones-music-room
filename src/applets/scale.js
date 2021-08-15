@@ -59,7 +59,7 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset, s
     }
     let levelParams = {
         key: "Level",
-        init: scaleState['/FaustDSP/Zita_Light/Level'],
+        init: scaleState['/Zita_Light/Level'],
         max: 30,
         min: -30,
         step: 0.5
@@ -124,7 +124,7 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset, s
             <p><strong>Scale Parameters</strong></p>
             <Selector params={octaveList} path="/FaustDSP/Common_Parameters/Octave" onParamUpdate={(value,path) => onParamUpdate(value,path)}></Selector>
             <Slider params={sustainParams} path="sustain" onParamUpdate={(value,path) => updateSustain(value)}></Slider>
-            <Slider params={levelParams} path="/FaustDSP/Zita_Light/Level" onParamUpdate={(value,path) => onParamUpdate(value,path)}></Slider>
+            <Slider params={levelParams} path="/Zita_Light/Level" onParamUpdate={(value,path) => onParamUpdate(value,path)}></Slider>
             <TabNav tablist={scaleTabs} pagelist={scalePages}></TabNav>
         </>
     )

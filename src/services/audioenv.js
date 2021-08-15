@@ -51,15 +51,31 @@ const AudioEnvProvider = ({children}) => {
             action.onJobComplete('Error')
         }
         apps.forEach((otherapp) => {
-        if(otherapp !== action.appname && state[`${otherapp}Playing`])
-            window[`${otherapp}node`].disconnect(audioCtx.destination)
+            if(otherapp !== action.appname && state[`${otherapp}Playing`])
+                window[`${otherapp}node`].disconnect(audioCtx.destination)
         })
         if(action.appname === 'drone') {
-            let puretones = window.puretones
-            puretones.createDSP(audioCtx,faustArgs.buffersize).then(startDSPNode,unableToStartDSPNode)
+            let puretones
+            if(!window.puretones) {
+                puretones = new window.puretonesWorklet(audioCtx,"/Faustlib")
+                //puretones = window.puretonesScriptProcessor
+                window.puretones = puretones
+            } else {
+                puretones = window.puretones
+            }
+            puretones.load().then(startDSPNode,unableToStartDSPNode)
+            //puretones.createDSP(audioCtx,faustArgs.buffersize).then(startDSPNode,unableToStartDSPNode)*/
         } else if(action.appname === 'scale'){
-            let musicscale = window.musicscalePoly
-            musicscale.createDSP(audioCtx,faustArgs.buffersize,faustArgs.voices).then(startDSPNode,unableToStartDSPNode)
+            let musicscale
+            if(!window.musicscale) {
+                musicscale = new window.musicscalePolyWorklet(audioCtx,faustArgs.voices,"/Faustlib")
+                //musicscale = window.musicscalePoly
+                window.musicscale = musicscale
+            } else {
+                musicscale = window.musicscale
+            }
+            musicscale.load().then(startDSPNode,unableToStartDSPNode)
+            //musicscale.createDSP(audioCtx,faustArgs.buffersize,faustArgs.voices).then(startDSPNode,unableToStartDSPNode)
         } else {
             faust.getNode(DSPCode, faustArgs).then(startDSPNode,unableToStartDSPNode)
         }
@@ -80,7 +96,7 @@ const AudioEnvProvider = ({children}) => {
                 if(!state[`${action.appname}Playing`]) {
                     audioCtx = window.audioCtx
                     let DSPCode = action.code
-                    let faustArgs = { audioCtx, useWorklet: false, buffersize: 1024, args: {"-I": "libraries/"} }
+                    let faustArgs = { audioCtx, useWorklet: true, buffersize: 1024, args: {"-I": "libraries/"} }
                     if(action.appname === 'scale') {
                         faustArgs['voices'] = 16
                     }

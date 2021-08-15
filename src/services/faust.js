@@ -6,6 +6,7 @@ const IncludeFaust = () => (
         <script src="/Faustlib/index.min.js" type="text/javascript"></script>
         <script src="/Faustlib/puretones.min.js" type="text/javascript"></script>
         <script src="/Faustlib/musicscale.min.js" type="text/javascript"></script>
+        <script src="/Faustlib/musicscale-worklet.min.js" type="text/javascript"></script>
     </Helmet>
 )
 
