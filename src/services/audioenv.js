@@ -1,5 +1,9 @@
 import * as React from "react"
 
+const isBrowser = typeof window !== "undefined"
+
+const isSafari = isBrowser && (navigator.userAgent.indexOf('Safari') > -1) && (navigator.userAgent.indexOf('Chrome') < 0)
+
 const initialState = {
     faustReady: false,
     audioContextReady: false,
@@ -36,10 +40,12 @@ const AudioEnvProvider = ({children}) => {
     }
     const playDSP = (audioCtx,faust,DSPCode,faustArgs,action) => {
         const startDSPNode = (node) => {
-            apps.forEach((otherapp) => {
-                if(otherapp !== action.appname && state[`${otherapp}Playing`])
-                    window[`${otherapp}node`].connect(audioCtx.destination)
-            })
+            if(isSafari) {
+                apps.forEach((otherapp) => {
+                    if(otherapp !== action.appname && state[`${otherapp}Playing`])
+                        window[`${otherapp}node`].connect(audioCtx.destination)
+                })
+            }
             window[`${action.appname}node`] = node
             node.connect(audioCtx.destination)
             if(action.settings)
@@ -50,32 +56,30 @@ const AudioEnvProvider = ({children}) => {
             console.log(reason)
             action.onJobComplete('Error')
         }
-        apps.forEach((otherapp) => {
-            if(otherapp !== action.appname && state[`${otherapp}Playing`])
-                window[`${otherapp}node`].disconnect(audioCtx.destination)
-        })
+        if(isSafari) {
+            apps.forEach((otherapp) => {
+                if(otherapp !== action.appname && state[`${otherapp}Playing`])
+                    window[`${otherapp}node`].disconnect(audioCtx.destination)
+            })
+        }
         if(action.appname === 'drone') {
             let puretones
             if(!window.puretones) {
-                puretones = new window.puretonesWorklet(audioCtx,"/Faustlib")
-                //puretones = window.puretonesScriptProcessor
+                puretones = isSafari ? window.puretonesScriptProcessor : new window.puretonesWorklet(audioCtx,"/Faustlib")
                 window.puretones = puretones
             } else {
                 puretones = window.puretones
             }
-            puretones.load().then(startDSPNode,unableToStartDSPNode)
-            //puretones.createDSP(audioCtx,faustArgs.buffersize).then(startDSPNode,unableToStartDSPNode)*/
+            isSafari ? puretones.createDSP(audioCtx,faustArgs.buffersize).then(startDSPNode,unableToStartDSPNode) : puretones.load().then(startDSPNode,unableToStartDSPNode)
         } else if(action.appname === 'scale'){
             let musicscale
             if(!window.musicscale) {
-                musicscale = new window.musicscalePolyWorklet(audioCtx,faustArgs.voices,"/Faustlib")
-                //musicscale = window.musicscalePoly
+                musicscale = isSafari ? window.musicscalePoly : new window.musicscalePolyWorklet(audioCtx,faustArgs.voices,"/Faustlib")
                 window.musicscale = musicscale
             } else {
                 musicscale = window.musicscale
             }
-            musicscale.load().then(startDSPNode,unableToStartDSPNode)
-            //musicscale.createDSP(audioCtx,faustArgs.buffersize,faustArgs.voices).then(startDSPNode,unableToStartDSPNode)
+            isSafari ? musicscale.createDSP(audioCtx,faustArgs.buffersize,faustArgs.voices).then(startDSPNode,unableToStartDSPNode) : musicscale.load().then(startDSPNode,unableToStartDSPNode)
         } else {
             faust.getNode(DSPCode, faustArgs).then(startDSPNode,unableToStartDSPNode)
         }
@@ -96,7 +100,7 @@ const AudioEnvProvider = ({children}) => {
                 if(!state[`${action.appname}Playing`]) {
                     audioCtx = window.audioCtx
                     let DSPCode = action.code
-                    let faustArgs = { audioCtx, useWorklet: true, buffersize: 1024, args: {"-I": "libraries/"} }
+                    let faustArgs = { audioCtx, useWorklet: !isSafari, buffersize: 1024, args: {"-I": "libraries/"} }
                     if(action.appname === 'scale') {
                         faustArgs['voices'] = 16
                     }
@@ -151,7 +155,6 @@ const AudioEnvProvider = ({children}) => {
             case 'MIDI':
                 if(state['scalePlaying'] && action.appname === 'scale')
                     handleMIDIMessage(window['scalenode'],action.message)
-//                    window['scalenode'].midiMessage(action.message)
                 return state
             default:
                 return state
