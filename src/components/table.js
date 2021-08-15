@@ -3,13 +3,16 @@ import styled from 'styled-components'
 
 const TableContainer = styled.div`
     overflow-x: auto;
+    border: 1px solid #e6e6eb;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    margin: 0 0 1em 0;
 `
 
 const TableElement = styled.table`
-    width: calc(100% - 2px);
-    margin: 0 auto 1em;
+    width: 100%;
+    margin: 0 auto;
     border-style: hidden;
-    box-shadow: 0 1px 0 1px #e6e6eb;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     tr:last-child td:first-child{

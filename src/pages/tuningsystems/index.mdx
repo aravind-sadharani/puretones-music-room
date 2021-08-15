@@ -1,9 +1,13 @@
 import scaleBasicIntervals from './basicIntervals.pkb'
 import scaleSamaGana from 'data/default.pkb'
-import scaleShadajGram from './shadajGramR1.pkb'
+import scaleShadajGram from './shadajGramR0.pkb'
+import scaleShadajGramR1 from './shadajGramR1.pkb'
+import scaleShadajGramR2 from './shadajGramR2.pkb'
+import scaleShadajGramR3 from './shadajGramR3.pkb'
+import scaleShadajGramR4 from './shadajGramR4.pkb'
+import genericDrone from 'data/default.prt'
 
-export const title = "PureTones"
-const notesBasicIntervals = [
+export const notesBasicIntervals = [
     {white: "Sa", black: "fade"},
     {white: "fade", black: "fade"},
     {white: "Ga"},
@@ -13,7 +17,7 @@ const notesBasicIntervals = [
     {white: "fade"},
     {white: "SA"}
 ]
-const notesSamaGana = [
+export const notesSamaGana = [
     {white: "Sa", black: "fade"},
     {white: "Re", black: "ga"},
     {white: "fade"},
@@ -23,13 +27,13 @@ const notesSamaGana = [
     {white: "fade"},
     {white: "SA"}
 ]
-const notesShadajGram = [
-    {white: "Sa", black: "fade"},
-    {white: "Re♭", black: "ga"},
+export const notesShadajGram = [
+    {white: "Sa", black: "Re♭"},
+    {white: "Re", black: "ga"},
     {white: "fade"},
     {white: "ma", black: "fade"},
-    {white: "Pa", black: "fade"},
-    {white: "Dha♭", black: "ni"},
+    {white: "Pa", black: "Dha♭"},
+    {white: "Dha", black: "ni"},
     {white: "fade"},
     {white: "SA"}
 ]
@@ -116,7 +120,7 @@ Before we analyse this any further, hear for yourself what this scale sounds lik
 
 <ScalePlayer title='Demo 4. Shadaj Gram Scale' noteSpec={notesShadajGram} scale={scaleShadajGram} />
 
-Let us calculate the precise amount by which Re and Dha were reduced in pitch to obtain Re♭ and Dha♭ respectively. The ma-Dha interval consists of the ma-Pa interval applied twice, which is $(9/8)^2 = 81/64$. Since the Gandhar interval is 5/4, the gap between the Gandhar and the ma-Dha interval can be calculated to be $81/64 ÷ 5/4 = 81/80$. This interval $\frac{81}{80}$ was recognized and known as **Pramana Shruti**.
+Note that although Re♭ has been depicted as a *black* key, it is not a full semitone lower than Re. The Re♭-Re gap is an interval smaller than a semitone. Such intervals are often referred to as [microtones](https://en.wikipedia.org/wiki/Microtonal_music). Let us calculate the precise amount by which Re and Dha were reduced in pitch to obtain Re♭ and Dha♭ respectively. The ma-Dha interval consists of the ma-Pa interval applied twice, which is $(9/8)^2 = 81/64$. Since the Gandhar interval is 5/4, the gap between the Gandhar and the ma-Dha interval can be calculated to be $81/64 ÷ 5/4 = 81/80$. This interval $\frac{81}{80}$ (21.5 cents) was recognized and known as **Pramana Shruti**.
 
 Knowing the Pramana Shruti, the dissonance in the Sama Gana scale can be removed and the Shadaj Gram scale can be derived by tuning the Re and Dha down in pitch by an amount equal to the Pramana Shruti. Again, the Shadaj Gram scale itself is discussed and documented in a number of references (see Lakshanagrandhas in Music or Sangeet Ratnakar). Here is the scale (see Table 2).
 
@@ -175,4 +179,127 @@ Using these observations, we can calculate the size of the 2, 3 and 4 Shruti int
 
 Now, it is easy to verify mathematically that the Shadaj Gram scales defined by Table 2 and Table 3 are identical. For example, since $r_3=10/9$, we know that Re♭ should be 10/9 which is consistent with Table 2. If you are keen, we encourage you to check the consistency of all the other notes in Shadaj Gram as well.
 
-<Notice>The Madhyam Gram scale as described by Bharat and by Sarang Dev, has the note Pa at Shruti #16, making the ma-Pa gap 3 Shrutis and the Pa-Dha♭ gap 4 Shrutis. Knowing the values of the 2, 3 and 4 Shruti intervals, you can determine the exact scale of Madhyam Gram too.</Notice>
+<Notice>The Madhyam Gram scale as described by Bharat and by Sarang Dev, has a flatter note Pa♭ at Shruti #16, making the ma-Pa♭ gap 3 Shrutis and the Pa♭-Dha♭ gap 4 Shrutis. Knowing the values of the 2, 3 and 4 Shruti intervals, we can determine the exact scale of Madhyam Gram too. Specifically, Pa♭ corresponds to the ratio (4/3) X (10/9) = 40/27. The rest of the scale is the same as in Shadaj Gram.</Notice>
+
+## Shadaj Gram (22 Shruti Scale)
+
+Let us perform the Bharat-Sarang Dev harp experiment and derive the full 22 shruti scale mathematically. The steps followed in the experiment are given below.
+
+### Round 1
+
+-   Round 1 starts by observing (like we mentioned before) that the notes Re♭ and Pa are not consonant.
+-   So in Round 1, the Pa (fifth) string of the Chal Veena is set to Shruti #16 which is defined as a Madhyam interval (9 Shrutis) above Shruti #7.
+-   Then, each of the other strings are lowered by the ratio of Shruti #17 to Shruti #16. This ratio of Shruti #17 to Shruti #16 is called Pramana Shruti.
+-   We can check that this is consistent with the earlier derivation of Pramana Shruti. This is because Shruti #16 is Shruti #7 times the Madhyam ratio which is $\frac{10}{9} \times \frac{4}{3} = \frac{40}{27}$. So, Pramana Shruti is $\frac{3/2}{40/27}=\frac{81}{80}$ as before.
+
+<Notice>Again, the Madhyam Gram scale as described by Bharat and by Sarang Dev, has the note Pa♭ at Shruti #16, while the rest of the notes are taken to be the same as in Shadaj Gram. As observed above, this makes the notes Re♭ and Pa♭ consonant with each other.</Notice>
+
+### Round 2
+
+-   In Round 2, the ga (third) string of the Chal Veena is set to Shruti #7.
+-   Then, each of the other strings are lowered by the ratio of Shruti #8 to Shruti #7. This ratio of Shruti #8 to Shruti #7 is called Purna Shruti.
+-   We can check that this is consistent with the earlier derivation of Purna Shruti. This is because Shruti #8 is Shruti #9 divided by Pramana Shruti which is $\frac{32/27}{81/80} = \frac{2560}{2187}$. So, Purna Shruti is $\frac{2560/2187}{10/9} = \frac{256}{243}$ as before.
+
+### Round 3
+
+-   In Round 3, the re (second) string of the Chal Veena is set to Shruti #4.
+-   Then, each of the other strings are lowered by the ratio of Shruti #5 to Shruti #4. This ratio of Shruti #5 to Shruti #4 is called **Nyuna Shruti**.
+-   Note that in Round 3, the ga (third) and ni (seventh) string of the Chal Veena are ignored.
+-   We can compute the value of Nyuna Shruti as follows. Shruti #5 is Shruti #6 divided by Purna Shruti which itself is Shruti #7 divided by Pramana Shruti. Thus, Shruti #5 is $\left(\frac{10/9}{81/80}\right) ÷ \frac{256}{243} = \frac{25}{24}$. Since, Shruti #4 is just 1, Nyuna Shruti is $\frac{25}{24}$.
+
+### Round 4
+
+-   In Round 4, the Pa (fifth) string of the Chal Veena is set to Shruti #13.
+-   Then, each of the other strings are lowered by the ratio of Shruti #14 to Shruti #13. This ratio of Shruti #14 to Shruti #13 is also equal to Pramana Shruti.
+-   Note that in Round 4, the ga (third) and ni (seventh) string of the Chal Veena are ignored, like in Round 3.
+-   We can check that this is consistent with the earlier derivation of Pramana Shruti. This is because Shruti #14 is Shruti #17 divided by Pramana Shruti, then by Purna Shruti and then by Nyuna Shruti. So, Shruti #14 is $\left(\frac{3/2}{81/80} ÷ \frac{256}{243}\right) ÷ \frac{25}{24} = \frac{27}{20}$. So, Pramana Shruti is $\frac{27/20}{4/3} = \frac{81}{80}$ as before.
+
+If you are interested in the actual values for each of the 22 shrutis, refer to Table 4 which summarizes the result of all these steps (scroll horizontally to see the whole table).
+
+<Caption>
+Table 4. Illustration of Shadaj Gram Scale (22 Shrutis)
+</Caption>
+
+| Shruti | Note | Achal Veena | Round 1 | Round 2 | Round 3 | Round 4 | All 22 Ratios |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 |   |   |   |   | 0.9 |   | 0.9 |
+| 2 |   |   |   | 0.9375 |   |   | 0.9375 |
+| 3 |   |   | 0.987654321 |   |   | 0.987654321 | 0.987654321 |
+| 4 | Sa | 1 |   |   | 1 |   | 1 |
+| 5 |   |   |   | 1.041666667 |   |   | 1.041666667 |
+| 6 |   |   | 1.097393689 |   |   |   | 1.097393689 |
+| 7 | Re | 1.111111111 |   | 1.111111111 |   |   | 1.111111111 |
+| 8 |   |   | 1.170553269 |   |   |   | 1.170553269 |
+| 9 | ga | 1.185185185 |   |   |   | 1.185185185 | 1.185185185 |
+| 10 |   |   |   |   | 1.2 |   | 1.2 |
+| 11 |   |   |   | 1.25 |   |   | 1.25 |
+| 12 |   |   | 1.316872428 |   |   |   | 1.316872428 |
+| 13 | ma | 1.333333333 |   |   |   | 1.333333333 | 1.333333333 |
+| 14 |   |   |   |   | 1.35 |   | 1.35 |
+| 15 |   |   |   | 1.40625 |   |   | 1.40625 |
+| 16 |   |   | 1.481481481 |   |   | 1.481481481 | 1.481481481 |
+| 17 | Pa | 1.5 |   |   | 1.5 |   | 1.5 |
+| 18 |   |   |   | 1.5625 |   |   | 1.5625 |
+| 19 |   |   | 1.646090535 |   |   |   | 1.646090535 |
+| 20 | Dha | 1.666666667 |   | 1.666666667 |   |   | 1.666666667 |
+| 21 |   |   | 1.755829904 |   |   |   | 1.755829904 |
+| 22 | ni | 1.777777778 |   |   |   | 1.777777778 | 1.777777778 |
+| 1 |   |   |   |   | 1.8 |   | 1.8 |
+| 2 |   |   |   | 1.875 |   |   | 1.875 |
+| 3 |   |   | 1.975308642 |   |   |   | 1.975308642 |
+| 4 | SA | 2 |   |   |   |   | 2 |
+
+The Shadaj Gram scale can also be represented by showing the relevant pitches in a circle (see Figure 1). The figure depicts how the Chal veena is depressed by the different shruti intervals in each round.
+
+![](./Shadaj-gram-1.png)
+
+<FigCaption>
+Figure 1. Illustration of Shadaj Gram Scale (22 Shrutis)
+</FigCaption>
+
+export const notesShadajGramR0 = [
+    {white: "Sa", black: "fade"},
+    {white: "Re♭", black: "ga"},
+    {white: "fade"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "fade"},
+    {white: "Dha♭", black: "ni"},
+    {white: "fade"},
+    {white: "SA"}
+]
+
+<DronePlayer title='Generic Drone for Reference' settings={genericDrone} />
+
+<ScalePlayer title='Demo 5. Shadaj Gram - Achal Veena' noteSpec={notesShadajGramR0} scale={scaleShadajGram} />
+
+<ScalePlayer title='Demo 6. Shadaj Gram - Round 1' noteSpec={notesShadajGramR0} scale={scaleShadajGramR1} />
+
+<ScalePlayer title='Demo 7. Shadaj Gram - Round 2' noteSpec={notesShadajGramR0} scale={scaleShadajGramR2} />
+
+export const notesShadajGramR3 = [
+    {white: "Sa", black: "fade"},
+    {white: "Re♭", black: "fade"},
+    {white: "fade"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "fade"},
+    {white: "Dha♭", black: "fade"},
+    {white: "fade"},
+    {white: "SA"}
+]
+
+<ScalePlayer title='Demo 8. Shadaj Gram - Round 3' noteSpec={notesShadajGramR3} scale={scaleShadajGramR3} />
+
+<ScalePlayer title='Demo 9. Shadaj Gram - Round 4' noteSpec={notesShadajGramR3} scale={scaleShadajGramR4} />
+
+export const noteSpec = [
+    {white: "Sa", black: "re"},
+    {white: "Re", black: "ga"},
+    {white: "Ga"},
+    {white: "ma", black: "Ma"},
+    {white: "Pa", black: "dha"},
+    {white: "Dha", black: "ni"},
+    {white: "Ni"},
+    {white: "SA"}
+]
+
+<ScalePlayer title='Test 22' noteSpec={noteSpec} scale={scaleSamaGana} />

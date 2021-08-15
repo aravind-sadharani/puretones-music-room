@@ -6,23 +6,23 @@ gate = button("gate") : en.adsr(0,0,1,0.01);
 cperiod = hslider("Common_Parameters/Period",2,0,3,0.1);
 
 midiKey = ba.hz2midikey(freq);
-rootKey = hslider("[0][style:radio{'B':14;'A#':13;'A':12;'G#':11;'G':10;'F#':9;'F':8;'E':7;'D#':6;'D':5;'C#':4;'C':3}]Common_Parameters/Pitch",0,0,11,1) - 3;
+rootKey = hslider("[0][style:radio{'B':14;'A#':13;'A':12;'G#':11;'G':10;'F#':9;'F':8;'E':7;'D#':6;'D':5;'C#':4;'C':3}]Common_Parameters/Pitch",3,3,14,1) - 3;
 octave = hslider("Common_Parameters/Octave",0,-2,2,1);
 noteId = (midiKey + octave*12 - rootKey) : %(12);
 fineTune = hslider("Common_Parameters/Fine_Tune",0,-100,100,1);
 
-offsetSa = 0 + hslider("Common_Parameters/12_Note_Scale/Sa/Cent",0,-120,120,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/Sa/0.01_Cent",0,-100,100,1);
-offsetre = -9.78 + hslider("Common_Parameters/12_Note_Scale/re/Cent",0,-120,120,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/re/0.01_Cent",0,-100,100,1);
-offsetRe = 3.91 + hslider("Common_Parameters/12_Note_Scale/Re/Cent",0,-120,120,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/Re/0.01_Cent",0,-100,100,1);
-offsetga = -5.87 + hslider("Common_Parameters/12_Note_Scale/ga/Cent",0,-120,120,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/ga/0.01_Cent",0,-100,100,1);
-offsetGa = 7.82 + hslider("Common_Parameters/12_Note_Scale/Ga/Cent",0,-120,120,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/Ga/0.01_Cent",0,-100,100,1);
-offsetma = -1.96 + hslider("Common_Parameters/12_Note_Scale/ma/Cent",0,-120,120,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/ma/0.01_Cent",0,-100,100,1);
-offsetMa = 11.73 + hslider("Common_Parameters/12_Note_Scale/Ma/Cent",0,-120,120,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/Ma/0.01_Cent",0,-100,100,1);
-offsetPa = 1.96 + hslider("Common_Parameters/12_Note_Scale/Pa/Cent",0,-120,120,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/Pa/0.01_Cent",0,-100,100,1);
-offsetdha = -7.82 + hslider("Common_Parameters/12_Note_Scale/dha/Cent",0,-120,120,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/dha/0.01_Cent",0,-100,100,1);
-offsetDha = 5.87 + hslider("Common_Parameters/12_Note_Scale/Dha/Cent",0,-120,120,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/Dha/0.01_Cent",0,-100,100,1);
-offsetni = -3.91 + hslider("Common_Parameters/12_Note_Scale/ni/Cent",0,-120,120,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/ni/0.01_Cent",0,-100,100,1);
-offsetNi = 9.78 + hslider("Common_Parameters/12_Note_Scale/Ni/Cent",0,-120,120,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/Ni/0.01_Cent",0,-100,100,1);
+offsetSa = 0 + hslider("Common_Parameters/12_Note_Scale/Sa/Cent",0,-220,220,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/Sa/0.01_Cent",0,-100,100,1);
+offsetre = -9.78 + hslider("Common_Parameters/12_Note_Scale/re/Cent",0,-220,220,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/re/0.01_Cent",0,-100,100,1);
+offsetRe = 3.91 + hslider("Common_Parameters/12_Note_Scale/Re/Cent",0,-220,220,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/Re/0.01_Cent",0,-100,100,1);
+offsetga = -5.87 + hslider("Common_Parameters/12_Note_Scale/ga/Cent",0,-220,220,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/ga/0.01_Cent",0,-100,100,1);
+offsetGa = 7.82 + hslider("Common_Parameters/12_Note_Scale/Ga/Cent",0,-220,220,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/Ga/0.01_Cent",0,-100,100,1);
+offsetma = -1.96 + hslider("Common_Parameters/12_Note_Scale/ma/Cent",0,-220,220,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/ma/0.01_Cent",0,-100,100,1);
+offsetMa = 11.73 + hslider("Common_Parameters/12_Note_Scale/Ma/Cent",0,-220,220,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/Ma/0.01_Cent",0,-100,100,1);
+offsetPa = 1.96 + hslider("Common_Parameters/12_Note_Scale/Pa/Cent",0,-220,220,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/Pa/0.01_Cent",0,-100,100,1);
+offsetdha = -7.82 + hslider("Common_Parameters/12_Note_Scale/dha/Cent",0,-220,220,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/dha/0.01_Cent",0,-100,100,1);
+offsetDha = 5.87 + hslider("Common_Parameters/12_Note_Scale/Dha/Cent",0,-220,220,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/Dha/0.01_Cent",0,-100,100,1);
+offsetni = -3.91 + hslider("Common_Parameters/12_Note_Scale/ni/Cent",0,-220,220,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/ni/0.01_Cent",0,-100,100,1);
+offsetNi = 9.78 + hslider("Common_Parameters/12_Note_Scale/Ni/Cent",0,-220,220,1) + 0.01*hslider("Common_Parameters/12_Note_Scale/Ni/0.01_Cent",0,-100,100,1);
 
 noteOffset = offsetSa,offsetre,offsetRe,offsetga,offsetGa,offsetma,offsetMa,offsetPa,offsetdha,offsetDha,offsetni,offsetNi : ba.selectn(12,noteId);
 
