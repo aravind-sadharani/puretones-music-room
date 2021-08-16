@@ -55,7 +55,7 @@ const SliderKey = styled.span`
 const Slider = ({params,path,onParamUpdate}) =>  {
     const changeValue = (value) => onParamUpdate(value, path)
     let {key,max,min,step,init} = params
-    init = typeof(init) === 'string' ? init.replace('.0','') : init
+    init = Math.floor(step) ? Number(init).toFixed(0) : Number(init).toFixed(1)
     return (
         <SliderContainer>
             <SliderKey>{key}</SliderKey>
