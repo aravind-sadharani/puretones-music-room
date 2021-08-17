@@ -9,7 +9,7 @@ const DronePlayerContainer = styled.div`
     padding: 12px;
     margin: 0 0 1em 0;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 120px;
     border: 1px solid #e6e6eb;
     border-radius: 5px;
 `

@@ -5,7 +5,7 @@ const ShowHideContainer = styled.div`
     padding: 0 0 12px 0;
     margin: 0;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 120px;
 `
 
 const ShowHideKey = styled.span`
