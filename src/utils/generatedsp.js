@@ -200,9 +200,10 @@ const baseValue = (noteStr) => {
 }
 
 const octaveValue = (noteStr) => {
-    if(noteStr.includes('"'))
+    let octStr = noteStr.substring(2,4)
+    if(octStr.includes('"'))
         return 2
-    if(noteStr.includes("'"))
+    if(octStr.includes("'"))
         return 1/2
     return 1
 }
@@ -234,7 +235,8 @@ const findUniqueNotes = (tokens) => {
         if(uniqueNotes.find(uniqueNote => isEqual(uniqueNote, note)) === undefined)
             uniqueNotes.push(note)
         if(note.includes("(G)")) {
-            let unShakenNote = note.replace("(G)","")
+            let paramsMatch = /\(G\)\(.*\)/
+            let unShakenNote = note.replace(paramsMatch,"")
             if(uniqueNotes.find(uniqueNote => isEqual(uniqueNote, unShakenNote)) === undefined)
                 uniqueNotes.push(unShakenNote)
         }

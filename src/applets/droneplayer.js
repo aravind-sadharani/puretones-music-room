@@ -57,6 +57,8 @@ const DronePlayer = ({title,settings}) => {
     const playStop = () => {
         if(buttonTitle === 'Starting...' || buttonTitle === 'Stopping...')
             return
+        if(buttonTitle === 'Start' && state.dronePlaying)
+            return
         let newButtonTitle = buttonTitle === 'Stop' ? "Stopping..." : "Starting..."
         let newState = buttonTitle !== 'Stop'
         updateButtonTitle(newButtonTitle)
