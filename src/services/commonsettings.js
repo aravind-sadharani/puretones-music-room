@@ -8,7 +8,8 @@ const initialCachedSettings = {
 
 const initialVolatileSettings = {
     currentMotif: 'MusicRoom Sequencer',
-    currentScale: 'MusicRoom Scale'
+    currentScale: 'MusicRoom Scale',
+    currentDrone: 'MusicRoom Drone'
 }
 
 const CommonSettingsEnv = React.createContext({...initialCachedSettings, ...initialVolatileSettings})
@@ -23,6 +24,7 @@ const CommonSettingsEnvProvider = ({children}) => {
         let newVolatileSettings = {}
         newVolatileSettings['currentMotif'] = newSettings['currentMotif']
         newVolatileSettings['currentScale'] = newSettings['currentScale']
+        newVolatileSettings['currentDrone'] = newSettings['currentDrone']
         setCachedSettings(newCachedSettings)
         setVolatileSettings(newVolatileSettings)
     }

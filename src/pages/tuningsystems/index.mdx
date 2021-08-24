@@ -1,6 +1,7 @@
 import scaleBasicIntervals from './basicIntervals.pkb'
 import scaleSamaGana from 'data/default.pkb'
-import scaleShadajGram from './shadajGramR0.pkb'
+import scaleShadajGram from './shadajGram.pkb'
+import scaleShadajGramAchal from './shadajGramR0.pkb'
 import scaleShadajGramR1 from './shadajGramR1.pkb'
 import scaleShadajGramR2 from './shadajGramR2.pkb'
 import scaleShadajGramR3 from './shadajGramR3.pkb'
@@ -125,7 +126,9 @@ In Shadaj Gram, the note Dha from Sama Gana scale was reduced in pitch to Dha♭
 
 Before we analyse this any further, hear for yourself what this scale sounds like using Demo 4 below.
 
-<ScalePlayer title='Demo 4. Shadaj Gram Scale' noteSpec={notesShadajGram} scale={scaleShadajGram} />
+export const keysShadajGram = {'Sa': 0, 'Re♭': 1, 'Re': 2, 'ga': 3, 'ma': 5, 'Pa': 7, 'Dha♭': 8, 'Dha': 9, 'ni': 10, 'SA': 12}
+
+<ScalePlayer title='Demo 4. Shadaj Gram Scale' keySpec={keysShadajGram} noteSpec={notesShadajGram} scale={scaleShadajGram} />
 
 Note that although Re♭ has been depicted as a *black* key, it is not a full semitone lower than Re. The Re♭-Re gap is an interval smaller than a semitone. Such intervals are often referred to as [microtones](https://en.wikipedia.org/wiki/Microtonal_music). Let us calculate the precise amount by which Re and Dha were reduced in pitch to obtain Re♭ and Dha♭ respectively. The ma-Dha interval consists of the ma-Pa interval applied twice, which is $(9/8)^2 = 81/64$. Since the Gandhar interval is 5/4, the gap between the Gandhar and the ma-Dha interval can be calculated to be $81/64 ÷ 5/4 = 81/80$. This interval $\frac{81}{80}$ (21.5 cents) was recognized and known as **Pramana Shruti**.
 
@@ -194,20 +197,22 @@ Let us perform the Bharat-Sarang Dev harp experiment and derive the full 22 shru
 
 ### Achal Veena
 
-Listen to Demo 5 below to familiarize yourself with the Achal Veena scale. This is nothing but the Shadaj Gram scale in Demo 4, but depicted a bit differently.
+Listen to Demo 5 below to familiarize yourself with the Achal Veena scale. This is nothing but the Shadaj Gram scale in Demo 4, but depicted a bit differently. Specifically, the notes are labelled according to their Shruti numbers as per Table 3.
 
 export const notesShadajGramAchal = [
-    {white: "Sa"},
-    {white: "Re♭"},
-    {white: "ga"},
-    {white: "ma"},
-    {white: "Pa"},
-    {white: "Dha♭"},
-    {white: "ni"},
-    {white: "SA"}
+    {white: "4"},
+    {white: "7"},
+    {white: "9"},
+    {white: "13"},
+    {white: "17"},
+    {white: "20"},
+    {white: "22"},
+    {white: "4\""}
 ]
 
-<ScalePlayer title='Demo 5. Shadaj Gram - Achal Veena' noteSpec={notesShadajGramAchal} scale={scaleShadajGram} />
+export const keysShadajGramAchal = {'4': 0, '7': 2, '9': 3, '13': 5, '17': 7, '20': 9, '22': 10, '4"': 12}
+
+<ScalePlayer title='Demo 5. Shadaj Gram - Achal Veena' noteSpec={notesShadajGramAchal} keySpec={keysShadajGramAchal} scale={scaleShadajGramAchal} />
 
 ### Round 1
 
@@ -215,6 +220,23 @@ export const notesShadajGramAchal = [
 -   So in Round 1, the Pa (fifth) string of the Chal Veena is set to Shruti #16 which is defined as a Madhyam interval (9 Shrutis) above Shruti #7.
 -   Then, each of the other strings are lowered by the ratio of Shruti #17 to Shruti #16. This ratio of Shruti #17 to Shruti #16 is called Pramana Shruti.
 -   We can check that this is consistent with the earlier derivation of Pramana Shruti. This is because Shruti #16 is Shruti #7 times the Madhyam ratio which is $\frac{10}{9} \times \frac{4}{3} = \frac{40}{27}$. So, Pramana Shruti is $\frac{3/2}{40/27}=\frac{81}{80}$ as before.
+
+Listen to the Chal Veena scale after Round 1 in Demo 6 below.
+
+export const notesShadajGramR1 = [
+    {white: "3"},
+    {white: "6"},
+    {white: "8"},
+    {white: "12"},
+    {white: "16"},
+    {white: "19"},
+    {white: "21"},
+    {white: "3\""}
+]
+
+export const keysShadajGramR1 = {'3': 0, '6': 2, '8': 3, '12': 5, '16': 7, '19': 9, '21': 10, '3"': 12}
+
+<ScalePlayer title='Demo 6. Shadaj Gram - Round 1' noteSpec={notesShadajGramR1} keySpec={keysShadajGramR1} scale={scaleShadajGramR1} />
 
 <Notice>Again, the Madhyam Gram scale as described by Bharat and by Sarang Dev, has the note Pa♭ at Shruti #16, while the rest of the notes are taken to be the same as in Shadaj Gram. As observed above, this makes the notes Re♭ and Pa♭ consonant with each other.</Notice>
 
@@ -224,6 +246,23 @@ export const notesShadajGramAchal = [
 -   Then, each of the other strings are lowered by the ratio of Shruti #8 to Shruti #7. This ratio of Shruti #8 to Shruti #7 is called Purna Shruti.
 -   We can check that this is consistent with the earlier derivation of Purna Shruti. This is because Shruti #8 is Shruti #9 divided by Pramana Shruti which is $\frac{32/27}{81/80} = \frac{2560}{2187}$. So, Purna Shruti is $\frac{2560/2187}{10/9} = \frac{256}{243}$ as before.
 
+Listen to the Chal Veena scale after Round 2 in Demo 7 below.
+
+export const notesShadajGramR2 = [
+    {white: "2"},
+    {white: "5"},
+    {white: "7"},
+    {white: "11"},
+    {white: "15"},
+    {white: "18"},
+    {white: "20"},
+    {white: "2\""}
+]
+
+export const keysShadajGramR2 = {'2': 0, '5': 2, '7': 3, '11': 5, '15': 7, '18': 9, '20': 10, '2"': 12}
+
+<ScalePlayer title='Demo 7. Shadaj Gram - Round 2' noteSpec={notesShadajGramR2} keySpec={keysShadajGramR2} scale={scaleShadajGramR2} />
+
 ### Round 3
 
 -   In Round 3, the re (second) string of the Chal Veena is set to Shruti #4.
@@ -231,12 +270,46 @@ export const notesShadajGramAchal = [
 -   Note that in Round 3, the ga (third) and ni (seventh) string of the Chal Veena are ignored.
 -   We can compute the value of Nyuna Shruti as follows. Shruti #5 is Shruti #6 divided by Purna Shruti which itself is Shruti #7 divided by Pramana Shruti. Thus, Shruti #5 is $\left(\frac{10/9}{81/80}\right) ÷ \frac{256}{243} = \frac{25}{24}$. Since, Shruti #4 is just 1, Nyuna Shruti is $\frac{25}{24}$.
 
+Listen to the Chal Veena scale after Round 3 in Demo 8 below.
+
+export const notesShadajGramR3 = [
+    {white: "1"},
+    {white: "4"},
+    {white: "fade"},
+    {white: "10"},
+    {white: "14"},
+    {white: "17"},
+    {white: "fade"},
+    {white: "1\""}
+]
+
+export const keysShadajGramR3 = {'1': 0, '4': 2, '10': 5, '14': 7, '17': 9, '1"': 12}
+
+<ScalePlayer title='Demo 8. Shadaj Gram - Round 3' noteSpec={notesShadajGramR3} keySpec={keysShadajGramR3} scale={scaleShadajGramR3} />
+
 ### Round 4
 
 -   In Round 4, the Pa (fifth) string of the Chal Veena is set to Shruti #13.
 -   Then, each of the other strings are lowered by the ratio of Shruti #14 to Shruti #13. This ratio of Shruti #14 to Shruti #13 is also equal to Pramana Shruti.
 -   Note that in Round 4, the ga (third) and ni (seventh) string of the Chal Veena are ignored, like in Round 3.
 -   We can check that this is consistent with the earlier derivation of Pramana Shruti. This is because Shruti #14 is Shruti #17 divided by Pramana Shruti, then by Purna Shruti and then by Nyuna Shruti. So, Shruti #14 is $\left(\frac{3/2}{81/80} ÷ \frac{256}{243}\right) ÷ \frac{25}{24} = \frac{27}{20}$. So, Pramana Shruti is $\frac{27/20}{4/3} = \frac{81}{80}$ as before.
+
+Listen to the Chal Veena scale after Round 4 in Demo 9 below.
+
+export const notesShadajGramR4 = [
+    {white: "22\'"},
+    {white: "3"},
+    {white: "fade"},
+    {white: "9"},
+    {white: "13"},
+    {white: "16"},
+    {white: "fade"},
+    {white: "22"}
+]
+
+export const keysShadajGramR4 = {'22\'': 0, '3': 2, '9': 5, '13': 7, '16': 9, '22': 12}
+
+<ScalePlayer title='Demo 9. Shadaj Gram - Round 4' noteSpec={notesShadajGramR4} keySpec={keysShadajGramR4} scale={scaleShadajGramR4} />
 
 If you are interested in the actual values for each of the 22 shrutis, refer to Table 4 which summarizes the result of all these steps (scroll horizontally to see the whole table).
 
@@ -281,47 +354,6 @@ The Shadaj Gram scale can also be represented by showing the relevant pitches in
 Figure 1. Illustration of Shadaj Gram Scale (22 Shrutis)
 </FigCaption>
 
-export const notesShadajGramR0 = [
-    {white: "Sa", black: "fade"},
-    {white: "Re♭", black: "ga"},
-    {white: "fade"},
-    {white: "ma", black: "fade"},
-    {white: "Pa", black: "fade"},
-    {white: "Dha♭", black: "ni"},
-    {white: "fade"},
-    {white: "SA"}
-]
-
-<ScalePlayer title='Demo 6. Shadaj Gram - Round 1' noteSpec={notesShadajGramR0} scale={scaleShadajGramR1} />
-
-<ScalePlayer title='Demo 7. Shadaj Gram - Round 2' noteSpec={notesShadajGramR0} scale={scaleShadajGramR2} />
-
-export const notesShadajGramR3 = [
-    {white: "Sa", black: "fade"},
-    {white: "Re♭", black: "fade"},
-    {white: "fade"},
-    {white: "ma", black: "fade"},
-    {white: "Pa", black: "fade"},
-    {white: "Dha♭", black: "fade"},
-    {white: "fade"},
-    {white: "SA"}
-]
-
-<ScalePlayer title='Demo 8. Shadaj Gram - Round 3' noteSpec={notesShadajGramR3} scale={scaleShadajGramR3} />
-
-<ScalePlayer title='Demo 9. Shadaj Gram - Round 4' noteSpec={notesShadajGramR3} scale={scaleShadajGramR4} />
-
-export const noteSpec = [
-    {white: "Sa", black: "re"},
-    {white: "Re", black: "ga"},
-    {white: "Ga"},
-    {white: "ma", black: "Ma"},
-    {white: "Pa", black: "dha"},
-    {white: "Dha", black: "ni"},
-    {white: "Ni"},
-    {white: "SA"}
-]
-
 ## Venkatamakhin-Ramamatya Scale
 
 Ramamatya laid down a practical procedure for setting the frets on a Veena, and in the process dividing an octave into 12 notes. Venkatamakhin documented the 12 note divisions of the octave and calculated numerical ratios for each of the 12 notes. Taken together Ramamatya and Venkatamakhin created a tuning system for Indian Classical music which was both practically and theoretically well defined. The tuning system defined by Venkatamakhin and Ramamatya is equivalent to the [Pythagorean Tuning](https://en.wikipedia.org/wiki/Pythagorean_tuning) system.
@@ -357,6 +389,17 @@ Starting with the fact that Pancham is $\frac{3}{2}$ and Madhyam is $\frac{4}
 You may have noticed that ratios for Ma and re at the first and sixth fret are different. Venkatamakhin prescribes that Ma is taken as $\frac{729}{512}$ (defined by the sixth fret) but that re is taken as $\frac{256}{243}$ (defined by the first fret).
 
 You can hear the Venkatamakhin-Ramamatya scale in Demo 10 below. The calculations for deriving the ratios for each note are summarized in Table 5.
+
+export const noteSpec = [
+    {white: "Sa", black: "re"},
+    {white: "Re", black: "ga"},
+    {white: "Ga"},
+    {white: "ma", black: "Ma"},
+    {white: "Pa", black: "dha"},
+    {white: "Dha", black: "ni"},
+    {white: "Ni"},
+    {white: "SA"}
+]
 
 <ScalePlayer title='Demo 10. Venkatamakhin-Ramamatya Tuning' noteSpec={noteSpec} scale={scaleSamaGana} />
 

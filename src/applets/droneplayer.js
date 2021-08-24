@@ -46,27 +46,35 @@ const DronePlayer = ({title,settings}) => {
     const [buttonTitle, updateButtonTitle] = React.useState('Start')
     const [active, setActive] = React.useState(false)
     const {state,dispatch} = React.useContext(AudioEnv)
-    const {commonSettings} = React.useContext(CommonSettingsEnv)
+    const {commonSettings,setCommonSettings} = React.useContext(CommonSettingsEnv)
     const [droneState,setDroneState] = React.useState({})
     const jobCompleted = (type) => {
         let newButtonTitle = type === 'Error' ? 'Error! Retry' : type === 'Stop' ? 'Start' : 'Stop'
         let newState = type !== 'Stop'
         updateButtonTitle(newButtonTitle)
         setActive(newState)
+        let newSettings = commonSettings
+        newSettings['currentDrone'] = type === 'Error' ? 'MusicRoom Drone' : type === 'Stop' ? 'MusicRoom Drone': title
+        setCommonSettings(newSettings)
     }
     const playStop = () => {
         if(buttonTitle === 'Starting...' || buttonTitle === 'Stopping...')
             return
-        if(buttonTitle === 'Start' && state.dronePlaying)
-            return
-        let newButtonTitle = buttonTitle === 'Stop' ? "Stopping..." : "Starting..."
-        let newState = buttonTitle !== 'Stop'
+        let newState = buttonTitle === 'Start' || (commonSettings['currentDrone'] !== title)
+        let newButtonTitle = newState ? "Starting..." : "Stopping..."
         updateButtonTitle(newButtonTitle)
         setActive(newState)
         let newDroneState = dspStateFromSettings('drone',settings)
         newDroneState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency'] = commonSettings['pitch']
         newDroneState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune'] = commonSettings['offSet']
         setDroneState(newDroneState)
+        let newSettings = commonSettings
+        newSettings['currentDrone'] = 'Busy'
+        setCommonSettings(newSettings)
+        if(newState && state['dronePlaying']) {
+            dispatch({type: 'Configure', appname: 'drone', settings: newDroneState})
+            jobCompleted('Play')
+        }
         if(!state.audioContextReady)
             dispatch({type: 'Init'})
     }
@@ -79,11 +87,12 @@ const DronePlayer = ({title,settings}) => {
         dispatch({type: 'Stop', appname: 'scale'})
         dispatch({type: 'Stop', appname: 'sequencer'})
     },[dispatch])
-    let buttonState = active ? "active" : ""
+    let buttonState = (active && (commonSettings['currentDrone'] === title)) ? "active" : ""
+    let buttonText = (commonSettings['currentDrone'] === title) ? buttonTitle : 'Start'
     return (
         <DronePlayerContainer>
             <DroneTitleElement>{title}</DroneTitleElement>
-            <DroneButtonElement className={buttonState} onClick={() => playStop()}>{buttonTitle}</DroneButtonElement>
+            <DroneButtonElement className={buttonState} onClick={() => playStop()}>{buttonText}</DroneButtonElement>
         </DronePlayerContainer>
     )
 }

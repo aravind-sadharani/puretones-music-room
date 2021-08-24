@@ -16,8 +16,8 @@ const ScalePlayerContainer = styled.div`
     border-radius: 5px;
 `
 
-const ScalePlayer = ({title,noteSpec,scale}) => {
-    const note2Offset = {'Sa': 0, 're': 1, 'Re': 2, 'Re♭': 1, 'ga': 3, 'Ga': 4, 'ma': 5, 'Ma': 6, 'Pa': 7, 'dha': 8, 'Dha': 9, 'Dha♭': 8, 'ni': 10, 'Ni': 11, 'SA': 12}
+const ScalePlayer = ({title,noteSpec,keySpec,scale}) => {
+    const note2Offset = keySpec || {'Sa': 0, 're': 1, 'Re': 2, 'ga': 3, 'Ga': 4, 'ma': 5, 'Ma': 6, 'Pa': 7, 'dha': 8, 'Dha': 9, 'ni': 10, 'Ni': 11, 'SA': 12}
     const key2Midi = (keyName) => (Number(commonSettings['pitch']) - 3 + note2Offset[`${keyName}`] + 48)
     const [keyState,setKeyState] = React.useState(Array(13).fill(0))
     const keyOn = (keyName) => {
@@ -72,8 +72,6 @@ const ScalePlayer = ({title,noteSpec,scale}) => {
     const play = () => {
         if(commonSettings['currentScale'] === 'Busy')
             return
-        if(state['scalePlaying'])
-            dispatch({type: 'Stop', appname: 'scale'})
         let scaleState = dspStateFromSettings('scale',scale)
         scaleState['/FaustDSP/Common_Parameters/Pitch'] = commonSettings['pitch']
         scaleState['/FaustDSP/Common_Parameters/Fine_Tune'] = commonSettings['offSet']
@@ -83,6 +81,10 @@ const ScalePlayer = ({title,noteSpec,scale}) => {
         let newSettings = commonSettings
         newSettings['currentScale'] = 'Busy'
         setCommonSettings(newSettings)
+        if(state['scalePlaying']) {
+            dispatch({type: 'Configure', appname: 'scale', settings: scaleState})
+            jobCompleted('Play')
+        }
         if(!state.audioContextReady)
             dispatch({type: 'Init'})
     }
