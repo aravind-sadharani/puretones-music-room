@@ -10,24 +10,33 @@ const SelectContainer = styled.div`
 
 const SelectElement = styled.select`
     padding: 0 6px;
-    border-color: #e6e6eb;
-    outline-color: #333366;
     -webkit-appearance: none;
-    background-color: #e6e6eb;
+    border-color: ${({theme}) => theme.light.borderColor};
+    ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
+    background-color: ${({theme}) => theme.light.bodyBackground};
+    ${({theme}) => theme.isDark`background-color: ${theme.dark.bodyBackground};`}
+    color: ${({theme}) => theme.light.textColor};
+    ${({theme}) => theme.isDark`color: ${theme.dark.textColor};`}
     border-width: 1px;
     border-radius: 5px;
     margin: 0 0 0 auto;
     width: 120px;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 4,6 8,0" style="fill:black"/></svg>');
+    background-image: ${({theme}) => `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 4,6 8,0" style="fill:${theme.light.textColor.replace('#','%23')}"/></svg>')`};
+    ${({theme}) => theme.isDark`background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 4,6 8,0" style="fill:${theme.dark.textColor.replace('#','%23')}"/></svg>')`};
     background-position-x: 120%;
     background-position-y: 55%;
     background-repeat: no-repeat;
     background-size: 2em;
     &:hover {
-        background-color: #333366;
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 4,6 8,0" style="fill:white"/></svg>');
-        color: white;
+        background-color: ${({theme}) => theme.light.buttonBackground};
+        background-image: ${({theme}) => `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 4,6 8,0" style="fill:${theme.light.buttonText.replace('#','%23')}"/></svg>')`};
+        color: ${({theme}) => theme.light.buttonText};
     }
+    ${({theme}) => theme.isDark`&:hover {
+        background-color: ${theme.dark.buttonBackground};
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 4,6 8,0" style="fill:${theme.dark.buttonText.replace('#','%23')}"/></svg>');
+        color: ${theme.dark.buttonText};
+    }`}
 `
 
 const OptionElement = styled.option`

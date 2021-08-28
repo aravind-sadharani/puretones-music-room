@@ -14,11 +14,12 @@ const SliderRange = styled.input`
     display: block;
     margin: 15px auto 5px;
     -webkit-appearance: none;
+    appearance: none;
     width: 100%;
     height: 10px;
-    border-radius: 5px;  
-    background: #e6e6eb;
-    outline-color: #333366;
+    border-radius: 5px;
+    background: ${({theme}) => theme.light.borderColor};
+    ${({theme}) => theme.isDark`background: ${theme.dark.borderColor};`}
     -webkit-transition: .2s;
     transition: opacity .2s;
     ::-webkit-slider-thumb {
@@ -26,24 +27,32 @@ const SliderRange = styled.input`
         appearance: none;
         width: 25px;
         height: 25px;
-        border-radius: 50%; 
-        background: #f76f8e;
+        border-radius: 50%;
+        background: ${({theme}) => theme.light.linkColor};
+        ${({theme}) => theme.isDark`background: ${theme.dark.linkColor};`}
         cursor: pointer;
     }
     ::-moz-range-thumb {
         width: 25px;
         height: 25px;
         border-radius: 50%;
-        background: #f76f8e;
+        background: ${({theme}) => theme.light.linkColor};
+        ${({theme}) => theme.isDark`background: ${theme.dark.linkColor};`}
         cursor: pointer;
     }
 `
 
 const SliderNumber = styled.input`
     -webkit-appearance: none;
+    appearance: none;
     padding: 0 6px;
-    outline-color: #333366;
-    border: 1px solid #e6e6eb;
+    border: 1px solid;
+    border-color: ${({theme}) => theme.light.borderColor};
+    ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
+    background: ${({theme}) => theme.light.bodyBackground};
+    ${({theme}) => theme.isDark`background: ${theme.dark.bodyBackground};`}
+    color: ${({theme}) => theme.light.textColor};
+    ${({theme}) => theme.isDark`color: ${theme.dark.textColor};`}
     border-radius: 5px;
     margin: 0 0 0 auto;
     width: 120px;

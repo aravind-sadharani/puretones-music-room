@@ -4,7 +4,9 @@ import {media} from "utils/mediatemplate"
 import FigCaption from 'components/figcaption'
 
 const CardContainer = styled.div`
-    border: 1px solid #e6e6eb;
+    border: 1px solid;
+    border-color: ${({theme}) => theme.light.borderColor};
+    ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     margin: 0;

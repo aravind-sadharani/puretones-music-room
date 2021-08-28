@@ -10,7 +10,9 @@ const DronePlayerContainer = styled.div`
     margin: 0 0 1em 0;
     display: grid;
     grid-template-columns: 1fr 120px;
-    border: 1px solid #e6e6eb;
+    border: 1px solid;
+    border-color: ${({theme}) => theme.light.borderColor};
+    ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
     border-radius: 5px;
 `
 
@@ -21,23 +23,29 @@ const DroneTitleElement = styled.blockquote`
 
 const DroneButtonElement = styled.button`
     padding: 0 6px;
-    border-color: #e6e6eb;
-    outline-color: #333366;
+    background-color: ${({theme}) => theme.light.borderColor};
+    ${({theme}) => theme.isDark`background-color: ${theme.dark.borderColor};`}
+    color: ${({theme}) => theme.light.textColor};
+    ${({theme}) => theme.isDark`color: ${theme.dark.textColor};`}
     -webkit-appearance: none;
-    background-color: #e6e6eb;
+    appearance: none;
     border: 0;
     border-radius: 5px;
     margin: auto 0 0 auto;
     width: 120px;
     &:hover {
-        background-color: #333366;
-        color: white;
+        background-color: ${({theme}) => theme.light.buttonBackground};
+        ${({theme}) => theme.isDark`background-color: ${theme.dark.buttonBackground};`}
+        color: ${({theme}) => theme.light.buttonText};
+        ${({theme}) => theme.isDark`color: ${theme.dark.buttonText};`}
         font-weight: 700;
         opacity: 0.8;
     }
     &.active {
-        background-color: #333366;
-        color: white;
+        background-color: ${({theme}) => theme.light.buttonBackground};
+        ${({theme}) => theme.isDark`background-color: ${theme.dark.buttonBackground};`}
+        color: ${({theme}) => theme.light.buttonText};
+        ${({theme}) => theme.isDark`color: ${theme.dark.buttonText};`}
         font-weight: 700;
     }
 `

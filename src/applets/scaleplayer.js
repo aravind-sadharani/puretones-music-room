@@ -12,7 +12,9 @@ const isBrowser = typeof window !== "undefined"
 const ScalePlayerContainer = styled.div`
     padding: 12px 12px 0 12px;
     margin: 0 0 1em 0;
-    border: 1px solid #e6e6eb;
+    border: 1px solid;
+    border-color: ${({theme}) => theme.light.borderColor};
+    ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
     border-radius: 5px;
 `
 

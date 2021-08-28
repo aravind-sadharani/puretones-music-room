@@ -3,9 +3,12 @@ import styled from "styled-components"
 import ShowHideControls from "components/showhidecontrols"
 
 const EditorElement = styled.textarea`
+    color: ${({theme}) => theme.light.textColor};
+    ${({theme}) => theme.isDark`color: ${theme.dark.textColor};`}
+    background-color: ${({theme}) => theme.light.bodyBackground};
+    ${({theme}) => theme.isDark`background-color: ${theme.dark.bodyBackground};`}
     display: block;
     overflow: auto;
-    outline-color: #333366;
     height: auto;
     width: 100%;
     margin: 0 0 12px 0;

@@ -3,23 +3,29 @@ import styled from "styled-components"
 
 const ButtonElement = styled.button`
     padding: 0 6px;
-    border-color: #e6e6eb;
-    outline-color: #333366;
+    background-color: ${({theme}) => theme.light.borderColor};
+    ${({theme}) => theme.isDark`background-color: ${theme.dark.borderColor};`}
+    color: ${({theme}) => theme.light.textColor};
+    ${({theme}) => theme.isDark`color: ${theme.dark.textColor};`}
     -webkit-appearance: none;
-    background-color: #e6e6eb;
+    appearance: none;
     border: 0;
     border-radius: 5px;
     margin: 6px;
     width: 120px;
     &:hover {
-        background-color: #333366;
-        color: white;
+        background-color: ${({theme}) => theme.light.buttonBackground};
+        ${({theme}) => theme.isDark`background-color: ${theme.dark.buttonBackground};`}
+        color: ${({theme}) => theme.light.buttonText};
+        ${({theme}) => theme.isDark`color: ${theme.dark.buttonText};`}
         font-weight: 700;
         opacity: 0.8;
     }
     &.active {
-        background-color: #333366;
-        color: white;
+        background-color: ${({theme}) => theme.light.buttonBackground};
+        ${({theme}) => theme.isDark`background-color: ${theme.dark.buttonBackground};`}
+        color: ${({theme}) => theme.light.buttonText};
+        ${({theme}) => theme.isDark`color: ${theme.dark.buttonText};`}
         font-weight: 700;
     }
 `

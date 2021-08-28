@@ -10,15 +10,18 @@ const WhiteKeyElement = styled.div`
     border: 1px solid black;
     background: ivory;
     border-radius: 5px;
-    box-shadow: 0px 3px 5px #666666;
+    box-shadow: 0px 1px 3px black;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: flex-end;
     padding-bottom: 20%;
     font-weight: bold;
+    color: black;
     &.fade {
-        opacity: 0.5;
+        background: #d9d9cc;
+        border-color: #d9d9cc;
+        z-index: -1;
     }
 `
 
@@ -32,7 +35,7 @@ const BlackKeyElement = styled.div`
     max-height: 160px;
     background: #282c34;
     border-radius: 5px;
-    box-shadow: 0px 3px 5px #666666;
+    box-shadow: 0px 1px 3px black;
     cursor: pointer;
     z-index: 333;
     display: flex;

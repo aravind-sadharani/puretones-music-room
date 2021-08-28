@@ -6,7 +6,8 @@ const TabBarElement = styled.div`
     overflow: hidden;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
-    background-color: #e6e6eb;
+    background-color: ${({theme}) => theme.light.borderColor};
+    ${({theme}) => theme.isDark`background-color: ${theme.dark.borderColor};`}
     display: grid;
     grid-template-columns: repeat(${props => props.numtabs},1fr);
 `
@@ -21,19 +22,25 @@ const TabElement = styled.button`
     transition: 0.3s;
     font-weight: normal;
     font-size: calc(min(${props => `${(130/(props.numtabs*Math.max(3,props.children.length))).toFixed(1)}vw`},1em));
+    color: ${({theme}) => theme.light.textColor};
+    ${({theme}) => theme.isDark`color: ${theme.dark.textColor};`}
     &:hover {
         border-top-right-radius: 5px;
         border-top-left-radius: 5px;
-        background-color: #333366;
-        color: white;
+        background-color: ${({theme}) => theme.light.buttonBackground};
+        ${({theme}) => theme.isDark`background-color: ${theme.dark.buttonBackground};`}
+        color: ${({theme}) => theme.light.buttonText};
+        ${({theme}) => theme.isDark`color: ${theme.dark.buttonText};`}
         font-weight: bold;
         opacity: 0.8;
     }
     &.active {
         border-top-right-radius: 5px;
         border-top-left-radius: 5px;
-        background-color: #333366;
-        color: white;
+        background-color: ${({theme}) => theme.light.buttonBackground};
+        ${({theme}) => theme.isDark`background-color: ${theme.dark.buttonBackground};`}
+        color: ${({theme}) => theme.light.buttonText};
+        ${({theme}) => theme.isDark`color: ${theme.dark.buttonText};`}
         font-weight: bold;
     }
 `
@@ -42,7 +49,10 @@ const TabPageElement = styled.div`
     display: none;
     margin: 0 0 12px 0;
     padding: 12px 12px 0 12px;
-    border: 1px solid #e6e6eb;
+    border: 1px solid;
+    border-color: ${({theme}) => theme.light.borderColor};
+    ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
+    border-top: 0;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
     grid-template-columns: 1fr 1fr;

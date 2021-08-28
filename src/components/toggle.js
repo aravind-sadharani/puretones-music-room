@@ -29,7 +29,8 @@ const ToggleSwitch = styled.span`
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: ${props => props.checked ? '#f76f8e' : '#e6e6eb'};
+    background-color: ${({checked,theme}) => checked ? `${theme.light.linkColor}` : `${theme.light.borderColor}`};
+    ${({checked,theme}) => checked ? theme.isDark`background-color: ${theme.dark.linkColor};` : theme.isDark`background-color: ${theme.dark.borderColor};`}
     -webkit-transition: .4s;
     transition: .4s;
     border-radius: 28px;
@@ -40,13 +41,14 @@ const ToggleSwitch = styled.span`
         width: 20px;
         left: 4px;
         bottom: 4px;
-        background-color: white;
+        background-color: ${({theme}) => theme.light.bodyBackground};
+        ${({theme}) => theme.isDark`background-color: ${theme.dark.bodyBackground};`}
         -webkit-transition: .4s;
         transition: .4s;
         border-radius: 50%;
-        -webkit-transform: ${props => props.checked ? 'translateX(20px)' : ''};
-        -ms-transform: ${props => props.checked ? 'translateX(20px)' : ''};
-        transform: ${props => props.checked ? 'translateX(20px)' : ''};
+        -webkit-transform: ${({checked}) => checked ? 'translateX(20px)' : ''};
+        -ms-transform: ${({checked}) => checked ? 'translateX(20px)' : ''};
+        transform: ${({checked}) => checked ? 'translateX(20px)' : ''};
     }
 `
 
