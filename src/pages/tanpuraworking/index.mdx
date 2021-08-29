@@ -1,0 +1,251 @@
+import sixteenHarmonics from './16harmonics.dsp'
+import droneSamaGana from 'data/default.prt'
+import scaleSamaGana from 'data/default.pkb'
+import droneShadajGram from '../musicalscales/shadajgram.prt'
+import scaleShadajGram from '../musicalscales/shadajgram.pkb'
+
+# Tanpura - A Cornerstone of Indian Classical Music
+
+The Tanpura (also referred to as **Tambura**) is a musical instrument with an intriguing and also fundamental place in today's Indian Classical music. As you may well know, it is not a lead instrument on which a melody is played. Rather it is used as a background instrument to create a drone accompaniment through the repetitive plucking of four open strings. It is relatively new to Indian Classical music, having reached its modern form sometime around 1700 CE. But it has influenced Indian Classical music quite profoundly, including both the common styles of Hindustani and Carnatic music. To understand what came before it, it may help you to read about the [pre-Tanpura tuning systems](/tuningsystems/) used in Indian Classical music and also the evolution of [Indian musical scales](/musicalscales/) in related articles.
+
+In this article, we focus on the Tanpura, its unique sound and how it affects the tuning and rendition of Indian Classical music. Contrary to widely held perceptions, the Tanpura is not only responsible for providing a reference of the fundamental note **Sa**, but it actually provides a tuning system resulting from string overtones which supports the entire Raga being performed. Skilled and sensitive artists can tune a Tanpura with such subtlety as to leave an unmistakeable impression of the Raga they perform. To understand this better, we need to start with how a Tanpura works.
+
+## Reference Pitch, Basic Intervals and Ratios
+
+Before we begin, let us start with the concept of the fundamental note **Sa**. In Indian Classical music, all musical notes are defined based on their relationship with **Sa**. You can use the settings below to set the **Sa** to any pitch you prefer. All the demos on this page would play according to this setting.
+
+<CommonPitch />
+
+<Notice>This article features high quality audio demonstrations which are an integral part of the narrative. Please try and use a pair of headphones or good quality speakers to listen to the samples with maximum clarity.</Notice>
+
+## Basic Working of a Tanpura
+
+Let us start by listening to a short sample of a Tanpura, to appreciate its rich and characteristic sound. This Tanpura is set to the key of C, with its four strings tuned as **Pa** - **SA** - **SA** - **Sa**, where Sa denotes the fundamental, Pa the fifth and SA the octave. As you can hear, the Tanpura has a very distinctive sound which is quite different from other string instruments you may have heard.
+
+A Tanpura (see Figure 1) has a long stem which is attached to a soundboard and a round resonating enclosure. The stem and soundboard are generally made of wood, while the resonator may be made from the shell of a pumpkin or gourd, or from wood. The Tanpura has four strings with their tuning pegs at the top end. They pass over a smooth round bridge and are attached to the base of the instrument. In addition to the tuning pegs at the top, each string has small fine tuning beads below the bridge. Finally, a cotton thread is passed between the strings and their contact point on the bridge. Using the tuning pegs, the fine tuning beads and the position of the thread on the bridge, an expert artist can finely tune the Tanpura to create just the right sound needed for their musical rendition.
+
+![](./tanpura-labelled.png)
+
+<FigCaption>
+Figure 1. Structure of a Tanpura
+(Picture courtesy of <a href="https://www.flickr.com/photos/91676597@N07/8325869555">Alex Lenovski</a> used under <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>, Labels by Aravind Iyer)
+</FigCaption>
+
+## The Sound of a String
+
+There has been a lot of research into the sound of the Tanpura, starting from C. V. Raman in 1921 till the present times. Subsequently, there have been a number of works which have investigated the phenomenon of how a Tanpura string vibrates and produces sound. But before we attempt to explain the Tanpura sound, we need to look at a generic string and how it vibrates. Consider a string stretched across two points of contact. If the string is plucked, then how would it vibrate? It turns out that the string vibrates in a combination of the following modes of vibration.
+
+![](./harmonics.png)
+
+<FigCaption>
+Figure 2. Modes of Vibration in a Vibrating String
+</FigCaption>
+
+It may look strange but really the string is vibrating in all of those ways at the same time. If you have a look at the vibrating string side on, what you see visually is the string vibrate in a combination of these modes of vibration. Not all of the modes vibrate with the same amount of intensity though. The most fundamental mode of vibration is the one labelled $f$ with the single peak right in the middle. This is the most dominant mode of vibration. The intensity of vibration progressively decreases as you go to higher modes of vibration, $2f$, $3f$, $4f$, etc.
+
+Now each mode corresponds to a different pitch, with the mode $2f$ at twice the frequency as $f$, $3f$ at thrice the frequency as $f$ and so on as the labels indicate. What we hear is the cumulative sound of all of those pitches playing out at different intensities. Since $f$ is the loudest (or most dominant), our ears perceive the overall pitch to be $f$ and the higher modes of vibration lend the string sound its character or what is called the timbre.
+
+These modes of vibration are also referred to as overtones or harmonics. They play a key role in giving rise to the characteristic Tanpura sound. Listen to the demonstration below to hear the different harmonics of a string. The demonstration plays the harmonics in sequence from $f$ all the way to $16f$ and then back again. If we take $f$ to be the note **Sa**, then can you identify which note each harmonic corresponds to?
+
+<MotifPlayer title='Demo 2. First 16 Harmonics of a String' motif='For each harmonic, can you identify which note it corresponds to?' staticCode={sixteenHarmonics} />
+
+## Perception of Pitch and Interactions between Pitches
+
+We need to talk about an important mathematical equation which is key to explaining the Tanpura sound.
+
+<center>
+
+$$\sin(2\pi f_1t) + \sin(2\pi f_2t) = 2\sin\left(2\pi{f_1+f_2 \over 2}t\right)\cos\left(2\pi{f_1-f_2 \over 2}t\right)$$
+
+</center>
+
+For the less mathematically inclined, $\sin(2\pi f_1t)$ represents a signal which is oscillating or vibrating at a frequency $f_1$. Those who know their mathematics may recognize that this is just a basic identity in Trigonometry.
+
+So what this equation says is that when we hear two signals vibrating at $f_1$ and $f_2$ at the same time, it can also be regarded as hearing the product of two signals vibrating at the average and half the difference of the two frequencies, i.e., at ${f_1+f_2 \over 2}$ and ${f_1-f_2 \over 2}$ respectively.
+
+Now think about the case where the frequencies $f_1$ and $f_2$ are so close that the difference is near the limit of human capability to discriminate pitches. At this point, if we were to play a string at $f_1$ and then a string at $f_2$, fewer and fewer people would be able to tell them apart as different pitches, as the pitches get closer and closer.
+
+In such a situation, when $f_1$ and $f_2$ are played together, we would hear it as a signal at the average pitch ${f_1+f_2 \over 2}$ (which again is very close to $f_1$ or $f_2$, since they are so close together) and the intensity of this signal would rise and ebb slowly at the rate ${f_1-f_2 \over 2}$.
+
+Listen to the samples below to hear two close frequencies $f_1$ and $f_2$ played separately and together to understand this effect. The pitches $f_1$ and $f_2$ are very close, so you may not be able to tell them apart. Yet, when they are played together, notice how you hear the intensity rise and fall repeatedly as the signal dies out, showing you that they are slightly different.
+
+Here is another set of samples of two close frequencies $f_1$ and $f_2$ played separately and together. Unlike the previous case where the samples consisted of tones, here you can hear a richer string-like sound. This time, when the signals are played together, what do you hear in addition to the intensity fluctuations you heard previously? In the background, in higher registers, you may be able to hear the overtones also peaking and falling.
+
+You can also try playing Demo 8 together with Demo 2 to see if you can hear a faint hint of the overtones in Demo 8. Another thing you may observe is how well in-tune Demo 2 appears with Demo 8.
+
+## A Tanpura String
+
+We learned two concepts so far: vibrating modes of a string or harmonics; and what happens when two pitches very close together are played at the same time. We need to understand three more points and then we would be ready to put things together to explain the sound an individual Tanpura string produces.
+
+### Vibrating Length and Pitch
+
+The length of the string determines the pitch of the string. To be a bit more precise, two strings which are stretched to the same level of tension would vibrate at pitches inversely proportional to their vibrating lengths. For example, a string which is half the length of a second string, would vibrate at twice the pitch of the second string.
+
+### Rounded Bridge and Length Variation
+
+The role of the rounded bridge in a Tanpura is to spread the point of contact between the string and the bridge. This results in the vibrating length of the string changing ever so slightly as the string vibrates. This in turn causes the pitch of the string to modulate slightly as it vibrates.
+
+### Cotton Thread and Sharpness
+
+A side-effect of a rounded bridge is that the string grazes against the bridge more than it would with a pointier bridge. This results in a duller sound which dissipates more quickly. The role of the cotton thread is to restore the sharpness and to sustain the sound.
+
+Overall, the combination of the rounded bridge and the cotton thread in the Tanpura, achieve the effect of maintaining the sharpness and sustain of a pointy bridge while also allowing the vibrating length to change subtly as the string vibrates.
+
+### Putting it all together
+
+We know that if the vibrating length changes, the pitch of the string would also change. In the case of a Tanpura string, this effectively results in the string playing at two slightly different pitches simultaneously. If we denote by $\Delta f$, the difference in pitches because of the changing vibrating length, we hear two close pitches $f+\Delta f$ and $f-\Delta f$, where $f$ is the pitch of the string.
+
+We also know that if these two signals are played simultaneously, we would perceive their amplitude to periodically ebb and rise at the rate ${f_1-f_2 \over 2}$ which is $\Delta f$. This is true not only for the fundamental mode of vibration $f$, but also for each of the overtones $2f$, $3f$ and so on which occur concurrently. Thus, $f$ rises and falls at the rate $\Delta f$, $2f$ at the rate $2\Delta f$, $3f$ at $3\Delta f$ and so on.
+
+Unlike a generic string, where the fundamental $f$ overshadows the higher harmonics, in a Tanpura, each harmonic peaks in intensity at different times, enabling us to hear each of them separately in quick succession. Much like a prism splitting white light into its constituent rainbow colours, the bridge and thread of the Tanpura split apart the harmonics of each string.
+
+Recall the first 16 harmonics from Demo 2. According to our explanation, we should be able to hear all those harmonics play one after the other in a single Tanpura string.
+
+## The Tuning System from String Overtones
+
+So far, we have looked at the Tanpura from the perspective of sound analysis. What about the musical perspective? To address the musical perspective, let us first understand the musical scale which results from the harmonics you heard in Demo 2. Consider a Tanpura tuned as **Pa** - **SA** - **SA** - **Sa**. Now consider the overtones emanating from the Sa and Pa strings. In Table 1 and Table 2 below, we list some of these harmonics and the notes corresponding to them.
+
+
+<Caption>
+Table 1. Harmonics from Sa
+</Caption>
+
+| Harmonic | Ratio | Symbolic Ratio | Note |
+| --- | --- | --- | --- |
+| 8 | 1 | 1 | Sa |
+| 9 | 1.125 | 9/8 | Re |
+| 10 | 1.25 | 5/4 | Ga (Antara Gandhar) |
+| 11 | 1.375 | 11/8 | ma (Sharp ma) |
+| 12 | 1.5 | 3/2 | Pa |
+| 13 | 1.625 | 13/8 | dha (Sharp dha) |
+| 14 | 1.75 | 7/4 | ni (Flat ni) |
+| 15 | 1.875 | 15/8 | Ni (Kakali Nishad) |
+| 16 | 2 | 2 | SA |
+
+<Caption>
+Table 2. Harmonics from Pa
+</Caption>
+
+
+| Harmonic | Ratio | Symbolic Ratio | Note |
+| --- | --- | --- | --- |
+| 8 | 1.5 | 3/2 | Pa |
+| 9 | 1.6875 | 27/16 | Dha |
+| 10 | 1.875 | 15/8 | Ni (Kakali Nishad) |
+| 11 | 1.03125 | 33/16 | re (flat re) |
+| 12 | 1.125 | 9/8 | Re |
+| 13 | 1.21875 | 39/32 | ga (Sharp ga) |
+| 14 | 1.3125 | 21/16 | ma (Flat ma) |
+| 15 | 1.40625 | 45/32 | Ma (Flat Ma) |
+| 16 | 1.5 | 3/2 | Pa |
+
+Thus, a Tanpura tuned as **Pa** - **SA** - **SA** - **Sa** creates a tuning system consisting of the notes in Table 1 and 2. If an artist picks up a Raga based on notes from this tuning system, we should expect that the musical performance and the Tanpura should sound perfectly in tune.
+
+## Sama Gana and Shadaj Gram scales
+
+To illustrate this point better, let us check the case of the Sama Gana scale and the Shadaj Gram scale. For more details on these scales, please check [this article](/tuningsystems/) on Indian tuning systems.
+
+Compare and contrast the ratios in Table 1 and 2 with those of the Sama Gana scale listed in Table 3. Observe how Re, Pa and Dha are exactly identical across Tables 1, 2 and 3.
+
+<Caption>
+Table 3. Illustration of Sama Gana Scale
+</Caption>
+
+
+| Note | Ratio | Symbolic Ratio |
+| --- | --- | --- |
+| Sa | 1 | 1 |
+| Re | 1.125 | 9/8 |
+| ga | 1.185185185 | 32/27 |
+| ma | 1.333333333 | 4/3 |
+| Pa | 1.5 | 3/2 |
+| Dha | 1.6875 | 27/16 |
+| ni | 1.777777778 | 16/9 |
+| SA | 2 | 2 |
+
+With this understanding, listen to the Tanpura track in Demo 9 which is tuned as **Pa** - **SA** - **SA** - **Sa**. Note how well it supports the Sama Gana scale which you can play from Demo 10.
+
+<DronePlayer title='Demo 9. Drone for Sama Gana Scale' settings={droneSamaGana} />
+
+export const notesSamaGana = [
+    {white: "Sa", black: "fade"},
+    {white: "Re", black: "ga"},
+    {white: "fade"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "fade"},
+    {white: "Dha", black: "ni"},
+    {white: "fade"},
+    {white: "SA"}
+]
+
+<ScalePlayer title='Demo 10. Sama Gana Scale' noteSpec={notesSamaGana} scale={scaleSamaGana} />
+
+Now, consider the Shadaj Gram scale from Table 4 below and see how the notes Re and Dha are different from those in Sama Gana scale. Consequently, these notes are not supported by the Tanpura in Demo 9.
+
+<Caption>
+Table 4. Illustration of Shadaj Gram Scale
+</Caption>
+
+| Note | Ratio | Symbolic Ratio |
+| --- | --- | --- |
+| Sa | 1 | 1 |
+| Re**♭** | 1.111111111 | 10/9 |
+| ga | 1.185185185 | 32/27 |
+| ma | 1.333333333 | 4/3 |
+| Pa | 1.5 | 3/2 |
+| Dha**♭** | 1.666666667 | 5/3 |
+| ni | 1.777777778 | 16/9 |
+| SA | 2 | 2 |
+
+In order to support the Shadaj Gram scale, the **Sa** string of the Tanpura needs to be tuned down in pitch, so as to support Re**♭** in Shadaj Gram. Listen to Demo 11 for a Tanpura tuned to support Shadaj Gram and observe how it supports the Shadaj Gram scale in Demo 12.
+
+<DronePlayer title='Demo 11. Drone for Shadaj Gram Scale' settings={droneShadajGram} />
+
+export const notesShadajGram = [
+    {white: "Sa", black: "fade"},
+    {white: "Re♭", black: "ga"},
+    {white: "fade"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "fade"},
+    {white: "Dha♭", black: "ni"},
+    {white: "fade"},
+    {white: "SA"}
+]
+
+export const keysShadajGram = {'Sa': 0, 'Re♭': 2, 'ga': 3, 'ma': 5, 'Pa': 7, 'Dha♭': 9, 'ni': 10, 'SA': 12}
+
+<ScalePlayer title='Demo 12. Shadaj Gram Scale' noteSpec={notesShadajGram} keySpec={keysShadajGram} scale={scaleShadajGram} />
+
+In the Tanpura in Demo 11, the **Sa** string has been tuned down in pitch by 14.71 ¢. The harmonics from this detuned Sa string are illustrated in Table 5 below. Note how the 9th harmonic emanating from the Sa string is now very close the intended Re**♭** of the Shadaj Gram scale.
+
+<Caption>
+Table 5. Harmonics from Sa - 14.71 ¢
+</Caption>
+
+| Harmonic | Ratio | Note |
+| --- | --- | --- |
+| 9 | 1.115 | Re |
+| 10 | 1.239 | Ga |
+| 11 | 1.363 | ma |
+| 12 | 1.487 | Pa |
+| 13 | 1.611 | dha |
+| 14 | 1.735 | ni |
+| 15 | 1.859 | Ni |
+
+## Musical Process with the Tanpura
+
+The above demonstrations of the Sama Gana scale and the Shadaj Gram scale are just examples. In general, an artist skilled in using a Tanpura can tune a Tanpura for any desired Raga they wish to perform. Artists tend to follow a musical process which is something like Figure 3. An artist may think of a Raga they wish to play. They have to think of the musical scale of this Raga in terms of the relationships between its constituent notes - specifically, which pairs of notes should have a Pancham, Madhyam or Gandhar relationship with each other. With these relationships in mind, the artist tunes the Tanpura so that the tuning system resulting from the overtones of the Tanpura strings supports this musical scale correctly.
+
+![](./musical-process.png)
+
+<FigCaption>
+Figure 3. Musical Process with a Tanpura
+</FigCaption>
+
+Alternatively, they may start tuning the Tanpura and observe the tuning system which results from that tuning. From this they may be guided to pick up a musical scale and Raga which is well supported. Thus, a well-tuned tanpura creates the musical space and provides the perfect *Samvad* (consonance) to an appropriately chosen Raga.
+
+## Summary
+
+We covered different aspects of the sound of a Tanpura. We looked at it from the perspective of its construction and saw how each string of a Tanpura emits a dispersion of its constituent harmonics. We also looked at it from a musical perspective and saw how an appropriately tuned Tanpura can support a desired Raga or musical scale. As patrons of Indian Classical music would know, the sense of accuracy which comes from an artist and a well-tuned Tanpura being perfectly in sync with each other, can create an unmistakeable feeling of a Raga. Indian Classical musicians today no longer uses historical tuning systems, but rely on the Tanpura to provide the musical space and support for their music. So it is no exaggeration to say that the Tanpura is the cornerstone of today's Indian Classical music.
+
+In related articles, we cover the [pre-Tanpura tuning systems](/tuningsystems/) used in Indian Classical music and also the evolution of [Indian musical scales](/musicalscales/). These articles should provide more context for the other facets of the musical process depicted in Figure 3.

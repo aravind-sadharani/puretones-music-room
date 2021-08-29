@@ -15,10 +15,4 @@ const media = Object.keys(sizes).reduce((acc, label) => {
   return acc
 }, {})
 
-const dark = (...args) => css`
-  @media (prefers-color-scheme: dark) {
-    ${css(...args)}
-  }
-`
-
-export { media, dark }
+export { media }

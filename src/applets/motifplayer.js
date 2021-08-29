@@ -47,7 +47,7 @@ const defaultSequencerState = [
     }
 ]
 
-const MotifPlayer = ({title,motif,scale}) => {
+const MotifPlayer = ({title,motif,scale,staticCode}) => {
     const [playState, updatePlayState] = React.useState('stopped')
     const [DSPCode, setDSPCode] = React.useState('')
     const [DSPSettings, setDSPSettings] = React.useState({})
@@ -71,10 +71,9 @@ const MotifPlayer = ({title,motif,scale}) => {
         setCommonSettings(newSettings)
     }
     const generate = () => {
-        let scaleState = dspStateFromSettings('scale',scale)
         let sequencerState = defaultSequencerState
         sequencerState[0]['composition'] = motif
-        let code = generateDSP(sequencerState,scaleState)
+        let code = staticCode || generateDSP(sequencerState,dspStateFromSettings('scale',scale))
         setDSPCode(code)
         let sequencerSettings = {}
         sequencerSettings['/FaustDSP/Motif/Pitch'] = commonSettings['pitch']

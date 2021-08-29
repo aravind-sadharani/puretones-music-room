@@ -1,6 +1,6 @@
 const dspTemplateTop = `import("stdfaust.lib");
 
-commonPitch = hslider("[0][style:radio{'B':14;'A#':13;'A':12;'G#':11;'G':10;'F#':9;'F':8;'E':7;'D#':6;'D':5;'C#':4;'C':3}]Pitch",0,0,11,1);
+commonPitch = hslider("[0][style:radio{'B':14;'A#':13;'A':12;'G#':11;'G':10;'F#':9;'F':8;'E':7;'D#':6;'D':5;'C#':4;'C':3}]Pitch",3,3,14,1);
 fineTune = hslider("Fine_Tune",0,-100,100,1);
 cperiod = 2^(vslider("[01]Motif Tempo",1.0,-2,4,0.1) - 3);
 cgain = 10^(vslider("[02]Motif Gain",-9,-20,20,0.1) - 6 : /(20));

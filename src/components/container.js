@@ -1,30 +1,6 @@
 import * as React from "react"
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components'
-import { dark } from 'utils/mediatemplate'
-
-const systemTheme = {
-    isDark: dark,
-    light: {
-        bodyBackground: 'white',
-        textColor: '#404047',
-        linkColor: '#f76f8e',
-        borderColor: '#e6e6eb',
-        buttonBackground: '#333366',
-        buttonText: 'white',
-        noticeBackground: '#ffead0',
-        noticeText: '#404047'
-    },
-    dark: {
-        bodyBackground: '#404047',
-        textColor: '#b8b8bc',
-        linkColor: '#f98ca4',
-        borderColor: '#66666c',
-        buttonBackground: '#5c5c85',
-        buttonText: '#e6e6eb',
-        noticeBackground: '#ccbba6',
-        noticeText: '#404047'
-    }
-}
+import globalTheme from "utils/theme"
 
 const GlobalStyle = createGlobalStyle`
     body {
@@ -71,7 +47,7 @@ const ContainerElement = styled.div`
 `
 
 const Container = ({children}) => (
-    <ThemeProvider theme={systemTheme}>
+    <ThemeProvider theme={globalTheme}>
         <GlobalStyle />
         <ContainerElement>
             {children}
