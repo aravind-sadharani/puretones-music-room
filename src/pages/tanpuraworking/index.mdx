@@ -1,4 +1,6 @@
 import sixteenHarmonics from './16harmonics.dsp'
+import twoCloseTones from './Two-close-tones.dsp'
+import twoCloseStrings from './Two-close-strings.dsp'
 import droneSamaGana from 'data/default.prt'
 import scaleSamaGana from 'data/default.pkb'
 import droneShadajGram from '../musicalscales/shadajgram.prt'
@@ -21,6 +23,12 @@ Before we begin, let us start with the concept of the fundamental note **Sa**. I
 ## Basic Working of a Tanpura
 
 Let us start by listening to a short sample of a Tanpura, to appreciate its rich and characteristic sound. This Tanpura is set to the key of C, with its four strings tuned as **Pa** - **SA** - **SA** - **Sa**, where Sa denotes the fundamental, Pa the fifth and SA the octave. As you can hear, the Tanpura has a very distinctive sound which is quite different from other string instruments you may have heard.
+
+<Audio src="/Samples/01-Tanpura-Sample.mp3" caption="/Samples/01-Tanpura-Sample.vtt" />
+
+<FigCaption>
+Demo 1. A short recording of a Tanpura
+</FigCaption>
 
 A Tanpura (see Figure 1) has a long stem which is attached to a soundboard and a round resonating enclosure. The stem and soundboard are generally made of wood, while the resonator may be made from the shell of a pumpkin or gourd, or from wood. The Tanpura has four strings with their tuning pegs at the top end. They pass over a smooth round bridge and are attached to the base of the instrument. In addition to the tuning pegs at the top, each string has small fine tuning beads below the bridge. Finally, a cotton thread is passed between the strings and their contact point on the bridge. Using the tuning pegs, the fine tuning beads and the position of the thread on the bridge, an expert artist can finely tune the Tanpura to create just the right sound needed for their musical rendition.
 
@@ -69,9 +77,21 @@ In such a situation, when $f_1$ and $f_2$ are played together, we would hear it 
 
 Listen to the samples below to hear two close frequencies $f_1$ and $f_2$ played separately and together to understand this effect. The pitches $f_1$ and $f_2$ are very close, so you may not be able to tell them apart. Yet, when they are played together, notice how you hear the intensity rise and fall repeatedly as the signal dies out, showing you that they are slightly different.
 
+export const demo3text = `Tone 1 plays on the left.
+Tone 2 plays on the right.
+Then both tones play together.`
+
+<MotifPlayer title='Demo 3. Two tones close in pitch' motif={demo3text} staticCode={twoCloseTones} />
+
 Here is another set of samples of two close frequencies $f_1$ and $f_2$ played separately and together. Unlike the previous case where the samples consisted of tones, here you can hear a richer string-like sound. This time, when the signals are played together, what do you hear in addition to the intensity fluctuations you heard previously? In the background, in higher registers, you may be able to hear the overtones also peaking and falling.
 
-You can also try playing Demo 8 together with Demo 2 to see if you can hear a faint hint of the overtones in Demo 8. Another thing you may observe is how well in-tune Demo 2 appears with Demo 8.
+export const demo4text = `String 1 plays on the left.
+String 2 plays on the right.
+Then both strings play together.`
+
+<MotifPlayer title='Demo 4. Two strings close in pitch' motif={demo4text} staticCode={twoCloseStrings} />
+
+You can also try playing Demo 4 together with Demo 2 to see if you can hear a faint hint of the overtones in Demo 4. Another thing you may observe is how well in-tune Demo 2 appears with Demo 4.
 
 ## A Tanpura String
 
@@ -163,9 +183,9 @@ Table 3. Illustration of Sama Gana Scale
 | ni | 1.777777778 | 16/9 |
 | SA | 2 | 2 |
 
-With this understanding, listen to the Tanpura track in Demo 9 which is tuned as **Pa** - **SA** - **SA** - **Sa**. Note how well it supports the Sama Gana scale which you can play from Demo 10.
+With this understanding, listen to the Tanpura track in Demo 5 which is tuned as **Pa** - **SA** - **SA** - **Sa**. Note how well it supports the Sama Gana scale which you can play from Demo 6.
 
-<DronePlayer title='Demo 9. Drone for Sama Gana Scale' settings={droneSamaGana} />
+<DronePlayer title='Demo 5. Drone for Sama Gana Scale' settings={droneSamaGana} />
 
 export const notesSamaGana = [
     {white: "Sa", black: "fade"},
@@ -178,9 +198,9 @@ export const notesSamaGana = [
     {white: "SA"}
 ]
 
-<ScalePlayer title='Demo 10. Sama Gana Scale' noteSpec={notesSamaGana} scale={scaleSamaGana} />
+<ScalePlayer title='Demo 6. Sama Gana Scale' noteSpec={notesSamaGana} scale={scaleSamaGana} />
 
-Now, consider the Shadaj Gram scale from Table 4 below and see how the notes Re and Dha are different from those in Sama Gana scale. Consequently, these notes are not supported by the Tanpura in Demo 9.
+Now, consider the Shadaj Gram scale from Table 4 below and see how the notes Re and Dha are different from those in Sama Gana scale. Consequently, these notes are not supported by the Tanpura in Demo 5.
 
 <Caption>
 Table 4. Illustration of Shadaj Gram Scale
@@ -197,9 +217,9 @@ Table 4. Illustration of Shadaj Gram Scale
 | ni | 1.777777778 | 16/9 |
 | SA | 2 | 2 |
 
-In order to support the Shadaj Gram scale, the **Sa** string of the Tanpura needs to be tuned down in pitch, so as to support Re**♭** in Shadaj Gram. Listen to Demo 11 for a Tanpura tuned to support Shadaj Gram and observe how it supports the Shadaj Gram scale in Demo 12.
+In order to support the Shadaj Gram scale, the **Sa** string of the Tanpura needs to be tuned down in pitch, so as to support Re**♭** in Shadaj Gram. Listen to Demo 7 for a Tanpura tuned to support Shadaj Gram and observe how it supports the Shadaj Gram scale in Demo 8.
 
-<DronePlayer title='Demo 11. Drone for Shadaj Gram Scale' settings={droneShadajGram} />
+<DronePlayer title='Demo 7. Drone for Shadaj Gram Scale' settings={droneShadajGram} />
 
 export const notesShadajGram = [
     {white: "Sa", black: "fade"},
@@ -214,9 +234,9 @@ export const notesShadajGram = [
 
 export const keysShadajGram = {'Sa': 0, 'Re♭': 2, 'ga': 3, 'ma': 5, 'Pa': 7, 'Dha♭': 9, 'ni': 10, 'SA': 12}
 
-<ScalePlayer title='Demo 12. Shadaj Gram Scale' noteSpec={notesShadajGram} keySpec={keysShadajGram} scale={scaleShadajGram} />
+<ScalePlayer title='Demo 8. Shadaj Gram Scale' noteSpec={notesShadajGram} keySpec={keysShadajGram} scale={scaleShadajGram} />
 
-In the Tanpura in Demo 11, the **Sa** string has been tuned down in pitch by 14.71 ¢. The harmonics from this detuned Sa string are illustrated in Table 5 below. Note how the 9th harmonic emanating from the Sa string is now very close the intended Re**♭** of the Shadaj Gram scale.
+In the Tanpura in Demo 7, the **Sa** string has been tuned down in pitch by 14.71 ¢. The harmonics from this detuned Sa string are illustrated in Table 5 below. Note how the 9th harmonic emanating from the Sa string is now very close the intended Re**♭** of the Shadaj Gram scale.
 
 <Caption>
 Table 5. Harmonics from Sa - 14.71 ¢
