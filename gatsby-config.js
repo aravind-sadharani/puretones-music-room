@@ -86,7 +86,15 @@ module.exports = {
         ],
       },
     },
-    `gatsby-plugin-catch-links`
+    `gatsby-plugin-catch-links`,
+    {
+      resolve: 'gatsby-plugin-react-svg',
+      options: {
+        rule: {
+          include: /\.inline\.svg$/
+        }
+      }
+    },
   ],
   flags: {
     DEV_SSR: false

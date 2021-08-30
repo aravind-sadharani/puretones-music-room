@@ -5,7 +5,6 @@ import Footer from 'components/footer'
 import IncludeFaust from 'services/faust'
 import { AudioEnvProvider } from 'services/audioenv'
 import { CommonSettingsEnvProvider } from 'services/commonsettings'
-import { Link } from 'gatsby'
 import DronePlayer from 'applets/droneplayer'
 import MotifPlayer from 'applets/motifplayer'
 import ScalePlayer from 'applets/scaleplayer'
@@ -16,26 +15,15 @@ import FigCaption from 'components/figcaption'
 import Audio from 'components/audio'
 import Notice from 'components/notice'
 import { MDXProvider } from "@mdx-js/react"
-import pureTonesLogo from 'images/puretones-logo.svg'
 import "katex/dist/katex.min.css"
 
 const shortcodes = { DronePlayer, MotifPlayer, ScalePlayer, CommonPitch, Notice, Caption, table: Table, FigCaption, Audio }
 
-const DefaultLayout = ({title,children}) => {
+const DefaultLayout = ({children,location}) => {
   return (
     <Container>
       <IncludeFaust />
-      <Header>
-        <Link to="/">
-          <h1>
-            <img
-              src={pureTonesLogo}
-              alt="PureTones Logo">
-            </img>
-            {title || 'PureTones'}
-          </h1>
-        </Link>
-      </Header>
+      <Header location={location} />
       <AudioEnvProvider>
         <CommonSettingsEnvProvider>
           <MDXProvider components={shortcodes}>
