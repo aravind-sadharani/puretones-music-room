@@ -15,10 +15,11 @@ import Table from 'components/table'
 import FigCaption from 'components/figcaption'
 import Audio from 'components/audio'
 import Notice from 'components/notice'
+import Action from 'components/action'
 import { MDXProvider } from "@mdx-js/react"
 import "katex/dist/katex.min.css"
 
-const shortcodes = { DronePlayer, MotifPlayer, ScalePlayer, CommonPitch, Notice, Caption, table: Table, FigCaption, Audio }
+const shortcodes = { DronePlayer, MotifPlayer, ScalePlayer, CommonPitch, Notice, Caption, table: Table, FigCaption, Audio, Action }
 
 const DefaultLayout = ({children,location}) => {
   return (

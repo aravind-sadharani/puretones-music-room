@@ -3,9 +3,9 @@ import styled from "styled-components"
 
 const WhiteKeyElement = styled.div`
     position: relative;
-    width: 11vw;
+    width: calc(12.5vw - 9px);
     max-width: 80px;
-    height: 33vw;
+    height: 30vw;
     max-height: 240px;
     border: 1px solid black;
     background: ivory;
@@ -29,9 +29,9 @@ const BlackKeyElement = styled.div`
     position: absolute;
     top: -1px;
     left: 62.5%;
-    width: 8.25vw;
+    width: calc(9.375vw - 6px);
     max-width: 60px;
-    height: 22vw;
+    height: 20vw;
     max-height: 160px;
     background: #282c34;
     border-radius: 5px;

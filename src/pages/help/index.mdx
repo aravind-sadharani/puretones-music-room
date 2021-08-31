@@ -1,55 +1,78 @@
-# Introduction
+import droneSamaGana from 'data/default.prt'
+import scaleSamaGana from 'data/default.pkb'
 
-PureTones Drone is a digital Tanpura with controls for fine tuning the strings and adjusting their harmonic envelope. PureTones Drone has been developed using [Faust](https://faust.grame.fr/), a functional programming language for sound synthesis and audio processing. This enables skilled Indian Classical musicians to fine tune the harmonic envelope to suit whichever Raga they wish to perform or practice.
+## PureTones User Guide
 
-PureTones Musical Scale is a 12 note digital musical scale with controls for fine tuning each note. It also provides controls for emulating a *Gamaka* (bending or shaking of a note as per Indian Classical music). PureTones Musical Scale has been developed using [Faust](https://faust.grame.fr/), a functional programming language for sound synthesis and audio processing. This enables skilled Indian Classical musicians to fine tune the musical scale to go with the [PureTones Drone](/app/) which they have finely tuned.
+Here is a quick user guide to start using PureTones. You can reach the [PureTones App](/app/) at any time, by clicking on the [App](/app/) link in the top navigation bar. It has four main sections explained below.
 
-PureTones Sequencer is a digital musical composer for Indian Classical music. It uses a simple grammar to describe an Indian Classical music composition and then generates a [Faust](https://faust.grame.fr/) DSP (Digital Signal Processing) code. Faust is a functional programming language for sound synthesis and audio processing. The generated Faust code can be played by pasting the code in the online [Faust Editor](https://fausteditor.grame.fr/index.html).
+### Common Parameters
 
-It has been built using [faust2webaudio](https://github.com/grame-cncm/faust2webaudio). The webapp has been created using `faust2webaudiowasm` (see [Faust Tools](https://faustdoc.grame.fr/manual/tools/) for details).
+As you may well know, in Indian Classical Music, all musical notes are defined in relation with the fundamental note **Sa**. The `Common Parameters` control the `Key` and `Offset` of **Sa**. This enables you to select a **Sa** according to your preference and comfort. You can also select it using the dialog below. You will notice that your settings persist across pages.
 
-Contrary to widely held perceptions, the Tanpura is not only responsible for providing a reference of the fundamental note **Sa**, but it actually provides a tuning system resulting from string overtones which supports the entire Raga being performed. To understand this better, read [this article](/tanpuraworking/) which illustrates the role of the Tanpura in Indian Classical music.
+<CommonPitch />
 
-Contrary to widely held perceptions, the Tanpura is not only responsible for providing a reference of the fundamental note **Sa**, but it actually provides a tuning system resulting from string overtones which supports the entire Raga being performed. Skilled artists then employ appropriate shades of each note in the Raga they perform to render each note with utmost accuracy and clarity. To understand this better, read [this article](/tanpuraworking/) which illustrates the role of the Tanpura in Indian Classical music.
 
-PureTones Sequencer is meant to be used in conjunction with [PureTones Drone](/app/) and [PureTones Musical Scale](/app/). To understand how a Tanpura and a musical scale can be tuned to each other, please read [this article](/tanpuraworking/) which illustrates the role of the Tanpura in Indian Classical music.
- 
-## How to use the Drone
+### Drone
 
-1.  Click on `New Session` under `Session Controls`. This starts a Pa-Tanpura in the key of C.
-2.  Select your pitch using the `Key`, `Octave` and `Cents`.
+On the [App](/app/) page, click on the `Drone` tab below the `Common Parameters` section to get to the Drone section. Once in the Drone section, use the following steps to start a drone track and tune it according to your requirement and preference.
+
+1.  Click on `Start` under `Drone Controls`. This starts a generic **Pa**-Tanpura in the key you selected using the `Common Parameters` above. You can click on `Start` below to hear the generic drone track. This is the same track you would hear and tune in the Drone section.
+
+<DronePlayer title='Generic Drone without tuning controls' settings={droneSamaGana} />
+
+
+2.  Change your octave using the `Octave` selector.
 3.  Use `Period` to control the playing tempo and `Level` to control the volume level.
 4.  There are six tunable strings accessible via the string tabs.
 5.  Select which note the string should play and use the `Fine Tune` and `Ultrafine Tune` sliders to finetune the pitch of each string. You can also input a number directly into the input boxes, for precise data entry.
 6.  Use the `Variance` and `Timbre` controls to fine tune the harmonic content produced by each string, and `Gain` to adjust the relative gain levels of different strings.
-7.  If you are familiar with a tanpura, then you should be able to relate the adjustment of the thread under the string, to the `Variance` and `Timbre` controls. `Variance` controls the speed of unraveling of the harmonics, while `Timbre` controls the emphasis of specific harmonics which may be necessary to support specific notes in a Raga.
-8.  When you are satisfied, you can save your tuning to a file by clicking on `Save Session` which can be uploaded later using `Restore Session`.
+7.  To turn a string on or off, use the `Loop` toggle switch.
+8.  If you are familiar with a tanpura, then you should be able to relate the adjustment of the thread under the string, to the `Variance` and `Timbre` controls. `Variance` controls the speed of unraveling of the harmonics, while `Timbre` controls the emphasis of specific harmonics which may be necessary to support specific notes in a Raga.
+9.  When you are satisfied, you can save your tuning to a file by clicking on `Save` which can be uploaded later using `Restore`.
+10. To start afresh, just click on `Reset`.
 
-## How to use the Scale
+### Scale
 
-1.  Click on `New Session` under `Session Controls`. This starts up a music scale in the key of C, as per the [Venkatamakhin-Ramamatya Tuning](/tuningsystems/).
-2.  Select your pitch using the `Key`, `Octave` and `Cents`.
-3.  Use `Period` to control the playing tempo and `Level` to control the volume level.
-4.  There are two tone settings available, `Synth` and `String`. The `String` setting is more resource intensive and may not work on your computer. If you experience any audio issues, try increasing the `Latency`.
-5.  There are multiple `Latency` levels, with 1 being the lowest (fastest response) and 5 being the highest (slowest response). Try and play at the lowest `Latency` level which works on your computer without causing any glitches, echos or other audio issues. You may find that the `Synth` tone works with a lower latency as compared to the `String` tone.
+On the [App](/app/) page, click on the `Scale` tab below the `Common Parameters` section to get to the Scale section. Once in the Scale section, use the following steps to start a 12 note musical scale and tune it according to your requirement and preference.
+
+1.  Click on `Start` under `Scale Controls`. This starts a musical scale in the key you selected using the `Common Parameters` above, as per the [Venkatamakhin-Ramamatya Tuning](/tuningsystems/). You can click on `Start` below to hear the generic scale. This is the same scale you would hear and tune in the Scale section.
+
+export const notesSamaGana = [
+    {white: "Sa", black: "re"},
+    {white: "Re", black: "ga"},
+    {white: "Ga"},
+    {white: "ma", black: "Ma"},
+    {white: "Pa", black: "dha"},
+    {white: "Dha", black: "ni"},
+    {white: "Ni"},
+    {white: "SA"}
+]
+
+<ScalePlayer title='Generic Scale without tuning controls' noteSpec={notesSamaGana} scale={scaleSamaGana} />
+
+2.  You can play the scale using your computer's QWERTY keyboard. This can be turned on and off using the `Computer Keyboard` toggle switch.
+3.  The different notes of the scale can be played using the keys described below: `a` - **Sa**, `w` - **re**, `s` - **Re**, `e` - **ga**, `d` - **Ga**, `f` - **ma**, `t` - **Ma**, `g` - **Pa**, `y` - **dha**, `h` - **Dha**, `u` - **ni**, `j` - **Ni** and `k` - **SA**.
+4.  Change your octave using the `Octave` selector. Or use the `z` key to shift to a lower octave and the `x` key to shift to a higher octave.
+5.  Use `Sustain` to control the sustain and `Level` to control the volume level.
 6.  Use the `Note` tabs labelled as `Sa`, `re`, `Re`,... to access each of the 12 notes.
 7.  Use the `Fine Tune` and `Ultrafine Tune` sliders to finetune the pitch of each note. You can also input a number directly into the input boxes, for precise data entry.
-8.  Use the `Loop` toggle to play the note repeatedly and the `Variance` controls to adjust the timbre of the note.
-9.  Use the `Gamaka` controls to manipulate and fine tune the gamaka as you desire.
-10. When you are satisfied, you can save your tuning to a file by clicking on `Save Session` which can be uploaded later using `Restore Session`.
-11. Also note that a saved keyboard tuning can also be loaded into the [PureTones Sequencer Webapp](/app/) to compose musical works using the saved tuning.
+8. When you are satisfied, you can save your tuning to a file by clicking on `Save` which can be uploaded later using `Restore`.
+9. To start afresh, just click on `Reset`.
 
-## How to use the Sequencer
+### Sequencer
 
-1.  Select your pitch using the `Key`, `Octave` and `Cents` settings.
-2.  For each of the notes, `Sa`, `re`, `Re`,..., use the `Cents` and `0.01 ¢` to finetune the pitch of each note.
-3.  If you saved a keyboard tuning using the `Save Session` dialog from the [PureTones Musical Scale Webapp](/app/), you can load that tuning into the sequencer using the `Upload Keyboard Tuning` button.
-4.  Type your composition in the textbox indicated. For details about the grammar, see the documentation below.
-5.  Use the `Play Audio` and `Download Faust File` buttons to play the audio and to generate the Faust DSP code and download it.
-6.  The Faust DSP code you download can also be played using the online [Faust Editor](https://fausteditor.grame.fr/index.html).
-7.  You are at liberty to use the Faust DSP code to create musical works and use them as you like. We would be grateful if you acknowledge and credit PureTones by linking to this website.
+On the [App](/app/) page, click on the `Sequencer` tab below the `Common Parameters` section to get to the Sequencer section. Once in the Sequencer section, use the following steps to start composing musical works based on the Drone and Scale settings you have tuned so far.
 
-### Grammar
+1.  The Sequencer section provides you with three voices which can play musical tunes simultaneously.
+2.  You can set the Octave and Tone of each voice, using the corresponding `Octave` and `Tone` controls.
+3.  There are four tones available: `String 1`, `String 2`, `Bow` and `Reed`.
+4.  Type your musical compositions in the appropriate textboxes labelled as `Composition Editor`. For details about the syntax and grammar for specifying musical compositions, see the Grammar documentation below. We have also provided some examples below which you can play and read the notation alongside to understand how the notation corresponds to musical notes.
+5.  If you fine-tuned the notes of the musical scale using the controls in the Scale section, then those settings are automatically incorporated in the Sequencer. For example, if you made the **ga** sharp in the Scale section, then if you type `ga` in a composition, the Sequencer would play the sharpened note **ga**.
+6.  Similar to the other sections, you can save your compositions to a file by clicking on `Save` which can be uploaded later using `Restore`.
+7. To start afresh, just click on `Reset`.
+8.  You are at liberty to use the Sequencer to create musical works and use them as you like. We would be grateful if you acknowledge and credit PureTones by linking to this website.
+
+### Musical Grammar of the PureTones Sequencer
 
 PureTones Sequencer uses a simple grammar to write compositions using notation from Indian Classical music as specified below:
 
@@ -60,12 +83,12 @@ PureTones Sequencer uses a simple grammar to write compositions using notation f
     <identifier> = <name> + <octave> + <shake>
     <name> = Sa | re | Re | ga | Ga | ma | Ma | Pa | dha | Dha | ni | Ni
     <octave> = null | " | '
-    <shake> = null | '(G)' | '(G)(<start>, <end>, <rate>, <times>)'
+    <shake> = null | '(G)' | '(G)(<start>,<end>,<rate>,<times>)'
     <timing> = null | <jati> + <repeats>
     <jati> = null | . | ; | ,
     <repeats> = null | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
-    <start> = number
-    <end> = number
+    <start> = <name> + <octave> | number
+    <end> = <name> + <octave> | number
     <rate> = number
     <times> = number
 
@@ -76,39 +99,38 @@ PureTones Sequencer uses a simple grammar to write compositions using notation f
 3.  An `identifier` is a triplet of `name`, `octave` and `shake` without any separators.
 4.  A `name` could be any one of 12 notes from an octave denoted as follows `Sa re Re ga Ga ma Ma Pa dha Dha ni Ni` where notes beginning with a lowercase are *Komal* (flat) notes and those beginning with an uppercase are *Tivra* (sharp) notes. Of course, `Sa` and `Pa` are always capitalized.
 5.  An `octave` specification is optional. There are three *Saptaks* (octaves): *Mandra* (low), *Madhya* (middle) and *Tara* (high). A `"` denotes *Tara Saptak*, a `'` denotes *Mandra Saptak* and no octave specification means *Madhya Saptak*.
-6.  A `shake` denotes whether or not the note is shaken or rendered with a *Gamaka*. A `shake` specification is optional. It is denoted by `(G)` to mean a note with *Gamaka* or not specified to mean an unmodulated note. It can also be specified with additional parameters like `(G)(start, end, rate, times)` where `start` is the starting pitch in cents with respect to the present note, `end` is the ending pitch in cents, `rate` is the rate of the shake, and `times` is the number of times for which the shake is to be repeated(including fractional numbers).
-7.  A `timing` is a pair of `jati` and `repeats` without any separators. It is an optional specification. If a `timing` specification is not provided, it means the `note` specified in the previous token is a whole note (or has a duration of 1 period).
-8.  A `jati` denotes a subdivision of a period. It is an optional specification. A `.` denotes a 1/2 note, a `;` a 1/4 note and a `,` a 1/8 note. If `jati` is omitted, it denotes a whole note.
-9.  A `repeats` specification determines the factor by which a note duration derived from its `jati` is extended. It is an optional specification. It can take any numerical value from `1` to `8`. If a `repeats` specification is omitted, it means a default value of `1`.
-10. As an example, a `timing` specification of `.3` denotes a note of duration `3` 1/2 notes, since the `jati` is 1/2 note and the `repeats` is 3. As another example, a `timing` specification of `2` denotes a note of duration `2` whole notes, and a `timing` specification of `;` denotes a note of duration of a 1/4 note.
-11. Each of the parameters `start`, `end`, `rate` and `times` is specified as a `number`.
+6.  A `shake` denotes whether or not the note is shaken or rendered with a *Gamaka*. A `shake` specification is optional. It is denoted by `(G)` to mean a note with *Gamaka* or not specified to mean an unmodulated note. It can also be specified with additional parameters like `(G)(start,end,rate,times)` where `start` is the starting pitch, `end` is the ending pitch in cents, `rate` is the rate of the shake, and `times` is the number of times for which the shake is to be repeated (including fractional numbers).
+7.  The pitches `start` and `end` can be specified either as notes identified by a `name` and an optional `octave` specification, or in terms of cents with respect to the pitch of the current note. For example, `ga(G)(36,12,2.5,3.34)` specifies a `shake` which oscillates between 36 cents above **ga** and 12 cents above **ga**. Another example is `Re(G)(Re,ga,1.5,1)` which specifies a `shake` which oscillates between **Re** and **ga**.
+8. The parameters `rate` and `times` are specified as a `number`.
+9.  A `timing` is a pair of `jati` and `repeats` without any separators. It is an optional specification. If a `timing` specification is not provided, it means the `note` specified in the previous token is a whole note (or has a duration of 1 period).
+10.  A `jati` denotes a subdivision of a period. It is an optional specification. A `.` denotes a 1/2 note, a `;` a 1/4 note and a `,` a 1/8 note. If `jati` is omitted, it denotes a whole note.
+11.  A `repeats` specification determines the factor by which a note duration derived from its `jati` is extended. It is an optional specification. It can take any numerical value from `1` to `8`. If a `repeats` specification is omitted, it means a default value of `1`.
+12. As an example, a `timing` specification of `.3` denotes a note of duration `3` 1/2 notes, since the `jati` is 1/2 note and the `repeats` is 3. As another example, a `timing` specification of `2` denotes a note of duration `2` whole notes, and a `timing` specification of `;` denotes a note of duration of a 1/4 note.
 
-### Example Motif
+### Example Compositions
 
-Here is an example motif composed using the grammar specified above.
+Here is an example composition using the grammar specified above.
 
-```
+export const example1 = `ni' Sa Ga ma dha(G) ni dha(G) Pa(G) 2
+ma Pa(G) Pa .3 ma .3 Ga 2 Ga ma Ga 2 Re Sa 4
+ma' dha' ni'(G) 2 Sa Ga ma dha ni(G) 2 ni Sa" 4
+ni Sa" Ga" ma" Ga" Re" Sa" 4
+ni Sa" dha(G) Pa .3 ma Pa(G) 2 Pa ma Ga 2
+Ga ma Ga 2 Re 2 Sa 4
+dha' ni' Sa 8`
 
-    ni' Sa Ga ma dha(G) ni dha(G) Pa(G) 2
-    ma Pa(G) Pa .3 ma .3 Ga 2 Ga ma Ga 2 Re Sa 4
-    ma' dha' ni'(G) 2 Sa Ga ma dha ni(G) 2 ni Sa" 4
-    ni Sa" Ga" ma" Ga" Re" Sa" 4
-    ni Sa" dha(G) Pa .3 ma Pa(G) 2 Pa ma Ga 2
-    Ga ma Ga 2 Re 2 Sa 4
-    dha' ni' Sa 8
+<MotifPlayer title='Example 1' motif={example1} scale={scaleSamaGana} />
 
-```
 
 Here is another example showing the use of the full specification for a gamaka using the syntax of `(G)(start, end, rate, times)`.
 
-```
+export const example2 = `Sa(G)(ni',Re,-0.7,1.2) 2
+Sa ga(G)(36,12,2.5,3.34) 2 Re Sa 2
+ni' Re(G)(72,Re,7,4.35) 2 ni'(G) Sa 2
+ga(G)(30,-30,6,3.3) Re 2 Re ga(G) 2 Re Sa 2
+Sa ni' . Dha'(G) Pa' ma' Pa' ni'(G)(30,-30,7,3.3) 2 Dha' ni'(G) ga(G) 2 Re(G) ; Sa 2
+Sa Re(G)(Re,ga,1.5,1) ga(G) ma Pa ma ga ; Re(G)(Re,45,7,3.5) 2 Sa 2`
 
-    Sa ma ga(G)(0,203.91,1.5,0.9) ma Dha(G)(0,111.73,1.5,0.9) ma Pa ;1 ga(G) Re Sa 2
-    ni'(G)(-30,30,5,2.95) Sa Re(G)(0,-182.4,1.5,0.9) 2 Sa ni' Dha'(G) 2
-    ma' Dha'(G)(0,-182.4,1.5,0.9) 2 Dha' ni'(G) Sa 2
+<MotifPlayer title='Example 2' motif={example2} scale={scaleSamaGana} />
 
-```
-
-### Fine Tune Adjustments
-
-The generated code uses the Venkatamakhin-Ramamatya tuning system (for details, refer to [this article](/tuningsystems/).) to generate the ratios representing each note. If these ratios are not right for you, you can use the fine tune adjustments to microtonally adjust the pitch of each note in your scale up to a resolution of 0.01 cents. The values you fill in for the fine tune adjustments are incorporated in the generated code.
+You can also scroll up, play the drone and come back and play these example compositions along with the drone. This may provide you with another perspective on how the drone and composition tracks interact musically.

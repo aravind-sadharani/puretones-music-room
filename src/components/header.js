@@ -2,6 +2,7 @@ import * as React from "react"
 import styled from "styled-components"
 import { Link } from 'gatsby'
 import PureTonesLogo from 'images/puretones-logo.inline.svg'
+import { media } from 'utils/mediatemplate'
 
 const navlinklist = [
     {path: '/app/', text: 'App'},
@@ -12,6 +13,7 @@ const navlinklist = [
 const HeaderElement = styled.header`
     display: grid;
     grid-template-columns: 1fr repeat(3,100px);
+    ${media.phone`grid-template-columns: repeat(3,1fr);`}
     text-align: center;
     align-items: center;
     background-color: ${({theme}) => theme.light.buttonBackground};
@@ -24,6 +26,7 @@ const HeaderElement = styled.header`
         color: ${({theme}) => theme.light.linkColor};
         ${({theme}) => theme.isDark`color: ${theme.dark.linkColor};`}
         font-size: 3em;
+        ${media.phone`grid-column: 1 / 4;`}
     }
     h1 a {
         color: inherit;
@@ -45,12 +48,7 @@ const NavLinkElement = styled.span`
     font-size: 1.5em;
     color: ${({theme}) => theme.light.linkColor};
     ${({theme}) => theme.isDark`color: ${theme.dark.linkColor};`}
-    &:hover {
-        font-weight: bold;
-        font-size: 1.6em;
-        opacity: 0.8;
-    }
-    &.active {
+    &.active, &:hover {
         font-size: 1.6em;
         font-weight: bold;
     }

@@ -21,7 +21,7 @@ const ShowHideButton = styled.button`
     appearance: none;
     border: 0;
     border-radius: 5px;
-    margin: 0 0 0 auto;
+    margin: auto 0 0 auto;
     width: 120px;
     &:hover {
         background-color: ${({theme}) => theme.light.buttonBackground};
