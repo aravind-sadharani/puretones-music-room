@@ -90,11 +90,6 @@ const DronePlayer = ({title,settings}) => {
         if(buttonTitle === 'Starting...' || buttonTitle === 'Stopping...')
             dispatch({type: `${buttonTitle === 'Starting...' ? 'Play' : 'Stop'}`, appname: 'drone', code: droneDSPCode, settings: droneState, onJobComplete: jobCompleted})
     })
-    React.useEffect(() => {
-        dispatch({type: 'Stop', appname: 'drone'})
-        dispatch({type: 'Stop', appname: 'scale'})
-        dispatch({type: 'Stop', appname: 'sequencer'})
-    },[dispatch])
     let buttonState = (active && (commonSettings['currentDrone'] === title)) ? "active" : ""
     let buttonText = (commonSettings['currentDrone'] === title) ? buttonTitle : 'Start'
     return (

@@ -13,11 +13,20 @@ const MotifPlayerContainer = styled.div`
     border-color: ${({theme}) => theme.light.borderColor};
     ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
     border-radius: 5px;
+    pre, code {
+        background-color: ${({theme}) => theme.light.bodyBackground};
+        ${({theme}) => theme.isDark`background-color: ${theme.dark.bodyBackground};`}    
+    }
 `
 
 const MotifElement = styled.pre`
     margin: 0 0 1em 0;
     overflow-x: scroll;
+    p {
+        font-family: 'Noto Sans', sans-serif;
+        font-size: 1.2em;
+        margin-bottom: 0;
+    }
 `
 
 const defaultSequencerState = [
@@ -114,7 +123,10 @@ const MotifPlayer = ({title,motif,scale,staticCode}) => {
     return (
         <MotifPlayerContainer>
             <ShowHideControls title={title} label={showHideLabel} visibility={motifVisibility && (commonSettings['currentMotif'] === title)} onShowHide={toggleMotifVisibility}>
-                <MotifElement>{motif}</MotifElement>
+                <MotifElement>
+                    {!staticCode && <code>{motif}</code>}
+                    {staticCode && <p>{motif}</p>}
+                </MotifElement>
             </ShowHideControls>
         </MotifPlayerContainer>
     )

@@ -9,6 +9,7 @@ import DronePlayer from 'applets/droneplayer'
 import MotifPlayer from 'applets/motifplayer'
 import ScalePlayer from 'applets/scaleplayer'
 import CommonPitch from 'applets/commonpitch'
+import StopStaleDSP from 'applets/stopstaledsp'
 import Caption from 'components/caption'
 import Table from 'components/table'
 import FigCaption from 'components/figcaption'
@@ -25,6 +26,7 @@ const DefaultLayout = ({children,location}) => {
       <IncludeFaust />
       <Header location={location} />
       <AudioEnvProvider>
+        <StopStaleDSP />
         <CommonSettingsEnvProvider>
           <MDXProvider components={shortcodes}>
             {children}

@@ -27,6 +27,12 @@ const ContainerElement = styled.div`
     h1, h2, h3 {
         margin: 0 0 1rem 0;
     }
+    pre, code {
+        overflow-x: scroll;
+        border-radius: 5px;
+        background-color: ${({theme}) => theme.light.borderColor};
+        ${({theme}) => theme.isDark`background-color: ${theme.dark.borderColor};`}
+    }
     .katex {
         font: 100%/1.666 'Noto Sans', sans-serif !important;
     }

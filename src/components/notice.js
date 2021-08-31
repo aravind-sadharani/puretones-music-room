@@ -2,7 +2,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 const NoticeContainer = styled.div`
-    padding: 12px 12px 1em 12px;
+    padding: 12px 12px 1px 12px;
     margin: 0 0 1em 0;
     background-color: ${({theme}) => theme.light.noticeBackground};
     ${({theme}) => theme.isDark`background-color: ${theme.dark.noticeBackground};`}
@@ -13,7 +13,7 @@ const NoticeContainer = styled.div`
 
 const Notice = ({children}) => (
     <NoticeContainer>
-        <strong>Note: </strong>{children}
+        {children}
     </NoticeContainer>
 )
 

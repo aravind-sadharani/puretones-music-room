@@ -29,7 +29,7 @@ const typography = new Typography({
       },
   ],
   overrideStyles: () => ({
-    pre: {
+    code: {
       fontFamily: ['Roboto Mono', 'monospace'].join(','),
     },
     textarea: {

@@ -1,12 +1,20 @@
-# PureTones Drone
+# Introduction
 
 PureTones Drone is a digital Tanpura with controls for fine tuning the strings and adjusting their harmonic envelope. PureTones Drone has been developed using [Faust](https://faust.grame.fr/), a functional programming language for sound synthesis and audio processing. This enables skilled Indian Classical musicians to fine tune the harmonic envelope to suit whichever Raga they wish to perform or practice.
 
+PureTones Musical Scale is a 12 note digital musical scale with controls for fine tuning each note. It also provides controls for emulating a *Gamaka* (bending or shaking of a note as per Indian Classical music). PureTones Musical Scale has been developed using [Faust](https://faust.grame.fr/), a functional programming language for sound synthesis and audio processing. This enables skilled Indian Classical musicians to fine tune the musical scale to go with the [PureTones Drone](/app/) which they have finely tuned.
+
+PureTones Sequencer is a digital musical composer for Indian Classical music. It uses a simple grammar to describe an Indian Classical music composition and then generates a [Faust](https://faust.grame.fr/) DSP (Digital Signal Processing) code. Faust is a functional programming language for sound synthesis and audio processing. The generated Faust code can be played by pasting the code in the online [Faust Editor](https://fausteditor.grame.fr/index.html).
+
+It has been built using [faust2webaudio](https://github.com/grame-cncm/faust2webaudio). The webapp has been created using `faust2webaudiowasm` (see [Faust Tools](https://faustdoc.grame.fr/manual/tools/) for details).
+
 Contrary to widely held perceptions, the Tanpura is not only responsible for providing a reference of the fundamental note **Sa**, but it actually provides a tuning system resulting from string overtones which supports the entire Raga being performed. To understand this better, read [this article](/tanpuraworking/) which illustrates the role of the Tanpura in Indian Classical music.
 
-## PureTones Drone Webapp
+Contrary to widely held perceptions, the Tanpura is not only responsible for providing a reference of the fundamental note **Sa**, but it actually provides a tuning system resulting from string overtones which supports the entire Raga being performed. Skilled artists then employ appropriate shades of each note in the Raga they perform to render each note with utmost accuracy and clarity. To understand this better, read [this article](/tanpuraworking/) which illustrates the role of the Tanpura in Indian Classical music.
 
-To listen to the PureTones Drone and to create your own Tanpura tunings, check out the [PureTones Drone Webapp](/app/). The webapp has been created using `faust2webaudiowasm` (see [Faust Tools](https://faustdoc.grame.fr/manual/tools/) for details). Here is a quick user guide.
+PureTones Sequencer is meant to be used in conjunction with [PureTones Drone](/app/) and [PureTones Musical Scale](/app/). To understand how a Tanpura and a musical scale can be tuned to each other, please read [this article](/tanpuraworking/) which illustrates the role of the Tanpura in Indian Classical music.
+ 
+## How to use the Drone
 
 1.  Click on `New Session` under `Session Controls`. This starts a Pa-Tanpura in the key of C.
 2.  Select your pitch using the `Key`, `Octave` and `Cents`.
@@ -17,15 +25,7 @@ To listen to the PureTones Drone and to create your own Tanpura tunings, check o
 7.  If you are familiar with a tanpura, then you should be able to relate the adjustment of the thread under the string, to the `Variance` and `Timbre` controls. `Variance` controls the speed of unraveling of the harmonics, while `Timbre` controls the emphasis of specific harmonics which may be necessary to support specific notes in a Raga.
 8.  When you are satisfied, you can save your tuning to a file by clicking on `Save Session` which can be uploaded later using `Restore Session`.
 
-# PureTones Musical Scale
-
-PureTones Musical Scale is a 12 note digital musical scale with controls for fine tuning each note. It also provides controls for emulating a *Gamaka* (bending or shaking of a note as per Indian Classical music). PureTones Musical Scale has been developed using [Faust](https://faust.grame.fr/), a functional programming language for sound synthesis and audio processing. This enables skilled Indian Classical musicians to fine tune the musical scale to go with the [PureTones Drone](/app/) which they have finely tuned.
-
-Contrary to widely held perceptions, the Tanpura is not only responsible for providing a reference of the fundamental note **Sa**, but it actually provides a tuning system resulting from string overtones which supports the entire Raga being performed. Skilled artists then employ appropriate shades of each note in the Raga they perform to render each note with utmost accuracy and clarity. To understand this better, read [this article](/tanpuraworking/) which illustrates the role of the Tanpura in Indian Classical music.
-
-## PureTones Musical Scale Webapp
-
-To tune a musical scale for a Raga or with respect to a Drone tuning, check out the [PureTones Musical Scale Webapp](/app/). The webapp has been built using `faust2webaudiowasm` (see [Faust Tools](https://faustdoc.grame.fr/manual/tools/) for details). Here is a quick user guide.
+## How to use the Scale
 
 1.  Click on `New Session` under `Session Controls`. This starts up a music scale in the key of C, as per the [Venkatamakhin-Ramamatya Tuning](/tuningsystems/).
 2.  Select your pitch using the `Key`, `Octave` and `Cents`.
@@ -39,15 +39,7 @@ To tune a musical scale for a Raga or with respect to a Drone tuning, check out 
 10. When you are satisfied, you can save your tuning to a file by clicking on `Save Session` which can be uploaded later using `Restore Session`.
 11. Also note that a saved keyboard tuning can also be loaded into the [PureTones Sequencer Webapp](/app/) to compose musical works using the saved tuning.
 
-# PureTones Sequencer
-
-PureTones Sequencer is a digital musical composer for Indian Classical music. It uses a simple grammar to describe an Indian Classical music composition and then generates a [Faust](https://faust.grame.fr/) DSP (Digital Signal Processing) code. Faust is a functional programming language for sound synthesis and audio processing. The generated Faust code can be played by pasting the code in the online [Faust Editor](https://fausteditor.grame.fr/index.html).
-
-PureTones Sequencer is meant to be used in conjunction with [PureTones Drone](/app/) and [PureTones Musical Scale](/app/). To understand how a Tanpura and a musical scale can be tuned to each other, please read [this article](/tanpuraworking/) which illustrates the role of the Tanpura in Indian Classical music.
-
-## PureTones Sequencer Webapp
-
-To sequence musical phrases, motifs and compositions in Indian Classical music, check out the [PureTones Sequencer Webapp](/app/). It has been built using [faust2webaudio](https://github.com/grame-cncm/faust2webaudio). Here is a quick user guide.
+## How to use the Sequencer
 
 1.  Select your pitch using the `Key`, `Octave` and `Cents` settings.
 2.  For each of the notes, `Sa`, `re`, `Re`,..., use the `Cents` and `0.01 ¢` to finetune the pitch of each note.
