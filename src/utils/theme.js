@@ -16,7 +16,8 @@ const globalTheme = {
         buttonBackground: '#333366',
         buttonText: 'white',
         noticeBackground: '#ffead0',
-        noticeText: '#404047'
+        noticeText: '#404047',
+        codeBackground: '#e6e6eb',
     },
     dark: {
         bodyBackground: '#404047',
@@ -26,7 +27,8 @@ const globalTheme = {
         buttonBackground: '#5c5c85',
         buttonText: '#e6e6eb',
         noticeBackground: '#ccbba6',
-        noticeText: '#404047'
+        noticeText: '#404047',
+        codeBackground: 'black',
     }
 }
 

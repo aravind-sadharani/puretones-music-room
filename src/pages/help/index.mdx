@@ -3,7 +3,14 @@ import scaleSamaGana from 'data/default.pkb'
 
 ## PureTones User Guide
 
-Here is a quick user guide to start using PureTones. You can reach the [PureTones App](/app/) at any time, by clicking on the [App](/app/) link in the top navigation bar. It has four main sections explained below.
+Here is a quick user guide to start using PureTones. You can reach the [PureTones App](/app/) at any time, by clicking on the [App](/app/) link in the top navigation bar. It has four main sections:
+
+1.  Common Parameters
+2.  Drone
+3.  Scale
+4.  Sequencer
+
+Each of these sections is explained below.
 
 ### Common Parameters
 
@@ -98,18 +105,18 @@ PureTones Sequencer uses a simple grammar to write compositions using notation f
 2.  A `note` is a pair of an `identifier` and a `timing` separated by whitespace.
 3.  An `identifier` is a triplet of `name`, `octave` and `shake` without any separators.
 4.  A `name` could be any one of 12 notes from an octave denoted as follows `Sa re Re ga Ga ma Ma Pa dha Dha ni Ni` where notes beginning with a lowercase are *Komal* (flat) notes and those beginning with an uppercase are *Tivra* (sharp) notes. Of course, `Sa` and `Pa` are always capitalized.
-5.  An `octave` specification is optional. There are three *Saptaks* (octaves): *Mandra* (low), *Madhya* (middle) and *Tara* (high). A `"` denotes *Tara Saptak*, a `'` denotes *Mandra Saptak* and no octave specification means *Madhya Saptak*.
+5.  An `octave` specification is optional. There are three *Saptaks* (octaves):  *Mandra* (low), *Madhya* (middle) and *Tara* (high). A `"` symbol denotes *Tara Saptak*, a `'` symbol denotes *Mandra Saptak* and no octave specification means *Madhya Saptak*.
 6.  A `shake` denotes whether or not the note is shaken or rendered with a *Gamaka*. A `shake` specification is optional. It is denoted by `(G)` to mean a note with *Gamaka* or not specified to mean an unmodulated note. It can also be specified with additional parameters like `(G)(start,end,rate,times)` where `start` is the starting pitch, `end` is the ending pitch in cents, `rate` is the rate of the shake, and `times` is the number of times for which the shake is to be repeated (including fractional numbers).
 7.  The pitches `start` and `end` can be specified either as notes identified by a `name` and an optional `octave` specification, or in terms of cents with respect to the pitch of the current note. For example, `ga(G)(36,12,2.5,3.34)` specifies a `shake` which oscillates between 36 cents above **ga** and 12 cents above **ga**. Another example is `Re(G)(Re,ga,1.5,1)` which specifies a `shake` which oscillates between **Re** and **ga**.
 8. The parameters `rate` and `times` are specified as a `number`.
 9.  A `timing` is a pair of `jati` and `repeats` without any separators. It is an optional specification. If a `timing` specification is not provided, it means the `note` specified in the previous token is a whole note (or has a duration of 1 period).
-10.  A `jati` denotes a subdivision of a period. It is an optional specification. A `.` denotes a 1/2 note, a `;` a 1/4 note and a `,` a 1/8 note. If `jati` is omitted, it denotes a whole note.
+10.  A `jati` denotes a subdivision of a period. It is an optional specification. A `.` symbol denotes a $\frac{1}{2}$ note, a `;` symbol denotes a $\frac{1}{4}$ note and a `,` symbol a $\frac{1}{8}$ note. If `jati` is omitted, it denotes a whole note.
 11.  A `repeats` specification determines the factor by which a note duration derived from its `jati` is extended. It is an optional specification. It can take any numerical value from `1` to `8`. If a `repeats` specification is omitted, it means a default value of `1`.
-12. As an example, a `timing` specification of `.3` denotes a note of duration `3` 1/2 notes, since the `jati` is 1/2 note and the `repeats` is 3. As another example, a `timing` specification of `2` denotes a note of duration `2` whole notes, and a `timing` specification of `;` denotes a note of duration of a 1/4 note.
+12. As an example, a `timing` specification of `.3` denotes a note of duration $3\times\frac{1}{2} = 1\frac{1}{2}$ notes, since the `jati` is $\frac{1}{2}$ note and the `repeats` is 3. As another example, a `timing`  specification of `2` denotes a note of duration 2 whole notes, and a `timing` specification of `;` denotes a note of duration of a $\frac{1}{4}$ note.
 
 ### Example Compositions
 
-Here is an example composition using the grammar specified above.
+Here is an example composition using the grammar specified above. Click on `Start` below. The composition will start playing and the text of the composition will be displayed. You can try to follow the music and correlate it with the text.
 
 export const example1 = `ni' Sa Ga ma dha(G) ni dha(G) Pa(G) 2
 ma Pa(G) Pa .3 ma .3 Ga 2 Ga ma Ga 2 Re Sa 4
@@ -122,7 +129,7 @@ dha' ni' Sa 8`
 <MotifPlayer title='Example 1' motif={example1} scale={scaleSamaGana} />
 
 
-Here is another example showing the use of the full specification for a gamaka using the syntax of `(G)(start, end, rate, times)`.
+Here is another example showing the use of the full specification for a gamaka using the syntax of `(G)(start,end,rate,times)`. Again, click on `Start` and try to relate the music to the text.
 
 export const example2 = `Sa(G)(ni',Re,-0.7,1.2) 2
 Sa ga(G)(36,12,2.5,3.34) 2 Re Sa 2
