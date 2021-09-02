@@ -6,7 +6,7 @@ import { media } from 'utils/mediatemplate'
 
 const navlinklist = [
     {path: '/app/', text: 'App'},
-    {path: '/ragas/', text: 'Ragas'},
+    {path: '/learn/', text: 'Learn'},
     {path: '/help/', text: 'Help'}
 ]  
 
@@ -60,7 +60,7 @@ const NavLinkElement = styled.span`
 
 const Header = ({location}) => {
     let NavLinkComponentList = navlinklist.map(s => {
-        let active = (s.path === location.pathname) ? "active" : ""
+        let active = (location && location.pathname.includes(s.path)) ? "active" : ""
         return (
             <NavLinkElement className={active} key={`nav_${s.path}`} id={`nav_${s.path}`}>
                 <Link to={`${s.path}`}>{s.text}</Link>

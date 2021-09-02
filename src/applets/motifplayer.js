@@ -14,6 +14,7 @@ const MotifPlayerContainer = styled.div`
     ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
     border-radius: 5px;
     pre, code {
+        padding: 0;
         background-color: ${({theme}) => theme.light.bodyBackground};
         ${({theme}) => theme.isDark`background-color: ${theme.dark.bodyBackground};`}    
     }
