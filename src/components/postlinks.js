@@ -4,13 +4,13 @@ import { Link } from 'gatsby'
 import { media } from 'utils/mediatemplate'
 
 const PostLinksContainer = styled.div`
-    margin: 2em 0;
+    margin: 1em 0 0 0;
     display: grid;
     grid-template-columns: 1fr 1fr;
     ${media.phone`grid-template-columns: 1fr;`}
 `
 
-const PostLinksTitle = styled.h3`
+const PostLinksTitle = styled.h2`
     grid-column: 1 / 3;
 `
 

@@ -2,6 +2,7 @@ import * as React from "react"
 import styled from "styled-components"
 import { Link } from 'gatsby'
 import { media } from 'utils/mediatemplate'
+import PostGraphic from "components/postgraphic"
 
 const PostPreviewContainer = styled.div`
     border: 1px solid;
@@ -29,24 +30,17 @@ const PostMedia = styled.div`
     border-radius: 5px;
 `
 
-const PostGraphic = ({title}) => (
-    <svg>
-        <text x="0" y="80" transform="rotate(-30 150,30)">Graphic for {title}</text>
-    </svg>
-)
-
-const PostPreview = ({title,description,image,url}) => (
+const PostPreview = ({title,description,url}) => (
     <PostPreviewContainer>
         <Link to={url}>
             <PostExcerpt>
                 <h4>{title}</h4>
-                {description}
+                {description.length > 180 ? `${description.slice(0,180)}...` : description}
             </PostExcerpt>
         </Link>
         <Link to={url}>
             <PostMedia>
                 <PostGraphic title={title}/>
-                {image}
             </PostMedia>
         </Link>
     </PostPreviewContainer>
