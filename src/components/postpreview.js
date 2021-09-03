@@ -25,6 +25,10 @@ const PostExcerpt = styled.div`
     ${media.phone`padding: 12px 12px 0 12px;`}
 `
 
+const PostTitle = styled.h3`
+    margin: 0 0 1em 0;
+`
+
 const PostMedia = styled.div`
     padding: 12px;
     border-radius: 5px;
@@ -34,8 +38,8 @@ const PostPreview = ({title,description,url}) => (
     <PostPreviewContainer>
         <Link to={url}>
             <PostExcerpt>
-                <h4>{title}</h4>
-                {description.length > 180 ? `${description.slice(0,180)}...` : description}
+                <PostTitle>{title}</PostTitle>
+                {description.length > 185 ? `${description.slice(0,185)}...` : description}
             </PostExcerpt>
         </Link>
         <Link to={url}>

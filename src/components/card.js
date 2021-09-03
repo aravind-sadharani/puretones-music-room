@@ -21,6 +21,10 @@ const CardDescription = styled.div`
     ${media.phone`padding: 12px 12px 0 12px;`}
 `
 
+const CardTitle = styled.h3`
+    margin: 0 0 1em 0;
+`
+
 const CardMedia = styled.div`
     padding: 12px;
     border-radius: 5px;
@@ -30,7 +34,7 @@ const Card = ({title,description,media,caption}) => (
     <>
         <CardContainer>
             <CardDescription>
-                <h4>{title}</h4>
+                <CardTitle>{title}</CardTitle>
                 {description}
             </CardDescription>
             <CardMedia>
