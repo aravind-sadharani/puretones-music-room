@@ -16,17 +16,18 @@ import FigCaption from 'components/figcaption'
 import Audio from 'components/audio'
 import Notice from 'components/notice'
 import Action from 'components/action'
+import PostLinks from 'components/postlinks'
 import { MDXProvider } from "@mdx-js/react"
 import { MDXRenderer } from "gatsby-plugin-mdx"
-import { Link, graphql } from 'gatsby'
+import { graphql } from 'gatsby'
 import "katex/dist/katex.min.css"
 
 const shortcodes = { DronePlayer, MotifPlayer, ScalePlayer, CommonPitch, Notice, Caption, table: Table, FigCaption, Audio, Action }
 
 const PostLayout = ({data: { mdx }, pageContext, location}) => {
   const {prev, next} = pageContext
-  let prevLink = prev !== null ? { url: `${prev.fields.slug}`, title: `Previous ${prev.fields.slug} ${prev.frontmatter.title}` } : null
-  let nextLink = next !== null ? { url: `${next.fields.slug}`, title: `Next ${next.fields.slug} ${next.frontmatter.title}` } : null
+  let prevLink = prev !== null ? { url: `${prev.fields.slug}`, title: `${prev.frontmatter.title}` } : null
+  let nextLink = next !== null ? { url: `${next.fields.slug}`, title: `${next.frontmatter.title}` } : null
   return (
     <Container>
       <IncludeFaust />
@@ -35,13 +36,12 @@ const PostLayout = ({data: { mdx }, pageContext, location}) => {
         <StopStaleDSP />
         <CommonSettingsEnvProvider>
             <MDXProvider components={shortcodes}>
+                <h1>{mdx.frontmatter.title}</h1>
                 <MDXRenderer frontmatter={mdx.frontmatter}>{mdx.body}</MDXRenderer>
             </MDXProvider>
         </CommonSettingsEnvProvider>
       </AudioEnvProvider>
-      {prevLink !== null && <Link to={prevLink.url}>{prevLink.title}</Link>}
-      {nextLink !== null && <Link to={nextLink.url}>{nextLink.title}</Link>}
-      <p></p>
+      <PostLinks prev={prevLink} next={nextLink} />
       <Footer>
         Developed by <a href="https://www.sadharani.com">Sadharani</a>
       </Footer>

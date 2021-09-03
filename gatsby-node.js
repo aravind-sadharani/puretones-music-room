@@ -17,7 +17,10 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     const {createPage} = actions
     const result = await graphql(`
         query PostQuery {
-            allMdx(filter: {fileAbsolutePath: {regex: "/posts/"}}) {
+            allMdx(
+                filter: {fileAbsolutePath: {regex: "/posts/"}}
+                sort: { fields: [frontmatter___date, frontmatter___title], order: [ASC, DESC] }
+            ) {
                 edges {
                     node {
                         fileAbsolutePath
