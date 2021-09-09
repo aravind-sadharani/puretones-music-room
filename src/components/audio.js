@@ -20,7 +20,7 @@ const Audio = ({src, caption}) => (
     <AudioContainer>
         <audio src={src} controls preload="auto">
             This browser does not support audio.
-            <track default kind="captions" srclang="en" src={caption}></track>
+            <track default kind="captions" srcLang="en" src={caption}></track>
         </audio>
     </AudioContainer>
 )

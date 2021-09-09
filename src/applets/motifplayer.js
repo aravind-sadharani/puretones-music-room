@@ -23,11 +23,6 @@ const MotifPlayerContainer = styled.div`
 const MotifElement = styled.pre`
     margin: 0 0 1em 0;
     overflow-x: scroll;
-    p {
-        font-family: 'Noto Sans', sans-serif;
-        font-size: 1.2em;
-        margin-bottom: 0;
-    }
 `
 
 const defaultSequencerState = [
@@ -124,10 +119,7 @@ const MotifPlayer = ({title,motif,scale,staticCode}) => {
     return (
         <MotifPlayerContainer>
             <ShowHideControls title={title} label={showHideLabel} visibility={motifVisibility && (commonSettings['currentMotif'] === title)} onShowHide={toggleMotifVisibility}>
-                <MotifElement>
-                    {!staticCode && <code>{motif}</code>}
-                    {staticCode && <p>{motif}</p>}
-                </MotifElement>
+                { (!staticCode && <MotifElement><code>{motif}</code></MotifElement>) || (<p>{motif}</p>) }
             </ShowHideControls>
         </MotifPlayerContainer>
     )

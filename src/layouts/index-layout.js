@@ -40,7 +40,7 @@ export const indexQuery = graphql`
   query IndexQuery($skip: Int!, $limit: Int!) {
     allMdx(
         filter: {fileAbsolutePath: {regex: "/posts/"}}
-        sort: { fields: [frontmatter___date, frontmatter___title], order: [ASC, DESC] }
+        sort: { fields: [frontmatter___date, frontmatter___title], order: [ASC, ASC] }
         limit: $limit
         skip: $skip
     ) {

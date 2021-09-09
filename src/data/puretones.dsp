@@ -27,7 +27,7 @@ PureTonesString(coarsefreq,period,finetune,ratio,variance,delay) = string(freq*(
     
     envelope1 = en.adsr(0.1*period,0.3*period,0.2,0.3*period,gate);
     envelope2 = en.adsr(0.2*period,0.4*period,0.4,0.4*period,gate);
-    envelope3 = 0.95*en.adsr(0.1*period,0.5*period,0.6,0.5*period,gate) + 0.05;
+    envelope3 = en.adsr(0.1*period,0.5*period,0.6,0.5*period,gate);
     fullstring(f,n1,n2,g) = ((g^(n2+2-n1))*os.osc(f*n2) + os.osc(f*n1) - (g^(n2+1-n1))*os.osc(f*(n2+1)) - g*os.osc(f*(n1-1)))/(1+g^2-2*g*os.osccos(f));
     octave1gain = vslider("[11]Octave 1", 5.6,0,10,0.1)*0.04; 	
     octave2gain = vslider("[11]Octave 2", 7.8,0,10,0.1)*0.04; 	

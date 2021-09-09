@@ -65,4 +65,4 @@ string2 = String2Tone(freq+delta,1,g2) : *(env2) : *(cgain);
 
 mix(l,r) = 0.7*l+0.3*r,0.3*l+0.7*r;
 
-process = hgroup("Two Close Pitches",(string1, string2 : mix)) : @(ma.SR*0.01),@(ma.SR*0.01) : dm.zita_light;
+process = hgroup("Motif",(string1, string2 : mix)) : @(ma.SR*0.01),@(ma.SR*0.01) : dm.zita_light;

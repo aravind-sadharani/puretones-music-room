@@ -19,7 +19,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         query PostQuery {
             allMdx(
                 filter: {fileAbsolutePath: {regex: "/posts/"}}
-                sort: { fields: [frontmatter___date, frontmatter___title], order: [ASC, DESC] }
+                sort: { fields: [frontmatter___date, frontmatter___title], order: [ASC, ASC] }
             ) {
                 edges {
                     node {
@@ -56,7 +56,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         })
     })
 
-    let postsPerPage = 3
+    let postsPerPage = 6
     let numPages = Math.ceil(posts.length/postsPerPage)
     Array.from({length: numPages}).forEach((_, index) => {
         createPage({
