@@ -19,7 +19,7 @@ import Action from 'components/action'
 import PostLinks from 'components/postlinks'
 import { MDXProvider } from "@mdx-js/react"
 import { MDXRenderer } from "gatsby-plugin-mdx"
-import { graphql } from 'gatsby'
+import { graphql, Link } from 'gatsby'
 import "katex/dist/katex.min.css"
 
 const shortcodes = { DronePlayer, MotifPlayer, ScalePlayer, CommonPitch, Notice, Caption, table: Table, FigCaption, Audio, Action }
@@ -28,6 +28,12 @@ const PostLayout = ({data: { mdx }, pageContext, location}) => {
   const {prev, next} = pageContext
   let prevLink = prev !== null ? { url: `${prev.fields.slug}`, title: `${prev.frontmatter.title}` } : null
   let nextLink = next !== null ? { url: `${next.fields.slug}`, title: `${next.frontmatter.title}` } : null
+  let tagList = mdx.frontmatter.tags.map((tag,index) => {
+    const tagPath = tag.replace(/ /g, '_').replace(/\//g,'by')
+    return (
+      <Action key={index}><Link to={`/learn/tags/${tagPath}`}>{tag}</Link></Action>
+    )
+  })
   return (
     <Container>
       <IncludeFaust />
@@ -41,6 +47,11 @@ const PostLayout = ({data: { mdx }, pageContext, location}) => {
             </MDXProvider>
         </CommonSettingsEnvProvider>
       </AudioEnvProvider>
+      <h2>Category and Tags</h2>
+      <p>
+        <Action><Link to={`/learn/categories/${mdx.frontmatter.category}`}>{mdx.frontmatter.category}</Link></Action>
+        {tagList}
+      </p>
       <PostLinks prev={prevLink} next={nextLink} />
       <Footer>
         Developed by <a href="https://www.sadharani.com">Sadharani</a>
@@ -58,6 +69,8 @@ export const postQuery = graphql`
       body
       frontmatter {
         title
+        tags
+        category
       }
     }
   }

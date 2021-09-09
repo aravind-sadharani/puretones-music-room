@@ -21,6 +21,14 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                 filter: {fileAbsolutePath: {regex: "/posts/"}}
                 sort: { fields: [frontmatter___date, frontmatter___title], order: [ASC, ASC] }
             ) {
+                tags: group(field: frontmatter___tags) {
+                    totalCount
+                    fieldValue
+                }
+                categories: group(field: frontmatter___category) {
+                    totalCount
+                    fieldValue
+                }
                 edges {
                     node {
                         fileAbsolutePath
@@ -68,6 +76,46 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
                 numPages,
                 currentPage: index+1,
             },
+        })
+    })
+
+    let categories = result.data.allMdx.categories
+    createPage({
+        path: `/learn/categories/`,
+        component: path.resolve(`./src/layouts/category-index-layout.js`),
+        context: {
+            categories: categories,
+        }
+    })
+    categories.forEach((category) => {
+        const {fieldValue} = category
+        const categoryPath = fieldValue.replace(/ /g, '_').replace(/\//g,'by')
+        createPage({
+            path: `/learn/categories/${categoryPath}`,
+            component: path.resolve(`./src/layouts/category-layout.js`),
+            context: {
+                category: fieldValue,
+            }
+        })
+    })
+
+    let tags = result.data.allMdx.tags
+    createPage({
+        path: `/learn/tags/`,
+        component: path.resolve(`./src/layouts/tag-index-layout.js`),
+        context: {
+            tags: tags,
+        }
+    })
+    tags.forEach((tag) => {
+        const {fieldValue} = tag
+        const tagPath = fieldValue.replace(/ /g, '_').replace(/\//g,'by')
+        createPage({
+            path: `/learn/tags/${tagPath}`,
+            component: path.resolve(`./src/layouts/tag-layout.js`),
+            context: {
+                tag: fieldValue,
+            }
         })
     })
 }

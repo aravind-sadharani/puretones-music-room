@@ -4,10 +4,11 @@ import Header from 'components/header'
 import Footer from 'components/footer'
 import PostLinks from 'components/postlinks'
 import PostPreview from 'components/postpreview'
+import Action from 'components/action'
 import IncludeFaust from 'services/faust'
 import { AudioEnvProvider } from 'services/audioenv'
 import StopStaleDSP from 'applets/stopstaledsp'
-import { graphql } from 'gatsby'
+import { graphql, Link } from 'gatsby'
 
 const IndexLayout = ({ data, pageContext, location }) => {
     const {currentPage, numPages} = pageContext
@@ -24,6 +25,13 @@ const IndexLayout = ({ data, pageContext, location }) => {
         <AudioEnvProvider>
           <StopStaleDSP />
         </AudioEnvProvider>
+        <h2>Browse by Category or Tag</h2>
+        {currentPage === 1 && (
+          <p>
+            <Action><Link to='/learn/categories'>Categories</Link></Action>
+            <Action><Link to='/learn/tags'>Tags</Link></Action>
+          </p>
+        )}
         <h2>List of Articles{pageTitle}</h2>
         {postList}
         <PostLinks prev={prevLink} next={nextLink} />
