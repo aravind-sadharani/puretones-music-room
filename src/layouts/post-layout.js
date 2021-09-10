@@ -15,14 +15,14 @@ import Table from 'components/table'
 import FigCaption from 'components/figcaption'
 import Audio from 'components/audio'
 import Notice from 'components/notice'
-import Action from 'components/action'
+import Tag from 'components/tag'
 import PostLinks from 'components/postlinks'
 import { MDXProvider } from "@mdx-js/react"
 import { MDXRenderer } from "gatsby-plugin-mdx"
 import { graphql, Link } from 'gatsby'
 import "katex/dist/katex.min.css"
 
-const shortcodes = { DronePlayer, MotifPlayer, ScalePlayer, CommonPitch, Notice, Caption, table: Table, FigCaption, Audio, Action }
+const shortcodes = { DronePlayer, MotifPlayer, ScalePlayer, CommonPitch, Notice, Caption, table: Table, FigCaption, Audio, Tag }
 
 const PostLayout = ({data: { mdx }, pageContext, location}) => {
   const {prev, next} = pageContext
@@ -31,7 +31,7 @@ const PostLayout = ({data: { mdx }, pageContext, location}) => {
   let tagList = mdx.frontmatter.tags.map((tag,index) => {
     const tagPath = tag.replace(/ /g, '_').replace(/\//g,'by')
     return (
-      <Action key={index}><Link to={`/learn/tags/${tagPath}`}>{tag}</Link></Action>
+      <Tag key={index}><Link to={`/learn/tags/${tagPath}`}>{tag}</Link></Tag>
     )
   })
   return (
@@ -49,7 +49,7 @@ const PostLayout = ({data: { mdx }, pageContext, location}) => {
       </AudioEnvProvider>
       <h2>Category and Tags</h2>
       <p>
-        <Action><Link to={`/learn/categories/${mdx.frontmatter.category}`}>{mdx.frontmatter.category}</Link></Action>
+        <Tag><Link to={`/learn/categories/${mdx.frontmatter.category}`}>{mdx.frontmatter.category}</Link></Tag>
         {tagList}
       </p>
       <PostLinks prev={prevLink} next={nextLink} />

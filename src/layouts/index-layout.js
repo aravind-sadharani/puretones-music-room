@@ -4,7 +4,7 @@ import Header from 'components/header'
 import Footer from 'components/footer'
 import PostLinks from 'components/postlinks'
 import PostPreview from 'components/postpreview'
-import Action from 'components/action'
+import Tag from 'components/tag'
 import IncludeFaust from 'services/faust'
 import { AudioEnvProvider } from 'services/audioenv'
 import StopStaleDSP from 'applets/stopstaledsp'
@@ -18,6 +18,18 @@ const IndexLayout = ({ data, pageContext, location }) => {
         <PostPreview key={node.id} title={node.frontmatter.title} description={node.excerpt} url={node.fields.slug} />
     ))
     let pageTitle = currentPage !== 1 ? ` - Page ${currentPage}` : ""
+    let FirstPageContent = () => (
+      <>
+        <h2>PureTones Articles</h2>
+        <p>The PureTones <Link to="/app/">App</Link> is built based on an understanding of the history and evolution of Indian Classical music. The history of Indian Classical music can be said to start from around 1200 BCE with the singing of passages from Sama Veda. Since then Indian Classical music has evolved and gone through significant developments on its way to its present day form. Through in-depth articles with a variety of samples and musical demonstrations, we have attempted to shed some light on Indian Ragas, Tuning Systems and other aspects relating to Indian Classical Music.</p>
+        <p>You can browse the articles by Category or Tag to find a topic of your interest. Or you can read the articles sequentially. All these articles feature samples and demonstrations which have been created using the PureTones <Link to="/app/">App</Link>.</p>
+        <h2>Browse by Category or Tag</h2>
+        <p>
+          <Tag><Link to='/learn/categories'>Categories</Link></Tag>
+          <Tag><Link to='/learn/tags'>Tags</Link></Tag>
+        </p>
+      </>
+    )
     return (
       <Container>
         <IncludeFaust />
@@ -25,13 +37,7 @@ const IndexLayout = ({ data, pageContext, location }) => {
         <AudioEnvProvider>
           <StopStaleDSP />
         </AudioEnvProvider>
-        <h2>Browse by Category or Tag</h2>
-        {currentPage === 1 && (
-          <p>
-            <Action><Link to='/learn/categories'>Categories</Link></Action>
-            <Action><Link to='/learn/tags'>Tags</Link></Action>
-          </p>
-        )}
+        {currentPage === 1 && <FirstPageContent />}
         <h2>List of Articles{pageTitle}</h2>
         {postList}
         <PostLinks prev={prevLink} next={nextLink} />

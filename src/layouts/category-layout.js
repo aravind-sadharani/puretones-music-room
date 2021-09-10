@@ -20,7 +20,7 @@ const CategoryLayout = ({ data, pageContext, location }) => {
         <AudioEnvProvider>
           <StopStaleDSP />
         </AudioEnvProvider>
-        <h2>Posts under {category}</h2>
+        <h2>Articles under〝{category}〞</h2>
         {postList}
         <Footer>
           Developed by <a href="https://www.sadharani.com">Sadharani</a>

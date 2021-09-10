@@ -20,7 +20,7 @@ const TagLayout = ({ data, pageContext, location }) => {
         <AudioEnvProvider>
           <StopStaleDSP />
         </AudioEnvProvider>
-        <h2>Posts tagged {tag}</h2>
+        <h2>Articles tagged〝{tag}〞</h2>
         {postList}
         <Footer>
           Developed by <a href="https://www.sadharani.com">Sadharani</a>

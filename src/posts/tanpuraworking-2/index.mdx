@@ -68,7 +68,7 @@ Thus, a Tanpura tuned as **Pa** - **SA** - **SA** - **Sa** creates a tun
 
 ## Sama Gana and Shadaj Gram scales
 
-To illustrate this point better, let us check the case of the Sama Gana scale and the Shadaj Gram scale. For more details on these scales, please check [this article](/learn/tuningsystems/) on Indian tuning systems.
+To illustrate this point better, let us check the case of the Sama Gana scale and the Shadaj Gram scale. For more details on these scales, please check [this article](/learn/tuningsystems-1/) on Indian tuning systems.
 
 Compare and contrast the ratios in Table 1 and 2 with those of the Sama Gana scale listed in Table 3. Observe how Re, Pa and Dha are exactly identical across Tables 1, 2 and 3.
 
@@ -88,9 +88,9 @@ Table 3. Illustration of Sama Gana Scale
 | ni | 1.777777778 | 16/9 |
 | SA | 2 | 2 |
 
-With this understanding, listen to the Tanpura track in Demo 5 which is tuned as **Pa** - **SA** - **SA** - **Sa**. Note how well it supports the Sama Gana scale which you can play from Demo 6.
+With this understanding, listen to the Tanpura track in Demo 1 which is tuned as **Pa** - **SA** - **SA** - **Sa**. Note how well it supports the Sama Gana scale which you can play from Demo 2.
 
-<DronePlayer title='Demo 5. Drone for Sama Gana Scale' settings={droneSamaGana} />
+<DronePlayer title='Demo 1. Drone for Sama Gana Scale' settings={droneSamaGana} />
 
 export const notesSamaGana = [
     {white: "Sa", black: "fade"},
@@ -103,9 +103,9 @@ export const notesSamaGana = [
     {white: "SA"}
 ]
 
-<ScalePlayer title='Demo 6. Sama Gana Scale' noteSpec={notesSamaGana} scale={scaleSamaGana} />
+<ScalePlayer title='Demo 2. Sama Gana Scale' noteSpec={notesSamaGana} scale={scaleSamaGana} />
 
-Now, consider the Shadaj Gram scale from Table 4 below and see how the notes Re and Dha are different from those in Sama Gana scale. Consequently, these notes are not supported by the Tanpura in Demo 5.
+Now, consider the Shadaj Gram scale from Table 4 below and see how the notes Re and Dha are different from those in Sama Gana scale. Consequently, these notes are not supported by the Tanpura in Demo 1.
 
 <Caption>
 Table 4. Illustration of Shadaj Gram Scale
@@ -122,9 +122,9 @@ Table 4. Illustration of Shadaj Gram Scale
 | ni | 1.777777778 | 16/9 |
 | SA | 2 | 2 |
 
-In order to support the Shadaj Gram scale, the **Sa** string of the Tanpura needs to be tuned down in pitch, so as to support Re**♭** in Shadaj Gram. Listen to Demo 7 for a Tanpura tuned to support Shadaj Gram and observe how it supports the Shadaj Gram scale in Demo 8.
+In order to support the Shadaj Gram scale, the **Sa** string of the Tanpura needs to be tuned down in pitch, so as to support Re**♭** in Shadaj Gram. Listen to Demo 3 for a Tanpura tuned to support Shadaj Gram and observe how it supports the Shadaj Gram scale in Demo 4.
 
-<DronePlayer title='Demo 7. Drone for Shadaj Gram Scale' settings={droneShadajGram} />
+<DronePlayer title='Demo 3. Drone for Shadaj Gram Scale' settings={droneShadajGram} />
 
 export const notesShadajGram = [
     {white: "Sa", black: "fade"},
@@ -139,9 +139,9 @@ export const notesShadajGram = [
 
 export const keysShadajGram = {'Sa': 0, 'Re♭': 2, 'ga': 3, 'ma': 5, 'Pa': 7, 'Dha♭': 9, 'ni': 10, 'SA': 12}
 
-<ScalePlayer title='Demo 8. Shadaj Gram Scale' noteSpec={notesShadajGram} keySpec={keysShadajGram} scale={scaleShadajGram} />
+<ScalePlayer title='Demo 4. Shadaj Gram Scale' noteSpec={notesShadajGram} keySpec={keysShadajGram} scale={scaleShadajGram} />
 
-In the Tanpura in Demo 7, the **Sa** string has been tuned down in pitch by 14.71 ¢. The harmonics from this detuned Sa string are illustrated in Table 5 below. Note how the 9th harmonic emanating from the Sa string is now very close the intended Re**♭** of the Shadaj Gram scale.
+In the Tanpura in Demo 3, the **Sa** string has been tuned down in pitch by 14.71 ¢. The harmonics from this detuned Sa string are illustrated in Table 5 below. Note how the 9th harmonic emanating from the Sa string is now very close the intended Re**♭** of the Shadaj Gram scale.
 
 <Caption>
 Table 5. Harmonics from Sa - 14.71 ¢
@@ -159,12 +159,12 @@ Table 5. Harmonics from Sa - 14.71 ¢
 
 ## Musical Process with the Tanpura
 
-The above demonstrations of the Sama Gana scale and the Shadaj Gram scale are just examples. In general, an artist skilled in using a Tanpura can tune a Tanpura for any desired Raga they wish to perform. Artists tend to follow a musical process which is something like Figure 3. An artist may think of a Raga they wish to play. They have to think of the musical scale of this Raga in terms of the relationships between its constituent notes - specifically, which pairs of notes should have a Pancham, Madhyam or Gandhar relationship with each other. With these relationships in mind, the artist tunes the Tanpura so that the tuning system resulting from the overtones of the Tanpura strings supports this musical scale correctly.
+The above demonstrations of the Sama Gana scale and the Shadaj Gram scale are just examples. In general, an artist skilled in using a Tanpura can tune a Tanpura for any desired Raga they wish to perform. Artists tend to follow a musical process which is something like Figure 1. An artist may think of a Raga they wish to play. They have to think of the musical scale of this Raga in terms of the relationships between its constituent notes - specifically, which pairs of notes should have a Pancham, Madhyam or Gandhar relationship with each other. With these relationships in mind, the artist tunes the Tanpura so that the tuning system resulting from the overtones of the Tanpura strings supports this musical scale correctly.
 
 ![](./musical-process.png)
 
 <FigCaption>
-Figure 3. Musical Process with a Tanpura
+Figure 1. Musical Process with a Tanpura
 </FigCaption>
 
 Alternatively, they may start tuning the Tanpura and observe the tuning system which results from that tuning. From this they may be guided to pick up a musical scale and Raga which is well supported. Thus, a well-tuned tanpura creates the musical space and provides the perfect *Samvad* (consonance) to an appropriately chosen Raga.
@@ -173,4 +173,4 @@ Alternatively, they may start tuning the Tanpura and observe the tuning system w
 
 We covered different aspects of the sound of a Tanpura. We looked at it from the perspective of its construction and saw how each string of a Tanpura emits a dispersion of its constituent harmonics. We also looked at it from a musical perspective and saw how an appropriately tuned Tanpura can support a desired Raga or musical scale. As patrons of Indian Classical music would know, the sense of accuracy which comes from an artist and a well-tuned Tanpura being perfectly in sync with each other, can create an unmistakeable feeling of a Raga. Indian Classical musicians today no longer uses historical tuning systems, but rely on the Tanpura to provide the musical space and support for their music. So it is no exaggeration to say that the Tanpura is the cornerstone of today's Indian Classical music.
 
-In related articles, we cover the pre-Tanpura tuning systems ([1](/learn/tuningsystems-1/), [2](/learn/tuningsystems-2/), [3](/learn/tuningsystems-3/) and [4](/learn/tuningsystems-4/)) used in Indian Classical music and also the evolution of [Indian musical scales](/learn/musicalscales/). These articles should provide more context for the other facets of the musical process depicted in Figure 3.
+In related articles, we cover the pre-Tanpura tuning systems ([1](/learn/tuningsystems-1/), [2](/learn/tuningsystems-2/), [3](/learn/tuningsystems-3/) and [4](/learn/tuningsystems-4/)) used in Indian Classical music and also the evolution of [Indian musical scales](/learn/musicalscales/). These articles should provide more context for the other facets of the musical process depicted in Figure 1.

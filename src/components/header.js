@@ -14,6 +14,7 @@ const HeaderElement = styled.header`
     display: grid;
     grid-template-columns: 1fr repeat(3,100px);
     ${media.phone`grid-template-columns: repeat(3,1fr);`}
+    ${media.phone`grid-template-rows: 1fr 50px;`}
     text-align: center;
     align-items: center;
     background-color: ${({theme}) => theme.light.buttonBackground};
@@ -60,7 +61,7 @@ const NavLinkElement = styled.span`
 
 const Header = ({location}) => {
     let NavLinkComponentList = navlinklist.map(s => {
-        let active = (location && location.pathname.includes(s.path)) ? "active" : ""
+        let active = (location && location.pathname === s.path) ? "active" : ""
         return (
             <NavLinkElement className={active} key={`nav_${s.path}`} id={`nav_${s.path}`}>
                 <Link to={`${s.path}`}>{s.text}</Link>
