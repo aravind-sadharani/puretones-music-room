@@ -31,6 +31,7 @@
     "gatsby-plugin-sitemap": "^4.4.0",
     "gatsby-plugin-styled-components": "^4.8.0",
     "gatsby-plugin-typography": "^3.8.0",
+    "gatsby-remark-copy-linked-files": "^4.10.0",
     "gatsby-remark-images": "^5.8.0",
     "gatsby-source-filesystem": "^3.9.0",
     "gatsby-transformer-sharp": "^3.8.0",
