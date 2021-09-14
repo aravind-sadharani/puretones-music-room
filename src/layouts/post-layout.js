@@ -49,7 +49,7 @@ const PostLayout = ({data: { mdx }, pageContext, location}) => {
       </AudioEnvProvider>
       <h2>Category and Tags</h2>
       <p>
-        <Tag><Link to={`/learn/categories/${mdx.frontmatter.category}`}>{mdx.frontmatter.category}</Link></Tag>
+        <Tag><Link to={`/learn/categories/${mdx.frontmatter.category.replace(/ /g, '_').replace(/\//g,'by')}`}>{mdx.frontmatter.category}</Link></Tag>
         {tagList}
       </p>
       <PostLinks prev={prevLink} next={nextLink} />
