@@ -26,11 +26,31 @@ const RightLink = styled.span`
     ${media.phone`grid-column: 1 / 2;`}
 `
 
+const ArrowContainer = styled.svg`
+    position: relative;
+    top: 0.1em;
+    height: 0.9em;
+    fill: ${({theme}) => theme.light.linkColor};
+    ${({theme}) => theme.isDark`fill: ${theme.dark.linkColor};`}
+`
+
+const LeftArrow = () => (
+    <ArrowContainer viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="0,50 100,0 100,100" />
+    </ArrowContainer>
+)
+
+const RightArrow = () => (
+    <ArrowContainer viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="0,0 100,50 0,100" />
+    </ArrowContainer>
+)
+
 const PostLinks = ({prev,next}) => (
     <PostLinksContainer>
         {(prev || next) && <PostLinksTitle>Read more</PostLinksTitle>}
-        {prev !== null && <LeftLink><Link to={prev.url}>◀︎ {prev.title}</Link></LeftLink>}
-        {next !== null && <RightLink><Link to={next.url}>{next.title} ►</Link></RightLink>}
+        {prev !== null && <LeftLink><Link to={prev.url}><LeftArrow /> {prev.title}</Link></LeftLink>}
+        {next !== null && <RightLink><Link to={next.url}>{next.title} <RightArrow /></Link></RightLink>}
     </PostLinksContainer>
 )
 
