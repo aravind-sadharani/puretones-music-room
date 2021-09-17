@@ -95,6 +95,15 @@ const AudioEnvProvider = ({children}) => {
                     window.audioCtx = audioCtx
                     state.audioContextReady = true
                 }
+                if(!state.faustReady) {
+                    let faust = new window.Faust2WebAudio.Faust({debug: false, wasmLocation: "/Faustlib/libfaust-wasm.wasm", dataLocation: "/Faustlib/libfaust-wasm.data"})
+                    faust.ready.then(() => {
+                        window.faust = faust
+                        state.faustReady = true
+                    }, reason => {
+                        console.log(reason)
+                    })
+                }
                 return state
             case 'Play':
                 if(!state[`${action.appname}Playing`]) {
@@ -108,7 +117,7 @@ const AudioEnvProvider = ({children}) => {
                         let faust = new window.Faust2WebAudio.Faust({debug: false, wasmLocation: "/Faustlib/libfaust-wasm.wasm", dataLocation: "/Faustlib/libfaust-wasm.data"})
                         faust.ready.then(() => {
                             window.faust = faust
-                            state.faustReady = true    
+                            state.faustReady = true
                             playDSP(audioCtx,faust,DSPCode,faustArgs,action)
                         }, reason => {
                             console.log(reason)
