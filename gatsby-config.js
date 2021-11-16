@@ -1,14 +1,14 @@
 module.exports = {
   siteMetadata: {
-    siteUrl: "https://www.yourdomain.tld",
-    title: "PureTones Music Room",
+    siteUrl: "https://puretones.sadharani.com",
+    title: "PureTones Music",
   },
   plugins: [
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `PureTones MusicRoom`,
-        short_name: `MusicRoom`,
+        name: `PureTones Music`,
+        short_name: `PureTones`,
         start_url: `/`,
         background_color: `white`,
         theme_color: `#333366`,
