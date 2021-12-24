@@ -88,11 +88,12 @@ PureTones Sequencer uses a simple grammar to write compositions using notation f
 ```
 
     <motif> = <note> + ' ' + <motif>
-    <note> = <identifier> + ' ' <timing>
-    <identifier> = <name> + <octave> + <shake>
+    <note> = <identifier> + ' ' + <timing>
+    <identifier> = <name> + <octave> + <shake> + <stroke>
     <name> = Sa | re | Re | ga | Ga | ma | Ma | Pa | dha | Dha | ni | Ni
     <octave> = null | " | '
     <shake> = null | '(G)' | '(G)(<start>,<end>,<rate>,<times>)'
+    <stroke> = null | ^
     <timing> = null | <jati> + <repeats>
     <jati> = null | . | ; | ,
     <repeats> = null | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
@@ -111,10 +112,11 @@ PureTones Sequencer uses a simple grammar to write compositions using notation f
 6.  A `shake` denotes whether or not the note is shaken or rendered with a *Gamaka*. A `shake` specification is optional. It is denoted by `(G)` to mean a note with *Gamaka* or not specified to mean an unmodulated note. It can also be specified with additional parameters like `(G)(start,end,rate,times)` where `start` is the starting pitch, `end` is the ending pitch in cents, `rate` is the rate of the shake, and `times` is the number of times for which the shake is to be repeated (including fractional numbers).
 7.  The pitches `start` and `end` can be specified either as notes identified by a `name` and an optional `octave` specification, or in terms of cents with respect to the pitch of the current note. For example, `ga(G)(36,12,2.5,3.34)` specifies a `shake` which oscillates between 36 cents above **ga** and 12 cents above **ga**. Another example is `Re(G)(Re,ga,1.5,1)` which specifies a `shake` which oscillates between **Re** and **ga**.
 8. The parameters `rate` and `times` are specified as a `number`.
-9.  A `timing` is a pair of `jati` and `repeats` without any separators. It is an optional specification. If a `timing` specification is not provided, it means the `note` specified in the previous token is a whole note (or has a duration of 1 period).
-10.  A `jati` denotes a subdivision of a period. It is an optional specification. A `.` symbol denotes a $\frac{1}{2}$ note, a `;` symbol denotes a $\frac{1}{4}$ note and a `,` symbol a $\frac{1}{8}$ note. If `jati` is omitted, it denotes a whole note.
-11.  A `repeats` specification determines the factor by which a note duration derived from its `jati` is extended. It is an optional specification. It can take any numerical value from `1` to `8`. If a `repeats` specification is omitted, it means a default value of `1`.
-12. As an example, a `timing` specification of `.3` denotes a note of duration $3\times\frac{1}{2} = 1\frac{1}{2}$ notes, since the `jati` is $\frac{1}{2}$ note and the `repeats` is 3. As another example, a `timing`  specification of `2` denotes a note of duration 2 whole notes, and a `timing` specification of `;` denotes a note of duration of a $\frac{1}{4}$ note.
+9. A `stroke` refers to whether the next note is played with a separate stroke or not. A `^` symbol denotes that the next note would be played using the sustain from the stroke of the current note. No stroke specification means that the next note would be played using a separate new stroke.
+10.  A `timing` is a pair of `jati` and `repeats` without any separators. It is an optional specification. If a `timing` specification is not provided, it means the `note` specified in the previous token is a whole note (or has a duration of 1 period).
+11.  A `jati` denotes a subdivision of a period. It is an optional specification. A `.` symbol denotes a $\frac{1}{2}$ note, a `;` symbol denotes a $\frac{1}{4}$ note and a `,` symbol a $\frac{1}{8}$ note. If `jati` is omitted, it denotes a whole note.
+12.  A `repeats` specification determines the factor by which a note duration derived from its `jati` is extended. It is an optional specification. It can take any numerical value from `1` to `8`. If a `repeats` specification is omitted, it means a default value of `1`.
+13. As an example, a `timing` specification of `.3` denotes a note of duration $3\times\frac{1}{2} = 1\frac{1}{2}$ notes, since the `jati` is $\frac{1}{2}$ note and the `repeats` is 3. As another example, a `timing`  specification of `2` denotes a note of duration 2 whole notes, and a `timing` specification of `;` denotes a note of duration of a $\frac{1}{4}$ note.
 
 ### Example Compositions
 

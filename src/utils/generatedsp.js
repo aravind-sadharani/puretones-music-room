@@ -270,9 +270,9 @@ const repeatValue = (timeStr) => {
     return (isNaN(intTimeStr) ? 1 : intTimeStr)
 }
 
-const getPluckLength = (timeStr) => 8*jatiValue(timeStr)*repeatValue(timeStr)
+const getGateLength = (timeStr) => 8*jatiValue(timeStr)*repeatValue(timeStr)
 
-const getPluckTiming = (tokens) => {
+const getGateTiming = (tokens) => {
     let state = 0
     let timing = []
 
@@ -283,7 +283,7 @@ const getPluckTiming = (tokens) => {
             timing.push(8)
             state = 1
         } else if(state === 1 && !isNote(token)) {
-            timing.push(getPluckLength(token))
+            timing.push(getGateLength(token))
             state = 0
         }
     })
@@ -325,21 +325,32 @@ const centsFromNotes = (noteStr, baseNoteStr) => {
 
 const ratioFromNote = (noteStr) => Number(baseValue(noteStr))*Number(octaveValue(noteStr))
 
-const printPluckTiming = (id, repeats) => (id.includes("Q") ? "0,0,".repeat(repeats-1).concat("0,0") : "1,1,".repeat(repeats-1).concat("1,0"))
+const printGateTiming = (id, repeats) => (id.includes("Q") ? "0,0,".repeat(repeats-1).concat("0,0") : "1,1,".repeat(repeats-1).concat("1,0"))
+
+const printStrokeTiming = (id, repeats) => {
+    if(id.includes("Q")) {
+        return "0,0,".repeat(repeats-1).concat("0,0")
+    } else if(id.includes("^")) {
+        return "1,1,".repeat(repeats-1).concat("1,1")
+    } else {
+        return "1,1,".repeat(repeats-1).concat("1,0")
+    }
+}
 
 const printNoteTiming = (id, repeats) => `${id},`.repeat(2*repeats-1).concat(`${id}`)
 
 const getVoice = (voiceName,tokens,octave,noteOffsets,toneName) => {
     let uniqueNotes = findUniqueNotes(tokens)
-    let pluckTimes = getPluckTiming(tokens)
+    let gateTimes = getGateTiming(tokens)
     let noteIds = tokens.filter(isNote).map(n => uniqueNotes.findIndex(t => isEqual(t,n)))
 
     let noteSpec = `${uniqueNotes.map((str,id) => printNoteSpec(voiceName,str,id,noteOffsets)).join("")}
 ${voiceName}noteratio = ${uniqueNotes.map((str,id) => printNoteId(voiceName,id)).join()} : ba.selectn(${uniqueNotes.length},${voiceName}noteindex);`
 
-    let pluckTiming = `${noteIds.map((id, index) => printPluckTiming(uniqueNotes[id],pluckTimes[index])).join()}`
-    let pluckWaveformLength = pluckTiming.length
-    let noteTiming = `${noteIds.map((id, index) => printNoteTiming(id,pluckTimes[index])).join()}`
+    let gateTiming = `${noteIds.map((id, index) => printGateTiming(uniqueNotes[id],gateTimes[index])).join()}`
+    let strokeTiming = `${tokens.filter(isNote).map((id, index) => printStrokeTiming(id,gateTimes[index])).join()}`
+    let gateWaveformLength = gateTiming.length
+    let noteTiming = `${noteIds.map((id, index) => printNoteTiming(id,gateTimes[index])).join()}`
 
     let dspVoiceTop = `
 ${voiceName}phasedcos(x) = phasor(x) - (phasor(x) : ba.latch(${voiceName}gate(cperiod))) : *(2*ma.PI) : cos;
@@ -351,13 +362,13 @@ ${voiceName}noteindex = cperiod : ${voiceName}motifnotes;
     let voiceComposition = `${dspVoiceTop}
 ${printPitch(voiceName,octave)}
 ${noteSpec}
-${voiceName}gatewaveform = waveform{${pluckTiming}};
-
-${voiceName}gate(p) = ${voiceName}gatewaveform,int(2*ba.period(${(pluckWaveformLength+1)/4}*p*ma.SR)/(p*ma.SR)) : rdtable;
+${voiceName}gatewaveform = waveform{${gateTiming}};
+${voiceName}gate(p) = ${voiceName}gatewaveform,int(2*ba.period(${(gateWaveformLength+1)/4}*p*ma.SR)/(p*ma.SR)) : rdtable;
 ${voiceName}motif = waveform{${noteTiming}};
-
-${voiceName}motifnotes(p) = ${voiceName}motif,int(2*ba.period(${(pluckWaveformLength+1)/4}*p*ma.SR)/(p*ma.SR)) : rdtable;
-${voiceName}notes = ${toneName}Tone(${voiceName}cpitch,${voiceName}noteratio,${voiceName}gate(cperiod)) : @(ma.SR*0.1);
+${voiceName}motifnotes(p) = ${voiceName}motif,int(2*ba.period(${(gateWaveformLength+1)/4}*p*ma.SR)/(p*ma.SR)) : rdtable;
+${voiceName}strokewaveform = waveform{${strokeTiming}};
+${voiceName}stroke(p) = ${voiceName}strokewaveform,int(2*ba.period(${(gateWaveformLength+1)/4}*p*ma.SR)/(p*ma.SR)) : rdtable;
+${voiceName}notes = ${toneName}Tone(${voiceName}cpitch,${voiceName}noteratio,${voiceName}stroke(cperiod)) : @(ma.SR*0.1);
 `
     return voiceComposition
 }
