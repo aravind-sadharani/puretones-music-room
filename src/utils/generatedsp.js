@@ -100,7 +100,9 @@ with {
     `ViolinTone(f,r,g) = ((pm.f2l(f*r)/6))*ViolinModel(pm.f2l(f*r),0.2*ViolinBow,0.2*ViolinBow,0.79) : *(ViolinEnv)
 with {
 
-    ViolinBow = en.adsr(0.1,cperiod*0.7,0.6,cperiod*0.3,g)*(1+0.35*os.osc(1/(16*cperiod)));
+    ViolinLongBowRamp(x) = ramp(x) - (ramp(x) : ba.latch(g)) : *(-1) : exp;
+    ViolinLongBowDynamics(x) = phasor(x) - (phasor(x) : ba.latch(g)) : *(2*ma.PI) : cos;
+    ViolinBow = en.adsr(0.1,cperiod*0.7,0.6,cperiod*0.3,g)*(1+0.35*ViolinLongBowDynamics(1/(16*cperiod)))*(0.15+ViolinLongBowRamp(2.5*cperiod/ma.SR));
     ViolinEnv = en.adsr(0.1,cperiod*0.6,0.6,cperiod*0.5,g);
     
     violinBowedString(length,bowPressure,bowVelocity,bowPosition) = strChain
@@ -140,8 +142,10 @@ with {
     `ReedTone(f,r,g) = ReedModel(pm.f2l(f*r),0.56*(1+ReedBlow),-0.104) : *(ReedEnv)
 with {
 
-    ReedBlow = 3*en.adsr(0.01,cperiod*0.7,0.9,cperiod*0.3,g)*(1+0.25*os.osc(1/(16*cperiod)));
-    ReedEnv = en.adsr(0.1,cperiod*0.6,0.8,cperiod*0.5,g);
+    ReedLongBlowDynamics(x) = phasor(x) - (phasor(x) : ba.latch(g)) : *(2*ma.PI) : cos;
+    ReedBlow = 3*en.adsr(0.01,cperiod*0.7,0.9,cperiod*0.3,g)*(1+0.25*ReedLongBlowDynamics(1/(16*cperiod)));
+    ReedLongBlowRamp(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
+    ReedEnv = en.adsr(0.1,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*ReedLongBlowRamp(2*cperiod/ma.SR));
     
     reedTable(offset,slope) = reedTable : min(1) : max(-1)
         with {
