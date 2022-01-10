@@ -56,7 +56,7 @@ const toRREF = matrix => {
 
     let pivot = 0
     for(let r = 0; r < rows; r++) {
-        if(pivot >= columns-2)
+        if(pivot >= columns-1)
             break
         let i = r
         while(matrix[i][pivot] === 0) {
@@ -64,7 +64,7 @@ const toRREF = matrix => {
             if(i === rows) {
                 i = r
                 pivot += 1
-                if(pivot === columns-2)
+                if(pivot === columns-1)
                     break
             }
         }
@@ -188,7 +188,7 @@ const buildScale = (constraints) => {
         return `Please specify some constraints to build the scale.\n`
     
     scaleRules = toRREF(scaleRules)
-
+    
     let scaleNotes = Object.entries(noteNumber).filter(note => !isColumnZero(scaleRules,note[1]))
 
     let unSolvedNotes = scaleNotes.filter(note => !isNoteSolved(scaleRules,note[1]))
