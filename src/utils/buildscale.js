@@ -155,6 +155,8 @@ const noteRank = note => note[0] === 'Sa' ? -1 : noteNumber[note[0]]
 
 const buildScale = (constraints) => {
     let transposeRef = 'Sa'
+    let deletedNotes = []
+    let badRules = []
     let scaleRules = splitbyline(constraints).map(rule => {
         let ruleArray = new Array(12).fill(0)
         let state = {
@@ -188,12 +190,25 @@ const buildScale = (constraints) => {
                     ruleArray[11] += FOURTH*sign
                 else if(interval === 'G')
                     ruleArray[11] += THIRD*sign
-            } else {
-                let notes = token.replace(/(\(|\))/g,'').split(',')
-                if(notes.length !== 2) {
-                    console.log('Syntax Error')
+            } else if(token[0] === 'S') {
+                let note = token.replace(/(\(|\)|S)/g,'')
+                let sign = state.side === 'LHS' ? -1 : 1
+                if(baseRatio[note] === undefined) {
+                    badRules.push(token)
                     return ruleArray
                 }
+                ruleArray[11] += 1200*Math.log2(baseRatio[note])*sign
+            } else if(token[0] === 'D') {
+                let note = token.replace(/(\(|\)|S)/g,'')
+                deletedNotes.push(note)
+            } else {
+                let notes = token.replace(/(\(|\))/g,'').split(',')
+                if(notes.length > 2 || (notes.length === 1 && notes[0] === 'Sa')) {
+                    badRules.push(token)
+                    return ruleArray
+                }
+                if(notes.length === 1)
+                    notes.push('Sa')
                 let sign = getIndex(notes[0]) > getIndex(notes[1]) ? 1 : -1
                 if( (state.sign === '-' && state.side === 'LHS') || (state.sign === '+' && state.side === 'RHS') )
                     sign *= -1
@@ -204,6 +219,13 @@ const buildScale = (constraints) => {
         return ruleArray
     })
 
+    if(badRules.length > 0)
+        return {
+            status: false,
+            message: `The rules included the following invalid parameters.\n${badRules.join('\n')}\nPlease specify rules with valid parameters.\n`,
+            scale: []
+        }
+
     if(scaleRules.length === 0)
         return {
             status: false,
@@ -212,8 +234,9 @@ const buildScale = (constraints) => {
         }
     
     scaleRules = toRREF(scaleRules)
+    let allDeletedNotes = deletedNotes.join(',')
     
-    let scaleNotes = Object.entries(noteNumber).filter(note => !isColumnZero(scaleRules,note[1]))
+    let scaleNotes = Object.entries(noteNumber).filter(note => !isColumnZero(scaleRules,note[1])).filter(note => !allDeletedNotes.includes(note[0]))
 
     let unSolvedNotes = scaleNotes.filter(note => !isNoteSolved(scaleRules,note[1]))
 
