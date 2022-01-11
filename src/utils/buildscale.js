@@ -136,7 +136,25 @@ const noteToSettings = note => {
 ${(100*(Number(note[1])-Number(note[1]).toFixed(0))).toFixed(0)} /musicscale/Common_Parameters/12_Note_Scale/${note[0]}/0.01_Cent`
 }
 
+const transposeOffset = (note, ref) => {
+    let transposedNoteNumber = (noteNumber[note[0]] - noteNumber[ref[0]] + noteNumber['Sa']) % 12
+    let transposedNoteName = Object.entries(noteNumber).filter(testNote => testNote[1] === transposedNoteNumber)[0][0]
+    let transposedNoteOffset = 1200*Math.log2((baseRatio[note[0]]/baseRatio[ref[0]])/baseRatio[transposedNoteName]) % 1200 + Number(note[1]) - Number(ref[1])
+    transposedNoteOffset = Math.abs(transposedNoteOffset) < EPSILON ? 0 : transposedNoteOffset
+    return [transposedNoteName, transposedNoteOffset.toFixed(2)]
+}
+
+const transposeNumber = (note, ref) => {
+    let transposedNoteNumber = (noteNumber[note[0]] - noteNumber[ref[0]] + noteNumber['Sa']) % 12
+    return Object.entries(noteNumber).filter(testNote => testNote[1] === transposedNoteNumber)[0]
+}
+
+const compareNotes = (note1, note2) => noteRank(note1) - noteRank(note2)
+
+const noteRank = note => note[0] === 'Sa' ? -1 : noteNumber[note[0]]
+
 const buildScale = (constraints) => {
+    let transposeRef = 'Sa'
     let scaleRules = splitbyline(constraints).map(rule => {
         let ruleArray = new Array(12).fill(0)
         let state = {
@@ -159,6 +177,8 @@ const buildScale = (constraints) => {
                 state.sign = '-'
             } else if(token === '=') {
                 state.side = 'RHS'
+            } else if(token[0] === 'T') {
+                transposeRef = token.replace(/(\(|\)|T)/g,'')
             } else if(token[0] === 'I') {
                 let interval = token.replace(/(\(|\)|I)/g,'')
                 let sign = state.side === 'LHS' ? -1 : 1
@@ -185,7 +205,11 @@ const buildScale = (constraints) => {
     })
 
     if(scaleRules.length === 0)
-        return `Please specify some constraints to build the scale.\n`
+        return {
+            status: false,
+            message: `Please specify some rules to build the scale.\n`,
+            scale: []
+        }
     
     scaleRules = toRREF(scaleRules)
     
@@ -195,14 +219,57 @@ const buildScale = (constraints) => {
 
     let solvedNotes = scaleNotes.filter(note => isNoteSolved(scaleRules,note[1])).map(note => solveNote(scaleRules,note))
 
+    if(transposeRef !== 'Sa') {
+        if(noteNumber[transposeRef] === undefined) {
+            return {
+                status: false,
+                message: `The name ${transposeRef} is not a valid note name.\nPlease specify a valid note to transpose.\n`,
+                scale: []
+            }
+        }
+        let refList = solvedNotes.filter(note => note[0] === transposeRef)
+        if(refList.length === 0) {
+            return {
+                status: false,
+                message: `The note ${transposeRef} is not in the original scale: ${scaleNotes.map(note => note[0]).join(',')}\nPlease specify a valid note to transpose.\n`,
+                scale: []
+            }
+        }
+        let ref = refList[0]
+        scaleNotes = scaleNotes.map(note => transposeNumber(note,ref)).sort(compareNotes)
+        solvedNotes = solvedNotes.map(note => transposeOffset(note,ref)).sort(compareNotes)
+        unSolvedNotes = unSolvedNotes.map(note => transposeNumber(note,ref)).sort(compareNotes)
+    }
+
+    let message = unSolvedNotes.length > 0 ? `Scale: ${scaleNotes.map(note => note[0]).join(',')}\nThe following notes cannot be solved with the given rules:\n${unSolvedNotes.map(note => note[0]).join(',')}\nPlease add some more rules and retry.\n` : `Scale: ${scaleNotes.map(note => note[0]).join(',')}\n${solvedNotes.map(note => `${note[0]}: ${note[1]} ¢`).join('\n')}`
+
     let result = {
-        scaleNotes: scaleNotes,
-        unSolvedNotes: unSolvedNotes,
-        solvedNotes: solvedNotes,
-        settings: solvedNotes.map(note => noteToSettings(note)).join('\n')
+        status: (unSolvedNotes.length === 0),
+        message: message,
+        scale: solvedNotes
     }
 
     return result
 }
 
-export default buildScale
+const prepareKeyboard = (scale) => {
+    let settings = scale.map(note => noteToSettings(note)).join('\n')
+    let scaleNotesList = scale.map(note => note[0]).join(',')
+    const noteLabel = note => scaleNotesList.includes(note) ? note : 'fade'
+    let notespec = [
+        {white: "Sa", black: `${noteLabel('re')}`},
+        {white: `${noteLabel('Re')}`, black: `${noteLabel('ga')}`},
+        {white: `${noteLabel('Ga')}`},
+        {white: `${noteLabel('ma')}`, black: `${noteLabel('Ma')}`},
+        {white: `${noteLabel('Pa')}`, black: `${noteLabel('dha')}`},
+        {white: `${noteLabel('Dha')}`, black: `${noteLabel('ni')}`},
+        {white: `${noteLabel('Ni')}`},
+        {white: "SA"}
+    ]
+    return {
+        settings: settings,
+        notespec: notespec
+    }
+}
+
+export { buildScale, prepareKeyboard }
