@@ -127,16 +127,16 @@ const SaveRestore = ({extn,save,restore}) => {
     let activeUL = visibleUL ? "active" : ""
     return (
         <>
-            <Button onClick={toggleDownloadDialog}>Save</Button>
-            <Button onClick={toggleUploadDialog}>Restore</Button>
-            <FileDownloadDialog className={activeDL}>
+            {save && <Button onClick={toggleDownloadDialog}>Save</Button>}
+            {restore && <Button onClick={toggleUploadDialog}>Restore</Button>}
+            {save && <FileDownloadDialog className={activeDL}>
                 <label htmlFor={`snapshotDL${extn}`}><strong>Name File ►</strong></label>
                 <FileName id={`snapshotDL${extn}`} type="text" placeholder="snapshot" ref={fileNameRef} onChange={(e) => updateFilenameDL(e.target.value)}></FileName>
                 <Button onClick={download}>Download</Button>
                 <Button onClick={toggleDownloadDialog}>Cancel</Button>
                 <FileAnchor download={`${filenameDL.replace(/ /g,'-') || 'snapshot'}.${extn}`} href={fileURL} ref={fileLink}>snapshot</FileAnchor>
-            </FileDownloadDialog>
-            <FileUploadDialog className={activeUL}>
+            </FileDownloadDialog>}
+            {restore && <FileUploadDialog className={activeUL}>
                 <label htmlFor={`snapshotUL${extn}`}>
                     <strong>{filenameUL || 'Select File ►'}</strong>
                     <FileBrowser className={activeUL}>
@@ -146,7 +146,7 @@ const SaveRestore = ({extn,save,restore}) => {
                 <FileInput id={`snapshotUL${extn}`} type="file" accept={`.${extn}`} onClick={e => (e.target.value = null)} onChange={(e) => handleFileUpload(e)}></FileInput>
                 <Button onClick={upload}>Upload</Button>
                 <Button onClick={toggleUploadDialog}>Cancel</Button>
-            </FileUploadDialog>
+            </FileUploadDialog>}
         </>
     )   
 }

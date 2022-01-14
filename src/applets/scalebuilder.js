@@ -2,6 +2,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 import CommonPitch from 'applets/commonpitch'
 import Button from 'components/button'
+import SaveRestore from 'components/saverestore'
 import { buildScale, prepareKeyboard } from 'utils/buildscale'
 import ScalePlayer from 'applets/scaleplayer'
 
@@ -41,7 +42,7 @@ const ScaleBuilderResultElement = styled.pre`
 
 const ScaleBuilder = () => {
     const [scaleRules, setScaleRules] = React.useState({rules: ""})
-    const [scaleResult, setScaleResult] = React.useState({status: false, message: "", scale: [], notespec: [], settings: ""})
+    const [scaleResult, setScaleResult] = React.useState({status: false, message: "", scale: [], title: "", notespec: [], settings: ""})
     const onRulesChange = (rules) => {
         setScaleRules({rules: rules})
     }
@@ -49,14 +50,27 @@ const ScaleBuilder = () => {
     const solveRules = () => {
         let result = buildScale(scaleRules.rules)
 
-        setScaleResult({status: result.status, message: result.message, scale: result.scale, notespec: [], settings: ""})
+        if(result.status) {
+            let keyboard = prepareKeyboard(result.scale)
+            let title = newTitle(scaleResult.message,result.message)
+            setScaleResult({status: result.status, message: result.message, scale: result.scale, title: title, notespec: keyboard.notespec, settings: keyboard.settings})
+        } else
+            setScaleResult({status: result.status, message: result.message, scale: result.scale, title: "", notespec: [], settings: ""})
     }
 
-    const listen = () => {
-        let result = prepareKeyboard(scaleResult.scale)
-
-        setScaleResult({...scaleResult, notespec: result.notespec, settings: result.settings})
+    const newTitle = (oldMsg, newMsg) => {
+        if(newMsg === '')
+            return ''
+        if(oldMsg === '' || oldMsg.split('\n')[0] !== newMsg.split('\n')[0])
+            return newMsg.split('\n')[0].replace(/,/g,', ')
+        
+        let oldMsgLines = oldMsg.split('\n')
+        let newMsgLines = newMsg.split('\n')
+        let changes = newMsgLines.filter((line,index) => line !== oldMsgLines[index]).join(', ')
+        return `${oldMsg.split('\n')[0].replace(/,/g,', ')} ${changes !== '' ? `(${changes})` : ''}` 
     }
+
+    const save = () => scaleResult.settings
 
     return (
         <>
@@ -64,12 +78,14 @@ const ScaleBuilder = () => {
             <ScaleBuilderContainer>
                 <p><strong>Scale Builder</strong></p>
                 <ScaleBuilderEditorElement rows='8' value={scaleRules.rules} onChange={(e) => onRulesChange(e.target.value)} />
-                <center><Button onClick={() => solveRules()}>Solve</Button></center>
+                <center>
+                    <Button onClick={() => solveRules()}>Solve</Button>
+                    {scaleResult.settings !== '' && <SaveRestore extn='pkb' save={save}/>}
+                </center>
                 <p></p>
-                {scaleResult.message !== '' && <ScaleBuilderResultElement><code>{scaleResult.message}</code></ScaleBuilderResultElement>}
-                {scaleResult.status && scaleResult.settings === '' && <center><Button onClick={() => listen()}>Listen</Button></center>}
+                {scaleResult.message !== '' && !scaleResult.status && <ScaleBuilderResultElement><code>{scaleResult.message}</code></ScaleBuilderResultElement>}
             </ScaleBuilderContainer>
-            {scaleResult.settings !== '' && <ScalePlayer title='Press Start to Listen' noteSpec={scaleResult.notespec} scale={scaleResult.settings} />}
+            {scaleResult.settings !== '' && <ScalePlayer title={scaleResult.title} noteSpec={scaleResult.notespec} scale={scaleResult.settings} />}
         </>
     )
 }

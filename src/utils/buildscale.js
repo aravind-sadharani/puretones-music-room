@@ -242,7 +242,7 @@ const buildScale = (constraints) => {
 
     let solvedNotes = scaleNotes.filter(note => isNoteSolved(scaleRules,note[1])).map(note => solveNote(scaleRules,note))
 
-    if(transposeRef !== 'Sa') {
+    if(transposeRef !== 'Sa' && unSolvedNotes.length === 0) {
         if(noteNumber[transposeRef] === undefined) {
             return {
                 status: false,
