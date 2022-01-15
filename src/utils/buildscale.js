@@ -332,9 +332,38 @@ const findSymmetry = (scale) => {
                 }
         }).filter(interval => Object.keys(interval).length !== 0)
     }).filter(list => list.length !== 0)
-    let symmetryReadable = symmetry.map(list => list.map(element => `(${element.first},${element.second}) = (${element.third},${element.fourth}) = ${element.gap.toFixed(2)} with a symmetry of ${element.symmetry.toFixed(2)}`).join('\n')).join('\n')
+    let symmetryReadable = symmetry.map(list => list.map(element => `(${element.first},${element.second}) = (${element.third},${element.fourth}) = ${centsReadable(element.gap)} with a symmetry of ${centsReadable(element.symmetry)}`).join('\n')).join('\n')
 
     return symmetryReadable
+}
+
+const centsReadable = (cents) => {
+    if(Math.abs(cents-FIFTH) < EPSILON)
+        return 'Pancham'
+    if(Math.abs(cents-FOURTH) < EPSILON)
+        return 'Madhyam'
+    if(Math.abs(cents-THIRD) < EPSILON)
+        return 'Ga (5/4)'
+    if(Math.abs(cents - toCents(6/5)) < EPSILON)
+        return 'ga (6/5)'
+    if(Math.abs(cents - toCents(81/64)) < EPSILON)
+        return 'Ga (81/64)'
+    if(Math.abs(cents - toCents(32/27)) < EPSILON)
+        return 'ga (32/27)'
+    if(Math.abs(cents - toCents(9/8)) < EPSILON)
+        return 'Re (9/8)'
+    if(Math.abs(cents - toCents(10/9)) < EPSILON)
+        return 'Re (10/9)'
+    if(Math.abs(cents - toCents(16/15)) < EPSILON)
+        return 're (16/15)'
+    if(Math.abs(cents - toCents(256/243)) < EPSILON)
+        return 're (256/243)'
+    if(Math.abs(cents - toCents(75/64)) < EPSILON)
+        return 'ga (75/64)'
+    if(Math.abs(cents - toCents(256/225)) < EPSILON)
+        return 'Re (256/225)'
+
+    return cents.toFixed(2)
 }
 
 export { buildScale, prepareKeyboard }
