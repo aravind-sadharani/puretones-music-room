@@ -109,7 +109,7 @@ const ScalePlayer = ({title,noteSpec,keySpec,scale}) => {
     }
     return (
         <ScalePlayerContainer>
-            <ShowHideControls title={title} label={showHideLabel} visibility={visibility && (commonSettings['currentScale'] === title)} onShowHide={toggleScaleVisibility}>
+            <ShowHideControls title={title.split('\n')[0]} label={showHideLabel} visibility={visibility && (commonSettings['currentScale'] === title)} onShowHide={toggleScaleVisibility}>
                 <Keyboard keyOn={keyOn} keyOff={keyOff} noteSpec={noteSpec} />
             </ShowHideControls>
         </ScalePlayerContainer>

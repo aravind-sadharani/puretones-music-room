@@ -1,8 +1,10 @@
+const toCents = ratio => 1200*Math.log2(ratio)
+
 const OCTAVE = 1200
-const FIFTH = 1200*Math.log2(3/2)
-const FOURTH = 1200*Math.log2(4/3)
-const THIRD = 1200*Math.log2(5/4)
-const EPSILON = 1e-12
+const FIFTH = toCents(3/2)
+const FOURTH = toCents(4/3)
+const THIRD = toCents(5/4)
+const EPSILON = 1e-10
 
 const baseRatio = {
     Sa: 1,
@@ -120,13 +122,13 @@ const isNoteSolved = (matrix,note) => {
 
 const solveNote = (matrix,note) => {
     if(note[1] === 11)
-        return ['Sa',Number(0).toFixed(2)]
+        return ['Sa',Number(0)]
     
     for(let r = 0; r < matrix.length; r++) {
         if(matrix[r][note[1]] === 1) {
-            let offset = matrix[r][matrix[r].length-1] - 1200*Math.log2(baseRatio[note[0]])
+            let offset = matrix[r][matrix[r].length-1] - toCents(baseRatio[note[0]])
             offset = Math.abs(offset) < EPSILON ? 0 : offset
-            return [note[0],offset.toFixed(2)]
+            return [note[0],offset]
         }
     }
 }
@@ -139,9 +141,9 @@ ${(100*(Number(note[1])-Number(note[1]).toFixed(0))).toFixed(0)} /musicscale/Com
 const transposeOffset = (note, ref) => {
     let transposedNoteNumber = (noteNumber[note[0]] - noteNumber[ref[0]] + noteNumber['Sa']) % 12
     let transposedNoteName = Object.entries(noteNumber).filter(testNote => testNote[1] === transposedNoteNumber)[0][0]
-    let transposedNoteOffset = 1200*Math.log2((baseRatio[note[0]]/baseRatio[ref[0]])/baseRatio[transposedNoteName]) % 1200 + Number(note[1]) - Number(ref[1])
+    let transposedNoteOffset = toCents((baseRatio[note[0]]/baseRatio[ref[0]])/baseRatio[transposedNoteName]) % OCTAVE + Number(note[1]) - Number(ref[1])
     transposedNoteOffset = Math.abs(transposedNoteOffset) < EPSILON ? 0 : transposedNoteOffset
-    return [transposedNoteName, transposedNoteOffset.toFixed(2)]
+    return [transposedNoteName, transposedNoteOffset]
 }
 
 const transposeNumber = (note, ref) => {
@@ -197,7 +199,7 @@ const buildScale = (constraints) => {
                     badRules.push(token)
                     return ruleArray
                 }
-                ruleArray[11] += 1200*Math.log2(baseRatio[note])*sign
+                ruleArray[11] += toCents(baseRatio[note])*sign
             } else if(token[0] === 'D') {
                 let note = token.replace(/(\(|\)|S)/g,'')
                 deletedNotes.push(note)
@@ -264,13 +266,14 @@ const buildScale = (constraints) => {
         unSolvedNotes = unSolvedNotes.map(note => transposeNumber(note,ref)).sort(compareNotes)
     }
 
-    let message = unSolvedNotes.length > 0 ? `Scale: ${scaleNotes.map(note => note[0]).join(',')}\nThe following notes cannot be solved with the given rules:\n${unSolvedNotes.map(note => note[0]).join(',')}\nPlease add some more rules and retry.\n` : `Scale: ${scaleNotes.map(note => note[0]).join(',')}\n${solvedNotes.map(note => `${note[0]}: ${note[1]} ¢`).join('\n')}`
+    let message = unSolvedNotes.length > 0 ? `Scale: ${scaleNotes.map(note => note[0]).join(',')}\nThe following notes cannot be solved with the given rules:\n${unSolvedNotes.map(note => note[0]).join(',')}\nPlease add some more rules and retry.\n` : `Scale: ${scaleNotes.map(note => note[0]).join(',')}\n\nScale tuning relative to Venkatamakhin-Ramamatya system\n${solvedNotes.map(note => `${note[0]}: ${note[1].toFixed(2)} ¢`).join('\n')}\n\nSymmetric intervals in the Scale\n${findSymmetry(solvedNotes)}`
 
     let result = {
         status: (unSolvedNotes.length === 0),
         message: message,
         scale: solvedNotes
     }
+
 
     return result
 }
@@ -293,6 +296,45 @@ const prepareKeyboard = (scale) => {
         settings: settings,
         notespec: notespec
     }
+}
+
+const findSymmetry = (scale) => {
+    let centScale = scale.map(note => [note[0], toCents(baseRatio[note[0]]) + Number(note[1])])
+    let scaleIntervals = centScale.map((note,index) => {
+        let first = note[0]
+        let second = centScale[(index+1)%scale.length][0]
+        let gap = centScale[(index+1)%scale.length][1] - note[1]
+        if(index+1 >= scale.length) {
+            second = `${second}"`
+            gap += OCTAVE
+        }
+        return {
+            first: first,
+            second: second,
+            gap: gap
+        }
+    })
+    let symmetry = centScale.map((_,refIndex) => {
+        return scaleIntervals.map((interval,index) => {
+            let ratio = (centScale[refIndex][1] - centScale[index][1] + OCTAVE) % OCTAVE
+            if(index === refIndex || ratio > FIFTH + EPSILON)
+                return {}
+            let matchingFirstNote = centScale.findIndex(note => Math.abs((centScale[index][1] + ratio + EPSILON) %OCTAVE - note[1]) < 1.1*EPSILON)
+            let matchingSecondNote = centScale.findIndex(note => Math.abs((centScale[index][1] + ratio + interval.gap + EPSILON) %OCTAVE - note[1]) < 1.1*EPSILON)
+            if(matchingFirstNote === -1 || matchingSecondNote === -1)
+                return {}
+            else
+                return {
+                    ...interval,
+                    third: centScale[matchingFirstNote][0],
+                    fourth: `${centScale[matchingSecondNote][0]}${matchingSecondNote < matchingFirstNote ? '"' : ''}`,
+                    symmetry: ratio
+                }
+        }).filter(interval => Object.keys(interval).length !== 0)
+    }).filter(list => list.length !== 0)
+    let symmetryReadable = symmetry.map(list => list.map(element => `(${element.first},${element.second}) = (${element.third},${element.fourth}) = ${element.gap.toFixed(2)} with a symmetry of ${element.symmetry.toFixed(2)}`).join('\n')).join('\n')
+
+    return symmetryReadable
 }
 
 export { buildScale, prepareKeyboard }

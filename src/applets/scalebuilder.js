@@ -35,9 +35,6 @@ const ScaleBuilderEditorElement = styled.textarea`
 const ScaleBuilderResultElement = styled.pre`
     margin: 0 0 1em 0;
     overflow-x: scroll;
-    code {
-        padding: 0px;
-    }
 `
 
 const ScaleBuilder = () => {
@@ -62,12 +59,12 @@ const ScaleBuilder = () => {
         if(newMsg === '')
             return ''
         if(oldMsg === '' || oldMsg.split('\n')[0] !== newMsg.split('\n')[0])
-            return newMsg.split('\n')[0].replace(/,/g,', ')
+            return `Listen to the ${newMsg.split('\n')[0].replace(/,/g,', ')}`
         
         let oldMsgLines = oldMsg.split('\n')
         let newMsgLines = newMsg.split('\n')
         let changes = newMsgLines.filter((line,index) => line !== oldMsgLines[index]).join(', ')
-        return `${oldMsg.split('\n')[0].replace(/,/g,', ')} ${changes !== '' ? `(${changes})` : ''}` 
+        return `Listen to the ${oldMsg.split('\n')[0].replace(/,/g,', ')}\n ${changes !== '' ? `(${changes})` : ''}` 
     }
 
     const save = () => scaleResult.settings
@@ -82,10 +79,16 @@ const ScaleBuilder = () => {
                     <Button onClick={() => solveRules()}>Solve</Button>
                     {scaleResult.settings !== '' && <SaveRestore extn='pkb' save={save}/>}
                 </center>
-                <p></p>
-                {scaleResult.message !== '' && !scaleResult.status && <ScaleBuilderResultElement><code>{scaleResult.message}</code></ScaleBuilderResultElement>}
             </ScaleBuilderContainer>
             {scaleResult.settings !== '' && <ScalePlayer title={scaleResult.title} noteSpec={scaleResult.notespec} scale={scaleResult.settings} />}
+            <ScaleBuilderContainer>
+                <p><strong>Scale Notes</strong></p>
+                {scaleResult.message !== '' && <ScaleBuilderResultElement>
+                    <code>
+                        {scaleResult.message}
+                    </code>
+                </ScaleBuilderResultElement>}
+            </ScaleBuilderContainer>
         </>
     )
 }
