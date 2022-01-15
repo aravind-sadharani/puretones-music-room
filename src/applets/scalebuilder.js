@@ -81,14 +81,14 @@ const ScaleBuilder = () => {
                 </center>
             </ScaleBuilderContainer>
             {scaleResult.settings !== '' && <ScalePlayer title={scaleResult.title} noteSpec={scaleResult.notespec} scale={scaleResult.settings} />}
-            <ScaleBuilderContainer>
+            {scaleResult.message !== '' && <ScaleBuilderContainer>
                 <p><strong>Scale Notes</strong></p>
-                {scaleResult.message !== '' && <ScaleBuilderResultElement>
+                <ScaleBuilderResultElement>
                     <code>
                         {scaleResult.message}
                     </code>
-                </ScaleBuilderResultElement>}
-            </ScaleBuilderContainer>
+                </ScaleBuilderResultElement>
+            </ScaleBuilderContainer>}
         </>
     )
 }
