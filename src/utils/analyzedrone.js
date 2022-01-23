@@ -31,9 +31,14 @@ const analyzeDrone = (stringConfig) => {
     let message = `Drone Analysis with three strings tuned as ${stringNames[Number(stringConfig[0].value)]}, ${stringNames[Number(stringConfig[1].value)]} and ${stringNames[Number(stringConfig[2].value)]}\n\n`
 
     let strings = [0,1,2].map(i => stringRatios[Number(stringConfig[i].value)]*(2**((Number(stringConfig[i].finetune) + Number(stringConfig[i].ultrafinetune)/100)/1200)))
+    let stringPairs = []
+    strings.forEach((string,index) => {
+        for(let pairIndex = index+1; pairIndex < strings.length; pairIndex++) {
+            stringPairs.push([string,strings[pairIndex]])
+        }
+    })
 
     let relevantTones = []
-
     const addRatio = ratio => {
         if(ratio === 0 || !isAudible(ratio))
             return
@@ -60,12 +65,6 @@ const analyzeDrone = (stringConfig) => {
             if(GCD(i,j) !== 1)
                 continue
             
-            let stringPairs = [
-                [strings[0],strings[1]],
-                [strings[1],strings[2]],
-                [strings[2],strings[0]]
-            ]
-
             stringPairs.forEach(pair => {
                 let ratio = Math.abs(i*pair[0]-j*pair[1])/2
                 addRatio(ratio)
@@ -73,11 +72,12 @@ const analyzeDrone = (stringConfig) => {
         }
     }
 
-    relevantTones.sort((tone1, tone2) => tone1.ratio - tone2.ratio)
+    relevantTones.sort((tone1, tone2) => tone2.count - tone1.count)
     let relevantTonesPrintable = relevantTones.map(tone => `Ratio = ${(2**(tone.ratio/1200)).toFixed(5)} (${tone.ratio.toFixed(2)} ¢)\t\t Count = ${tone.count}`).join('\n')
-    
     message = message.concat(relevantTonesPrintable)
 
+    relevantTones.sort((tone1, tone2) => tone1.ratio - tone2.ratio)
+    
     return {
         status: status,
         message: message,
