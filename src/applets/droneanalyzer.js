@@ -10,11 +10,12 @@ import {
     Legend,
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
-import TabNav from "components/tabs"
-import Selector from "components/selector"
-import Slider from "components/slider"
 import Button from 'components/button'
+import SaveRestore from 'components/saverestore'
 import {analyzeDrone} from 'utils/analyzedrone'
+import {dspStateFromSettings} from 'utils/dspsettingsinterpreter'
+import dronePRT from 'data/default.prt'
+import scalePKB from 'data/default.pkb'
 
 ChartJS.register(
     CategoryScale,
@@ -73,153 +74,44 @@ const chartOptions = {
     },
 }
 
-const stringSelectParams = {
-    key: "Note",
-    options: [
-      {
-        value: "0",
-        text: "SA"
-      },
-      {
-        value: "1",
-        text: "Ni"
-      },
-      {
-        value: "2",
-        text: "ni"
-      },
-      {
-        value: "3",
-        text: "Dha"
-      },
-      {
-        value: "4",
-        text: "dha"
-      },
-      {
-        value: "5",
-        text: "Pa"
-      },
-      {
-        value: "6",
-        text: "Ma"
-      },
-      {
-        value: "7",
-        text: "ma"
-      },
-      {
-        value: "8",
-        text: "Ga"
-      },
-      {
-        value: "9",
-        text: "ga"
-      },
-      {
-        value: "10",
-        text: "Re"
-      },
-      {
-        value: "11",
-        text: "re"
-      },
-      {
-        value: "12",
-        text: "Sa"
-      }
-    ]
-}
-
-const fineTuneParams = {
-    key: "Fine Tune",
-    init: 0,
-    max: 100,
-    min: -100,
-    step: 1
-}
-
-const ultraFineTuneParams = {
-    key: "Ultrafine Tune",
-    init: 0,
-    max: 100,
-    min: -100,
-    step: 1
-}
-
 const DroneAnalyzer = () => {
-    const [droneState,setDroneState] = React.useState({
-        strings: [
-            {
-                value: 5,
-                finetune: 0,
-                ultrafinetune: 0,
-            },
-            {
-                value: 0,
-                finetune: 0,
-                ultrafinetune: 0,
-            },
-            {
-                value: 12,
-                finetune: 0,
-                ultrafinetune: 0,
-            }
-        ]
-    })
-
-    const onDroneStateChange = (value,path) => {
-        let newStrings = droneState.strings
-        if(path.includes('select')) {
-            newStrings[Number(path.replace("select",""))].value = Number(value)
-        } else if(path.includes('fine')) {
-            newStrings[Number(path.replace("fine",""))].finetune = Number(value)
-        } else if(path.includes('ultra')) {
-            newStrings[Number(path.replace("ultra",""))].ultrafinetune = Number(value)
-        }
-        setDroneState({strings: newStrings})
-    }
-
-    const stringTabs = ['String 1', 'String 2', 'String 3']
-
-    const stringConfig = droneState.strings.map((string,index) => {
-        const selectorParams = {...stringSelectParams,
-            default: `${string.value}`,
-        }
-        const fineParams = {...fineTuneParams,
-            init: `${string.finetune}`,
-        }
-        const ultraFineParams = {...ultraFineTuneParams,
-            init: `${string.ultrafinetune}`,
-        }
-        let path = `${index}`
-        return (
-            <>
-                <Selector params={selectorParams} path={`select${path}`} onParamUpdate={onDroneStateChange} />
-                <Slider params={fineParams} path={`fine${path}`} onParamUpdate={onDroneStateChange} />
-                <Slider params={ultraFineParams} path={`ultra${path}`} onParamUpdate={onDroneStateChange} />
-            </>
-        )
-    })
+    let defaultDroneState = dspStateFromSettings('drone', dronePRT)
+    let defaultScaleState = dspStateFromSettings('scale', scalePKB)
+    const [droneState,setDroneState] = React.useState(defaultDroneState)
+    const [scaleState,setScaleState] = React.useState(defaultScaleState)
+    const [droneFilename,setDroneFilename] = React.useState("")
+    const [scaleFilename,setScaleFilename] = React.useState("")
 
     const [droneAnalysis,setDroneAnalysis] = React.useState({status: false, message: ""})
     const [dronePitches,setDronePitches] = React.useState({})
 
+    const restoreDrone = (dronesnapshot,dronefilename) => {
+        let droneState = dspStateFromSettings('drone',dronesnapshot)
+        setDroneFilename(dronefilename)
+        setDroneState({...droneState})
+    }
+
+    const restoreScale = (scalesnapshot,scalefilename) => {
+        let scaleState = dspStateFromSettings('scale',scalesnapshot)
+        setScaleFilename(scalefilename)
+        setScaleState({...scaleState})
+    }
+
     const analyze = () => {
-        let result = analyzeDrone(droneState.strings)
+        let result = analyzeDrone(droneState,scaleState)
 
         setDroneAnalysis({status: result.status, message: result.message})
         setDronePitches({
             labels: result.pitches.map((pitch) => (2**(pitch.ratio/1200)).toFixed(5)),
             datasets: [
                 {
-                    label: 'Standard Pitches',
+                    label: 'Pitches from the Scale',
                     data: result.pitches.map((pitch) => pitch.stdCount),
                     backgroundColor: '#5c5c85',
                     barThickness: 2,
                 },
                 {
-                    label: 'Generated Pitches',
+                    label: 'Pitches generated by the Drone',
                     data: result.pitches.map((pitch) => pitch.count),
                     backgroundColor: '#f98ca4',
                 },
@@ -231,13 +123,30 @@ const DroneAnalyzer = () => {
         <>
             <DroneAnalyzerContainer>
                 <p><strong>Drone Analyzer</strong></p>
-                <TabNav tablist={stringTabs} pagelist={stringConfig} />
+                <DroneAnalyzerContainer>
+                    <p><strong>Configure Drone</strong></p>
+                    <p>Upload a drone tuning {droneFilename !== '' ? `or keep using〝${droneFilename}〞` : 'or use the standard drone'}</p>
+                    <center>
+                        <SaveRestore extn='prt' restore={restoreDrone} restoretitle='Load Drone' />
+                    </center>
+                    <p></p>
+                </DroneAnalyzerContainer>
+                <DroneAnalyzerContainer>
+                    <p><strong>Configure Scale</strong></p>
+                    <p>Upload a scale tuning {scaleFilename !== '' ? `or keep using〝${scaleFilename}〞` : 'or use the standard scale'}</p>
+                    <center>
+                        <SaveRestore extn='pkb' restore={restoreScale} restoretitle='Load Scale' />
+                    </center>
+                    <p></p>
+                </DroneAnalyzerContainer>
+                <p>Press Analyze to view the results.</p>
                 <center>
                     <Button onClick={() => analyze()}>Analyze</Button>
                 </center>
+                <p></p>
             </DroneAnalyzerContainer>
             {droneAnalysis.status && <DroneAnalyzerContainer>
-                <p><strong>Pitches Generated by the Drone</strong></p>
+                <p><strong>Analysis Results</strong></p>
                 <Bar options={chartOptions} data={dronePitches} />
             </DroneAnalyzerContainer>}
             {droneAnalysis.message !== '' && <DroneAnalyzerContainer>

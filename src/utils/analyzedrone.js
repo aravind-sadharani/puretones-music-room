@@ -1,15 +1,7 @@
 const MAXHARMONICS = 64
 const OCTAVE = 1200
 const EPSILON = 0.001
-const DELTACENTS = 4
-
-/*const GCD = (a,b) => {
-    let first = Math.abs(a) > Math.abs(b) ? Math.abs(a) : Math.abs(b)
-    let second = Math.abs(a) > Math.abs(b) ? Math.abs(b) : Math.abs(a)
-    if(second === 0)
-        return first
-    return GCD(second,first % second)
-}*/
+const DELTACENTS = 6
 
 const isAudible = ratio => (ratio > 1/4 - EPSILON) && (ratio < 64 + EPSILON)
 
@@ -20,14 +12,24 @@ const toCents = ratio => {
     return baseCents % OCTAVE
 }
 
-const stringRatios = [2,243/128,16/9,27/16,128/81,3/2,729/512,4/3,81/64,32/27,9/8,256/243,1]
-const stringNames = ['SA','Ni','ni','Dha','dha','Pa','Ma','ma','Ga','ga','Re','re','Sa']
+const noteRatios = [2,243/128,16/9,27/16,128/81,3/2,729/512,4/3,81/64,32/27,9/8,256/243,1]
+const noteNames = ['SA','Ni','ni','Dha','dha','Pa','Ma','ma','Ga','ga','Re','re','Sa']
+const stringNames = ['1st_String', '2nd_String', '3rd_String', '4th_String', '5th_String', '6th_String']
 
-const analyzeDrone = (stringConfig) => {
+const analyzeDrone = (droneState,scaleState) => {
+    let stringConfig = stringNames.map(name => {
+        let basePath = `/FaustDSP/PureTones_v1.0/0x00/${name}`
+        return ({
+            value: Number(droneState[`${basePath}/Select_Note`]),
+            finetune: Number(droneState[`${basePath}/Fine_Tune`]),
+            ultrafinetune: Number(droneState[`${basePath}/Ultrafine_Tune`]),
+        })
+    })
+
     let status = true
-    let message = `Drone Analysis with three strings tuned as ${stringNames[Number(stringConfig[0].value)]}, ${stringNames[Number(stringConfig[1].value)]} and ${stringNames[Number(stringConfig[2].value)]}\n\n`
+    let message = `Drone Analysis with ${stringConfig.length} strings tuned as ${stringConfig.map(s => noteNames[s.value]).join(', ')}\n\n`
 
-    let strings = [0,1,2].map(i => stringRatios[Number(stringConfig[i].value)]*(2**((Number(stringConfig[i].finetune) + Number(stringConfig[i].ultrafinetune)/100)/1200)))
+    let strings = stringConfig.map(s => noteRatios[Number(s.value)]*(2**((Number(s.finetune) + Number(s.ultrafinetune)/100)/1200)))
     let stringPairs = []
     strings.forEach((string,index) => {
         for(let pairIndex = index+1; pairIndex < strings.length; pairIndex++) {
@@ -72,7 +74,10 @@ const analyzeDrone = (stringConfig) => {
     message = message.concat(relevantTonesPrintable)
 
     let maxCount = relevantTones[0].count
-    let scaleConfig = stringRatios
+    let scaleConfig = noteNames.map((note,index) =>{
+        let basePath = `/FaustDSP/Common_Parameters/12_Note_Scale`
+        return noteRatios[index]*(2**((Number(scaleState[`${basePath}/${note}/Cent`])+Number(scaleState[`${basePath}/${note}/0.01_Cent`])/100)/1200))
+    })
     scaleConfig.forEach(ratio => {
         let existingRatio = relevantTones.find(tone => (Math.abs(tone.ratio - toCents(ratio)) < DELTACENTS))
         if(existingRatio !== undefined)

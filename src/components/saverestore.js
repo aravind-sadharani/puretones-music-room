@@ -63,7 +63,7 @@ const FileBrowser = styled.div`
     }
 `
 
-const SaveRestore = ({extn,save,restore}) => {
+const SaveRestore = ({extn,save,restore,savetitle,restoretitle}) => {
     const [visibleDL, setDLVisibility] = React.useState(false)
     const [visibleUL, setULVisibility] = React.useState(false)
     const [fileURL,setFileURL] = React.useState(null)
@@ -105,7 +105,7 @@ const SaveRestore = ({extn,save,restore}) => {
         let file = fileOBJ
         let reader = new FileReader()
         reader.onload = () => {
-            restore(reader.result)
+            restore(reader.result,file.name)
         }
         if(file !== null) {
             reader.readAsText(file)
@@ -113,12 +113,13 @@ const SaveRestore = ({extn,save,restore}) => {
         }
     }
     React.useEffect(() => {
-        fileLink.current.click()
+        if(save)
+            fileLink.current.click()
         return () => {
             URL.revokeObjectURL(fileURL)
             setFileURL(null)    
         }
-    },[fileURL])
+    },[fileURL,save])
     React.useEffect(() => {
         if(visibleDL)
             fileNameRef.current.focus()
@@ -127,8 +128,8 @@ const SaveRestore = ({extn,save,restore}) => {
     let activeUL = visibleUL ? "active" : ""
     return (
         <>
-            {save && <Button onClick={toggleDownloadDialog}>Save</Button>}
-            {restore && <Button onClick={toggleUploadDialog}>Restore</Button>}
+            {save && <Button onClick={toggleDownloadDialog}>{savetitle || 'Save'}</Button>}
+            {restore && <Button onClick={toggleUploadDialog}>{restoretitle || 'Restore'}</Button>}
             {save && <FileDownloadDialog className={activeDL}>
                 <label htmlFor={`snapshotDL${extn}`}><strong>Name File ►</strong></label>
                 <FileName id={`snapshotDL${extn}`} type="text" placeholder="snapshot" ref={fileNameRef} onChange={(e) => updateFilenameDL(e.target.value)}></FileName>
