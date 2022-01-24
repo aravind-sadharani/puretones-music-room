@@ -4,14 +4,11 @@ const EPSILON = 0.001
 const DELTACENTS = 4
 
 const GCD = (a,b) => {
-    if(a === 0)
-        return b
-    if(b === 0)
-        return a
-    if(a > b)
-        return GCD(b,a % b)
-    else
-        return GCD(a,b % a)
+    let first = Math.abs(a) > Math.abs(b) ? Math.abs(a) : Math.abs(b)
+    let second = Math.abs(a) > Math.abs(b) ? Math.abs(b) : Math.abs(a)
+    if(second === 0)
+        return first
+    return GCD(second,first % second)
 }
 
 const isAudible = ratio => (ratio > 1/4 - EPSILON) && (ratio < 64 + EPSILON)
@@ -53,6 +50,7 @@ const analyzeDrone = (stringConfig) => {
         relevantTones.push({
             ratio: toCents(ratio),
             count: 1,
+            stdCount: 0,
         })
     }
 
@@ -76,6 +74,19 @@ const analyzeDrone = (stringConfig) => {
     let relevantTonesPrintable = relevantTones.map(tone => `Ratio = ${(2**(tone.ratio/1200)).toFixed(5)} (${tone.ratio.toFixed(2)} ¢)\t\t Count = ${tone.count}`).join('\n')
     message = message.concat(relevantTonesPrintable)
 
+    let maxCount = relevantTones[0].count
+    let scaleConfig = stringRatios
+    scaleConfig.forEach(ratio => {
+        let existingRatio = relevantTones.find(tone => (Math.abs(tone.ratio - toCents(ratio)) < DELTACENTS))
+        if(existingRatio !== undefined)
+            existingRatio.stdCount = Math.floor(maxCount/2)
+        else
+            relevantTones.push({
+                ratio: toCents(ratio),
+                count: 0,
+                stdCount: Math.floor(maxCount/2),
+            })
+    })
     relevantTones.sort((tone1, tone2) => tone1.ratio - tone2.ratio)
     
     return {

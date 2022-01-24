@@ -63,12 +63,12 @@ const chartOptions = {
     },
     plugins: {
         legend: {
-            display: false,
+            display: true,
             position: 'top',
         },
         title: {
             display: false,
-            text: 'Drone Pitches',
+            text: 'Drone Analysis',
         }
     },
 }
@@ -212,6 +212,12 @@ const DroneAnalyzer = () => {
         setDronePitches({
             labels: result.pitches.map((pitch) => (2**(pitch.ratio/1200)).toFixed(5)),
             datasets: [
+                {
+                    label: 'Standard Pitches',
+                    data: result.pitches.map((pitch) => pitch.stdCount),
+                    backgroundColor: '#5c5c85',
+                    barThickness: 2,
+                },
                 {
                     label: 'Generated Pitches',
                     data: result.pitches.map((pitch) => pitch.count),
