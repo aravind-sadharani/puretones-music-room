@@ -3,13 +3,13 @@ const OCTAVE = 1200
 const EPSILON = 0.001
 const DELTACENTS = 4
 
-const GCD = (a,b) => {
+/*const GCD = (a,b) => {
     let first = Math.abs(a) > Math.abs(b) ? Math.abs(a) : Math.abs(b)
     let second = Math.abs(a) > Math.abs(b) ? Math.abs(b) : Math.abs(a)
     if(second === 0)
         return first
     return GCD(second,first % second)
-}
+}*/
 
 const isAudible = ratio => (ratio > 1/4 - EPSILON) && (ratio < 64 + EPSILON)
 
@@ -60,9 +60,6 @@ const analyzeDrone = (stringConfig) => {
             addRatio(ratio)
         })
         for(let j = 1; j<= MAXHARMONICS; j++) {
-            if(GCD(i,j) !== 1)
-                continue
-            
             stringPairs.forEach(pair => {
                 let ratio = Math.abs(i*pair[0]-j*pair[1])/2
                 addRatio(ratio)
