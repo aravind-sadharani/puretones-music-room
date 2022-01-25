@@ -27,7 +27,7 @@ const analyzeDrone = (droneState,scaleState) => {
     })
 
     let status = true
-    let message = `Drone Analysis with ${stringConfig.length} strings tuned as ${stringConfig.map(s => noteNames[s.value]).join(', ')}\n\n`
+    let message = `Drone Analysis with ${stringConfig.length} strings tuned as\n  ${stringConfig.map((s,i) => `${noteNames[s.value]} (${Number(s.finetune) + Number(s.ultrafinetune)/100})${(i+1) % 3 === 0 ? '\n  ' : ', '}`).join('')}\n`
 
     let strings = stringConfig.map(s => noteRatios[Number(s.value)]*(2**((Number(s.finetune) + Number(s.ultrafinetune)/100)/1200)))
     let stringPairs = []
@@ -70,8 +70,8 @@ const analyzeDrone = (droneState,scaleState) => {
     }
 
     relevantTones.sort((tone1, tone2) => tone2.count - tone1.count)
-    let relevantTonesPrintableHeader = '\tRatio\t\t\tCents    \t\tCount\n'
-    let relevantTonesPrintable = relevantTones.map(tone => `\t${(2**(tone.ratio/1200)).toFixed(5)}\t\t\t${' '.repeat(7-tone.ratio.toFixed(2).length)}${tone.ratio.toFixed(2)} ¢\t\t${' '.repeat(5-tone.count.toFixed(0).length)}${tone.count}`).join('\n')
+    let relevantTonesPrintableHeader = '  Ratio\t\tCents    \tCount\n'
+    let relevantTonesPrintable = relevantTones.map(tone => `  ${(2**(tone.ratio/1200)).toFixed(5)}\t${' '.repeat(7-tone.ratio.toFixed(2).length)}${tone.ratio.toFixed(2)} ¢\t${' '.repeat(5-tone.count.toFixed(0).length)}${tone.count}`).join('\n')
     message = `${message}${relevantTonesPrintableHeader}${relevantTonesPrintable}`
 
     let maxCount = relevantTones[0].count
