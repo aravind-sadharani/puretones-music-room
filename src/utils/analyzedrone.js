@@ -70,8 +70,9 @@ const analyzeDrone = (droneState,scaleState) => {
     }
 
     relevantTones.sort((tone1, tone2) => tone2.count - tone1.count)
-    let relevantTonesPrintable = relevantTones.map(tone => `Ratio = ${(2**(tone.ratio/1200)).toFixed(5)} (${tone.ratio.toFixed(2)} ¢)\t\t Count = ${tone.count}`).join('\n')
-    message = message.concat(relevantTonesPrintable)
+    let relevantTonesPrintableHeader = '\tRatio\t\t\tCents    \t\tCount\n'
+    let relevantTonesPrintable = relevantTones.map(tone => `\t${(2**(tone.ratio/1200)).toFixed(5)}\t\t\t${' '.repeat(7-tone.ratio.toFixed(2).length)}${tone.ratio.toFixed(2)} ¢\t\t${' '.repeat(5-tone.count.toFixed(0).length)}${tone.count}`).join('\n')
+    message = `${message}${relevantTonesPrintableHeader}${relevantTonesPrintable}`
 
     let maxCount = relevantTones[0].count
     let scaleConfig = noteNames.map((note,index) =>{
