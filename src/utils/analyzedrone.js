@@ -79,21 +79,22 @@ const analyzeDrone = (droneState,scaleState) => {
         let basePath = `/FaustDSP/Common_Parameters/12_Note_Scale`
         return noteRatios[index]*(2**((Number(scaleState[`${basePath}/${note}/Cent`])+Number(scaleState[`${basePath}/${note}/0.01_Cent`])/100)/1200))
     })
-    scaleConfig.forEach(ratio => {
-        let existingRatio = relevantTones.find(tone => (Math.abs(tone.ratio - toCents(ratio)) < DELTACENTS))
+    scaleConfig.forEach((ratio,index) => {
+        let scaleRatio
+        if(noteNames[index] === 'SA' || noteNames[index] === 'Sa')
+            scaleRatio = OCTAVE*Math.log2(ratio)
+        else
+            scaleRatio = toCents(ratio)
+
+        let existingRatio = relevantTones.find(tone => (Math.abs(tone.ratio - scaleRatio) < DELTACENTS))
         if(existingRatio !== undefined)
             existingRatio.stdCount = Math.floor(maxCount/2)
         else
             relevantTones.push({
-                ratio: toCents(ratio),
+                ratio: scaleRatio,
                 count: 0,
                 stdCount: Math.floor(maxCount/2),
             })
-    })
-    relevantTones.push({
-        ratio: 1200,
-        count: 0,
-        stdCount: Math.floor(maxCount/2),        
     })
     relevantTones.sort((tone1, tone2) => tone2.ratio - tone1.ratio)
     
