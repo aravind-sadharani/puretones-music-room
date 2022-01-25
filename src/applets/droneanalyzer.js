@@ -35,18 +35,27 @@ const DroneAnalyzerContainer = styled.div`
     border-radius: 5px;
 `
 
+const ChartContainer = styled(DroneAnalyzerContainer)`
+    canvas {
+        max-height: 900px;
+        margin-bottom: 1em;
+    }
+`
+
 const DroneAnalyzerResultElement = styled.pre`
     margin: 0 0 1em 0;
     overflow-x: scroll;
 `
 
 const chartOptions = {
+    indexAxis: 'y',
+    maintainAspectRatio: false,
     responsive: true,
     scales: {
         yAxes: {
             title: {
                 display: true,
-                text: 'Count',
+                text: 'Ratio',
                 font: {
                     size: 15,
                 }
@@ -55,7 +64,7 @@ const chartOptions = {
         xAxes: {
             title: {
                 display: true,
-                text: 'Ratio',
+                text: 'Count',
                 font: {
                     size: 15,
                 }  
@@ -105,15 +114,15 @@ const DroneAnalyzer = () => {
             labels: result.pitches.map((pitch) => (2**(pitch.ratio/1200)).toFixed(5)),
             datasets: [
                 {
+                    label: `${droneFilename || 'Standard'} Drone`,
+                    data: result.pitches.map((pitch) => pitch.count),
+                    backgroundColor: '#f98ca4',
+                },
+                {
                     label: `${scaleFilename || 'Standard'} Scale`,
                     data: result.pitches.map((pitch) => pitch.stdCount),
                     backgroundColor: '#5c5c85',
                     barThickness: 2,
-                },
-                {
-                    label: `${droneFilename || 'Standard'} Drone`,
-                    data: result.pitches.map((pitch) => pitch.count),
-                    backgroundColor: '#f98ca4',
                 },
             ],
         })
@@ -145,10 +154,10 @@ const DroneAnalyzer = () => {
                 </center>
                 <p></p>
             </DroneAnalyzerContainer>
-            {droneAnalysis.status && <DroneAnalyzerContainer>
+            {droneAnalysis.status && <ChartContainer>
                 <p><strong>Analysis Results</strong></p>
                 <Bar options={chartOptions} data={dronePitches} />
-            </DroneAnalyzerContainer>}
+            </ChartContainer>}
             {droneAnalysis.message !== '' && <DroneAnalyzerContainer>
                 <p><strong>Detailed Results</strong></p>
                 <DroneAnalyzerResultElement>

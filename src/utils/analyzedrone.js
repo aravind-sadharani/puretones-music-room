@@ -90,7 +90,12 @@ const analyzeDrone = (droneState,scaleState) => {
                 stdCount: Math.floor(maxCount/2),
             })
     })
-    relevantTones.sort((tone1, tone2) => tone1.ratio - tone2.ratio)
+    relevantTones.push({
+        ratio: 1200,
+        count: 0,
+        stdCount: Math.floor(maxCount/2),        
+    })
+    relevantTones.sort((tone1, tone2) => tone2.ratio - tone1.ratio)
     
     return {
         status: status,
