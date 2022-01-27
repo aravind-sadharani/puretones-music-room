@@ -12,6 +12,7 @@ import {
 import { Bar } from 'react-chartjs-2'
 import Button from 'components/button'
 import SaveRestore from 'components/saverestore'
+import Slider from 'components/slider'
 import {analyzeDrone} from 'utils/analyzedrone'
 import {dspStateFromSettings} from 'utils/dspsettingsinterpreter'
 import dronePRT from 'data/default.prt'
@@ -37,7 +38,7 @@ const DroneAnalyzerContainer = styled.div`
 
 const ChartContainer = styled(DroneAnalyzerContainer)`
     canvas {
-        max-height: 900px;
+        max-height: 600px;
         margin-bottom: 1em;
     }
 `
@@ -55,7 +56,7 @@ const chartOptions = {
         yAxes: {
             title: {
                 display: true,
-                text: 'Ratio',
+                text: 'Sa     re       Re      ga      Ga     ma      Ma     Pa     dha     Dha     ni        Ni     SA',
                 font: {
                     size: 15,
                 }
@@ -64,7 +65,7 @@ const chartOptions = {
         xAxes: {
             title: {
                 display: true,
-                text: 'Count',
+                text: 'Signal-to-Noise Ratio (dB)',
                 font: {
                     size: 15,
                 }  
@@ -100,32 +101,65 @@ const DroneAnalyzer = () => {
         setDroneState({...droneState})
     }
 
+    const resetDrone = () => {
+        setDroneFilename("")
+        setDroneState({...defaultDroneState})
+    }
+
     const restoreScale = (scalesnapshot,scalefilename) => {
         let scaleState = dspStateFromSettings('scale',scalesnapshot)
         setScaleFilename(scalefilename.replace('.pkb',''))
         setScaleState({...scaleState})
     }
 
+    const resetScale = () => {
+        setScaleFilename("")
+        setScaleState({...defaultScaleState})
+    }
+
     const analyze = () => {
-        let result = analyzeDrone(droneState,scaleState)
+        let result = analyzeDrone(droneState,scaleState,resolution,noiseFloor)
 
         setDroneAnalysis({status: result.status, message: result.message})
         setDronePitches({
-            labels: result.pitches.map((pitch) => (2**(pitch.ratio/1200)).toFixed(5)),
+            labels: result.pitches.map(pitch => (2**(pitch.ratio/1200)).toFixed(5)),
             datasets: [
                 {
-                    label: `${droneFilename || 'Standard'} Drone`,
-                    data: result.pitches.map((pitch) => pitch.count),
-                    backgroundColor: '#f98ca4',
+                    label: `${scaleFilename || 'Standard'} Scale`,
+                    data: result.pitches.map((pitch) => pitch.refAmplitude),
+                    backgroundColor: '#5c5c85',
+                    barThickness: 1,
                 },
                 {
-                    label: `${scaleFilename || 'Standard'} Scale`,
-                    data: result.pitches.map((pitch) => pitch.stdCount),
-                    backgroundColor: '#5c5c85',
-                    barThickness: 2,
+                    label: `${droneFilename || 'Standard'} Drone`,
+                    data: result.pitches.map((pitch) => pitch.amplitude),
+                    backgroundColor: '#f98ca4',
+                    barThickness: 1,
                 },
             ],
         })
+    }
+
+    const [resolution,setResolution] = React.useState(6)
+    const [noiseFloor,setNoiseFloor] = React.useState(-96)
+
+    const updateResolution = (value) => setResolution(Number(value))
+    const updateNoiseFloor = (value) => setNoiseFloor(Number(value))
+
+    const resolutionParams = {
+        key: 'Resolution in ¢',
+        init: resolution,
+        max: 10,
+        min: 1,
+        step: 1,
+    }
+
+    const noiseFloorParams = {
+        key: 'Noise floor in dB',
+        init: noiseFloor,
+        max: -60,
+        min: -100,
+        step: 1,
     }
 
     return (
@@ -136,6 +170,7 @@ const DroneAnalyzer = () => {
                     <p><strong>Configure Drone</strong></p>
                     <p>Upload a drone tuning {droneFilename !== '' ? `or keep using〝${droneFilename}〞drone` : 'or use the standard drone'}</p>
                     <center>
+                        <Button onClick={resetDrone}>Reset Drone</Button>
                         <SaveRestore extn='prt' restore={restoreDrone} restoretitle='Load Drone' />
                     </center>
                     <p></p>
@@ -144,11 +179,14 @@ const DroneAnalyzer = () => {
                     <p><strong>Configure Scale</strong></p>
                     <p>Upload a scale tuning {scaleFilename !== '' ? `or keep using〝${scaleFilename}〞scale` : 'or use the standard scale'}</p>
                     <center>
+                        <Button onClick={resetScale}>Reset Scale</Button>
                         <SaveRestore extn='pkb' restore={restoreScale} restoretitle='Load Scale' />
                     </center>
                     <p></p>
                 </DroneAnalyzerContainer>
-                <p>Press Analyze to view the results.</p>
+                <p>Set the resolution and noise floor and press Analyze to view the results.</p>
+                <Slider params={resolutionParams} path='Resolution' onParamUpdate={updateResolution} />
+                <Slider params={noiseFloorParams} path='NoiseFloor' onParamUpdate={updateNoiseFloor} />
                 <center>
                     <Button onClick={() => analyze()}>Analyze</Button>
                 </center>
