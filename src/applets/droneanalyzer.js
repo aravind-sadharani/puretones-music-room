@@ -140,8 +140,8 @@ const DroneAnalyzer = () => {
         })
     }
 
-    const [resolution,setResolution] = React.useState(6)
-    const [noiseFloor,setNoiseFloor] = React.useState(-96)
+    const [resolution,setResolution] = React.useState(10)
+    const [noiseFloor,setNoiseFloor] = React.useState(-80)
 
     const updateResolution = (value) => setResolution(Number(value))
     const updateNoiseFloor = (value) => setNoiseFloor(Number(value))
@@ -149,7 +149,7 @@ const DroneAnalyzer = () => {
     const resolutionParams = {
         key: 'Resolution in ¢',
         init: resolution,
-        max: 10,
+        max: 20,
         min: 1,
         step: 1,
     }
