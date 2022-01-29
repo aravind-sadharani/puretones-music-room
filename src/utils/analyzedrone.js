@@ -115,7 +115,11 @@ const analyzeDrone = (droneState,scaleState,resolution,noiseFloor) => {
 
     let scaleConfig = noteNames.map((note,index) =>{
         let basePath = `/FaustDSP/Common_Parameters/12_Note_Scale`
-        return noteRatios[index]*(2**((Number(scaleState[`${basePath}/${note}/Cent`])+Number(scaleState[`${basePath}/${note}/0.01_Cent`])/100)/1200))
+        let centOffset = scaleState[`${basePath}/${note}/Cent`]
+        centOffset = centOffset === undefined ? 0 : Number(centOffset)
+        let subCentOffset = scaleState[`${basePath}/${note}/0.01_Cent`]
+        subCentOffset = subCentOffset === undefined ? 0 : Number(subCentOffset)
+        return noteRatios[index]*(2**((centOffset + subCentOffset/100)/1200))
     })
     scaleConfig.forEach((ratio,index) => {
         let scaleRatio
