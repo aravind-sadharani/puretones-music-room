@@ -1,15 +1,5 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend,
-} from 'chart.js'
-import { Bar } from 'react-chartjs-2'
 import Button from 'components/button'
 import SaveRestore from 'components/saverestore'
 import Slider from 'components/slider'
@@ -17,15 +7,8 @@ import {analyzeDrone} from 'utils/analyzedrone'
 import {dspStateFromSettings} from 'utils/dspsettingsinterpreter'
 import dronePRT from 'data/default.prt'
 import scalePKB from 'data/default.pkb'
-
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend
-)
+import DroneAnalysisTable from 'applets/droneanalysistable'
+import DroneAnalysisChart from 'applets/droneanalysischart'
 
 const DroneAnalyzerContainer = styled.div`
     padding: 12px 12px 0 12px;
@@ -36,108 +19,39 @@ const DroneAnalyzerContainer = styled.div`
     border-radius: 5px;
 `
 
-const ChartContainer = styled(DroneAnalyzerContainer)`
-    canvas {
-        max-height: 600px;
-        margin-bottom: 1em;
-    }
-`
-
-const DroneAnalyzerResultElement = styled.pre`
-    margin: 0 0 1em 0;
-    overflow-x: scroll;
-`
-
-const chartOptions = {
-    indexAxis: 'y',
-    maintainAspectRatio: false,
-    responsive: true,
-    scales: {
-        yAxes: {
-            title: {
-                display: true,
-                text: 'Sa     re       Re      ga      Ga     ma      Ma     Pa     dha     Dha     ni        Ni     SA',
-                font: {
-                    size: 15,
-                }
-            }
-        },
-        xAxes: {
-            title: {
-                display: true,
-                text: 'Signal-to-Noise Ratio (dB)',
-                font: {
-                    size: 15,
-                }  
-            }
-        },
-    },
-    plugins: {
-        legend: {
-            display: true,
-            position: 'top',
-        },
-        title: {
-            display: false,
-            text: 'Drone Analysis',
-        }
-    },
-}
-
 const DroneAnalyzer = () => {
     let defaultDroneState = dspStateFromSettings('drone', dronePRT)
     let defaultScaleState = dspStateFromSettings('scale', scalePKB)
-    const [droneState,setDroneState] = React.useState(defaultDroneState)
-    const [scaleState,setScaleState] = React.useState(defaultScaleState)
-    const [droneFilename,setDroneFilename] = React.useState("")
-    const [scaleFilename,setScaleFilename] = React.useState("")
-
-    const [droneAnalysis,setDroneAnalysis] = React.useState({status: false, message: ""})
-    const [dronePitches,setDronePitches] = React.useState({})
+    const [drone,setDrone] = React.useState({state: defaultDroneState, name: 'Standard'})
+    const [scale,setScale] = React.useState({state: defaultScaleState, name: 'Standard'})
+    const [droneAnalysis,setDroneAnalysis] = React.useState({status: false, pitches:[]})
 
     const restoreDrone = (dronesnapshot,dronefilename) => {
         let droneState = dspStateFromSettings('drone',dronesnapshot)
-        setDroneFilename(dronefilename.replace('.prt',''))
-        setDroneState({...droneState})
+        setDrone({state: droneState, name: dronefilename.replace('.prt','')})
+        setDroneAnalysis({status: false, pitches:[]})
     }
 
     const resetDrone = () => {
-        setDroneFilename("")
-        setDroneState({...defaultDroneState})
+        setDrone({state: defaultDroneState, name: 'Standard'})
+        setDroneAnalysis({status: false, pitches:[]})
     }
 
     const restoreScale = (scalesnapshot,scalefilename) => {
         let scaleState = dspStateFromSettings('scale',scalesnapshot)
-        setScaleFilename(scalefilename.replace('.pkb',''))
-        setScaleState({...scaleState})
+        setScale({state: scaleState, name: scalefilename.replace('.pkb','')})
+        setDroneAnalysis({status: false, pitches:[]})
     }
 
     const resetScale = () => {
-        setScaleFilename("")
-        setScaleState({...defaultScaleState})
+        setScale({state: defaultScaleState, name: 'Standard'})
+        setDroneAnalysis({status: false, pitches:[]})
     }
 
     const analyze = () => {
-        let result = analyzeDrone(droneState,scaleState,resolution,noiseFloor)
+        let result = analyzeDrone(drone.state,scale.state,resolution,noiseFloor)
 
-        setDroneAnalysis({status: result.status, message: result.message})
-        setDronePitches({
-            labels: result.pitches.map(pitch => (2**(pitch.ratio/1200)).toFixed(5)),
-            datasets: [
-                {
-                    label: `${scaleFilename || 'Standard'} Scale`,
-                    data: result.pitches.map((pitch) => pitch.refAmplitude),
-                    backgroundColor: '#5c5c85',
-                    barThickness: 1,
-                },
-                {
-                    label: `${droneFilename || 'Standard'} Drone`,
-                    data: result.pitches.map((pitch) => pitch.amplitude),
-                    backgroundColor: '#f98ca4',
-                    barThickness: 1,
-                },
-            ],
-        })
+        setDroneAnalysis({status: result.status, pitches: result.pitches})
     }
 
     const [resolution,setResolution] = React.useState(10)
@@ -168,7 +82,7 @@ const DroneAnalyzer = () => {
                 <p><strong>Drone Analyzer</strong></p>
                 <DroneAnalyzerContainer>
                     <p><strong>Configure Drone</strong></p>
-                    <p>Upload a drone tuning {droneFilename !== '' ? `or keep using〝${droneFilename}〞drone` : 'or use the standard drone'}</p>
+                    <p>Upload a drone tuning or keep using <strong>{drone.name}</strong> drone</p>
                     <center>
                         <Button onClick={resetDrone}>Reset Drone</Button>
                         <SaveRestore extn='prt' restore={restoreDrone} restoretitle='Load Drone' />
@@ -177,7 +91,7 @@ const DroneAnalyzer = () => {
                 </DroneAnalyzerContainer>
                 <DroneAnalyzerContainer>
                     <p><strong>Configure Scale</strong></p>
-                    <p>Upload a scale tuning {scaleFilename !== '' ? `or keep using〝${scaleFilename}〞scale` : 'or use the standard scale'}</p>
+                    <p>Upload a scale tuning or keep using <strong>{scale.name}</strong> scale</p>
                     <center>
                         <Button onClick={resetScale}>Reset Scale</Button>
                         <SaveRestore extn='pkb' restore={restoreScale} restoretitle='Load Scale' />
@@ -192,18 +106,8 @@ const DroneAnalyzer = () => {
                 </center>
                 <p></p>
             </DroneAnalyzerContainer>
-            {droneAnalysis.status && <ChartContainer>
-                <p><strong>Analysis Results</strong></p>
-                <Bar options={chartOptions} data={dronePitches} />
-            </ChartContainer>}
-            {droneAnalysis.message !== '' && <DroneAnalyzerContainer>
-                <p><strong>Detailed Results</strong></p>
-                <DroneAnalyzerResultElement>
-                        <code>
-                            {droneAnalysis.message}
-                        </code>
-                </DroneAnalyzerResultElement>
-            </DroneAnalyzerContainer>}
+            {droneAnalysis.status && <DroneAnalysisChart pitches={droneAnalysis.pitches} droneName={drone.name} scaleName={scale.name} />}
+            {droneAnalysis.status && <DroneAnalysisTable pitches={droneAnalysis.pitches} droneState={drone.state} />}
         </>
     )
 }

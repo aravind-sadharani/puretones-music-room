@@ -7,19 +7,18 @@ const stringNames = ['1st_String', '2nd_String', '3rd_String', '4th_String', '5t
 const octaveGainConstants = [0.04, 0.04, 0.03, 0.04, 0.01, 0.003]
 
 const analyzeDrone = (droneState,scaleState,resolution,noiseFloor) => {
-    let stringConfig = stringNames.map(name => {
+    let strings = stringNames.map(name => {
         let basePath = `/FaustDSP/PureTones_v1.0/0x00/${name}`
-        return ({
-            value: Number(droneState[`${basePath}/Select_Note`]),
-            finetune: Number(droneState[`${basePath}/Fine_Tune`]),
-            ultrafinetune: Number(droneState[`${basePath}/Ultrafine_Tune`]),
-        })
+        let baseNote = Number(droneState[`${basePath}/Select_Note`])
+        let baseRatio = noteRatios[baseNote]
+        let centOffset = Number(droneState[`${basePath}/Fine_Tune`])
+        let subCentOffset = Number(droneState[`${basePath}/Ultrafine_Tune`])
+        let pitch = baseRatio*(2**((centOffset + subCentOffset/100)/1200))
+        return {
+            pitch: pitch,
+            basepath: basePath,
+        }
     })
-
-    let strings = stringConfig.map((s,i) => ({
-        pitch: noteRatios[Number(s.value)]*(2**((Number(s.finetune) + Number(s.ultrafinetune)/100)/1200)),
-        basepath: `/FaustDSP/PureTones_v1.0/0x00/${stringNames[i]}`,
-    }))
 
     let stringPairs = []
     strings.forEach((string,index) => {
@@ -100,18 +99,13 @@ const analyzeDrone = (droneState,scaleState,resolution,noiseFloor) => {
         ratio: tone.ratio,
         amplitude: todB(tone.amplitude),
         refAmplitude: 0,
-    })).sort((tone1, tone2) => tone2.amplitude - tone1.amplitude)
-
-    let status = true
-    let message = `Drone Analysis with ${stringConfig.length} strings tuned as\n  ${stringConfig.map((s,i) => `${noteNames[s.value]} (${Number(s.finetune) + Number(s.ultrafinetune)/100})${(i+1) % 3 === 0 ? '\n  ' : ', '}`).join('')}\n`
-
-    let relevantTonesPrintableHeader = '  Ratio\t\tCents    \tSNR (in dB)\n'
-    let relevantTonesPrintable = relevantTones.filter(tone => tone.amplitude > 0).map(tone => `  ${(2**(tone.ratio/1200)).toFixed(5)}\t${' '.repeat(7-tone.ratio.toFixed(2).length)}${tone.ratio.toFixed(2)} ¢\t${' '.repeat(6-tone.amplitude.toFixed(2).length)}${tone.amplitude.toFixed(2)} dB`).join('\n')
-
-    message = `${message}${relevantTonesPrintableHeader}${relevantTonesPrintable}`
+    }))
 
     let maxAmplitude = relevantTones[0].amplitude
-    relevantTones.sort((tone1, tone2) => tone1.ratio - tone2.ratio)
+    relevantTones.forEach(tone => {
+        if(maxAmplitude < tone.amplitude)
+            maxAmplitude = tone.amplitude
+    })
 
     let scaleConfig = noteNames.map((note,index) =>{
         let basePath = `/FaustDSP/Common_Parameters/12_Note_Scale`
@@ -139,12 +133,9 @@ const analyzeDrone = (droneState,scaleState,resolution,noiseFloor) => {
         let scaleIndex = Math.floor((scaleRatio + resolution/2)/resolution)
         relevantTones[scaleIndex].refAmplitude = maxAmplitude - 12
     })
-    
-    relevantTones.sort((tone1, tone2) => tone2.ratio - tone1.ratio)
-    
+        
     return {
-        status: status,
-        message: message,
+        status: true,
         pitches: relevantTones,
     }
 }
