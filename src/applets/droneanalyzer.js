@@ -3,12 +3,16 @@ import styled from 'styled-components'
 import Button from 'components/button'
 import SaveRestore from 'components/saverestore'
 import Slider from 'components/slider'
+import Toggle from 'components/toggle'
 import {analyzeDrone} from 'utils/analyzedrone'
 import {dspStateFromSettings} from 'utils/dspsettingsinterpreter'
 import dronePRT from 'data/default.prt'
 import scalePKB from 'data/default.pkb'
 import DroneAnalysisTable from 'applets/droneanalysistable'
 import DroneAnalysisChart from 'applets/droneanalysischart'
+import TimeFreqAnalysisChart from 'applets/timefreqanalysischart'
+
+const SLICE = 100
 
 const DroneAnalyzerContainer = styled.div`
     padding: 12px 12px 0 12px;
@@ -25,43 +29,71 @@ const DroneAnalyzer = () => {
     const [drone,setDrone] = React.useState({state: defaultDroneState, name: 'Standard'})
     const [scale,setScale] = React.useState({state: defaultScaleState, name: 'Standard'})
     const [droneAnalysis,setDroneAnalysis] = React.useState({status: false, pitches:[]})
+    const [timeFreqAnalysis,setTimeFreqAnalysis] = React.useState({status: false, pitches:[]})
+    const [title,setTitle] = React.useState('Analyze')
+
+    const resetAnalysis = () => {
+        setDroneAnalysis({status: false, pitches:[]})
+        setTimeFreqAnalysis({status: false, pitches:[]})
+        setTitle('Analyze')
+    }
 
     const restoreDrone = (dronesnapshot,dronefilename) => {
         let droneState = dspStateFromSettings('drone',dronesnapshot)
         setDrone({state: droneState, name: dronefilename.replace('.prt','')})
-        setDroneAnalysis({status: false, pitches:[]})
+        resetAnalysis()
     }
 
     const resetDrone = () => {
         setDrone({state: defaultDroneState, name: 'Standard'})
-        setDroneAnalysis({status: false, pitches:[]})
+        resetAnalysis()
     }
 
     const restoreScale = (scalesnapshot,scalefilename) => {
         let scaleState = dspStateFromSettings('scale',scalesnapshot)
         setScale({state: scaleState, name: scalefilename.replace('.pkb','')})
-        setDroneAnalysis({status: false, pitches:[]})
+        resetAnalysis()
     }
 
     const resetScale = () => {
         setScale({state: defaultScaleState, name: 'Standard'})
-        setDroneAnalysis({status: false, pitches:[]})
+        resetAnalysis()
     }
 
     const analyze = () => {
-        let result = analyzeDrone(drone.state,scale.state,resolution,noiseFloor)
+        if(title === 'Completed')
+            return
 
-        setDroneAnalysis({status: result.status, pitches: result.pitches})
+        setTitle('Analyzing...')        
     }
 
     const [resolution,setResolution] = React.useState(10)
     const [noiseFloor,setNoiseFloor] = React.useState(-80)
+    const [duration,setDuration] = React.useState(30)
+    const [mode,setMode] = React.useState(0)
 
-    const updateResolution = (value) => setResolution(Number(value))
-    const updateNoiseFloor = (value) => setNoiseFloor(Number(value))
+    const updateParams = (value,path) => {
+        switch(path) {
+            case 'Resolution':
+                setResolution(Number(value))
+                break
+            case 'NoiseFloor':
+                setNoiseFloor(Number(value))
+                break
+            case 'Duration':
+                setDuration(Number(value))
+                break
+            case 'Mode':
+                setMode(Number(value))
+                break
+            default:
+                console.error('Drone Analyzer: Incorrect path for updating parameters')
+        }
+        resetAnalysis()
+    }
 
     const resolutionParams = {
-        key: 'Resolution in ¢',
+        key: 'Resolution (¢)',
         init: resolution,
         max: 20,
         min: 1,
@@ -69,12 +101,42 @@ const DroneAnalyzer = () => {
     }
 
     const noiseFloorParams = {
-        key: 'Noise floor in dB',
+        key: 'Noise floor (dB)',
         init: noiseFloor,
         max: -60,
         min: -100,
         step: 1,
     }
+
+    const durationParams = {
+        key: 'Duration for Time Frequency Analysis (s)',
+        init: duration,
+        max: 60,
+        min: 1,
+        step: 1,
+    }
+
+    React.useEffect(() => {
+        if(title === 'Analyzing...') {
+            if(mode === 0) {
+                setDroneAnalysis({
+                    status: true,
+                    pitches: analyzeDrone(drone.state,scale.state,resolution,noiseFloor,-1),
+                })
+            } else {
+                let pitchData = []
+                for(let time=0; time<duration; time+=duration/SLICE) {
+                    pitchData.push(analyzeDrone(drone.state,scale.state,resolution,noiseFloor,time))
+                }
+                setTimeFreqAnalysis({
+                    status: true,
+                    pitches: pitchData,
+                })
+            }
+            setTitle('Completed')
+        }
+    },[title,duration,resolution,noiseFloor,mode,drone,scale])
+
 
     return (
         <>
@@ -98,14 +160,17 @@ const DroneAnalyzer = () => {
                     </center>
                     <p></p>
                 </DroneAnalyzerContainer>
-                <p>Set the resolution and noise floor and press Analyze to view the results.</p>
-                <Slider params={resolutionParams} path='Resolution' onParamUpdate={updateResolution} />
-                <Slider params={noiseFloorParams} path='NoiseFloor' onParamUpdate={updateNoiseFloor} />
+                <p><strong>Analysis Parameters</strong></p>
+                <Slider params={resolutionParams} path='Resolution' onParamUpdate={updateParams} />
+                <Slider params={noiseFloorParams} path='NoiseFloor' onParamUpdate={updateParams} />
+                <Toggle title='Enable Time Frequency Analysis' status={mode} path='Mode' onParamUpdate={updateParams} />
+                {mode === 1 && <Slider params={durationParams} path='Duration' onParamUpdate={updateParams} />}
                 <center>
-                    <Button onClick={() => analyze()}>Analyze</Button>
+                    <Button onClick={() => analyze()}>{title}</Button>
                 </center>
                 <p></p>
             </DroneAnalyzerContainer>
+            {timeFreqAnalysis.status && <TimeFreqAnalysisChart pitches={timeFreqAnalysis.pitches} duration={duration} droneName={drone.name} scaleName={scale.name} />}
             {droneAnalysis.status && <DroneAnalysisChart pitches={droneAnalysis.pitches} droneName={drone.name} scaleName={scale.name} />}
             {droneAnalysis.status && <DroneAnalysisTable pitches={droneAnalysis.pitches} droneState={drone.state} />}
         </>

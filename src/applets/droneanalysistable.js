@@ -42,7 +42,7 @@ const DroneAnalysisTable = ({pitches,droneState}) => {
 
     return (
         <DroneAnalysisContainer>
-            <p><strong>Detailed Results</strong></p>
+            <p><strong>Details of Overall Levels of Drone Pitches</strong></p>
             <DroneAnalysisTableElement>
                 <code>{message}</code>
             </DroneAnalysisTableElement>

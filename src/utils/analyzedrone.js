@@ -1,12 +1,14 @@
 const MAXHARMONICS = 64
 const OCTAVE = 1200
 const EPSILON = 0.001
+const FREQ = 87.31
 const noteRatios = [2,243/128,16/9,27/16,128/81,3/2,729/512,4/3,81/64,32/27,9/8,256/243,1]
 const noteNames = ['SA','Ni','ni','Dha','dha','Pa','Ma','ma','Ga','ga','Re','re','Sa']
 const stringNames = ['1st_String', '2nd_String', '3rd_String', '4th_String', '5th_String', '6th_String']
 const octaveGainConstants = [0.04, 0.04, 0.03, 0.04, 0.01, 0.003]
+const stringDelay = [0,0.3,0.6,0.5,0.8,0.1]
 
-const analyzeDrone = (droneState,scaleState,resolution,noiseFloor) => {
+const analyzeDrone = (droneState,scaleState,resolution,noiseFloor,time) => {
     let strings = stringNames.map(name => {
         let basePath = `/FaustDSP/PureTones_v1.0/0x00/${name}`
         let baseNote = Number(droneState[`${basePath}/Select_Note`])
@@ -18,7 +20,7 @@ const analyzeDrone = (droneState,scaleState,resolution,noiseFloor) => {
             pitch: pitch,
             basepath: basePath,
         }
-    })
+    }).filter(string => (Number(droneState[`${string.basepath}/Play_String/Loop`]) === 1))
 
     let stringPairs = []
     strings.forEach((string,index) => {
@@ -63,7 +65,35 @@ const analyzeDrone = (droneState,scaleState,resolution,noiseFloor) => {
         relevantTones[index].amplitude += amplitude
     }
 
-    const getAmplitude = (stringpath,harmonic) => {
+    const getTimeGain = (stringPath,pitch,harmonic,time) => {
+        if(time < 0)
+            return 1
+
+        let period = droneState[`/FaustDSP/PureTones_v1.0/0x00/Period`]
+        let stringIndex = Number(stringPath.replace('/FaustDSP/PureTones_v1.0/0x00/','')[0]) - 1
+
+        if(stringIndex < 3)
+            period -= 0.2
+        else
+            period += 0.2
+        
+        let adjustedTime = (time - stringDelay[stringIndex]*period) % period
+        let stringOn = 1
+
+        if(harmonic > 16)
+            stringOn = adjustedTime < 0.6*period ? 1 : 0
+        else if(harmonic > 4)
+            stringOn = adjustedTime < 0.8*period ? 1 : 0
+
+        let variance = droneState[`${stringPath}/Variance`]
+        let stringBeat = Math.cos(2*Math.PI*pitch*FREQ*harmonic*variance*time/10000)
+
+        return stringOn*stringBeat
+    }
+
+    const getAmplitude = (stringpath,pitch,harmonic,time) => {
+        let timeGain = getTimeGain(stringpath,pitch,harmonic,time)
+
         let stringdBGain = Number(droneState[`${stringpath}/Gain`])
         let stringRatio = noteRatios[Number(droneState[`${stringpath}/Select_Note`])]
         let stringGain = (10**(stringdBGain/20))/stringRatio
@@ -74,22 +104,22 @@ const analyzeDrone = (droneState,scaleState,resolution,noiseFloor) => {
         let octaveOffset = harmonic - 2**(octave-1) - 1
         let octaveDecay = harmonic === 1 ? 1 : (harmonic === 2 ? 1.42 : (0.5)**(octaveOffset))
 
-        return stringGain*octaveGain*octaveDecay
+        return timeGain*stringGain*octaveGain*octaveDecay
     }
 
     for(let i = 1; i <= MAXHARMONICS; i++) {
         strings.forEach(string => {
             let ratio = i*string.pitch
-            let amplitude = getAmplitude(string.basepath,i)
+            let amplitude = getAmplitude(string.basepath,string.pitch,i,time)
             addRatio(ratio, amplitude)
         })
         for(let j = 1; j<= MAXHARMONICS; j++) {
             stringPairs.forEach(pair => {
                 let ratio = Math.abs(i*pair[0].pitch-j*pair[1].pitch)
-                let amplitude = getAmplitude(pair[0].basepath,i)*getAmplitude(pair[1].basepath,j)
+                let amplitude = getAmplitude(pair[0].basepath,pair[0].pitch,i,time)*getAmplitude(pair[1].basepath,pair[1].pitch,j,time)
                 addRatio(ratio, amplitude)
                 ratio = i*pair[0].pitch+j*pair[1].pitch
-                amplitude = getAmplitude(pair[0].basepath,i)*getAmplitude(pair[1].basepath,j)
+                amplitude = getAmplitude(pair[0].basepath,pair[0].pitch,i,time)*getAmplitude(pair[1].basepath,pair[1].pitch,j,time)
                 addRatio(ratio, amplitude)
             })
         }
@@ -134,10 +164,7 @@ const analyzeDrone = (droneState,scaleState,resolution,noiseFloor) => {
         relevantTones[scaleIndex].refAmplitude = maxAmplitude - 12
     })
         
-    return {
-        status: true,
-        pitches: relevantTones,
-    }
+    return relevantTones
 }
 
 export {analyzeDrone}

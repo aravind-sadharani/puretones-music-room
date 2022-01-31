@@ -2,23 +2,23 @@ import * as React from 'react'
 import styled from 'styled-components'
 import {
     Chart as ChartJS,
-    CategoryScale,
     LinearScale,
-    BarElement,
+    PointElement,
     Title,
     Tooltip,
     Legend,
-} from 'chart.js'
-import { Bar } from 'react-chartjs-2'
+  } from 'chart.js'
+import { Bubble } from 'react-chartjs-2'
 
 ChartJS.register(
-    CategoryScale,
     LinearScale,
-    BarElement,
+    PointElement,
     Title,
     Tooltip,
     Legend
 )
+
+const SLICE = 100
 
 const ChartContainer = styled.div`
     padding: 12px 12px 0 12px;
@@ -28,13 +28,13 @@ const ChartContainer = styled.div`
     ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
     border-radius: 5px;
     canvas {
+        width: 670px;
         max-height: 600px;
         margin-bottom: 1em;
     }
 `
 
 const chartOptions = {
-    indexAxis: 'y',
     maintainAspectRatio: false,
     responsive: true,
     scales: {
@@ -50,7 +50,7 @@ const chartOptions = {
         xAxes: {
             title: {
                 display: true,
-                text: 'Signal-to-Noise Ratio (dB)',
+                text: 'Time (s)',
                 font: {
                     size: 15,
                 }  
@@ -69,32 +69,44 @@ const chartOptions = {
     },
 }
 
-const DroneAnalysisChart = ({pitches,scaleName,droneName}) => {
-    let pitchList = [...pitches]
-    pitchList.sort((tone1, tone2) => tone2.ratio - tone1.ratio)
+const TimeFreqAnalysisChart = ({pitches,duration,scaleName,droneName}) => {
     let pitchData = {
-        labels: pitchList.map(pitch => pitch.ratio.toFixed(2)),
         datasets: [
             {
                 label: `${scaleName} Scale`,
-                data: pitchList.map((pitch) => pitch.refAmplitude),
-                backgroundColor: 'rgba(143,143,171)',
-                barThickness: 1,
+                data: [].concat.apply([],pitches.map((pitchList,i) => {
+                    return pitchList.map(pitch => {
+                        return ({
+                            x: i*duration/SLICE,
+                            y: pitch.ratio.toFixed(2),
+                            r: pitch.refAmplitude !== 0 ? 3 : 0,
+                        })
+                    })
+                })),
+                borderColor: 'rgba(143,143,171)',
+                backgroundColor: 'rgba(143,143,171,0.2)',
             },
             {
                 label: `${droneName} Drone`,
-                data: pitchList.map((pitch) => pitch.amplitude),
-                backgroundColor: 'rgba(249,140,164,0.6)',
-                barThickness: 1,
+                data: [].concat.apply([],pitches.map((pitchList,i) => {
+                    return pitchList.map(pitch => {
+                        return ({
+                            x: i*duration/SLICE,
+                            y: pitch.ratio.toFixed(2),
+                            r: Math.floor(pitch.amplitude/20),
+                        })
+                    })
+                })),
+                backgroundColor: 'rgba(249,140,164,0.8)',
             },
         ],
     }
     return (
         <ChartContainer>
-            <p><strong>Overall Levels of Drone and Scale Pitches</strong></p>
-            <Bar options={chartOptions} data={pitchData} />
+            <p><strong>Drone and Scale Pitches over time</strong></p>
+            <Bubble options={chartOptions} data={pitchData} />
         </ChartContainer>
     )
 }
 
-export default DroneAnalysisChart
+export default TimeFreqAnalysisChart
