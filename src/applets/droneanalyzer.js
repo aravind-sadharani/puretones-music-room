@@ -4,6 +4,7 @@ import Button from 'components/button'
 import SaveRestore from 'components/saverestore'
 import Slider from 'components/slider'
 import Toggle from 'components/toggle'
+import ProgressBar from 'components/progressbar'
 import {dspStateFromSettings} from 'utils/dspsettingsinterpreter'
 import dronePRT from 'data/default.prt'
 import scalePKB from 'data/default.pkb'
@@ -30,6 +31,7 @@ const DroneAnalyzer = () => {
     const [droneAnalysis,setDroneAnalysis] = React.useState({status: false, pitches:[]})
     const [timeFreqAnalysis,setTimeFreqAnalysis] = React.useState({status: false, pitches:[]})
     const [title,setTitle] = React.useState('Analyze')
+    const [width,setWidth] = React.useState('0%')
 
     const resetAnalysis = () => {
         setDroneAnalysis({status: false, pitches:[]})
@@ -63,6 +65,8 @@ const DroneAnalyzer = () => {
         if(title !== 'Analyze')
             return
 
+        setTitle(`Analyzing...`)
+        
         const Worker = new window.Worker('/Workers/droneanalyzer.worker.js')
         Worker.postMessage({
             commonSettings: commonSettings,
@@ -78,7 +82,7 @@ const DroneAnalyzer = () => {
 
         Worker.onmessage = (e) => {
             if(!e.data.status) {
-                setTitle(`Working ${e.data.progress}%`)
+                setWidth(`${e.data.progress}%`)
             } else {
                 if(mode === 0)
                     setDroneAnalysis(e.data)
@@ -86,6 +90,7 @@ const DroneAnalyzer = () => {
                     setTimeFreqAnalysis(e.data)
                 Worker.terminate()
                 setTitle('Completed')
+                setWidth('100%')
             }
         }
     }
@@ -170,6 +175,7 @@ const DroneAnalyzer = () => {
                     <Button onClick={() => analyze()}>{title}</Button>
                 </center>
                 <p></p>
+                <ProgressBar title='Analysis Progress' width={width} />
             </DroneAnalyzerContainer>
             {timeFreqAnalysis.status && <TimeFreqAnalysisChart pitches={timeFreqAnalysis.pitches} duration={duration} droneName={drone.name} scaleName={scale.name} />}
             {droneAnalysis.status && <DroneAnalysisChart pitches={droneAnalysis.pitches} droneName={drone.name} scaleName={scale.name} />}
