@@ -10,6 +10,7 @@ import scalePKB from 'data/default.pkb'
 import DroneAnalysisTable from 'applets/droneanalysistable'
 import DroneAnalysisChart from 'applets/droneanalysischart'
 import TimeFreqAnalysisChart from 'applets/timefreqanalysischart'
+import { CommonSettingsEnv } from 'services/commonsettings'
 
 const DroneAnalyzerContainer = styled.div`
     padding: 12px 12px 0 12px;
@@ -21,6 +22,7 @@ const DroneAnalyzerContainer = styled.div`
 `
 
 const DroneAnalyzer = () => {
+    const {commonSettings} = React.useContext(CommonSettingsEnv)
     let defaultDroneState = dspStateFromSettings('drone', dronePRT)
     let defaultScaleState = dspStateFromSettings('scale', scalePKB)
     const [drone,setDrone] = React.useState({state: defaultDroneState, name: 'Standard'})
@@ -63,6 +65,7 @@ const DroneAnalyzer = () => {
 
         const Worker = new window.Worker('/Workers/droneanalyzer.worker.js')
         Worker.postMessage({
+            commonSettings: commonSettings,
             droneState: drone.state,
             scaleState: scale.state,
             resolution: resolution,
