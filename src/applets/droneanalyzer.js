@@ -12,8 +12,6 @@ import DroneAnalysisTable from 'applets/droneanalysistable'
 import DroneAnalysisChart from 'applets/droneanalysischart'
 import TimeFreqAnalysisChart from 'applets/timefreqanalysischart'
 
-const SLICE = 100
-
 const DroneAnalyzerContainer = styled.div`
     padding: 12px 12px 0 12px;
     margin: 0 0 1em 0;
@@ -118,25 +116,14 @@ const DroneAnalyzer = () => {
 
     React.useEffect(() => {
         if(title === 'Analyzing...') {
-            if(mode === 0) {
-                setDroneAnalysis({
-                    status: true,
-                    pitches: analyzeDrone(drone.state,scale.state,resolution,noiseFloor,-1),
-                })
-            } else {
-                let pitchData = []
-                for(let time=0; time<duration; time+=duration/SLICE) {
-                    pitchData.push(analyzeDrone(drone.state,scale.state,resolution,noiseFloor,time))
-                }
-                setTimeFreqAnalysis({
-                    status: true,
-                    pitches: pitchData,
-                })
-            }
+            if(mode === 0)
+                setDroneAnalysis(analyzeDrone(drone.state,scale.state,resolution,noiseFloor,mode,duration))
+            else
+                setTimeFreqAnalysis(analyzeDrone(drone.state,scale.state,resolution,noiseFloor,mode,duration))
+            
             setTitle('Completed')
         }
     },[title,duration,resolution,noiseFloor,mode,drone,scale])
-
 
     return (
         <>

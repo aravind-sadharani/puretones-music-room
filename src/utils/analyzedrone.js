@@ -1,3 +1,4 @@
+const SLICE = 100
 const MAXHARMONICS = 64
 const OCTAVE = 1200
 const EPSILON = 0.001
@@ -8,7 +9,7 @@ const stringNames = ['1st_String', '2nd_String', '3rd_String', '4th_String', '5t
 const octaveGainConstants = [0.04, 0.04, 0.03, 0.04, 0.01, 0.003]
 const stringDelay = [0,0.3,0.6,0.5,0.8,0.1]
 
-const analyzeDrone = (droneState,scaleState,resolution,noiseFloor,time) => {
+const analyzeDroneOnce = (droneState,scaleState,resolution,noiseFloor,time) => {
     let strings = stringNames.map(name => {
         let basePath = `/FaustDSP/PureTones_v1.0/0x00/${name}`
         let baseNote = Number(droneState[`${basePath}/Select_Note`])
@@ -77,7 +78,7 @@ const analyzeDrone = (droneState,scaleState,resolution,noiseFloor,time) => {
         else
             period += 0.2
         
-        let adjustedTime = (time - stringDelay[stringIndex]*period) % period
+        let adjustedTime = (time + stringDelay[stringIndex]*period) % period
         let stringOn = 1
 
         if(harmonic > 16)
@@ -165,6 +166,26 @@ const analyzeDrone = (droneState,scaleState,resolution,noiseFloor,time) => {
     })
         
     return relevantTones
+}
+
+const analyzeDrone = (droneState,scaleState,resolution,noiseFloor,mode,duration) => {
+    if(mode === 0) {
+        return {
+            status: true,
+            pitches: analyzeDroneOnce(droneState,scaleState,resolution,noiseFloor,-1),
+        }
+
+    } else {
+        let pitchData = []
+
+        for(let time=0; time<duration; time+=duration/SLICE)
+            pitchData.push(analyzeDroneOnce(droneState,scaleState,resolution,noiseFloor,time))
+
+        return {
+            status: true,
+            pitches: pitchData,
+        }
+    }
 }
 
 export {analyzeDrone}
