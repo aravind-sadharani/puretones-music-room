@@ -28,7 +28,7 @@ const ChartContainer = styled.div`
     ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
     border-radius: 5px;
     canvas {
-        width: 670px;
+        max-width: 670px;
         max-height: 600px;
         margin-bottom: 1em;
     }
@@ -44,6 +44,17 @@ const chartOptions = {
                 text: 'Sa     re       Re      ga      Ga     ma      Ma     Pa     dha     Dha     ni        Ni     SA',
                 font: {
                     size: 15,
+                }
+            },
+            min: -20,
+            max: 1220,
+            ticks : {
+                callback: (val) => {
+                    if(val === 1220)
+                        return 1200
+                    if(val === -20)
+                        return 0
+                    return val
                 }
             }
         },
