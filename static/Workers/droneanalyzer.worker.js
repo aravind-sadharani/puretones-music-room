@@ -168,24 +168,27 @@ const analyzeDroneOnce = (droneState,scaleState,resolution,noiseFloor,time) => {
     return relevantTones
 }
 
-const analyzeDrone = (droneState,scaleState,resolution,noiseFloor,mode,duration) => {
+onmessage = (e) => {
+    const {droneState,scaleState,resolution,noiseFloor,mode,duration} = e.data
+
     if(mode === 0) {
-        return {
+        postMessage({
             status: true,
             pitches: analyzeDroneOnce(droneState,scaleState,resolution,noiseFloor,-1),
-        }
-
+        })
     } else {
         let pitchData = []
 
-        for(let time=0; time<duration; time+=duration/SLICE)
+        for(let time=0; time<duration; time+=duration/SLICE) {
             pitchData.push(analyzeDroneOnce(droneState,scaleState,resolution,noiseFloor,time))
-
-        return {
+            postMessage({
+                status: false,
+                progress: Math.floor(time*SLICE/duration),
+            })
+        }
+        postMessage({
             status: true,
             pitches: pitchData,
-        }
+        })
     }
 }
-
-export {analyzeDrone}

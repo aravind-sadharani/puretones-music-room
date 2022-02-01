@@ -4,7 +4,6 @@ import Button from 'components/button'
 import SaveRestore from 'components/saverestore'
 import Slider from 'components/slider'
 import Toggle from 'components/toggle'
-import {analyzeDrone} from 'utils/analyzedrone'
 import {dspStateFromSettings} from 'utils/dspsettingsinterpreter'
 import dronePRT from 'data/default.prt'
 import scalePKB from 'data/default.pkb'
@@ -59,13 +58,36 @@ const DroneAnalyzer = () => {
     }
 
     const analyze = () => {
-        if(title === 'Completed')
+        if(title !== 'Analyze')
             return
 
-        setTitle('Analyzing...')        
+        const Worker = new window.Worker('/Workers/droneanalyzer.worker.js')
+        Worker.postMessage({
+            droneState: drone.state,
+            scaleState: scale.state,
+            resolution: resolution,
+            noiseFloor: noiseFloor,
+            mode: mode,
+            duration: duration
+        })
+
+        Worker.onerror = (err) => console.error(err)
+
+        Worker.onmessage = (e) => {
+            if(!e.data.status) {
+                setTitle(`Working ${e.data.progress}%`)
+            } else {
+                if(mode === 0)
+                    setDroneAnalysis(e.data)
+                else
+                    setTimeFreqAnalysis(e.data)
+                Worker.terminate()
+                setTitle('Completed')
+            }
+        }
     }
 
-    const [resolution,setResolution] = React.useState(10)
+    const [resolution,setResolution] = React.useState(4)
     const [noiseFloor,setNoiseFloor] = React.useState(-80)
     const [duration,setDuration] = React.useState(30)
     const [mode,setMode] = React.useState(0)
@@ -113,17 +135,6 @@ const DroneAnalyzer = () => {
         min: 1,
         step: 1,
     }
-
-    React.useEffect(() => {
-        if(title === 'Analyzing...') {
-            if(mode === 0)
-                setDroneAnalysis(analyzeDrone(drone.state,scale.state,resolution,noiseFloor,mode,duration))
-            else
-                setTimeFreqAnalysis(analyzeDrone(drone.state,scale.state,resolution,noiseFloor,mode,duration))
-            
-            setTitle('Completed')
-        }
-    },[title,duration,resolution,noiseFloor,mode,drone,scale])
 
     return (
         <>
