@@ -4,6 +4,7 @@ import Button from 'components/button'
 import SaveRestore from 'components/saverestore'
 import Slider from 'components/slider'
 import Toggle from 'components/toggle'
+import TabNav from "components/tabs"
 import ProgressBar from 'components/progressbar'
 import {dspStateFromSettings} from 'utils/dspsettingsinterpreter'
 import dronePRT from 'data/default.prt'
@@ -12,6 +13,9 @@ import DroneAnalysisTable from 'applets/droneanalysistable'
 import DroneAnalysisChart from 'applets/droneanalysischart'
 import TimeFreqAnalysisChart from 'applets/timefreqanalysischart'
 import { CommonSettingsEnv } from 'services/commonsettings'
+
+const droneStringNames = ['1st_String', '2nd_String', '3rd_String', '4th_String', '5th_String', '6th_String']
+const scaleTabs = ['Sa', 're', 'Re', 'ga', 'Ga', 'ma', 'Ma', 'Pa', 'dha', 'Dha', 'ni', 'Ni', 'SA']
 
 const DroneAnalyzerContainer = styled.div`
     padding: 12px 12px 0 12px;
@@ -32,6 +36,14 @@ const DroneAnalyzer = () => {
     const [timeFreqAnalysis,setTimeFreqAnalysis] = React.useState({status: false, pitches:[]})
     const [title,setTitle] = React.useState('Analyze')
     const [width,setWidth] = React.useState('0%')
+    const [resolution,setResolution] = React.useState(4)
+    const [noiseFloor,setNoiseFloor] = React.useState(-80)
+    const [duration,setDuration] = React.useState(30)
+    const [mode,setMode] = React.useState(0)
+    const [activeDroneStrings,setActiveDroneStrings] = React.useState(droneStringNames.filter(string => 
+        (Number(defaultDroneState[`/FaustDSP/PureTones_v1.0/0x00/${string}/Play_String/Loop`]) === 1)
+    ))
+    const [activeScaleNotes,setActiveScaleNotes] = React.useState(scaleTabs)
 
     const resetAnalysis = () => {
         setDroneAnalysis({status: false, pitches:[]})
@@ -42,22 +54,30 @@ const DroneAnalyzer = () => {
     const restoreDrone = (dronesnapshot,dronefilename) => {
         let droneState = dspStateFromSettings('drone',dronesnapshot)
         setDrone({state: droneState, name: dronefilename.replace('.prt','')})
+        setActiveDroneStrings(droneStringNames.filter(string => 
+            (Number(droneState[`/FaustDSP/PureTones_v1.0/0x00/${string}/Play_String/Loop`]) === 1)
+        ))
         resetAnalysis()
     }
 
     const resetDrone = () => {
         setDrone({state: defaultDroneState, name: 'Standard'})
+        setActiveDroneStrings(droneStringNames.filter(string => 
+            (Number(defaultDroneState[`/FaustDSP/PureTones_v1.0/0x00/${string}/Play_String/Loop`]) === 1)
+        ))
         resetAnalysis()
     }
 
     const restoreScale = (scalesnapshot,scalefilename) => {
         let scaleState = dspStateFromSettings('scale',scalesnapshot)
         setScale({state: scaleState, name: scalefilename.replace('.pkb','')})
+        setActiveScaleNotes(scaleTabs)
         resetAnalysis()
     }
 
     const resetScale = () => {
         setScale({state: defaultScaleState, name: 'Standard'})
+        setActiveScaleNotes(scaleTabs)
         resetAnalysis()
     }
 
@@ -71,7 +91,9 @@ const DroneAnalyzer = () => {
         Worker.postMessage({
             commonSettings: commonSettings,
             droneState: drone.state,
+            activeDroneStrings: activeDroneStrings,
             scaleState: scale.state,
+            activeScaleNotes: activeScaleNotes,
             resolution: resolution,
             noiseFloor: noiseFloor,
             mode: mode,
@@ -93,31 +115,6 @@ const DroneAnalyzer = () => {
                 setWidth('100%')
             }
         }
-    }
-
-    const [resolution,setResolution] = React.useState(4)
-    const [noiseFloor,setNoiseFloor] = React.useState(-80)
-    const [duration,setDuration] = React.useState(30)
-    const [mode,setMode] = React.useState(0)
-
-    const updateParams = (value,path) => {
-        switch(path) {
-            case 'Resolution':
-                setResolution(Number(value))
-                break
-            case 'NoiseFloor':
-                setNoiseFloor(Number(value))
-                break
-            case 'Duration':
-                setDuration(Number(value))
-                break
-            case 'Mode':
-                setMode(Number(value))
-                break
-            default:
-                console.error('Drone Analyzer: Incorrect path for updating parameters')
-        }
-        resetAnalysis()
     }
 
     const resolutionParams = {
@@ -144,6 +141,53 @@ const DroneAnalyzer = () => {
         step: 1,
     }
 
+    const updateParams = (value,path) => {
+        switch(path) {
+            case 'Resolution':
+                setResolution(Number(value))
+                break
+            case 'NoiseFloor':
+                setNoiseFloor(Number(value))
+                break
+            case 'Duration':
+                setDuration(Number(value))
+                break
+            case 'Mode':
+                setMode(Number(value))
+                break
+            default:
+                if(path.includes('String')) {
+                    if(activeDroneStrings.indexOf(path) === -1 && Number(value) === 1) {
+                        setActiveDroneStrings([...activeDroneStrings,path])
+                    } else if(activeDroneStrings.indexOf(path) !== -1 && Number(value) === 0) {
+                        setActiveDroneStrings([...activeDroneStrings].filter(name => name !== path))
+                    }
+                } else {
+                    if(activeScaleNotes.indexOf(path) === -1 && Number(value) === 1) {
+                        setActiveScaleNotes([...activeScaleNotes,path])
+                    } else if(activeScaleNotes.indexOf(path) !== -1 && Number(value) === 0) {
+                        setActiveScaleNotes([...activeScaleNotes].filter(name => name !== path))
+                    } else
+                        console.error(`Drone Analyzer: Incorrect path ${path} and value ${value} for updating parameters`)
+                }
+        }
+        resetAnalysis()
+    }
+
+    const droneTabs = droneStringNames.filter(string => 
+        (Number(drone.state[`/FaustDSP/PureTones_v1.0/0x00/${string}/Play_String/Loop`]) === 1)
+    ).map(string => `String ${string[0]} (${scaleTabs[12 - Number(drone.state[`/FaustDSP/PureTones_v1.0/0x00/${string}/Select_Note`])]})`)
+
+    const dronePages = droneStringNames.filter(string => 
+        (Number(drone.state[`/FaustDSP/PureTones_v1.0/0x00/${string}/Play_String/Loop`]) === 1)
+    ).map(string => (
+        <Toggle title='Include in Analysis' status={activeDroneStrings.indexOf(string) === -1 ? '0' : '1'} path={string} onParamUpdate={updateParams} />
+    ))
+
+    const scalePages = scaleTabs.map(note => (
+        <Toggle title='Include in Analysis' status={activeScaleNotes.indexOf(note) === -1 ? '0' : '1'} path={note} onParamUpdate={updateParams} />
+    ))
+
     return (
         <>
             <DroneAnalyzerContainer>
@@ -156,6 +200,7 @@ const DroneAnalyzer = () => {
                         <SaveRestore extn='prt' restore={restoreDrone} restoretitle='Load Drone' />
                     </center>
                     <p></p>
+                    <TabNav tablist={droneTabs} pagelist={dronePages} />
                 </DroneAnalyzerContainer>
                 <DroneAnalyzerContainer>
                     <p><strong>Configure Scale</strong></p>
@@ -165,6 +210,7 @@ const DroneAnalyzer = () => {
                         <SaveRestore extn='pkb' restore={restoreScale} restoretitle='Load Scale' />
                     </center>
                     <p></p>
+                    <TabNav tablist={scaleTabs} pagelist={scalePages} />
                 </DroneAnalyzerContainer>
                 <p><strong>Analysis Parameters</strong></p>
                 <Slider params={resolutionParams} path='Resolution' onParamUpdate={updateParams} />

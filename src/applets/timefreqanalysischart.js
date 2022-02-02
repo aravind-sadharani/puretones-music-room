@@ -41,7 +41,7 @@ const chartOptions = {
         yAxes: {
             title: {
                 display: true,
-                text: 'Sa     re       Re      ga      Ga     ma      Ma     Pa     dha     Dha     ni        Ni     SA',
+                text: 'Sa      re       Re     ga      Ga     ma     Ma     Pa     dha    Dha     ni        Ni     SA',
                 font: {
                     size: 15,
                 }
@@ -49,13 +49,7 @@ const chartOptions = {
             min: -20,
             max: 1220,
             ticks : {
-                callback: (val) => {
-                    if(val === 1220)
-                        return 1200
-                    if(val === -20)
-                        return 0
-                    return val
-                }
+                display: false,
             }
         },
         xAxes: {

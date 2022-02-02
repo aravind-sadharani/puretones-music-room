@@ -4,13 +4,12 @@ const OCTAVE = 1200
 const EPSILON = 0.001
 const AFREQ = 55
 const noteRatios = [2,243/128,16/9,27/16,128/81,3/2,729/512,4/3,81/64,32/27,9/8,256/243,1]
-const noteNames = ['SA','Ni','ni','Dha','dha','Pa','Ma','ma','Ga','ga','Re','re','Sa']
-const stringNames = ['1st_String', '2nd_String', '3rd_String', '4th_String', '5th_String', '6th_String']
+const ratioFromName = {'SA': 2, 'Ni': 243/128, 'ni': 16/9, 'Dha': 27/16, 'dha': 128/81, 'Pa': 3/2, 'Ma': 729/512, 'ma': 4/3, 'Ga': 81/64, 'ga': 32/27, 'Re': 9/8, 're': 256/243, 'Sa': 1}
 const octaveGainConstants = [0.04, 0.04, 0.03, 0.04, 0.01, 0.003]
 const stringDelay = [0,0.3,0.6,0.5,0.8,0.1]
 
-const analyzeDroneOnce = (commonSettings,droneState,scaleState,resolution,noiseFloor,time) => {
-    let strings = stringNames.map(name => {
+const analyzeDroneOnce = (commonSettings,droneState,activeDroneStrings,scaleState,activeScaleNotes,resolution,noiseFloor,time) => {
+    let strings = activeDroneStrings.map(name => {
         let basePath = `/FaustDSP/PureTones_v1.0/0x00/${name}`
         let baseNote = Number(droneState[`${basePath}/Select_Note`])
         let baseRatio = noteRatios[baseNote]
@@ -145,17 +144,17 @@ const analyzeDroneOnce = (commonSettings,droneState,scaleState,resolution,noiseF
             maxAmplitude = tone.amplitude
     })
 
-    let scaleConfig = noteNames.map((note,index) =>{
+    let scaleConfig = activeScaleNotes.map(note =>{
         let basePath = `/FaustDSP/Common_Parameters/12_Note_Scale`
         let centOffset = scaleState[`${basePath}/${note}/Cent`]
         centOffset = centOffset === undefined ? 0 : Number(centOffset)
         let subCentOffset = scaleState[`${basePath}/${note}/0.01_Cent`]
         subCentOffset = subCentOffset === undefined ? 0 : Number(subCentOffset)
-        return noteRatios[index]*(2**((centOffset + subCentOffset/100)/1200))
+        return ratioFromName[`${note}`]*(2**((centOffset + subCentOffset/100)/1200))
     })
     scaleConfig.forEach((ratio,index) => {
         let scaleRatio
-        if(noteNames[index] === 'SA' || noteNames[index] === 'Sa') {
+        if(activeScaleNotes[index] === 'SA' || activeScaleNotes[index] === 'Sa') {
             scaleRatio = OCTAVE*Math.log2(ratio)
             if(scaleRatio < -resolution/2 || scaleRatio > Math.ceil(OCTAVE/resolution)*resolution - resolution/2) {
                 relevantTones.push({
@@ -167,7 +166,7 @@ const analyzeDroneOnce = (commonSettings,droneState,scaleState,resolution,noiseF
             }
         } else
             scaleRatio = toCents(ratio)
-
+        
         let scaleIndex = Math.floor((scaleRatio + resolution/2)/resolution)
         relevantTones[scaleIndex].refAmplitude = maxAmplitude - 12
     })
@@ -176,18 +175,18 @@ const analyzeDroneOnce = (commonSettings,droneState,scaleState,resolution,noiseF
 }
 
 onmessage = (e) => {
-    const {commonSettings,droneState,scaleState,resolution,noiseFloor,mode,duration} = e.data
+    const {commonSettings,droneState,activeDroneStrings,scaleState,activeScaleNotes,resolution,noiseFloor,mode,duration} = e.data
 
     if(mode === 0) {
         postMessage({
             status: true,
-            pitches: analyzeDroneOnce(commonSettings,droneState,scaleState,resolution,noiseFloor,-1),
+            pitches: analyzeDroneOnce(commonSettings,droneState,activeDroneStrings,scaleState,activeScaleNotes,resolution,noiseFloor,-1),
         })
     } else {
         let pitchData = []
 
         for(let time=0; time<duration; time+=duration/SLICE) {
-            pitchData.push(analyzeDroneOnce(commonSettings,droneState,scaleState,resolution,noiseFloor,time))
+            pitchData.push(analyzeDroneOnce(commonSettings,droneState,activeDroneStrings,scaleState,activeScaleNotes,resolution,noiseFloor,time))
             postMessage({
                 status: false,
                 progress: Math.floor(time*SLICE/duration),
