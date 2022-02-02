@@ -38,4 +38,4 @@ PureTones tools are under development. Please help us improve these tools to ser
 
 If you are a music patron, please listen to recordings by our our featured artists:  [Chandraveena](https://chandraveena.bandcamp.com/) and [Ragatronics](https://ragatronics.bandcamp.com). If you like these recordings, please consider supporting our development efforts by their purchasing musical works.
 
-You can reach us at [puretones@sadharani.com](mailto:puretones@sadharani.com).
+You can reach us at [bala.chander@sadharani.com](mailto:bala.chander@sadharani.com) or [aravind.iyer@sadharani.com](mailto:aravind.iyer@sadharani.com).
