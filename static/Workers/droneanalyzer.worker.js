@@ -72,6 +72,28 @@ const analyzeDroneOnce = (commonSettings,droneState,activeDroneStrings,scaleStat
         return AFREQ*(2**(pitchNumber/12))*(2**(offSet/OCTAVE))
     }
 
+    const getADSRLevel = (harmonic,time,period) => {
+        let ADSRTimeFactors = []
+        if(harmonic > 16) {
+            ADSRTimeFactors = [0.1*period,0.3*period,0.2,0.3*period]
+        } else if(harmonic > 4) {
+            ADSRTimeFactors = [0.2*period,0.4*period,0.4,0.4*period]
+        } else {
+            ADSRTimeFactors = [0.1*period,0.5*period,0.6,0.5*period]
+        }
+
+        let ADSRLevel
+        if(time < ADSRTimeFactors[0]) {
+            ADSRLevel = time/ADSRTimeFactors[0]
+        } else if(time < ADSRTimeFactors[0]+ADSRTimeFactors[1]) {
+            ADSRLevel = (1 - (time - ADSRTimeFactors[0])*(1 - ADSRTimeFactors[2])/ADSRTimeFactors[1])
+        } else {
+            ADSRLevel = (ADSRTimeFactors[2] - (time - ADSRTimeFactors[0] - ADSRTimeFactors[1])*ADSRTimeFactors[2]/ADSRTimeFactors[3])
+        }
+
+        return ADSRLevel
+    }
+
     const getTimeGain = (stringPath,pitch,harmonic,time) => {
         if(time < 0)
             return 1
@@ -85,12 +107,8 @@ const analyzeDroneOnce = (commonSettings,droneState,activeDroneStrings,scaleStat
             period += 0.2
         
         let adjustedTime = (time + stringDelay[stringIndex]*period) % period
-        let stringOn = 1
 
-        if(harmonic > 16)
-            stringOn = adjustedTime < 0.6*period ? 1 : 0
-        else if(harmonic > 4)
-            stringOn = adjustedTime < 0.8*period ? 1 : 0
+        let stringOn = getADSRLevel(harmonic,adjustedTime,period)
 
         let variance = droneState[`${stringPath}/Variance`]
         let stringBeat = Math.cos(2*Math.PI*pitch*(getFreq())*harmonic*variance*time/10000)

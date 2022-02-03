@@ -31,8 +31,7 @@ const ChartContainer = styled.div`
 
 const CanvasContainer = styled.div`
     position: relative;
-    height: 80vw;
-    max-height: 600px;
+    height: 600px;
     width: 100%;
 `
 
@@ -100,7 +99,7 @@ const TimeFreqAnalysisChart = ({pitches,duration,scaleName,droneName}) => {
                         return ({
                             x: i*duration/SLICE,
                             y: pitch.ratio.toFixed(2),
-                            r: Math.floor(pitch.amplitude/20),
+                            r: Math.floor(pitch.amplitude/15),
                         })
                     })
                 })),
