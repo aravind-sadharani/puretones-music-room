@@ -62,7 +62,10 @@ const SliderKey = styled.span`
 `
 
 const Slider = ({params,path,onParamUpdate}) =>  {
-    const changeValue = (value) => onParamUpdate(value, path)
+    const changeValue = (value) => {
+        let sanitizedValue = value === '' ? 0 : value
+        onParamUpdate(sanitizedValue, path)
+    }
     let {key,max,min,step,init} = params
     init = Math.floor(step) ? Number(init).toFixed(0) : Number(init).toFixed(1)
     return (

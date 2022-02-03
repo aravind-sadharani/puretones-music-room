@@ -13,8 +13,10 @@ const analyzeDroneOnce = (commonSettings,droneState,activeDroneStrings,scaleStat
         let basePath = `/FaustDSP/PureTones_v1.0/0x00/${name}`
         let baseNote = Number(droneState[`${basePath}/Select_Note`])
         let baseRatio = noteRatios[baseNote]
-        let centOffset = Number(droneState[`${basePath}/Fine_Tune`])
-        let subCentOffset = Number(droneState[`${basePath}/Ultrafine_Tune`])
+        let centOffset = droneState[`${basePath}/Fine_Tune`]
+        centOffset = centOffset === undefined ? 0 : Number(centOffset)
+        let subCentOffset = droneState[`${basePath}/Ultrafine_Tune`]
+        subCentOffset = subCentOffset === undefined ? 0 : Number(subCentOffset)
         let pitch = baseRatio*(2**((centOffset + subCentOffset/100)/1200))
         return {
             pitch: pitch,
