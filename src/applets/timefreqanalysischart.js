@@ -27,11 +27,13 @@ const ChartContainer = styled.div`
     border-color: ${({theme}) => theme.light.borderColor};
     ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
     border-radius: 5px;
-    canvas {
-        max-width: 670px;
-        max-height: 600px;
-        margin-bottom: 1em;
-    }
+`
+
+const CanvasContainer = styled.div`
+    position: relative;
+    height: 80vw;
+    max-height: 600px;
+    width: 100%;
 `
 
 const chartOptions = {
@@ -41,7 +43,7 @@ const chartOptions = {
         yAxes: {
             title: {
                 display: true,
-                text: 'Sa      re       Re     ga      Ga     ma     Ma     Pa     dha    Dha     ni        Ni     SA',
+                text: 'Sa      re       Re     ga      Ga     ma      Ma    Pa    dha     Dha     ni        Ni     SA',
                 font: {
                     size: 15,
                 }
@@ -109,7 +111,9 @@ const TimeFreqAnalysisChart = ({pitches,duration,scaleName,droneName}) => {
     return (
         <ChartContainer>
             <p><strong>Drone and Scale Pitches over time</strong></p>
-            <Bubble options={chartOptions} data={pitchData} />
+            <CanvasContainer>
+                <Bubble options={chartOptions} data={pitchData} />
+            </CanvasContainer>
         </ChartContainer>
     )
 }

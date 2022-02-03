@@ -27,10 +27,13 @@ const ChartContainer = styled.div`
     border-color: ${({theme}) => theme.light.borderColor};
     ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
     border-radius: 5px;
-    canvas {
-        max-height: 600px;
-        margin-bottom: 1em;
-    }
+`
+
+const CanvasContainer = styled.div`
+    position: relative;
+    height: 80vw;
+    max-height: 600px;
+    width: 100%;
 `
 
 const chartOptions = {
@@ -41,10 +44,18 @@ const chartOptions = {
         yAxes: {
             title: {
                 display: true,
-                text: 'Sa     re       Re      ga      Ga     ma      Ma     Pa     dha     Dha     ni        Ni     SA',
+                text: 'Sa     re        Re     ga       Ga    ma       Ma    Pa     dha     Dha     ni        Ni     SA',
                 font: {
                     size: 15,
                 }
+            },
+            min: -20,
+            max: 1220,
+            ticks : {
+                display: false,
+            },
+            grid: {
+                display: false,
             }
         },
         xAxes: {
@@ -92,7 +103,9 @@ const DroneAnalysisChart = ({pitches,scaleName,droneName}) => {
     return (
         <ChartContainer>
             <p><strong>Overall Levels of Drone and Scale Pitches</strong></p>
-            <Bar options={chartOptions} data={pitchData} />
+            <CanvasContainer>
+                <Bar options={chartOptions} data={pitchData} />
+            </CanvasContainer>
         </ChartContainer>
     )
 }
