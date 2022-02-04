@@ -1,5 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
+import ShowHideControls from 'components/showhidecontrols'
 
 const DroneAnalysisContainer = styled.div`
     padding: 12px 12px 0 12px;
@@ -19,6 +20,7 @@ const stringNames = ['1st_String', '2nd_String', '3rd_String', '4th_String', '5t
 const noteNames = ['SA','Ni','ni','Dha','dha','Pa','Ma','ma','Ga','ga','Re','re','Sa']
 
 const DroneAnalysisTable = ({pitches,droneState}) => {
+    let [visibility,setVisibility] = React.useState(false)
     let stringConfig = stringNames.map(name => {
         let basePath = `/FaustDSP/PureTones_v1.0/0x00/${name}`
         return ({
@@ -42,10 +44,11 @@ const DroneAnalysisTable = ({pitches,droneState}) => {
 
     return (
         <DroneAnalysisContainer>
-            <p><strong>Details of Overall Levels of Drone Pitches</strong></p>
-            <DroneAnalysisTableElement>
-                <code>{message}</code>
-            </DroneAnalysisTableElement>
+            <ShowHideControls title="Details of Overall Levels of Drone Pitches" visibility={visibility} onShowHide={() => setVisibility(!visibility)}>
+                <DroneAnalysisTableElement>
+                    <code>{message}</code>
+                </DroneAnalysisTableElement>
+            </ShowHideControls>
         </DroneAnalysisContainer>
     )
 }

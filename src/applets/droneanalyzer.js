@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Button from 'components/button'
 import SaveRestore from 'components/saverestore'
 import Slider from 'components/slider'
+import Selector from "components/selector"
 import Toggle from 'components/toggle'
 import TabNav from "components/tabs"
 import ProgressBar from 'components/progressbar'
@@ -15,6 +16,7 @@ import TimeFreqAnalysisChart from 'applets/timefreqanalysischart'
 import { CommonSettingsEnv } from 'services/commonsettings'
 
 const droneStringNames = ['1st_String', '2nd_String', '3rd_String', '4th_String', '5th_String', '6th_String']
+const droneTabs = ['String 1', 'String 2', 'String 3', 'String 4', 'String 5', 'String 6']
 const scaleTabs = ['Sa', 're', 'Re', 'ga', 'Ga', 'ma', 'Ma', 'Pa', 'dha', 'Dha', 'ni', 'Ni', 'SA']
 
 const DroneAnalyzerContainer = styled.div`
@@ -180,55 +182,184 @@ const DroneAnalyzer = () => {
         resetAnalysis()
     }
 
-    const droneTabs = droneStringNames.filter(string => 
-        (Number(drone.state[`/FaustDSP/PureTones_v1.0/0x00/${string}/Play_String/Loop`]) === 1)
-    ).map(string => `String ${string[0]} (${scaleTabs[12 - Number(drone.state[`/FaustDSP/PureTones_v1.0/0x00/${string}/Select_Note`])]})`)
+    const updateStates = (appname,value,path) => {
+        resetAnalysis()
+        let newStates = {}
+        newStates[`${path}`] = value
+        switch(appname) {
+            case 'drone':
+                let newDroneName = (drone.name.includes('(modified)') || drone.name === 'Modified') ? drone.name : drone.name === 'Standard' ? 'Modified' : `${drone.name} (modified)`
+                setDrone({state: {...drone.state,...newStates}, name: newDroneName})
+                break
+            case 'scale':
+                let newScaleName = (scale.name.includes('(modified)') || scale.name === 'Modified') ? scale.name : scale.name === 'Standard' ? 'Modified' : `${scale.name} (modified)`
+                setScale({state: {...scale.state,...newStates}, name: newScaleName})
+                break
+            default:
+                console.log(`Update Parameters: Incorrect appname ${appname}!`)
+        }
+    }
 
     const dronePages = droneStringNames.filter(string => 
         (Number(drone.state[`/FaustDSP/PureTones_v1.0/0x00/${string}/Play_String/Loop`]) === 1)
-    ).map(string => (
-        <Toggle title='Include in Analysis' status={activeDroneStrings.indexOf(string) === -1 ? '0' : '1'} path={string} onParamUpdate={updateParams} />
-    ))
+    ).map(string => {
+        let basePath = `/FaustDSP/PureTones_v1.0/0x00/${string}`
+        let stringSelectParams = {
+            key: "Note",
+            default: drone.state[`${basePath}/Select_Note`],
+            options: [
+              {
+                value: "0",
+                text: "SA"
+              },
+              {
+                value: "1",
+                text: "Ni"
+              },
+              {
+                value: "2",
+                text: "ni"
+              },
+              {
+                value: "3",
+                text: "Dha"
+              },
+              {
+                value: "4",
+                text: "dha"
+              },
+              {
+                value: "5",
+                text: "Pa"
+              },
+              {
+                value: "6",
+                text: "Ma"
+              },
+              {
+                value: "7",
+                text: "ma"
+              },
+              {
+                value: "8",
+                text: "Ga"
+              },
+              {
+                value: "9",
+                text: "ga"
+              },
+              {
+                value: "10",
+                text: "Re"
+              },
+              {
+                value: "11",
+                text: "re"
+              },
+              {
+                value: "12",
+                text: "Sa"
+              }
+            ]
+        }
+        let fineTuneParams = {
+            key: "Fine Tune",
+            init: drone.state[`${basePath}/Fine_Tune`],
+            max: 100,
+            min: -100,
+            step: 1
+        }
+        let ultrafineTuneParams = {
+            key: "Ultrafine Tune",
+            init: drone.state[`${basePath}/Ultrafine_Tune`],
+            max: 100,
+            min: -100,
+            step: 1
+        }
+        return (
+            <>
+                <Toggle title='Include in Analysis' status={activeDroneStrings.indexOf(string) === -1 ? '0' : '1'} path={string} onParamUpdate={updateParams} />
+                <Selector params={stringSelectParams} path={`${basePath}/Select_Note`} onParamUpdate={(value,path) => updateStates(value,path)}></Selector>
+                <Slider params={fineTuneParams} path={`${basePath}/Fine_Tune`} onParamUpdate={(value,path) => updateStates('drone',value,path)}></Slider>
+                <Slider params={ultrafineTuneParams} path={`${basePath}/Ultrafine_Tune`} onParamUpdate={(value,path) => updateStates('drone',value,path)}></Slider>
+            </>
+        )
+    })
 
-    const scalePages = scaleTabs.map(note => (
-        <Toggle title='Include in Analysis' status={activeScaleNotes.indexOf(note) === -1 ? '0' : '1'} path={note} onParamUpdate={updateParams} />
-    ))
+    const scalePages = scaleTabs.map(note => {
+        let basePath = `/FaustDSP/Common_Parameters/12_Note_Scale/${note}`
+        let fineTuneParams = {
+            key: "Fine Tune",
+            init: scale.state[`${basePath}/Cent`],
+            max: 100,
+            min: -100,
+            step: 1
+        }
+        let ultrafineTuneParams = {
+            key: "Ultrafine Tune",
+            init: scale.state[`${basePath}/0.01_Cent`],
+            max: 100,
+            min: -100,
+            step: 1
+        }
+        return (
+            <>
+                <Toggle title='Include in Analysis' status={activeScaleNotes.indexOf(note) === -1 ? '0' : '1'} path={note} onParamUpdate={updateParams} />
+                <Slider params={fineTuneParams} path={`${basePath}/Cent`} onParamUpdate={(value,path) => updateStates('scale',value,path)}></Slider>
+                <Slider params={ultrafineTuneParams} path={`${basePath}/0.01_Cent`} onParamUpdate={(value,path) => updateStates('scale',value,path)}></Slider>
+            </>
+        )
+    })
+
+    const droneConfigPage = () => (
+        <>
+            <p>Upload a drone tuning{`${drone.name !== 'Standard' ? ', reset it' : ''}`} or keep using <strong>{drone.name}</strong> drone.</p>
+            <center>
+                <Button onClick={resetDrone}>Reset Drone</Button>
+                <SaveRestore extn='prt' restore={restoreDrone} restoretitle='Load Drone' />
+            </center>
+            <p></p>
+            <p>You can adjust some of the drone parameters below, and choose which strings to include in the analysis.</p>
+            <TabNav tablist={droneTabs} pagelist={dronePages} />
+        </>
+    )
+
+    const scaleConfigPage = () => (
+        <>
+            <p>Upload a scale tuning{`${scale.name !== 'Standard' ? ', reset it' : ''}`} or keep using <strong>{scale.name}</strong> scale</p>
+            <center>
+                <Button onClick={resetScale}>Reset Scale</Button>
+                <SaveRestore extn='pkb' restore={restoreScale} restoretitle='Load Scale' />
+            </center>
+            <p></p>
+            <p>You can adjust the scale parameters below, and choose which notes to include in the analysis.</p>
+            <TabNav tablist={scaleTabs} pagelist={scalePages} />
+        </>
+    )
+
+    const commonConfigPage = () => (
+        <>
+            <p><strong>Analysis Parameters</strong></p>
+            <Slider params={resolutionParams} path='Resolution' onParamUpdate={updateParams} />
+            <Slider params={noiseFloorParams} path='NoiseFloor' onParamUpdate={updateParams} />
+            <Toggle title='Enable Time Frequency Analysis' status={mode} path='Mode' onParamUpdate={updateParams} />
+            {mode === 1 && <Slider params={durationParams} path='Duration' onParamUpdate={updateParams} />}
+        </>
+    )
 
     return (
         <>
             <DroneAnalyzerContainer>
                 <p><strong>Drone Analyzer</strong></p>
-                <DroneAnalyzerContainer>
-                    <p><strong>Configure Drone</strong></p>
-                    <p>Upload a drone tuning or keep using <strong>{drone.name}</strong> drone</p>
-                    <center>
-                        <Button onClick={resetDrone}>Reset Drone</Button>
-                        <SaveRestore extn='prt' restore={restoreDrone} restoretitle='Load Drone' />
-                    </center>
-                    <p></p>
-                    <TabNav tablist={droneTabs} pagelist={dronePages} />
-                </DroneAnalyzerContainer>
-                <DroneAnalyzerContainer>
-                    <p><strong>Configure Scale</strong></p>
-                    <p>Upload a scale tuning or keep using <strong>{scale.name}</strong> scale</p>
-                    <center>
-                        <Button onClick={resetScale}>Reset Scale</Button>
-                        <SaveRestore extn='pkb' restore={restoreScale} restoretitle='Load Scale' />
-                    </center>
-                    <p></p>
-                    <TabNav tablist={scaleTabs} pagelist={scalePages} />
-                </DroneAnalyzerContainer>
-                <p><strong>Analysis Parameters</strong></p>
-                <Slider params={resolutionParams} path='Resolution' onParamUpdate={updateParams} />
-                <Slider params={noiseFloorParams} path='NoiseFloor' onParamUpdate={updateParams} />
-                <Toggle title='Enable Time Frequency Analysis' status={mode} path='Mode' onParamUpdate={updateParams} />
-                {mode === 1 && <Slider params={durationParams} path='Duration' onParamUpdate={updateParams} />}
+                <p>Set the common parameters and configure the drone and scale states using the tabs below. Press <code>Analyze</code> when ready.</p>
                 <center>
                     <Button onClick={() => analyze()}>{title}</Button>
                 </center>
                 <p></p>
                 <ProgressBar title='Analysis in Progress' progress={progress} />
+                {(title === 'Completed') && <p>Scroll down below the configuration tabs to view the results.</p>}
             </DroneAnalyzerContainer>
+            <TabNav tablist={['Common','Drone','Scale']} pagelist={[commonConfigPage(), droneConfigPage(),scaleConfigPage()]} />
             {timeFreqAnalysis.status && <TimeFreqAnalysisChart pitches={timeFreqAnalysis.pitches} duration={duration} droneName={drone.name} scaleName={scale.name} onComplete={chartCompleted} />}
             {droneAnalysis.status && <DroneAnalysisChart pitches={droneAnalysis.pitches} droneName={drone.name} scaleName={scale.name} onComplete={chartCompleted} />}
             {droneAnalysis.status && <DroneAnalysisTable pitches={droneAnalysis.pitches} droneState={drone.state} />}
