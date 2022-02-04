@@ -1,6 +1,5 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import CommonPitch from 'applets/commonpitch'
 import Button from 'components/button'
 import SaveRestore from 'components/saverestore'
 import { buildScale, prepareKeyboard } from 'utils/buildscale'
@@ -71,18 +70,18 @@ const ScaleBuilder = () => {
 
     return (
         <>
-            <CommonPitch />
             <ScaleBuilderContainer>
-                <p><strong>Scale Builder</strong></p>
+                <p><strong>Constraints for the Scale</strong></p>
                 <ScaleBuilderEditorElement rows='8' value={scaleRules.rules} onChange={(e) => onRulesChange(e.target.value)} />
                 <center>
-                    <Button onClick={() => solveRules()}>Solve</Button>
+                    <Button onClick={() => solveRules()}>Build</Button>
                     {scaleResult.settings !== '' && <SaveRestore extn='pkb' save={save}/>}
+                    <p></p>
                 </center>
             </ScaleBuilderContainer>
             {scaleResult.settings !== '' && <ScalePlayer title={scaleResult.title} noteSpec={scaleResult.notespec} scale={scaleResult.settings} />}
             {scaleResult.message !== '' && <ScaleBuilderContainer>
-                <p><strong>Scale Notes</strong></p>
+                <p><strong>Notes about the Scale</strong></p>
                 <ScaleBuilderResultElement>
                     <code>
                         {scaleResult.message}

@@ -1,3 +1,44 @@
 import ScaleBuilder from 'applets/scalebuilder'
+import ShowHideContent from 'components/showhidecontent'
+
+## Scale Builder for Indian musical scales
+
+Scale Builder is a tool to build microtonally accurate scales for Ragas in Indian Classical music.
+
+Use the common parameters below to set the `Sa` to any pitch you prefer.
+
+<CommonPitch />
+
+For an introduction to Scale Builder and a quick user guide, click `Show`.
+
+<ShowHideContent title='Guide to Scale Builder'>
+
+### Introduction
+
+Indian Ragas and their underlying scales are based on the principles of consonance and symmetry. This means that the interval between any two notes in a Raga can be described:
+* Using the common intervals of *Pancham* (fifth), *Madhyam* (fourth) and *Gandhar* (major third), or
+* By means of symmetrical intervals in a different part of the octave in that Raga.
+
+By specifying these musical intervals, you can use Scale Builder to build microtonally accurate scales for Indian Ragas. Scale Builder uses *Linear Algebra* to solve for a scale that meets all the *constraints* imposed by the musical intervals you specify.
+
+### Syntax
+
+The musical intervals in a scale are specified as constraints. Each constraint is specified in a separate line using intervals.
+
+* Individual notes are denoted as `Sa re Re ga Ga ma Ma Pa dha Dha ni Ni` where notes beginning with a lower case letter are *komal* or flat notes, and notes beginning with an upper case letter are *tivra* or sharp notes.
+* There are three *Saptaks* (octaves):  *Mandra* (low), *Madhya* (middle) and *Tara* (high). A `"` symbol denotes *Tara Saptak*, a `'` symbol denotes *Mandra Saptak* and no octave specification means *Madhya Saptak*.
+* `(Sa,Pa)` stands for the interval from Sa to Pa.
+* `(Sa,Pa)` is the same as `(Pa,Sa)`, but different from `(Pa,Sa")`.
+* `I(P)`, `I(m)` and `I(G)` are respectively the *Pancham*, *Madhyam* and *Gandhar* intervals.
+* So `(Sa,Pa) = I(P)` means that `Sa` and `Pa` have a *Pancham* relationship (which need not always be the case).
+* `(Pa,Dha) = (ma,Pa)` means that the `Pa-Dha` interval and `ma-Pa` interval are the same.
+* `(Re)` is a shortcut for `(Sa,Re)`.
+* `S(note)` means that the `note` should use the *standard* value from the Venkatamakhin-Ramamatya tuning system. For example, `(ga) = S(ga)` means that `ga` should use the standard value.
+* `D(note)` means that the `note` should be deleted from the scale (although it may be used to derive another note in the scale). For example, `D(Pa)` means that `Pa` is not be used in the scale.
+* `T(note)` means that the generated scale should be transposed with the `note` taken as the tonic note. For example, `T(ma)` means that the generated scale should be transposed to `ma`. 
+
+</ShowHideContent>
+
+<p></p>
 
 <ScaleBuilder />

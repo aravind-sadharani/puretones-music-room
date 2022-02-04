@@ -11,6 +11,11 @@ const ShowHideContainer = styled.div`
 const ShowHideKey = styled.span`
 `
 
+const ShowHideHeading = styled.span`
+    font-weight: bold;
+    font-size: 1.32rem;
+`
+
 const ShowHideButton = styled.button`
     padding: 0 6px;
     background-color: ${({theme}) => theme.light.borderColor};
@@ -62,14 +67,15 @@ const ShowHideChildren = styled.div`
     grid-column-end: 3;
 `
 
-const ShowHideControls = ({title,label,visibility,onShowHide,children}) => {
+const ShowHideControls = ({title,label,visibility,onShowHide,heading,children}) => {
     let active = visibility ? "active" : ""
     let tabTitle = visibility ? "Hide" : "Show"
     if (label)
         tabTitle = visibility ? label.inactive : label.active
     return (
         <ShowHideContainer>
-            <ShowHideKey>{title}</ShowHideKey>
+            {!heading && <ShowHideKey>{title}</ShowHideKey>}
+            {heading && <ShowHideHeading>{title}</ShowHideHeading>}
             <ShowHideButton className={active} onClick={onShowHide}>{tabTitle}</ShowHideButton>
             <ShowHideChildren className={active}>
                 {children}
