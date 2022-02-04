@@ -205,7 +205,8 @@ onmessage = (e) => {
     } else {
         let pitchData = []
 
-        for(let time=0; time<duration; time+=duration/SLICE) {
+        for(let i=0; i<=SLICE; i++) {
+            let time = i*duration/SLICE
             pitchData.push(analyzeDroneOnce(commonSettings,droneState,activeDroneStrings,scaleState,activeScaleNotes,resolution,noiseFloor,time))
             postMessage({
                 status: false,

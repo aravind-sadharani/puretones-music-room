@@ -38,7 +38,7 @@ const DroneAnalyzer = () => {
     const [width,setWidth] = React.useState('0%')
     const [resolution,setResolution] = React.useState(4)
     const [noiseFloor,setNoiseFloor] = React.useState(-80)
-    const [duration,setDuration] = React.useState(30)
+    const [duration,setDuration] = React.useState(16)
     const [mode,setMode] = React.useState(0)
     const [activeDroneStrings,setActiveDroneStrings] = React.useState(droneStringNames.filter(string => 
         (Number(defaultDroneState[`/FaustDSP/PureTones_v1.0/0x00/${string}/Play_String/Loop`]) === 1)
