@@ -32,9 +32,13 @@ const ChartContainer = styled.div`
 
 const CanvasContainer = styled.div`
     position: relative;
+    padding: 12px;
     height: 80vw;
     max-height: 600px;
     width: 100%;
+    border-radius: 5px;
+    background-color: ${({theme}) => theme.light.codeBackground};
+    ${({theme}) => theme.isDark`background-color: ${theme.dark.codeBackground};`}
 `
 
 const DroneAnalysisChart = ({pitches,scaleName,droneName,onComplete}) => {
