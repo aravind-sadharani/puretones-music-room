@@ -9,6 +9,7 @@ import {
     Legend,
   } from 'chart.js'
 import { Bubble } from 'react-chartjs-2'
+import SaveRestore from 'components/saverestore'
 
 ChartJS.register(
     LinearScale,
@@ -35,47 +36,49 @@ const CanvasContainer = styled.div`
     width: 100%;
 `
 
-const chartOptions = {
-    maintainAspectRatio: false,
-    responsive: true,
-    scales: {
-        yAxes: {
-            title: {
-                display: true,
-                text: 'Sa      re       Re     ga      Ga     ma      Ma    Pa    dha     Dha     ni        Ni     SA',
-                font: {
-                    size: 15,
+const TimeFreqAnalysisChart = ({pitches,duration,scaleName,droneName,onComplete}) => {
+    const chartOptions = {
+        maintainAspectRatio: false,
+        responsive: true,
+        scales: {
+            yAxes: {
+                title: {
+                    display: true,
+                    text: 'Sa      re       Re     ga      Ga     ma      Ma    Pa    dha     Dha     ni        Ni     SA',
+                    font: {
+                        size: 15,
+                    }
+                },
+                min: -20,
+                max: 1220,
+                ticks : {
+                    display: false,
                 }
             },
-            min: -20,
-            max: 1220,
-            ticks : {
-                display: false,
-            }
+            xAxes: {
+                title: {
+                    display: true,
+                    text: 'Time (s)       ',
+                    font: {
+                        size: 15,
+                    }  
+                }
+            },
         },
-        xAxes: {
-            title: {
+        plugins: {
+            legend: {
                 display: true,
-                text: 'Time (s)',
-                font: {
-                    size: 15,
-                }  
+                position: 'top',
+            },
+            title: {
+                display: false,
+                text: 'Drone Analysis',
             }
         },
-    },
-    plugins: {
-        legend: {
-            display: true,
-            position: 'top',
-        },
-        title: {
-            display: false,
-            text: 'Drone Analysis',
+        animation: {
+            onComplete: onComplete,
         }
-    },
-}
-
-const TimeFreqAnalysisChart = ({pitches,duration,scaleName,droneName}) => {
+    }
     let pitchData = {
         datasets: [
             {
@@ -107,12 +110,21 @@ const TimeFreqAnalysisChart = ({pitches,duration,scaleName,droneName}) => {
             },
         ],
     }
+
+    const chartRef = React.useRef(null)
+    const saveChart = () => chartRef.current.toBase64Image()
+
     return (
         <ChartContainer>
             <p><strong>Drone and Scale Pitches over time</strong></p>
             <CanvasContainer>
-                <Bubble options={chartOptions} data={pitchData} />
+                <Bubble ref={chartRef} options={chartOptions} data={pitchData} />
             </CanvasContainer>
+            <p></p>
+            <center>
+                <SaveRestore extn='png' save={saveChart} savetitle='Save Chart' />
+            </center>
+            <p></p>
         </ChartContainer>
     )
 }

@@ -35,7 +35,7 @@ const DroneAnalyzer = () => {
     const [droneAnalysis,setDroneAnalysis] = React.useState({status: false, pitches:[]})
     const [timeFreqAnalysis,setTimeFreqAnalysis] = React.useState({status: false, pitches:[]})
     const [title,setTitle] = React.useState('Analyze')
-    const [width,setWidth] = React.useState('0%')
+    const [progress,setProgress] = React.useState('100%')
     const [resolution,setResolution] = React.useState(4)
     const [noiseFloor,setNoiseFloor] = React.useState(-80)
     const [duration,setDuration] = React.useState(16)
@@ -86,6 +86,7 @@ const DroneAnalyzer = () => {
             return
 
         setTitle(`Analyzing...`)
+        setProgress('0%')
         
         const Worker = new window.Worker('/Workers/droneanalyzer.worker.js')
         Worker.postMessage({
@@ -104,17 +105,22 @@ const DroneAnalyzer = () => {
 
         Worker.onmessage = (e) => {
             if(!e.data.status) {
-                setWidth(`${e.data.progress}%`)
+                setProgress(`${e.data.progress}%`)
             } else {
                 if(mode === 0)
                     setDroneAnalysis(e.data)
                 else
                     setTimeFreqAnalysis(e.data)
                 Worker.terminate()
-                setTitle('Completed')
-                setWidth('100%')
+                setTitle('Plotting...')
+                setProgress('99%')
             }
         }
+    }
+
+    const chartCompleted = () => {
+        setTitle('Completed')
+        setProgress('100%')
     }
 
     const resolutionParams = {
@@ -221,10 +227,10 @@ const DroneAnalyzer = () => {
                     <Button onClick={() => analyze()}>{title}</Button>
                 </center>
                 <p></p>
-                <ProgressBar title='Analysis Progress' width={width} />
+                <ProgressBar title='Analysis in Progress' progress={progress} />
             </DroneAnalyzerContainer>
-            {timeFreqAnalysis.status && <TimeFreqAnalysisChart pitches={timeFreqAnalysis.pitches} duration={duration} droneName={drone.name} scaleName={scale.name} />}
-            {droneAnalysis.status && <DroneAnalysisChart pitches={droneAnalysis.pitches} droneName={drone.name} scaleName={scale.name} />}
+            {timeFreqAnalysis.status && <TimeFreqAnalysisChart pitches={timeFreqAnalysis.pitches} duration={duration} droneName={drone.name} scaleName={scale.name} onComplete={chartCompleted} />}
+            {droneAnalysis.status && <DroneAnalysisChart pitches={droneAnalysis.pitches} droneName={drone.name} scaleName={scale.name} onComplete={chartCompleted} />}
             {droneAnalysis.status && <DroneAnalysisTable pitches={droneAnalysis.pitches} droneState={drone.state} />}
         </>
     )

@@ -10,6 +10,7 @@ import {
     Legend,
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
+import SaveRestore from 'components/saverestore'
 
 ChartJS.register(
     CategoryScale,
@@ -36,51 +37,53 @@ const CanvasContainer = styled.div`
     width: 100%;
 `
 
-const chartOptions = {
-    indexAxis: 'y',
-    maintainAspectRatio: false,
-    responsive: true,
-    scales: {
-        yAxes: {
-            title: {
-                display: true,
-                text: 'Sa     re        Re     ga       Ga    ma       Ma    Pa     dha     Dha     ni        Ni     SA',
-                font: {
-                    size: 15,
+const DroneAnalysisChart = ({pitches,scaleName,droneName,onComplete}) => {
+    const chartOptions = {
+        indexAxis: 'y',
+        maintainAspectRatio: false,
+        responsive: true,
+        scales: {
+            yAxes: {
+                title: {
+                    display: true,
+                    text: 'Sa     re        Re     ga       Ga    ma       Ma    Pa     dha     Dha     ni        Ni     SA',
+                    font: {
+                        size: 15,
+                    }
+                },
+                min: -20,
+                max: 1220,
+                ticks : {
+                    display: false,
+                },
+                grid: {
+                    display: false,
                 }
             },
-            min: -20,
-            max: 1220,
-            ticks : {
-                display: false,
+            xAxes: {
+                title: {
+                    display: true,
+                    text: 'Signal-to-Noise Ratio (dB)   ',
+                    font: {
+                        size: 15,
+                    }  
+                }
             },
-            grid: {
-                display: false,
-            }
         },
-        xAxes: {
-            title: {
+        plugins: {
+            legend: {
                 display: true,
-                text: 'Signal-to-Noise Ratio (dB)',
-                font: {
-                    size: 15,
-                }  
+                position: 'top',
+            },
+            title: {
+                display: false,
+                text: 'Drone Analysis',
             }
         },
-    },
-    plugins: {
-        legend: {
-            display: true,
-            position: 'top',
-        },
-        title: {
-            display: false,
-            text: 'Drone Analysis',
+        animation: {
+            onComplete: onComplete,
         }
-    },
-}
-
-const DroneAnalysisChart = ({pitches,scaleName,droneName}) => {
+    }
     let pitchList = [...pitches]
     pitchList.sort((tone1, tone2) => tone2.ratio - tone1.ratio)
     let pitchData = {
@@ -100,12 +103,21 @@ const DroneAnalysisChart = ({pitches,scaleName,droneName}) => {
             },
         ],
     }
+
+    const chartRef = React.useRef(null)
+    const saveChart = () => chartRef.current.toBase64Image()
+
     return (
         <ChartContainer>
             <p><strong>Overall Levels of Drone and Scale Pitches</strong></p>
             <CanvasContainer>
-                <Bar options={chartOptions} data={pitchData} />
+                <Bar ref={chartRef} options={chartOptions} data={pitchData} />
             </CanvasContainer>
+            <p></p>
+            <center>
+                <SaveRestore extn='png' save={saveChart} savetitle='Save Chart' />
+            </center>
+            <p></p>
         </ChartContainer>
     )
 }

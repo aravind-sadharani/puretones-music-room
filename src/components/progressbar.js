@@ -44,15 +44,15 @@ const ProgressPercentage = styled.input`
 const ProgressBarTitle = styled.span`
 `
 
-const ProgressBar = ({title,width}) => {
-    let visible = (width !== '0%') && (width !== '100%')
+const ProgressBar = ({title,progress}) => {
+    let visible = (progress !== '100%')
     return (
         <>
             {visible && <ProgressBarContainer>
                 <ProgressBarTitle>{title}</ProgressBarTitle>
-                <ProgressPercentage type="text" value={width} readOnly />
+                <ProgressPercentage type="text" value={progress} readOnly />
                 <ProgressBarRail>
-                    <ProgressBarFill width={width} />
+                    <ProgressBarFill width={progress} />
                 </ProgressBarRail>
             </ProgressBarContainer>}
         </>

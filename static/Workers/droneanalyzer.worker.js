@@ -210,7 +210,7 @@ onmessage = (e) => {
             pitchData.push(analyzeDroneOnce(commonSettings,droneState,activeDroneStrings,scaleState,activeScaleNotes,resolution,noiseFloor,time))
             postMessage({
                 status: false,
-                progress: Math.floor(time*SLICE/duration),
+                progress: Math.min(i,99),
             })
         }
         postMessage({
