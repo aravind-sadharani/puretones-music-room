@@ -92,8 +92,7 @@ const SaveRestore = ({extn,save,restore,savetitle,restoretitle}) => {
             toggleDownloadDialog()
             return
         }
-        let file = new Blob([blob], {type: 'text/plain'})
-        setFileURL(URL.createObjectURL(file))
+        setFileURL(blob)
         toggleDownloadDialog()
     }
     const handleFileUpload = (event) => {
