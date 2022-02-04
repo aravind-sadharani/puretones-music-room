@@ -100,7 +100,7 @@ const analyzeDroneOnce = (commonSettings,droneState,activeDroneStrings,scaleStat
         if(time < 0)
             return 1
 
-        let period = droneState[`/FaustDSP/PureTones_v1.0/0x00/Period`]
+        let period = Number(droneState[`/FaustDSP/PureTones_v1.0/0x00/Period`])
         let stringIndex = Number(stringPath.replace('/FaustDSP/PureTones_v1.0/0x00/','')[0]) - 1
 
         if(stringIndex < 3)
@@ -112,7 +112,7 @@ const analyzeDroneOnce = (commonSettings,droneState,activeDroneStrings,scaleStat
 
         let stringOn = getADSRLevel(harmonic,adjustedTime,period)
 
-        let variance = droneState[`${stringPath}/Variance`]
+        let variance = Number(droneState[`${stringPath}/Variance`])
         let stringBeat = Math.cos(2*Math.PI*pitch*(getFreq())*harmonic*variance*time/10000)
 
         return stringOn*stringBeat
