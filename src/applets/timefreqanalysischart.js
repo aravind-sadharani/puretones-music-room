@@ -97,7 +97,7 @@ const TimeFreqAnalysisChart = ({pitches,duration,scaleName,droneName,onComplete}
                             r: pitch.refAmplitude !== 0 ? 3 : 0,
                         })
                     })
-                })),
+                })).filter(point => point.r === 3),
                 borderColor: 'rgb(92, 92, 133)',
                 backgroundColor: 'rgb(92, 92, 133, 0.2)',
             },
@@ -111,7 +111,7 @@ const TimeFreqAnalysisChart = ({pitches,duration,scaleName,droneName,onComplete}
                             r: Math.floor(pitch.amplitude/15),
                         })
                     })
-                })),
+                })).filter(point => point.r > 0),
                 backgroundColor: 'rgb(237, 44, 89, 0.3)',
             },
         ],
