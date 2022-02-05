@@ -349,17 +349,17 @@ const DroneAnalyzer = () => {
 
     return (
         <>
+            <TabNav tablist={['Common','Drone','Scale']} pagelist={[commonConfigPage(), droneConfigPage(),scaleConfigPage()]} />
             <DroneAnalyzerContainer>
                 <p><strong>Drone Analyzer</strong></p>
-                <p>Set the common parameters and configure the drone and scale states using the tabs below. Press <code>Analyze</code> when ready.</p>
+                <p>Set up the analysis parameters and configure the drone and scale states using the tabs above. Press <code>Analyze</code> when ready.</p>
                 <center>
                     <Button onClick={() => analyze()}>{title}</Button>
                 </center>
                 <p></p>
                 <ProgressBar title='Analysis in Progress' progress={progress} />
-                {(title === 'Completed') && <p>Scroll down below the configuration tabs to view the results.</p>}
+                {(title === 'Completed') && <p>Scroll down to view the results.</p>}
             </DroneAnalyzerContainer>
-            <TabNav tablist={['Common','Drone','Scale']} pagelist={[commonConfigPage(), droneConfigPage(),scaleConfigPage()]} />
             {timeFreqAnalysis.status && <TimeFreqAnalysisChart pitches={timeFreqAnalysis.pitches} duration={duration} droneName={drone.name} scaleName={scale.name} onComplete={chartCompleted} />}
             {droneAnalysis.status && <DroneAnalysisChart pitches={droneAnalysis.pitches} droneName={drone.name} scaleName={scale.name} onComplete={chartCompleted} />}
             {droneAnalysis.status && <DroneAnalysisTable pitches={droneAnalysis.pitches} droneState={drone.state} />}
