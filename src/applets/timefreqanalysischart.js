@@ -33,12 +33,11 @@ const ChartContainer = styled.div`
 const CanvasContainer = styled.div`
     position: relative;
     padding: 12px;
-    height: 80vw;
-    max-height: 600px;
+    height: 624px;
     width: 100%;
     border-radius: 5px;
-    background-color: ${({theme}) => theme.light.codeBackground};
-    ${({theme}) => theme.isDark`background-color: ${theme.dark.codeBackground};`}
+    background-color: ${({theme}) => theme.light.chartBackground};
+    ${({theme}) => theme.isDark`background-color: ${theme.dark.chartBackground};`}
 `
 
 const TimeFreqAnalysisChart = ({pitches,duration,scaleName,droneName,onComplete}) => {
@@ -66,8 +65,10 @@ const TimeFreqAnalysisChart = ({pitches,duration,scaleName,droneName,onComplete}
                     text: 'Time (s)       ',
                     font: {
                         size: 15,
-                    }  
-                }
+                    }
+                },
+                min: 0,
+                max: duration,
             },
         },
         plugins: {
@@ -97,8 +98,8 @@ const TimeFreqAnalysisChart = ({pitches,duration,scaleName,droneName,onComplete}
                         })
                     })
                 })),
-                borderColor: 'rgba(143,143,171)',
-                backgroundColor: 'rgba(143,143,171,0.2)',
+                borderColor: 'rgb(92, 92, 133)',
+                backgroundColor: 'rgb(92, 92, 133, 0.2)',
             },
             {
                 label: `${droneName} Drone`,
@@ -111,7 +112,7 @@ const TimeFreqAnalysisChart = ({pitches,duration,scaleName,droneName,onComplete}
                         })
                     })
                 })),
-                backgroundColor: 'rgba(249,140,164,0.8)',
+                backgroundColor: 'rgb(237, 44, 89, 0.3)',
             },
         ],
     }

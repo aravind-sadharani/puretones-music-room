@@ -33,12 +33,11 @@ const ChartContainer = styled.div`
 const CanvasContainer = styled.div`
     position: relative;
     padding: 12px;
-    height: 80vw;
-    max-height: 600px;
+    height: 624px;
     width: 100%;
     border-radius: 5px;
-    background-color: ${({theme}) => theme.light.codeBackground};
-    ${({theme}) => theme.isDark`background-color: ${theme.dark.codeBackground};`}
+    background-color: ${({theme}) => theme.light.chartBackground};
+    ${({theme}) => theme.isDark`background-color: ${theme.dark.chartBackground};`}
 `
 
 const DroneAnalysisChart = ({pitches,scaleName,droneName,onComplete}) => {
@@ -96,13 +95,13 @@ const DroneAnalysisChart = ({pitches,scaleName,droneName,onComplete}) => {
             {
                 label: `${scaleName} Scale`,
                 data: pitchList.map((pitch) => pitch.refAmplitude),
-                backgroundColor: 'rgba(143,143,171)',
+                backgroundColor: 'rgb(92, 92, 133)',
                 barThickness: 1,
             },
             {
                 label: `${droneName} Drone`,
                 data: pitchList.map((pitch) => pitch.amplitude),
-                backgroundColor: 'rgba(249,140,164,0.6)',
+                backgroundColor: 'rgb(237, 44, 89, 0.3)',
                 barThickness: 1,
             },
         ],

@@ -18,6 +18,7 @@ const globalTheme = {
         noticeBackground: '#ffead0',
         noticeText: '#404047',
         codeBackground: '#e6e6eb',
+        chartBackground: '#ffead0',
     },
     dark: {
         bodyBackground: '#404047',
@@ -29,6 +30,7 @@ const globalTheme = {
         noticeBackground: '#ccbba6',
         noticeText: '#404047',
         codeBackground: 'black',
+        chartBackground: '#ccbba6',
     }
 }
 
