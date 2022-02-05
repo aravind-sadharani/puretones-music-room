@@ -266,7 +266,7 @@ const buildScale = (constraints) => {
         unSolvedNotes = unSolvedNotes.map(note => transposeNumber(note,ref)).sort(compareNotes)
     }
 
-    let message = unSolvedNotes.length > 0 ? `\tScale: ${scaleNotes.map(note => note[0]).join(',')}\n\tThe following notes cannot be solved with the given rules:\n\t${unSolvedNotes.map(note => note[0]).join(',')}\n\tPlease add some more rules and retry.\n` : `\tScale: ${scaleNotes.map(note => note[0]).join(',')}\n\n\tScale tuning relative to Venkatamakhin-Ramamatya system\n${solvedNotes.map(note => `\t${note[0]}\t${' '.repeat(6-note[1].toFixed(2).length)}${note[1].toFixed(2)} ¢`).join('\n')}\n\n\tSymmetric intervals in the Scale\n${findSymmetry(solvedNotes)}`
+    let message = unSolvedNotes.length > 0 ? `Scale: ${scaleNotes.map(note => note[0]).join(',')}\n\tThe following notes cannot be solved with the given rules:\n\t${unSolvedNotes.map(note => note[0]).join(',')}\n\tPlease add some more rules and retry.\n` : `Scale: ${scaleNotes.map(note => note[0]).join(',')}\n\nScale tuning relative to Venkatamakhin-Ramamatya system\n${solvedNotes.map(note => `${note[0]}\t${' '.repeat(6-note[1].toFixed(2).length)}${note[1].toFixed(2)} ¢`).join('\n')}\n\nSymmetric intervals in the Scale\n${findSymmetry(solvedNotes)}`
 
     let result = {
         status: (unSolvedNotes.length === 0),
@@ -332,9 +332,9 @@ const findSymmetry = (scale) => {
                 }
         }).filter(interval => Object.keys(interval).length !== 0)
     }).filter(list => list.length !== 0)
-    let symmetryReadable = symmetry.map(list => list.map(element => `\t(${element.first},${element.second})${' '.repeat(6-element.first.length-element.second.length)}= (${element.third},${element.fourth})${' '.repeat(6-element.third.length-element.fourth.length)}\t${centsReadable(element.gap)}\t  ${centsReadable(element.symmetry)}`).join('\n')).join('\n')
+    let symmetryReadable = symmetry.map(list => list.map(element => `(${element.first},${element.second})${' '.repeat(6-element.first.length-element.second.length)}= (${element.third},${element.fourth})${' '.repeat(6-element.third.length-element.fourth.length)}\t${centsReadable(element.gap)}\t  ${centsReadable(element.symmetry)}`).join('\n')).join('\n')
 
-    return `\tEqual Intervals\t    \tInterval Size\t  Symmetry\n${symmetryReadable}`
+    return `Equal Intervals\t    \tInterval Size\t  Symmetry\n${symmetryReadable}`
 }
 
 const centsReadable = (cents) => {
