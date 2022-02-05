@@ -6,14 +6,15 @@ import { media } from 'utils/mediatemplate'
 
 const navlinklist = [
     {path: '/app/', text: 'App'},
+    {path: '/tools/', text: 'Tools'},
     {path: '/learn/', text: 'Learn'},
     {path: '/help/', text: 'Help'}
 ]  
 
 const HeaderElement = styled.header`
     display: grid;
-    grid-template-columns: 1fr repeat(3,100px);
-    ${media.phone`grid-template-columns: repeat(3,1fr);`}
+    grid-template-columns: 1fr repeat(4,80px);
+    ${media.phone`grid-template-columns: repeat(4,1fr);`}
     ${media.phone`grid-template-rows: 1fr 50px;`}
     text-align: center;
     align-items: center;
@@ -21,20 +22,21 @@ const HeaderElement = styled.header`
     ${({theme}) => theme.isDark`background-color: ${theme.dark.buttonBackground};`}
     border-radius: 5px;
     margin-bottom: 1em;
+    padding: 0 12px;
     h1 {
         margin: 0;
-        padding: 12px;
+        padding: 12px 0 14px;
         color: ${({theme}) => theme.light.linkColor};
         ${({theme}) => theme.isDark`color: ${theme.dark.linkColor};`}
-        font-size: 3em;
-        ${media.phone`grid-column: 1 / 4;`}
+        font-size: 2.5em;
+        ${media.phone`grid-column: 1 / 5;`}
     }
     h1 a {
         color: inherit;
     }
     h1 svg {
         margin-right: 10px;
-        margin-bottom: -5px;
+        margin-bottom: -10px;
         width: 79px;
         height: 48px;
         path {
@@ -45,7 +47,7 @@ const HeaderElement = styled.header`
 `
 
 const NavLinkElement = styled.span`
-    padding: 4px 4px;
+    padding: 8px 4px 4px 0;
     font-size: 1.5em;
     color: ${({theme}) => theme.light.linkColor};
     ${({theme}) => theme.isDark`color: ${theme.dark.linkColor};`}

@@ -7,10 +7,10 @@ Here is a quick user guide to start using the PureTones App. You can also [learn
 
 You can reach the [PureTones App](/app/) at any time, by clicking on the [App](/app/) link in the top navigation bar. It has four main sections:
 
-1.  Common Parameters
-2.  Drone
-3.  Scale
-4.  Sequencer
+1.  [Common Parameters](#common-parameters)
+2.  [Drone](#drone)
+3.  [Scale](#scale)
+4.  [Sequencer](#sequencer)
 
 Each of these sections is explained below.
 
@@ -25,26 +25,26 @@ As you may well know, in Indian Classical Music, all musical notes are defined i
 
 On the [App](/app/) page, click on the `Drone` tab below the `Common Parameters` section to get to the Drone section. Once in the Drone section, use the following steps to start a drone track and tune it according to your requirement and preference.
 
-1.  Click on `Start` under `Drone Controls`. This starts a generic **Pa**-Tanpura in the key you selected using the `Common Parameters` above. You can click on `Start` below to hear the generic drone track. This is the same track you would hear and tune in the Drone section.
+1.  Click on `Start` under `Drone Controls`. This starts a generic **Pa**-Tanpura in the key you selected using the `Common Parameters` above. You can click on `Start` below to hear the generic drone track. This is the same track you would hear and tune in the Drone section.
 
 <DronePlayer title='Generic Drone without tuning controls' settings={droneSamaGana} />
 
 
-2.  Change your octave using the `Octave` selector.
-3.  Use `Period` to control the playing tempo and `Level` to control the volume level.
+2.  Change your octave using the `Octave` selector.
+3.  Use `Period` to control the playing tempo and `Level` to control the volume level.
 4.  There are six tunable strings accessible via the string tabs.
-5.  Select which note the string should play and use the `Fine Tune` and `Ultrafine Tune` sliders to finetune the pitch of each string. You can also input a number directly into the input boxes, for precise data entry.
-6.  Use the `Variance` and `Timbre` controls to fine tune the harmonic content produced by each string, and `Gain` to adjust the relative gain levels of different strings.
+5.  Select which note the string should play and use the `Fine Tune` and `Ultrafine Tune` sliders to finetune the pitch of each string. You can also input a number directly into the input boxes, for precise data entry.
+6.  Use the `Variance` and `Timbre` controls to fine tune the harmonic content produced by each string, and `Gain` to adjust the relative gain levels of different strings.
 7.  To turn a string on or off, use the `Loop` toggle switch.
-8.  If you are familiar with a tanpura, then you should be able to relate the adjustment of the thread under the string, to the `Variance` and `Timbre` controls. `Variance` controls the speed of unraveling of the harmonics, while `Timbre` controls the emphasis of specific harmonics which may be necessary to support specific notes in a Raga.
-9.  When you are satisfied, you can save your tuning to a file by clicking on `Save` which can be uploaded later using `Restore`.
+8.  If you are familiar with a tanpura, then you should be able to relate the adjustment of the thread under the string, to the `Variance` and `Timbre` controls. `Variance` controls the speed of unraveling of the harmonics, while `Timbre` controls the emphasis of specific harmonics which may be necessary to support specific notes in a Raga.
+9.  When you are satisfied, you can save your tuning to a file by clicking on `Save` which can be uploaded later using `Restore`.
 10. To start afresh, just click on `Reset`.
 
 ### Scale
 
 On the [App](/app/) page, click on the `Scale` tab below the `Common Parameters` section to get to the Scale section. Once in the Scale section, use the following steps to start a 12 note musical scale and tune it according to your requirement and preference.
 
-1.  Click on `Start` under `Scale Controls`. This starts a musical scale in the key you selected using the `Common Parameters` above, as per the [Venkatamakhin-Ramamatya Tuning](/learn/tuningsystems-4/). You can click on `Start` below to hear the generic scale. This is the same scale you would hear and tune in the Scale section.
+1.  Click on `Start` under `Scale Controls`. This starts a musical scale in the key you selected using the `Common Parameters` above, as per the [Venkatamakhin-Ramamatya Tuning](/learn/tuningsystems-4/). You can click on `Start` below to hear the generic scale. This is the same scale you would hear and tune in the Scale section.
 
 export const notesSamaGana = [
     {white: "Sa", black: "re"},
@@ -61,11 +61,11 @@ export const notesSamaGana = [
 
 2.  You can play the scale using your computer's QWERTY keyboard. This can be turned on and off using the `Computer Keyboard` toggle switch.
 3.  The different notes of the scale can be played using the keys described below: `a` - **Sa**, `w` - **re**, `s` - **Re**, `e` - **ga**, `d` - **Ga**, `f` - **ma**, `t` - **Ma**, `g` - **Pa**, `y` - **dha**, `h` - **Dha**, `u` - **ni**, `j` - **Ni** and `k` - **SA**.
-4.  Change your octave using the `Octave` selector. Or use the `z` key to shift to a lower octave and the `x` key to shift to a higher octave.
-5.  Use `Sustain` to control the sustain and `Level` to control the volume level.
-6.  Use the `Note` tabs labelled as `Sa`, `re`, `Re`,... to access each of the 12 notes.
-7.  Use the `Fine Tune` and `Ultrafine Tune` sliders to finetune the pitch of each note. You can also input a number directly into the input boxes, for precise data entry.
-8. When you are satisfied, you can save your tuning to a file by clicking on `Save` which can be uploaded later using `Restore`.
+4.  Change your octave using the `Octave` selector. Or use the `z` key to shift to a lower octave and the `x` key to shift to a higher octave.
+5.  Use `Sustain` to control the sustain and `Level` to control the volume level.
+6.  Use the `Note` tabs labelled as `Sa`, `re`, `Re`,... to access each of the 12 notes.
+7.  Use the `Fine Tune` and `Ultrafine Tune` sliders to finetune the pitch of each note. You can also input a number directly into the input boxes, for precise data entry.
+8. When you are satisfied, you can save your tuning to a file by clicking on `Save` which can be uploaded later using `Restore`.
 9. To start afresh, just click on `Reset`.
 
 ### Sequencer
@@ -77,7 +77,7 @@ On the [App](/app/) page, click on the `Sequencer` tab below the `Common Paramet
 3.  There are four tones available: `String 1`, `String 2`, `Bow` and `Reed`.
 4.  Type your musical compositions in the appropriate textboxes labelled as `Composition Editor`. For details about the syntax and grammar for specifying musical compositions, see the Grammar documentation below. We have also provided some examples below which you can play and read the notation alongside to understand how the notation corresponds to musical notes.
 5.  If you fine-tuned the notes of the musical scale using the controls in the Scale section, then those settings are automatically incorporated in the Sequencer. For example, if you made the **ga** sharp in the Scale section, then if you type `ga` in a composition, the Sequencer would play the sharpened note **ga**.
-6.  Similar to the other sections, you can save your compositions to a file by clicking on `Save` which can be uploaded later using `Restore`.
+6.  Similar to the other sections, you can save your compositions to a file by clicking on `Save` which can be uploaded later using `Restore`.
 7. To start afresh, just click on `Reset`.
 8.  You are at liberty to use the Sequencer to create musical works and use them as you like. We would be grateful if you acknowledge and credit PureTones by linking to this website.
 
@@ -104,19 +104,19 @@ PureTones Sequencer uses a simple grammar to write compositions using notation f
 
 ```
 
-1.  A `motif` refers to a musical composition. It is a sequence of `note`'s separated by whitespaces.
-2.  A `note` is a pair of an `identifier` and a `timing` separated by whitespace.
-3.  An `identifier` is a triplet of `name`, `octave` and `shake` without any separators.
-4.  A `name` could be any one of 12 notes from an octave denoted as follows `Sa re Re ga Ga ma Ma Pa dha Dha ni Ni` where notes beginning with a lowercase are *Komal* (flat) notes and those beginning with an uppercase are *Tivra* (sharp) notes. Of course, `Sa` and `Pa` are always capitalized.
-5.  An `octave` specification is optional. There are three *Saptaks* (octaves):  *Mandra* (low), *Madhya* (middle) and *Tara* (high). A `"` symbol denotes *Tara Saptak*, a `'` symbol denotes *Mandra Saptak* and no octave specification means *Madhya Saptak*.
-6.  A `shake` denotes whether or not the note is shaken or rendered with a *Gamaka*. A `shake` specification is optional. It is denoted by `(G)` to mean a note with *Gamaka* or not specified to mean an unmodulated note. It can also be specified with additional parameters like `(G)(start,end,rate,times)` where `start` is the starting pitch, `end` is the ending pitch in cents, `rate` is the rate of the shake, and `times` is the number of times for which the shake is to be repeated (including fractional numbers).
+1.  A `motif` refers to a musical composition. It is a sequence of `note`'s separated by whitespaces.
+2.  A `note` is a pair of an `identifier` and a `timing` separated by whitespace.
+3.  An `identifier` is a triplet of `name`, `octave` and `shake` without any separators.
+4.  A `name` could be any one of 12 notes from an octave denoted as follows `Sa re Re ga Ga ma Ma Pa dha Dha ni Ni` where notes beginning with a lowercase are *Komal* (flat) notes and those beginning with an uppercase are *Tivra* (sharp) notes. Of course, `Sa` and `Pa` are always capitalized.
+5.  An `octave` specification is optional. There are three *Saptaks* (octaves):  *Mandra* (low), *Madhya* (middle) and *Tara* (high). A `"` symbol denotes *Tara Saptak*, a `'` symbol denotes *Mandra Saptak* and no octave specification means *Madhya Saptak*.
+6.  A `shake` denotes whether or not the note is shaken or rendered with a *Gamaka*. A `shake` specification is optional. It is denoted by `(G)` to mean a note with *Gamaka* or not specified to mean an unmodulated note. It can also be specified with additional parameters like `(G)(start,end,rate,times)` where `start` is the starting pitch, `end` is the ending pitch in cents, `rate` is the rate of the shake, and `times` is the number of times for which the shake is to be repeated (including fractional numbers).
 7.  The pitches `start` and `end` can be specified either as notes identified by a `name` and an optional `octave` specification, or in terms of cents with respect to the pitch of the current note. For example, `ga(G)(36,12,2.5,3.34)` specifies a `shake` which oscillates between 36 cents above **ga** and 12 cents above **ga**. Another example is `Re(G)(Re,ga,1.5,1)` which specifies a `shake` which oscillates between **Re** and **ga**.
-8. The parameters `rate` and `times` are specified as a `number`.
+8. The parameters `rate` and `times` are specified as a `number`.
 9. A `stroke` refers to whether the next note is played with a separate stroke or not. A `^` symbol denotes that the next note would be played using the sustain from the stroke of the current note. No stroke specification means that the next note would be played using a separate new stroke.
-10.  A `timing` is a pair of `jati` and `repeats` without any separators. It is an optional specification. If a `timing` specification is not provided, it means the `note` specified in the previous token is a whole note (or has a duration of 1 period).
-11.  A `jati` denotes a subdivision of a period. It is an optional specification. A `.` symbol denotes a $\frac{1}{2}$ note, a `;` symbol denotes a $\frac{1}{4}$ note and a `,` symbol a $\frac{1}{8}$ note. If `jati` is omitted, it denotes a whole note.
-12.  A `repeats` specification determines the factor by which a note duration derived from its `jati` is extended. It is an optional specification. It can take any numerical value from `1` to `8`. If a `repeats` specification is omitted, it means a default value of `1`.
-13. As an example, a `timing` specification of `.3` denotes a note of duration $3\times\frac{1}{2} = 1\frac{1}{2}$ notes, since the `jati` is $\frac{1}{2}$ note and the `repeats` is 3. As another example, a `timing`  specification of `2` denotes a note of duration 2 whole notes, and a `timing` specification of `;` denotes a note of duration of a $\frac{1}{4}$ note.
+10.  A `timing` is a pair of `jati` and `repeats` without any separators. It is an optional specification. If a `timing` specification is not provided, it means the `note` specified in the previous token is a whole note (or has a duration of 1 period).
+11.  A `jati` denotes a subdivision of a period. It is an optional specification. A `.` symbol denotes a $\frac{1}{2}$ note, a `;` symbol denotes a $\frac{1}{4}$ note and a `,` symbol a $\frac{1}{8}$ note. If `jati` is omitted, it denotes a whole note.
+12.  A `repeats` specification determines the factor by which a note duration derived from its `jati` is extended. It is an optional specification. It can take any numerical value from `1` to `8`. If a `repeats` specification is omitted, it means a default value of `1`.
+13. As an example, a `timing` specification of `.3` denotes a note of duration $3\times\frac{1}{2} = 1\frac{1}{2}$ notes, since the `jati` is $\frac{1}{2}$ note and the `repeats` is 3. As another example, a `timing`  specification of `2` denotes a note of duration 2 whole notes, and a `timing` specification of `;` denotes a note of duration of a $\frac{1}{4}$ note.
 
 ### Example Compositions
 
@@ -133,7 +133,7 @@ dha' ni' Sa 8`
 <MotifPlayer title='Example 1' motif={example1} scale={scaleSamaGana} />
 
 
-Here is another example showing the use of the full specification for a gamaka using the syntax of `(G)(start,end,rate,times)`. Again, click on `Start` and try to relate the music to the text.
+Here is another example showing the use of the full specification for a gamaka using the syntax of `(G)(start,end,rate,times)`. Again, click on `Start` and try to relate the music to the text.
 
 export const example2 = `Sa(G)(ni',Re,-0.7,1.2) 2
 Sa ga(G)(36,12,2.5,3.34) 2 Re Sa 2
