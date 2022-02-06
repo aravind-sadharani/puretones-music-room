@@ -7,20 +7,20 @@ const WhiteKeyElement = styled.div`
     max-width: 80px;
     height: 30vw;
     max-height: 240px;
-    border: 1px solid black;
-    background: ivory;
+    border: 1px solid;
     border-radius: 5px;
-    box-shadow: 0px 1px 3px black;
+    background-color: ${({theme}) => theme.ivory};
+    box-shadow: 0px 1px 3px;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: flex-end;
     padding-bottom: 20%;
     font-weight: bold;
-    color: black;
+    color: ${({theme}) => theme.light.textColor};
     &.fade {
-        background: #d9d9cc;
-        border-color: #d9d9cc;
+        opacity: 0.7;
+        border: none;
         z-index: -1;
     }
 `
@@ -33,16 +33,16 @@ const BlackKeyElement = styled.div`
     max-width: 60px;
     height: 20vw;
     max-height: 160px;
-    background: #282c34;
+    background-color: ${({theme}) => theme.ebony};
     border-radius: 5px;
-    box-shadow: 0px 1px 3px black;
+    box-shadow: 0px 1px 3px;
     cursor: pointer;
     z-index: 333;
     display: flex;
     justify-content: center;
     align-items: flex-end;
     padding-bottom: 20%;
-    color: white;
+    color: ${({theme}) => theme.light.buttonText};
     &.fade {
         opacity: 0.5;
     }

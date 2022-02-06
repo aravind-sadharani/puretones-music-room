@@ -8,6 +8,8 @@ const dark = (...args) => css`
 
 const globalTheme = {
     isDark: dark,
+    ivory: 'ivory',
+    ebony: '#282c34',
     light: {
         bodyBackground: 'white',
         textColor: '#404047',

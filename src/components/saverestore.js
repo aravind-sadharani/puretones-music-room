@@ -6,7 +6,9 @@ const FileDownloadDialog = styled.div`
     display: none;
     margin: 6px 12px;
     padding: 6px 6px;
-    border: 1px solid #e6e6eb;
+    border: 1px solid;
+    border-color: ${({theme}) => theme.light.borderColor};
+    ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
     border-radius: 5px;
     &.active{
         display: block;
@@ -17,7 +19,9 @@ const FileUploadDialog = styled.div`
     display: none;
     margin: 6px 12px;
     padding: 6px 6px;
-    border: 1px solid #e6e6eb;
+    border: 1px solid;
+    border-color: ${({theme}) => theme.light.borderColor};
+    ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
     border-radius: 5px;
     &.active{
         display: block;
@@ -28,8 +32,15 @@ const FileName = styled.input`
     -webkit-appearance: none;
     margin: 6px;
     padding: 0 6px;
-    outline-color: #333366;
-    border: 1px solid #e6e6eb;
+    outline-color: ${({theme}) => theme.light.buttonBackground};
+    ${({theme}) => theme.isDark`outline-color: ${theme.dark.textColor};`}
+    background-color: ${({theme}) => theme.light.bodyBackground};
+    ${({theme}) => theme.isDark`background-color: ${theme.dark.bodyBackground};`}
+    color: ${({theme}) => theme.light.textColor};
+    ${({theme}) => theme.isDark`color: ${theme.dark.textColor};`}
+    border: 1px solid;
+    border-color: ${({theme}) => theme.light.borderColor};
+    ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
     border-radius: 5px;
     width: 120px;
 `
@@ -45,21 +56,23 @@ const FileInput = styled.input`
 const FileBrowser = styled.div`
     display: inline-block;
     padding: 0 6px;
-    border-color: #e6e6eb;
-    outline-color: #333366;
-    background-color: #e6e6eb;
-    border: 0;
+    border: 2px solid;
     border-radius: 5px;
+    border-color: ${({theme}) => theme.light.buttonBackground};
+    ${({theme}) => theme.isDark`border-color: ${theme.dark.textColor};`}
+    background-color: ${({theme}) => theme.light.borderColor};
+    ${({theme}) => theme.isDark`background-color: ${theme.dark.borderColor};`}
     margin: 6px;
     width: 120px;
     &:hover {
-        background-color: #333366;
-        color: white;
+        color: ${({theme}) => theme.light.buttonText};
+        ${({theme}) => theme.isDark`color: ${theme.dark.buttonText};`}
+        border-color: ${({theme}) => theme.light.buttonBackground};
+        ${({theme}) => theme.isDark`border-color: ${theme.dark.buttonBackground};`}
+        background-color: ${({theme}) => theme.light.buttonBackground};
+        ${({theme}) => theme.isDark`background-color: ${theme.dark.buttonBackground};`}
         font-weight: 700;
         opacity: 0.8;
-    }
-    &.active {
-        border: 2px solid #333366;
     }
 `
 
@@ -139,9 +152,7 @@ const SaveRestore = ({extn,save,restore,savetitle,restoretitle}) => {
             {restore && <FileUploadDialog className={activeUL}>
                 <label htmlFor={`snapshotUL${extn}`}>
                     <strong>{filenameUL || 'Select File ►'}</strong>
-                    <FileBrowser className={activeUL}>
-                        Browse
-                    </FileBrowser>
+                    <FileBrowser>Browse</FileBrowser>
                 </label>
                 <FileInput id={`snapshotUL${extn}`} type="file" accept={`.${extn}`} onClick={e => (e.target.value = null)} onChange={(e) => handleFileUpload(e)}></FileInput>
                 <Button onClick={upload}>Upload</Button>

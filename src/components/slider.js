@@ -18,8 +18,8 @@ const SliderRange = styled.input`
     width: 100%;
     height: 10px;
     border-radius: 5px;
-    background: ${({theme}) => theme.light.borderColor};
-    ${({theme}) => theme.isDark`background: ${theme.dark.borderColor};`}
+    background-color: ${({theme}) => theme.light.borderColor};
+    ${({theme}) => theme.isDark`background-color: ${theme.dark.borderColor};`}
     -webkit-transition: .2s;
     transition: opacity .2s;
     ::-webkit-slider-thumb {
@@ -28,16 +28,16 @@ const SliderRange = styled.input`
         width: 25px;
         height: 25px;
         border-radius: 50%;
-        background: ${({theme}) => theme.light.linkColor};
-        ${({theme}) => theme.isDark`background: ${theme.dark.linkColor};`}
+        background-color: ${({theme}) => theme.light.linkColor};
+        ${({theme}) => theme.isDark`background-color: ${theme.dark.linkColor};`}
         cursor: pointer;
     }
     ::-moz-range-thumb {
         width: 25px;
         height: 25px;
         border-radius: 50%;
-        background: ${({theme}) => theme.light.linkColor};
-        ${({theme}) => theme.isDark`background: ${theme.dark.linkColor};`}
+        background-color: ${({theme}) => theme.light.linkColor};
+        ${({theme}) => theme.isDark`background-color: ${theme.dark.linkColor};`}
         cursor: pointer;
     }
 `
@@ -49,8 +49,8 @@ const SliderNumber = styled.input`
     border: 1px solid;
     border-color: ${({theme}) => theme.light.borderColor};
     ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
-    background: ${({theme}) => theme.light.bodyBackground};
-    ${({theme}) => theme.isDark`background: ${theme.dark.bodyBackground};`}
+    background-color: ${({theme}) => theme.light.bodyBackground};
+    ${({theme}) => theme.isDark`background-color: ${theme.dark.bodyBackground};`}
     color: ${({theme}) => theme.light.textColor};
     ${({theme}) => theme.isDark`color: ${theme.dark.textColor};`}
     border-radius: 5px;
