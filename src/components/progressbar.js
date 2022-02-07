@@ -20,7 +20,7 @@ const ProgressBarRail = styled.div`
 const ProgressBarFill = styled.div`
     height: 20px;
     border-radius: 20px;
-    width: ${(props) => props.width};
+    width: ${(props) => props.width === '0%' ? '0%' : `max(20px,${props.width})`};
     background-color: ${({theme}) => theme.light.linkColor};
     ${({theme}) => theme.isDark`background-color: ${theme.dark.linkColor};`}
 `
