@@ -121,8 +121,10 @@ const DroneAnalyzer = () => {
     }
 
     const chartCompleted = () => {
-        setTitle('Completed')
-        setProgress('100%')
+        if(title === 'Plotting...') {
+            setTitle('Completed')
+            setProgress('100%')    
+        }
     }
 
     const resolutionParams = {
