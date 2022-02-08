@@ -10,7 +10,7 @@ import ListenToKeyStrokes from "services/keystroke"
 
 const isBrowser = typeof window !== "undefined"
 
-const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset, save, restore}) => {
+const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset, save, restore, scaleName}) => {
     const scaleTabs = ['Sa', 're', 'Re', 'ga', 'Ga', 'ma', 'Ma', 'Pa', 'dha', 'Dha', 'ni', 'Ni', 'SA']
     let scalePages = scaleTabs.map((s) => {
         let basePath = `/FaustDSP/Common_Parameters/12_Note_Scale/${s}`
@@ -114,7 +114,7 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset, s
     }
     return (
         <>
-            <p><strong>Scale Controls</strong></p>
+            <p><strong>Scale Controls (using {scaleName} tuning)</strong></p>
             <SessionControls appname="scale" code={scaleDSPCode} settings={scaleState} reset={reset} save={save} restore={restore}/>
             <p><strong>Keyboard Controls</strong></p>
             <Toggle title='Computer Keyboard' status={keyStrokes} path='computer_keyboard' onParamUpdate={()=>toggleKeyStrokes(!keyStrokes)} />

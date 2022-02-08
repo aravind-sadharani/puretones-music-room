@@ -18,7 +18,7 @@ const useLocalStore = (key,initialValue) => {
     const [localValue, setLocalValue] = useReducer((localValue,value) => {
         try {
             const evaluatedValue = value instanceof Function ? value(localValue) : value
-            let newValue = {...localValue, ...evaluatedValue}
+            const newValue = value instanceof Object ? {...localValue, ...evaluatedValue} : value
             if(isBrowser) {
                 window.localStorage.setItem(key, JSON.stringify(newValue))
             }

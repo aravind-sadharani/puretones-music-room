@@ -55,7 +55,7 @@ const DroneAnalyzer = () => {
 
     const restoreDrone = (dronesnapshot,dronefilename) => {
         let droneState = dspStateFromSettings('drone',dronesnapshot)
-        setDrone({state: droneState, name: dronefilename.replace('.prt','')})
+        setDrone({state: droneState, name: dronefilename.toString().replace('.prt','')})
         setActiveDroneStrings(droneStringNames.filter(string => 
             (Number(droneState[`/FaustDSP/PureTones_v1.0/0x00/${string}/Play_String/Loop`]) === 1)
         ))
@@ -72,7 +72,7 @@ const DroneAnalyzer = () => {
 
     const restoreScale = (scalesnapshot,scalefilename) => {
         let scaleState = dspStateFromSettings('scale',scalesnapshot)
-        setScale({state: scaleState, name: scalefilename.replace('.pkb','')})
+        setScale({state: scaleState, name: scalefilename.toString().replace('.pkb','')})
         setActiveScaleNotes(scaleTabs)
         resetAnalysis()
     }

@@ -5,7 +5,7 @@ import Slider from "components/slider"
 import DroneString from "applets/dronestring"
 import SessionControls from "applets/sessioncontrols"
 
-const Drone = ({droneDSPCode,droneState,onParamUpdate,reset,save,restore}) => {
+const Drone = ({droneDSPCode,droneState,onParamUpdate,reset,save,restore,droneName}) => {
     const stringTabs = ['String 1', 'String 2', 'String 3', 'String 4', 'String 5', 'String 6']
     const stringNames = ['1st_String', '2nd_String', '3rd_String', '4th_String', '5th_String', '6th_String']
     let stringPages = stringNames.map((s,index) => {
@@ -48,7 +48,7 @@ const Drone = ({droneDSPCode,droneState,onParamUpdate,reset,save,restore}) => {
     }
     return (
         <>
-            <p><strong>Drone Controls</strong></p>
+            <p><strong>Drone Controls (using {droneName} tuning)</strong></p>
             <SessionControls appname='drone' code={droneDSPCode} settings={droneState} reset={reset} save={save} restore={restore}/>
             <p><strong>Drone Parameters</strong></p>
             <Selector params={octaveList} path="/FaustDSP/PureTones_v1.0/0x00/Octave_Selector" onParamUpdate={(value,path) => onParamUpdate(value,path)}></Selector>
