@@ -40,7 +40,7 @@ const CanvasContainer = styled.div`
     ${({theme}) => theme.isDark`background-color: ${theme.dark.chartBackground};`}
 `
 
-const TimeFreqAnalysisChart = ({pitches,duration,scaleName,droneName,onComplete}) => {
+const TimeFreqAnalysisChart = ({pitches,duration,scaleName,droneName}) => {
     const chartOptions = {
         maintainAspectRatio: false,
         responsive: true,
@@ -81,9 +81,7 @@ const TimeFreqAnalysisChart = ({pitches,duration,scaleName,droneName,onComplete}
                 text: 'Drone Analysis',
             }
         },
-        animation: {
-            onComplete: onComplete,
-        }
+        animation: false,
     }
     let pitchData = {
         datasets: [

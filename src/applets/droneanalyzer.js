@@ -114,16 +114,9 @@ const DroneAnalyzer = () => {
                 else
                     setTimeFreqAnalysis(e.data)
                 Worker.terminate()
-                setTitle('Plotting...')
-                setProgress('99%')
+                setTitle('Completed')
+                setProgress('100%')
             }
-        }
-    }
-
-    const chartCompleted = () => {
-        if(title === 'Plotting...') {
-            setTitle('Completed')
-            setProgress('100%')    
         }
     }
 
@@ -198,7 +191,7 @@ const DroneAnalyzer = () => {
                 setScale({state: {...scale.state,...newStates}, name: newScaleName})
                 break
             default:
-                console.log(`Update Parameters: Incorrect appname ${appname}!`)
+                console.error(`Drone Analyzer: Update Parameters: Incorrect appname ${appname}!`)
         }
     }
 
@@ -362,8 +355,8 @@ const DroneAnalyzer = () => {
                 <ProgressBar title='Analysis in Progress' progress={progress} />
                 {(title === 'Completed') && <p>Scroll down to view the results.</p>}
             </DroneAnalyzerContainer>
-            {timeFreqAnalysis.status && <TimeFreqAnalysisChart pitches={timeFreqAnalysis.pitches} duration={duration} droneName={drone.name} scaleName={scale.name} onComplete={chartCompleted} />}
-            {droneAnalysis.status && <DroneAnalysisChart pitches={droneAnalysis.pitches} droneName={drone.name} scaleName={scale.name} onComplete={chartCompleted} />}
+            {timeFreqAnalysis.status && <TimeFreqAnalysisChart pitches={timeFreqAnalysis.pitches} duration={duration} droneName={drone.name} scaleName={scale.name} />}
+            {droneAnalysis.status && <DroneAnalysisChart pitches={droneAnalysis.pitches} droneName={drone.name} scaleName={scale.name} />}
             {droneAnalysis.status && <DroneAnalysisTable pitches={droneAnalysis.pitches} droneState={drone.state} />}
         </>
     )

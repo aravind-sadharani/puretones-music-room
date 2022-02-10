@@ -40,7 +40,7 @@ const CanvasContainer = styled.div`
     ${({theme}) => theme.isDark`background-color: ${theme.dark.chartBackground};`}
 `
 
-const DroneAnalysisChart = ({pitches,scaleName,droneName,onComplete}) => {
+const DroneAnalysisChart = ({pitches,scaleName,droneName}) => {
     const chartOptions = {
         indexAxis: 'y',
         maintainAspectRatio: false,
@@ -83,9 +83,7 @@ const DroneAnalysisChart = ({pitches,scaleName,droneName,onComplete}) => {
                 text: 'Drone Analysis',
             }
         },
-        animation: {
-            onComplete: onComplete,
-        }
+        animation: false,
     }
     let pitchList = [...pitches]
     pitchList.sort((tone1, tone2) => tone2.ratio - tone1.ratio)
