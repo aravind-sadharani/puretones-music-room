@@ -10,8 +10,6 @@ import ProgressBar from 'components/progressbar'
 import {dspStateFromSettings} from 'utils/dspsettingsinterpreter'
 import dronePRT from 'data/default.prt'
 import scalePKB from 'data/default.pkb'
-import DroneAnalysisTable from 'applets/droneanalysistable'
-import DroneAnalysisChart from 'applets/droneanalysischart'
 import TimeFreqAnalysisChart from 'applets/timefreqanalysischart'
 import { CommonSettingsEnv } from 'services/commonsettings'
 
@@ -34,22 +32,19 @@ const DroneAnalyzer = () => {
     let defaultScaleState = dspStateFromSettings('scale', scalePKB)
     const [drone,setDrone] = React.useState({state: defaultDroneState, name: 'Standard'})
     const [scale,setScale] = React.useState({state: defaultScaleState, name: 'Standard'})
-    const [droneAnalysis,setDroneAnalysis] = React.useState({status: false, pitches:[]})
-    const [timeFreqAnalysis,setTimeFreqAnalysis] = React.useState({status: false, pitches:[]})
+    const [analysisData,setAnalysisData] = React.useState({status: false, pitches:[]})
     const [title,setTitle] = React.useState('Analyze')
-    const [progress,setProgress] = React.useState('100%')
+    const [progress,setProgress] = React.useState(100)
     const [resolution,setResolution] = React.useState(4)
     const [noiseFloor,setNoiseFloor] = React.useState(-80)
     const [duration,setDuration] = React.useState(16)
-    const [mode,setMode] = React.useState(0)
     const [activeDroneStrings,setActiveDroneStrings] = React.useState(droneStringNames.filter(string => 
         (Number(defaultDroneState[`/FaustDSP/PureTones_v1.0/0x00/${string}/Play_String/Loop`]) === 1)
     ))
     const [activeScaleNotes,setActiveScaleNotes] = React.useState(scaleTabs)
 
     const resetAnalysis = () => {
-        setDroneAnalysis({status: false, pitches:[]})
-        setTimeFreqAnalysis({status: false, pitches:[]})
+        setAnalysisData({status: false, pitches:[]})
         setTitle('Analyze')
     }
 
@@ -88,7 +83,7 @@ const DroneAnalyzer = () => {
             return
 
         setTitle(`Analyzing...`)
-        setProgress('0%')
+        setProgress(0)
         
         const Worker = new window.Worker('/Workers/droneanalyzer.worker.js')
         Worker.postMessage({
@@ -99,7 +94,6 @@ const DroneAnalyzer = () => {
             activeScaleNotes: activeScaleNotes,
             resolution: resolution,
             noiseFloor: noiseFloor,
-            mode: mode,
             duration: duration
         })
 
@@ -107,15 +101,12 @@ const DroneAnalyzer = () => {
 
         Worker.onmessage = (e) => {
             if(!e.data.status) {
-                setProgress(`${e.data.progress}%`)
+                setProgress(e.data.progress)
             } else {
-                if(mode === 0)
-                    setDroneAnalysis(e.data)
-                else
-                    setTimeFreqAnalysis(e.data)
+                setAnalysisData(e.data)
                 Worker.terminate()
-                setTitle('Completed')
-                setProgress('100%')
+                setTitle('Analyze')
+                setProgress(100)
             }
         }
     }
@@ -137,7 +128,7 @@ const DroneAnalyzer = () => {
     }
 
     const durationParams = {
-        key: 'Duration for Time Frequency Analysis (s)',
+        key: 'Duration (s)',
         init: duration,
         max: 60,
         min: 1,
@@ -154,9 +145,6 @@ const DroneAnalyzer = () => {
                 break
             case 'Duration':
                 setDuration(Number(value))
-                break
-            case 'Mode':
-                setMode(Number(value))
                 break
             default:
                 if(path.includes('String')) {
@@ -178,7 +166,6 @@ const DroneAnalyzer = () => {
     }
 
     const updateStates = (appname,value,path) => {
-        resetAnalysis()
         let newStates = {}
         newStates[`${path}`] = value
         switch(appname) {
@@ -193,6 +180,7 @@ const DroneAnalyzer = () => {
             default:
                 console.error(`Drone Analyzer: Update Parameters: Incorrect appname ${appname}!`)
         }
+        resetAnalysis()
     }
 
     const dronePages = droneStringNames.filter(string => 
@@ -337,8 +325,7 @@ const DroneAnalyzer = () => {
             <p><strong>Analysis Parameters</strong></p>
             <Slider params={resolutionParams} path='Resolution' onParamUpdate={updateParams} />
             <Slider params={noiseFloorParams} path='NoiseFloor' onParamUpdate={updateParams} />
-            <Toggle title='Enable Time Frequency Analysis' status={mode} path='Mode' onParamUpdate={updateParams} />
-            {mode === 1 && <Slider params={durationParams} path='Duration' onParamUpdate={updateParams} />}
+            <Slider params={durationParams} path='Duration' onParamUpdate={updateParams} />
         </>
     )
 
@@ -347,17 +334,14 @@ const DroneAnalyzer = () => {
             <TabNav tablist={['Common','Drone','Scale']} pagelist={[commonConfigPage(), droneConfigPage(),scaleConfigPage()]} />
             <DroneAnalyzerContainer>
                 <p><strong>Drone Analyzer</strong></p>
-                <p>Set up the analysis parameters and configure the drone and scale states using the tabs above. Press <code>Analyze</code> when ready.</p>
+                <p>Set up the analysis parameters and configure the drone and scale states using the tabs above. Press <code>Analyze</code> when ready. The results will appear in the chart below.</p>
                 <center>
                     <Button onClick={() => analyze()}>{title}</Button>
                 </center>
                 <p></p>
                 <ProgressBar title='Analysis in Progress' progress={progress} />
-                {(title === 'Completed') && <p>Scroll down to view the results.</p>}
             </DroneAnalyzerContainer>
-            {timeFreqAnalysis.status && <TimeFreqAnalysisChart pitches={timeFreqAnalysis.pitches} duration={duration} droneName={drone.name} scaleName={scale.name} />}
-            {droneAnalysis.status && <DroneAnalysisChart pitches={droneAnalysis.pitches} droneName={drone.name} scaleName={scale.name} />}
-            {droneAnalysis.status && <DroneAnalysisTable pitches={droneAnalysis.pitches} droneState={drone.state} />}
+            <TimeFreqAnalysisChart pitches={analysisData.pitches} duration={duration} droneName={drone.name} scaleName={scale.name} />
         </>
     )
 }

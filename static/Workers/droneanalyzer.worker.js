@@ -56,9 +56,6 @@ const getADSRLevel = (harmonic,time,period) => {
 }
 
 const getTimeGain = (droneState,commonSettings,stringPath,pitch,harmonic,time) => {
-    if(time < 0)
-        return 1
-
     let period = Number(droneState[`/FaustDSP/PureTones_v1.0/0x00/Period`])
     let stringIndex = Number(stringPath.replace('/FaustDSP/PureTones_v1.0/0x00/','')[0]) - 1
 
@@ -196,27 +193,20 @@ const analyzeDrone = (commonSettings,droneState,activeDroneStrings,scaleState,ac
 }
 
 onmessage = (e) => {
-    const {commonSettings,droneState,activeDroneStrings,scaleState,activeScaleNotes,resolution,noiseFloor,mode,duration} = e.data
+    const {commonSettings,droneState,activeDroneStrings,scaleState,activeScaleNotes,resolution,noiseFloor,duration} = e.data
 
-    if(mode === 0) {
-        postMessage({
-            status: true,
-            pitches: analyzeDrone(commonSettings,droneState,activeDroneStrings,scaleState,activeScaleNotes,resolution,noiseFloor,-1),
-        })
-    } else {
-        let pitchData = []
+    let pitchData = []
 
-        for(let i=0; i<=SLICE; i++) {
-            let time = i*duration/SLICE
-            pitchData.push(analyzeDrone(commonSettings,droneState,activeDroneStrings,scaleState,activeScaleNotes,resolution,noiseFloor,time))
-            postMessage({
-                status: false,
-                progress: Math.min(i,99),
-            })
-        }
+    for(let i=0; i<=SLICE; i++) {
+        let time = i*duration/SLICE
+        pitchData.push(analyzeDrone(commonSettings,droneState,activeDroneStrings,scaleState,activeScaleNotes,resolution,noiseFloor,time))
         postMessage({
-            status: true,
-            pitches: pitchData,
+            status: false,
+            progress: Math.min(i,99),
         })
     }
+    postMessage({
+        status: true,
+        pitches: pitchData,
+    })
 }

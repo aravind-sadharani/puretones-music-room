@@ -2,9 +2,9 @@ import * as React from "react"
 import styled from "styled-components"
 
 const ProgressBarContainer = styled.div`
+    display: ${({width}) => width === 100 ? 'none' : 'grid'};
     padding: 0 0 1em 0;
     margin: 0;
-    display: grid;
     grid-template-columns: 1fr 1fr;
 `
 
@@ -20,7 +20,7 @@ const ProgressBarRail = styled.div`
 const ProgressBarFill = styled.div`
     height: 20px;
     border-radius: 20px;
-    width: ${(props) => props.width === '0%' ? '0%' : `max(20px,${props.width})`};
+    width: ${({width}) => width === 0 ? '0%' : `max(20px,${width}%)`};
     background-color: ${({theme}) => theme.light.linkColor};
     ${({theme}) => theme.isDark`background-color: ${theme.dark.linkColor};`}
 `
@@ -45,17 +45,14 @@ const ProgressBarTitle = styled.span`
 `
 
 const ProgressBar = ({title,progress}) => {
-    let visible = (progress !== '100%')
     return (
-        <>
-            {visible && <ProgressBarContainer>
-                <ProgressBarTitle>{title}</ProgressBarTitle>
-                <ProgressPercentage type="text" value={progress} readOnly />
-                <ProgressBarRail>
-                    <ProgressBarFill width={progress} />
-                </ProgressBarRail>
-            </ProgressBarContainer>}
-        </>
+        <ProgressBarContainer width={progress}>
+            <ProgressBarTitle>{title}</ProgressBarTitle>
+            <ProgressPercentage type="text" value={`${progress}%`} readOnly />
+            <ProgressBarRail>
+                <ProgressBarFill width={progress} />
+            </ProgressBarRail>
+        </ProgressBarContainer>
     )
 }
 
