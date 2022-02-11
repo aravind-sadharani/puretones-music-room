@@ -6,6 +6,7 @@ import Slider from 'components/slider'
 import Selector from "components/selector"
 import Toggle from 'components/toggle'
 import TabNav from "components/tabs"
+import ProgressBar from 'components/progressbar'
 import {dspStateFromSettings} from 'utils/dspsettingsinterpreter'
 import dronePRT from 'data/default.prt'
 import scalePKB from 'data/default.pkb'
@@ -33,6 +34,7 @@ const DroneAnalyzer = () => {
     const [scale,setScale] = React.useState({state: defaultScaleState, name: 'Standard'})
     const [analysisData,setAnalysisData] = React.useState({status: false, pitches:[]})
     const [title,setTitle] = React.useState('Analyze')
+    const [progress,setProgress] = React.useState(100)
     const [resolution,setResolution] = React.useState(4)
     const [noiseFloor,setNoiseFloor] = React.useState(-80)
     const [duration,setDuration] = React.useState(16)
@@ -80,6 +82,7 @@ const DroneAnalyzer = () => {
             return
 
         setTitle(`Analyzing...`)
+        setProgress(0)
         
         const Worker = new window.Worker('/Workers/droneanalyzer.worker.js')
         Worker.postMessage({
@@ -100,6 +103,9 @@ const DroneAnalyzer = () => {
                 setAnalysisData(e.data)
                 Worker.terminate()
                 setTitle('Analyze')
+                setProgress(100)
+            } else {
+                setProgress(e.data.progress)
             }
         }
     }
@@ -332,6 +338,7 @@ const DroneAnalyzer = () => {
                     <Button onClick={() => analyze()}>{title}</Button>
                 </center>
                 <p></p>
+                <ProgressBar progress={progress} />
             </DroneAnalyzerContainer>
             <TimeFreqAnalysisChart pitches={analysisData.pitches} duration={duration} droneName={drone.name} scaleName={scale.name} />
         </>

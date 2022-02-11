@@ -193,6 +193,11 @@ onmessage = (e) => {
                 r: 3,
             })
         })
+        if(i%10 === 0)
+            postMessage({
+                status: false,
+                progress: Math.min(i,99),
+            })
     }
 
     postMessage({
