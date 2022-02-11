@@ -19,8 +19,6 @@ ChartJS.register(
     Legend
 )
 
-const SLICE = 100
-
 const ChartContainer = styled.div`
     padding: 12px 12px 0 12px;
     margin: 0 0 1em 0;
@@ -86,31 +84,15 @@ const TimeFreqAnalysisChart = ({pitches,duration,scaleName,droneName}) => {
     let pitchData = {
         datasets: [
             {
-                label: `${scaleName} Scale`,
-                data: [].concat.apply([],pitches.map((pitchList,i) => {
-                    return pitchList.map(pitch => {
-                        return ({
-                            x: i*duration/SLICE,
-                            y: pitch.ratio.toFixed(2),
-                            r: pitch.refAmplitude !== 0 ? 3 : 0,
-                        })
-                    })
-                })).filter(point => point.r === 3),
-                borderColor: 'rgb(92, 92, 133)',
-                backgroundColor: 'rgb(92, 92, 133, 0.2)',
+                label: `${droneName} Drone`,
+                data: pitches[0],
+                backgroundColor: 'rgb(237, 44, 89, 0.3)',
             },
             {
-                label: `${droneName} Drone`,
-                data: [].concat.apply([],pitches.map((pitchList,i) => {
-                    return pitchList.map(pitch => {
-                        return ({
-                            x: i*duration/SLICE,
-                            y: pitch.ratio.toFixed(2),
-                            r: Math.floor(pitch.amplitude/15),
-                        })
-                    })
-                })).filter(point => point.r > 0),
-                backgroundColor: 'rgb(237, 44, 89, 0.3)',
+                label: `${scaleName} Scale`,
+                data: pitches[1],
+                borderColor: 'rgb(92, 92, 133)',
+                backgroundColor: 'rgb(92, 92, 133, 0.2)',
             },
         ],
     }

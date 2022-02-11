@@ -90,7 +90,62 @@ const getAmplitude = (droneState,commonSettings,stringpath,pitch,harmonic,time) 
     return timeGain*stringGain*octaveGain*octaveDecay
 }
 
-const analyzeDrone = (commonSettings,droneState,activeDroneStrings,scaleState,activeScaleNotes,resolution,noiseFloor,time) => {
+const addRatio = (ratio,amplitude,resolution,toneAmplitudeList) => {
+    if(!isAudible(ratio))
+        return
+    
+    let centRatio = toCents(ratio)
+    let index = Math.floor(((centRatio + resolution/2) % OCTAVE)/resolution)
+    toneAmplitudeList[index] += amplitude
+}
+
+const analyzeTimeSlice = (droneState,commonSettings,strings,resolution,time) => {
+    let amplitudesStringHarmonics = []
+    strings.forEach(string => {
+        let amplitudesHarmonics = []
+        for(let i = 1; i <= MAXHARMONICS; i++) {
+            amplitudesHarmonics.push(getAmplitude(droneState,commonSettings,string.basepath,string.pitch,i,time))
+        }
+        amplitudesStringHarmonics.push(amplitudesHarmonics)
+    })
+
+    let droneAmplitudes = []
+    for(let i=0;i<Math.ceil(OCTAVE/resolution);i++)
+        droneAmplitudes[i] = 0
+
+    strings.forEach((string,index) => {
+        for(let i = 1; i <= MAXHARMONICS; i++) {
+            let ratio = i*string.pitch
+            let stringAmplitude = amplitudesStringHarmonics[index][i-1]
+            addRatio(ratio, stringAmplitude, resolution, droneAmplitudes)
+            for(let pairIndex = index+1; pairIndex < strings.length; pairIndex++) {
+                let pair = strings[pairIndex]
+                for(let j = 1; j<= MAXHARMONICS; j++) {
+                    let pairAmplitude = stringAmplitude*amplitudesStringHarmonics[pairIndex][j-1]
+                    let ratio = Math.abs(i*string.pitch-j*pair.pitch)
+                    addRatio(ratio, pairAmplitude, resolution, droneAmplitudes)
+                    ratio = i*string.pitch+j*pair.pitch
+                    addRatio(ratio, pairAmplitude, resolution, droneAmplitudes)
+                }
+            }
+        }
+    })
+
+    return droneAmplitudes
+}
+
+onmessage = (e) => {
+    const {
+        commonSettings,
+        droneState,
+        activeDroneStrings,
+        scaleState,
+        activeScaleNotes,
+        resolution,
+        noiseFloor,
+        duration
+    } = e.data
+
     let strings = activeDroneStrings.map(name => {
         let basePath = `/FaustDSP/PureTones_v1.0/0x00/${name}`
         let baseNote = Number(droneState[`${basePath}/Select_Note`])
@@ -106,62 +161,6 @@ const analyzeDrone = (commonSettings,droneState,activeDroneStrings,scaleState,ac
         }
     }).filter(string => (Number(droneState[`${string.basepath}/Play_String/Loop`]) === 1))
 
-    let amplitudesStringHarmonics = []
-    strings.forEach(string => {
-        let amplitudesHarmonics = []
-        for(let i = 1; i <= MAXHARMONICS; i++) {
-            amplitudesHarmonics.push(getAmplitude(droneState,commonSettings,string.basepath,string.pitch,i,time))
-        }
-        amplitudesStringHarmonics.push(amplitudesHarmonics)
-    })
-
-    let relevantTones = []
-    for(let i=0;i<Math.ceil(OCTAVE/resolution);i++) {
-        relevantTones[i] = {
-            ratio: i*resolution,
-            amplitude: 0,
-        }
-    }
-
-    const addRatio = (ratio,amplitude) => {
-        if(!isAudible(ratio))
-            return
-        
-        let centRatio = toCents(ratio)
-        let index = Math.floor(((centRatio + resolution/2) % OCTAVE)/resolution)
-        relevantTones[index].amplitude += amplitude
-    }
-
-    strings.forEach((string,index) => {
-        for(let i = 1; i <= MAXHARMONICS; i++) {
-            let ratio = i*string.pitch
-            let stringAmplitude = amplitudesStringHarmonics[index][i-1]
-            addRatio(ratio, stringAmplitude)
-            for(let pairIndex = index+1; pairIndex < strings.length; pairIndex++) {
-                let pair = strings[pairIndex]
-                for(let j = 1; j<= MAXHARMONICS; j++) {
-                    let pairAmplitude = stringAmplitude*amplitudesStringHarmonics[pairIndex][j-1]
-                    let ratio = Math.abs(i*string.pitch-j*pair.pitch)
-                    addRatio(ratio, pairAmplitude)
-                    ratio = i*string.pitch+j*pair.pitch
-                    addRatio(ratio, pairAmplitude)
-                }
-            }
-        }
-    })
-
-    relevantTones = relevantTones.map(tone => ({
-        ratio: tone.ratio,
-        amplitude: todB(tone.amplitude,noiseFloor),
-        refAmplitude: 0,
-    }))
-
-    let maxAmplitude = relevantTones[0].amplitude
-    relevantTones.forEach(tone => {
-        if(maxAmplitude < tone.amplitude)
-            maxAmplitude = tone.amplitude
-    })
-
     let scaleConfig = activeScaleNotes.map(note =>{
         let basePath = `/FaustDSP/Common_Parameters/12_Note_Scale`
         let centOffset = scaleState[`${basePath}/${note}/Cent`]
@@ -170,41 +169,30 @@ const analyzeDrone = (commonSettings,droneState,activeDroneStrings,scaleState,ac
         subCentOffset = subCentOffset === undefined ? 0 : Number(subCentOffset)
         return ratioFromName[`${note}`]*(2**((centOffset + subCentOffset/100)/1200))
     })
-    scaleConfig.forEach((ratio,index) => {
-        let scaleRatio
-        if(activeScaleNotes[index] === 'SA' || activeScaleNotes[index] === 'Sa') {
-            scaleRatio = OCTAVE*Math.log2(ratio)
-            if(scaleRatio < -resolution/2 || scaleRatio > Math.ceil(OCTAVE/resolution)*resolution - resolution/2) {
-                relevantTones.push({
-                    ratio: scaleRatio,
-                    amplitude: 0,
-                    refAmplitude: maxAmplitude - 12,
-                })
-                return
-            }
-        } else
-            scaleRatio = toCents(ratio)
-        
-        let scaleIndex = Math.floor((scaleRatio + resolution/2)/resolution)
-        relevantTones[scaleIndex].refAmplitude = maxAmplitude - 12
-    })
-        
-    return relevantTones
-}
 
-onmessage = (e) => {
-    const {commonSettings,droneState,activeDroneStrings,scaleState,activeScaleNotes,resolution,noiseFloor,duration} = e.data
-
-    let pitchData = []
-
+    let pitchData = [ [], [], ]
     for(let i=0; i<=SLICE; i++) {
         let time = i*duration/SLICE
-        pitchData.push(analyzeDrone(commonSettings,droneState,activeDroneStrings,scaleState,activeScaleNotes,resolution,noiseFloor,time))
-        postMessage({
-            status: false,
-            progress: Math.min(i,99),
+        let droneAmplitudes = analyzeTimeSlice(droneState,commonSettings,strings,resolution,time)
+        droneAmplitudes.forEach((amplitude,index) => {
+            let r = Math.floor(todB(amplitude,noiseFloor)/15)
+            if(r > 0) {
+                pitchData[0].push({
+                    x: time,
+                    y: (index*resolution).toFixed(2),
+                    r: r,
+                })
+            }
         })
+        scaleConfig.forEach(ratio => {
+            pitchData[1].push({
+                x: time,
+                y: (OCTAVE*Math.log2(ratio)).toFixed(2),
+                r: 3,
+            })
+        })    
     }
+
     postMessage({
         status: true,
         pitches: pitchData,
