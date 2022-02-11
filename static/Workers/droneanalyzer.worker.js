@@ -55,7 +55,7 @@ const getADSRLevel = (harmonic,time,period) => {
     return ADSRLevel
 }
 
-const getTimeGain = (droneState,commonSettings,stringPath,pitch,harmonic,time) => {
+const getTimeGain = (droneState,frequency,stringPath,pitch,harmonic,time) => {
     let period = Number(droneState[`/FaustDSP/PureTones_v1.0/0x00/Period`])
     let stringIndex = Number(stringPath.replace('/FaustDSP/PureTones_v1.0/0x00/','')[0]) - 1
 
@@ -69,13 +69,13 @@ const getTimeGain = (droneState,commonSettings,stringPath,pitch,harmonic,time) =
     let stringOn = getADSRLevel(harmonic,adjustedTime,period)
 
     let variance = Number(droneState[`${stringPath}/Variance`])
-    let stringBeat = Math.cos(2*Math.PI*pitch*(getFreq(commonSettings))*harmonic*variance*time/10000)
+    let stringBeat = Math.cos(2*Math.PI*pitch*frequency*harmonic*variance*time/10000)
 
     return stringOn*stringBeat
 }
 
-const getAmplitude = (droneState,commonSettings,stringpath,pitch,harmonic,time) => {
-    let timeGain = getTimeGain(droneState,commonSettings,stringpath,pitch,harmonic,time)
+const getAmplitude = (droneState,frequency,stringpath,pitch,harmonic,time) => {
+    let timeGain = getTimeGain(droneState,frequency,stringpath,pitch,harmonic,time)
 
     let stringdBGain = Number(droneState[`${stringpath}/Gain`])
     let stringRatio = noteRatios[Number(droneState[`${stringpath}/Select_Note`])]
@@ -99,12 +99,12 @@ const addRatio = (ratio,amplitude,resolution,toneAmplitudeList) => {
     toneAmplitudeList[index] += amplitude
 }
 
-const analyzeTimeSlice = (droneState,commonSettings,strings,resolution,time) => {
+const analyzeTimeSlice = (droneState,frequency,strings,resolution,time) => {
     let amplitudesStringHarmonics = []
     strings.forEach(string => {
         let amplitudesHarmonics = []
         for(let i = 1; i <= MAXHARMONICS; i++) {
-            amplitudesHarmonics.push(getAmplitude(droneState,commonSettings,string.basepath,string.pitch,i,time))
+            amplitudesHarmonics.push(getAmplitude(droneState,frequency,string.basepath,string.pitch,i,time))
         }
         amplitudesStringHarmonics.push(amplitudesHarmonics)
     })
@@ -146,6 +146,8 @@ onmessage = (e) => {
         duration
     } = e.data
 
+    let frequency = getFreq(commonSettings)
+
     let strings = activeDroneStrings.map(name => {
         let basePath = `/FaustDSP/PureTones_v1.0/0x00/${name}`
         let baseNote = Number(droneState[`${basePath}/Select_Note`])
@@ -173,7 +175,7 @@ onmessage = (e) => {
     let pitchData = [ [], [], ]
     for(let i=0; i<=SLICE; i++) {
         let time = i*duration/SLICE
-        let droneAmplitudes = analyzeTimeSlice(droneState,commonSettings,strings,resolution,time)
+        let droneAmplitudes = analyzeTimeSlice(droneState,frequency,strings,resolution,time)
         droneAmplitudes.forEach((amplitude,index) => {
             let r = Math.floor(todB(amplitude,noiseFloor)/15)
             if(r > 0) {
@@ -190,7 +192,7 @@ onmessage = (e) => {
                 y: (OCTAVE*Math.log2(ratio)).toFixed(2),
                 r: 3,
             })
-        })    
+        })
     }
 
     postMessage({

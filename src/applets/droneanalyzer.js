@@ -43,7 +43,6 @@ const DroneAnalyzer = () => {
 
     const resetAnalysis = () => {
         setAnalysisData({status: false, pitches:[]})
-        setTitle('Analyze')
     }
 
     const restoreDrone = (dronesnapshot,dronefilename) => {
@@ -256,7 +255,7 @@ const DroneAnalyzer = () => {
         return (
             <>
                 <Toggle title='Include in Analysis' status={activeDroneStrings.indexOf(string) === -1 ? '0' : '1'} path={string} onParamUpdate={updateParams} />
-                <Selector params={stringSelectParams} path={`${basePath}/Select_Note`} onParamUpdate={(value,path) => updateStates(value,path)}></Selector>
+                <Selector params={stringSelectParams} path={`${basePath}/Select_Note`} onParamUpdate={(value,path) => updateStates('drone',value,path)}></Selector>
                 <Slider params={fineTuneParams} path={`${basePath}/Fine_Tune`} onParamUpdate={(value,path) => updateStates('drone',value,path)}></Slider>
                 <Slider params={ultrafineTuneParams} path={`${basePath}/Ultrafine_Tune`} onParamUpdate={(value,path) => updateStates('drone',value,path)}></Slider>
             </>
