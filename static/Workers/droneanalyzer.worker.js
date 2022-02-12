@@ -143,56 +143,67 @@ onmessage = (e) => {
         activeScaleNotes,
         resolution,
         noiseFloor,
-        duration
+        duration,
+        mode
     } = e.data
 
-    let frequency = getFreq(commonSettings)
+    let frequency, strings, scaleConfig
 
-    let strings = activeDroneStrings.map(name => {
-        let basePath = `/FaustDSP/PureTones_v1.0/0x00/${name}`
-        let baseNote = Number(droneState[`${basePath}/Select_Note`])
-        let baseRatio = noteRatios[baseNote]
-        let centOffset = droneState[`${basePath}/Fine_Tune`]
-        centOffset = centOffset === undefined ? 0 : Number(centOffset)
-        let subCentOffset = droneState[`${basePath}/Ultrafine_Tune`]
-        subCentOffset = subCentOffset === undefined ? 0 : Number(subCentOffset)
-        let pitch = baseRatio*(2**((centOffset + subCentOffset/100)/1200))
-        return {
-            pitch: pitch,
-            basepath: basePath,
-        }
-    }).filter(string => (Number(droneState[`${string.basepath}/Play_String/Loop`]) === 1))
+    if(mode === 'Drone' || mode === 'Full') {
+        frequency = getFreq(commonSettings)
 
-    let scaleConfig = activeScaleNotes.map(note =>{
-        let basePath = `/FaustDSP/Common_Parameters/12_Note_Scale`
-        let centOffset = scaleState[`${basePath}/${note}/Cent`]
-        centOffset = centOffset === undefined ? 0 : Number(centOffset)
-        let subCentOffset = scaleState[`${basePath}/${note}/0.01_Cent`]
-        subCentOffset = subCentOffset === undefined ? 0 : Number(subCentOffset)
-        return ratioFromName[`${note}`]*(2**((centOffset + subCentOffset/100)/1200))
-    })
+        strings = activeDroneStrings.map(name => {
+            let basePath = `/FaustDSP/PureTones_v1.0/0x00/${name}`
+            let baseNote = Number(droneState[`${basePath}/Select_Note`])
+            let baseRatio = noteRatios[baseNote]
+            let centOffset = droneState[`${basePath}/Fine_Tune`]
+            centOffset = centOffset === undefined ? 0 : Number(centOffset)
+            let subCentOffset = droneState[`${basePath}/Ultrafine_Tune`]
+            subCentOffset = subCentOffset === undefined ? 0 : Number(subCentOffset)
+            let pitch = baseRatio*(2**((centOffset + subCentOffset/100)/1200))
+            return {
+                pitch: pitch,
+                basepath: basePath,
+            }
+        }).filter(string => (Number(droneState[`${string.basepath}/Play_String/Loop`]) === 1))
+    }
+
+    if(mode === 'Scale' || mode === 'Full') {
+        scaleConfig = activeScaleNotes.map(note =>{
+            let basePath = `/FaustDSP/Common_Parameters/12_Note_Scale`
+            let centOffset = scaleState[`${basePath}/${note}/Cent`]
+            centOffset = centOffset === undefined ? 0 : Number(centOffset)
+            let subCentOffset = scaleState[`${basePath}/${note}/0.01_Cent`]
+            subCentOffset = subCentOffset === undefined ? 0 : Number(subCentOffset)
+            return ratioFromName[`${note}`]*(2**((centOffset + subCentOffset/100)/1200))
+        })
+    }
 
     let pitchData = [ [], [], ]
     for(let i=0; i<=SLICE; i++) {
         let time = i*duration/SLICE
-        let droneAmplitudes = analyzeTimeSlice(droneState,frequency,strings,resolution,time)
-        droneAmplitudes.forEach((amplitude,index) => {
-            let r = Math.floor(todB(amplitude,noiseFloor)/15)
-            if(r > 0) {
-                pitchData[0].push({
-                    x: time,
-                    y: (index*resolution).toFixed(2),
-                    r: r,
-                })
-            }
-        })
-        scaleConfig.forEach(ratio => {
-            pitchData[1].push({
-                x: time,
-                y: (OCTAVE*Math.log2(ratio)).toFixed(2),
-                r: 3,
+        if(mode === 'Drone' || mode === 'Full') {
+            let droneAmplitudes = analyzeTimeSlice(droneState,frequency,strings,resolution,time)
+            droneAmplitudes.forEach((amplitude,index) => {
+                let r = Math.floor(todB(amplitude,noiseFloor)/15)
+                if(r > 0) {
+                    pitchData[0].push({
+                        x: time,
+                        y: (index*resolution).toFixed(2),
+                        r: r,
+                    })
+                }
             })
-        })
+        }
+        if(mode === 'Scale' || mode === 'Full') {
+            scaleConfig.forEach(ratio => {
+                pitchData[1].push({
+                    x: time,
+                    y: (OCTAVE*Math.log2(ratio)).toFixed(2),
+                    r: 3,
+                })
+            })
+        }
         if(i%10 === 0)
             postMessage({
                 status: false,
