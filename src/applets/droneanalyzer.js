@@ -28,7 +28,7 @@ const DroneAnalyzerContainer = styled.div`
 `
 
 const DroneAnalyzer = () => {
-    const {commonSettings} = React.useContext(CommonSettingsEnv)
+    const [commonSettings,setCommonSettings] = React.useState(React.useContext(CommonSettingsEnv).commonSettings)
     let defaultDroneState = dspStateFromSettings('drone', dronePRT)
     let defaultScaleState = dspStateFromSettings('scale', scalePKB)
     const [drone,setDrone] = React.useState({state: defaultDroneState, name: 'Standard'})
@@ -87,7 +87,7 @@ const DroneAnalyzer = () => {
         let analysisMessage
         if(state) {
             analysisMessage = {
-                commonSettings: commonSettings,
+                commonSettings: state.commonSettings || commonSettings,
                 droneState: state.droneState || drone.state,
                 activeDroneStrings: state.droneStrings || activeDroneStrings,
                 scaleState: state.scaleState || scale.state,
@@ -381,21 +381,19 @@ const DroneAnalyzer = () => {
         
         setAutoAnalyze(!autoAnalyze)
     }
+
+    const readLocal = (key) => JSON.parse(window.localStorage.getItem(key))
     
     const handleAnalyzeLocalToggle = () => {
         if(!analyzeLocal) {
-            const droneName = JSON.parse(window.localStorage.getItem('dronename'))
-            const droneLocalState = JSON.parse(window.localStorage.getItem('drone'))
-            droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency'] = commonSettings['pitch']
-            droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune'] = commonSettings['offSet']
+            const droneName = readLocal('dronename')
+            const droneLocalState = readLocal('drone')
             setDrone({state: droneLocalState, name: droneName})
             setActiveDroneStrings(droneStringNames.filter(string => 
                 (Number(droneLocalState[`/FaustDSP/PureTones_v1.0/0x00/${string}/Play_String/Loop`]) === 1)
             ))
-            const scaleName = JSON.parse(window.localStorage.getItem('scalename'))
-            const scaleLocalState = JSON.parse(window.localStorage.getItem('scale'))
-            scaleLocalState['/FaustDSP/Common_Parameters/Pitch'] = commonSettings['pitch']
-            scaleLocalState['/FaustDSP/Common_Parameters/Fine_Tune'] = commonSettings['offSet']
+            const scaleName = readLocal('scalename')
+            const scaleLocalState = readLocal('scale')
             setScale({state: scaleLocalState, name: scaleName})
             updateAnalysis({droneState: droneLocalState, scaleState: scaleLocalState, mode: 'Full'})
         }
@@ -411,8 +409,6 @@ const DroneAnalyzer = () => {
                 break
             case 'drone':
                 const droneLocalState = JSON.parse(newValue)
-                droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Common_Frequency'] = commonSettings['pitch']
-                droneLocalState['/FaustDSP/PureTones_v1.0/0x00/Fine_Tune'] = commonSettings['offSet']
                 setDrone({...drone, state: droneLocalState})
                 setActiveDroneStrings(droneStringNames.filter(string => 
                     (Number(droneLocalState[`/FaustDSP/PureTones_v1.0/0x00/${string}/Play_String/Loop`]) === 1)
@@ -424,10 +420,13 @@ const DroneAnalyzer = () => {
                 break
             case 'scale':
                 const scaleLocalState = JSON.parse(newValue)
-                scaleLocalState['/FaustDSP/Common_Parameters/Pitch'] = commonSettings['pitch']
-                scaleLocalState['/FaustDSP/Common_Parameters/Fine_Tune'] = commonSettings['offSet']
                 setScale({...scale, state: scaleLocalState})
                 updateAnalysis({scaleState: scaleLocalState, mode: 'Scale'})
+                break
+            case 'commonsettings':
+                const commonLocalSettings = JSON.parse(newValue)
+                setCommonSettings({...commonSettings,...commonLocalSettings})
+                updateAnalysis({commonSettings: commonLocalSettings})
                 break
             default:
         }
