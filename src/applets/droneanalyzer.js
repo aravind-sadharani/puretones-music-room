@@ -13,6 +13,8 @@ import scalePKB from 'data/default.pkb'
 import TimeFreqAnalysisChart from 'applets/timefreqanalysischart'
 import { CommonSettingsEnv } from 'services/commonsettings'
 import AnalyzeLocal from "services/analyzelocal"
+import { analyzeDrone } from 'utils/droneanalyzer.worker'
+import createWorker from 'utils/createworker'
 
 const droneStringNames = ['1st_String', '2nd_String', '3rd_String', '4th_String', '5th_String', '6th_String']
 const droneTabs = ['String 1', 'String 2', 'String 3', 'String 4', 'String 5', 'String 6']
@@ -114,7 +116,7 @@ const DroneAnalyzer = () => {
         setTitle(`Analyzing...`)
         setProgress(0)
         
-        const Worker = new window.Worker('/Workers/droneanalyzer.worker.js')
+        const Worker = createWorker(analyzeDrone)
         Worker.postMessage(analysisMessage)
 
         Worker.onerror = (err) => console.error(err)
