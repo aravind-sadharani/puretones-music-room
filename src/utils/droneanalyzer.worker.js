@@ -71,7 +71,7 @@ const analyzeDrone = ({data}) => {
         let stringOn = getADSRLevel(harmonic,adjustedTime,period)
 
         let variance = Number(droneState[`${stringPath}/Variance`])
-        let stringBeat = Math.abs(Math.cos(2*Math.PI*pitch*frequency*harmonic*variance*time/10000))
+        let stringBeat = Math.cos(2*Math.PI*pitch*frequency*harmonic*variance*time/10000)
 
         return stringOn*stringBeat
     }
