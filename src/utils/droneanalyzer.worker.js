@@ -51,7 +51,7 @@ const analyzeDrone = ({data}) => {
         } else if(time < ADSRTimeFactors[0]+ADSRTimeFactors[1]) {
             ADSRLevel = (1 - (time - ADSRTimeFactors[0])*(1 - ADSRTimeFactors[2])/ADSRTimeFactors[1])
         } else {
-            ADSRLevel = (ADSRTimeFactors[2] - (time - ADSRTimeFactors[0] - ADSRTimeFactors[1])*ADSRTimeFactors[2]/ADSRTimeFactors[3])
+            ADSRLevel = Math.max((ADSRTimeFactors[2] - (time - ADSRTimeFactors[0] - ADSRTimeFactors[1])*ADSRTimeFactors[2]/ADSRTimeFactors[3]),0)
         }
 
         return ADSRLevel
@@ -71,7 +71,7 @@ const analyzeDrone = ({data}) => {
         let stringOn = getADSRLevel(harmonic,adjustedTime,period)
 
         let variance = Number(droneState[`${stringPath}/Variance`])
-        let stringBeat = Math.cos(2*Math.PI*pitch*frequency*harmonic*variance*time/10000)
+        let stringBeat = Math.abs(Math.cos(2*Math.PI*pitch*frequency*harmonic*variance*time/10000))
 
         return stringOn*stringBeat
     }
