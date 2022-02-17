@@ -20,7 +20,7 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset, s
     })
     let octaveList = {
         key: "Octave",
-        default: scaleState['/FaustDSP/Common_Parameters/Octave'],
+        default: 0,
         options: [
             {
                 value: 2,
@@ -43,6 +43,12 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset, s
                 text: "Lowest"
             }
         ]
+    }
+    const [octaveParams,setOctave] = React.useState(octaveList)
+    const updateOctave = (value) => {
+        let newParams = octaveParams
+        newParams['default'] = value
+        setOctave({...newParams})
     }
     let initSustainParams = {
         key: "Sustain",
@@ -92,12 +98,12 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset, s
     }
     const octaveChange = (key) => {
         if(key === 'z')
-            onParamUpdate(Math.max(Number(scaleState['/FaustDSP/Common_Parameters/Octave'])-1,-2) ,'/FaustDSP/Common_Parameters/Octave')
+            updateOctave(Math.max(octaveParams.default-1,-2))
         if(key === 'x')
-            onParamUpdate(Math.min(Number(scaleState['/FaustDSP/Common_Parameters/Octave'])+1,2) ,'/FaustDSP/Common_Parameters/Octave')
+            updateOctave(Math.min(octaveParams.default+1,2))
     }
     const note2Offset = {'Sa': 0, 're': 1, 'Re': 2, 'ga': 3, 'Ga': 4, 'ma': 5, 'Ma': 6, 'Pa': 7, 'dha': 8, 'Dha': 9, 'ni': 10, 'Ni': 11, 'SA': 12}
-    const key2Midi = (keyName) => (Number(scaleState['/FaustDSP/Common_Parameters/Pitch']) - 3 + note2Offset[`${keyName}`] + 48 + Number(scaleState['/FaustDSP/Common_Parameters/Octave'])*12)
+    const key2Midi = (keyName) => (Number(scaleState['/FaustDSP/Common_Parameters/Pitch']) - 3 + note2Offset[`${keyName}`] + 48 + octaveParams.default*12)
     const [keyStrokes, toggleKeyStrokes] = React.useState(false)
     const handleKeyStroke = (e) => {
         let notes = {a: "Sa", w: "re", s: "Re", e: "ga", d: "Ga", f: "ma", t: "Ma", g: "Pa", y: "dha", h: "Dha", u: "ni", j: "Ni", k: "SA"}
@@ -122,7 +128,7 @@ const Scale = ({scaleDSPCode, scaleState, onParamUpdate, onMIDIMessage, reset, s
             <p></p>
             {keyStrokes && <ListenToKeyStrokes handleKeyStroke={handleKeyStroke} />}
             <p><strong>Scale Parameters</strong></p>
-            <Selector params={octaveList} path="/FaustDSP/Common_Parameters/Octave" onParamUpdate={(value,path) => onParamUpdate(value,path)}></Selector>
+            <Selector params={octaveParams} path="octave" onParamUpdate={(value,path) => updateOctave(value)}></Selector>
             <Slider params={sustainParams} path="sustain" onParamUpdate={(value,path) => updateSustain(value)}></Slider>
             <Slider params={levelParams} path="/Zita_Light/Level" onParamUpdate={(value,path) => onParamUpdate(value,path)}></Slider>
             <TabNav tablist={scaleTabs} pagelist={scalePages}></TabNav>
