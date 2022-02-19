@@ -20,7 +20,7 @@ const analyzeDrone = ({data}) => {
     }
 
     const todB = (amp,noise) => {
-        if(amp === 0)
+        if(amp <= 0)
             return 0
         let ampdB = 20*Math.log10(amp) - noise
         if(ampdB < 0)
