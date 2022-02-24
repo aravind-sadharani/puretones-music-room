@@ -48,6 +48,7 @@ const MusicRoom = () => {
             composition: ''
         }
     ]
+    const [sequencerName, setSequencerName] = useLocalStore('sequencername','')
     const [sequencerLocalState, setSequencerLocalState] = useLocalStore('sequencer', defaultSequencerState)
     const [droneName, setDroneName] = useLocalStore('dronename', 'Standard')
     const [droneLocalState, setDroneLocalState] = useLocalStore('drone', defaultDroneState)
@@ -77,6 +78,10 @@ const MusicRoom = () => {
         }
     }
     const updateVoiceParameters = (index, value, path) => {
+        if(sequencerName !== '' && sequencerName.includes('loaded')) {
+            let newSequencerName = sequencerName.replace('loaded','modified')
+            setSequencerName(newSequencerName)
+        }
         let newSequencerState = sequencerLocalState
         newSequencerState[index][`${path}`] = value
         setSequencerLocalState(newSequencerState)   
@@ -97,6 +102,7 @@ const MusicRoom = () => {
                 setScaleLocalState(defaultScaleState)
                 break
             case 'sequencer':
+                setSequencerName('')
                 setSequencerLocalState(defaultSequencerState)
                 break
             default:
@@ -137,6 +143,7 @@ const MusicRoom = () => {
                 setScaleLocalState(newScaleState)
                 break
             case 'sequencer':
+                setSequencerName(`(loaded ${filename.toString().replace('.psq','')})`)
                 setSequencerLocalState(JSON.parse(snapshot))
                 break
             default:
@@ -148,7 +155,7 @@ const MusicRoom = () => {
     let mainNavPages = [
         <Drone droneDSPCode={droneDSPCode} droneState={droneLocalState} onParamUpdate={(value,path) => updateParameter('drone',value,path)} reset={()=>reset('drone')} save={(()=>saveSnapshot('drone'))} restore={(snapshot,filename) => restoreSnapshot(snapshot,'drone',filename)} droneName={droneName} />, 
         <Scale scaleDSPCode={scaleDSPCode} scaleState={scaleLocalState} onParamUpdate={(value,path) => updateParameter('scale',value,path)} onMIDIMessage={sendMIDIMessage} reset={()=>reset('scale')} save={(()=>saveSnapshot('scale'))} restore={(snapshot,filename) => restoreSnapshot(snapshot,'scale',filename)} scaleName={scaleName} />,
-        <Sequencer scaleState={scaleLocalState} sequencerState={sequencerLocalState} onVoiceParamUpdate={updateVoiceParameters} reset={()=>reset('sequencer')} save={(()=>saveSnapshot('sequencer'))} restore={(snapshot) => restoreSnapshot(snapshot,'sequencer')}/>
+        <Sequencer scaleState={scaleLocalState} sequencerName={sequencerName} sequencerState={sequencerLocalState} onVoiceParamUpdate={updateVoiceParameters} reset={()=>reset('sequencer')} save={(()=>saveSnapshot('sequencer'))} restore={(snapshot,filename) => restoreSnapshot(snapshot,'sequencer',filename)}/>
     ]
     return (
         <>

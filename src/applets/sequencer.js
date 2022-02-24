@@ -3,14 +3,14 @@ import SessionControls from "applets/sessioncontrols"
 import SequencerVoice from "applets/sequencervoice"
 import generateDSP from "utils/generatedsp"
 
-const Sequencer = ({sequencerState,scaleState,onVoiceParamUpdate,reset,save,restore}) => {
+const Sequencer = ({sequencerState,sequencerName,scaleState,onVoiceParamUpdate,reset,save,restore}) => {
     const generate = () => generateDSP(sequencerState,scaleState)
     let sequencerSettings = {}
     sequencerSettings['/FaustDSP/Motif/Pitch'] = scaleState['/FaustDSP/Common_Parameters/Pitch']
     sequencerSettings['/FaustDSP/Motif/Fine_Tune'] = scaleState['/FaustDSP/Common_Parameters/Fine_Tune']
     return (
         <>
-            <p><strong>Sequencer Controls</strong></p>
+            <p><strong>Sequencer Controls {sequencerName}</strong></p>
             <SessionControls appname='sequencer' settings={sequencerSettings} reset={reset} generate={generate} save={save} restore={restore}/>
             <p><strong>Sequencer Parameters</strong></p>
             <SequencerVoice index='0' title='Voice 1' sequencerVoiceState={sequencerState[0]} onVoiceParamUpdate={onVoiceParamUpdate} />
