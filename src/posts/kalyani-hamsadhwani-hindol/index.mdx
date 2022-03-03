@@ -1,0 +1,78 @@
+---
+title: "Raga Comparison - Kalyani, Hamsadhwani and Hindol"
+date: 2022-03-10
+category: 'Comparison of Ragas'
+tags: [ 'Lakshya', 'Lakshana' ]
+---
+
+import kalyaniDrone from './kalyani.prt'
+import kalyaniScale from './kalyani.pkb'
+
+Let us discuss three related Ragas, namely, *Kalyani*, *Hamsadhwani* and *Hindol*.
+
+## Origin and History
+
+
+
+## Common Pitch
+
+Before we begin, let us start with the fundamental note **Sa**. In Indian Classical music, all musical notes are defined based on their relationship with **Sa**. You can use the settings below to set the **Sa** to any pitch you prefer. All the demos on this page would play according to this setting.
+
+<CommonPitch />
+
+## Scale for Raga Kalyani
+
+The scale for Raga Kalyani can be built using the [Scale Builder](/tools/scalebuilder/) tool with the following inter-note relationships.
+
+```
+(Sa,Pa) = I(P)
+(Re,Pa) = I(m)
+(Re,Ma) = I(G)
+(Ga,Pa) = (Ma,Dha)
+(Ma,Ni) = I(m)
+(Ga,Dha) = I(m)
+```
+
+The above relationships result in the following scale. Click `Start` below to expand the scale controls. Then play each note one at a time. For each note, observe how it sounds in relation to other notes in the scale.
+
+export const noteSpecKalyani = [
+    {white: "Sa", black: "fade"},
+    {white: "Re", black: "fade"},
+    {white: "Ga"},
+    {white: "fade", black: "Ma"},
+    {white: "Pa", black: "fade"},
+    {white: "Dha", black: "fade"},
+    {white: "Ni"},
+    {white: "SA"}
+]
+
+<ScalePlayer title='Scale for Raga Kalyani' noteSpec={noteSpecKalyani} scale={kalyaniScale} />
+
+## Drone for Raga Kalyani
+
+Before we compare Raga Kalyani with Raga Hamsadhwani and Raga Hindol, let us start with the drone track for Raga Kalyani. Click `Start` below and listen to the drone track for some time.
+
+<DronePlayer title='Drone for Raga Kalyani' settings={kalyaniDrone} />
+
+After you have spent some time and feel comfortable with the drone track, you can move to the subsequent sections. Let the drone track continue to play while you read and listen to the remainder of this article.
+
+## Raga Kalyani
+
+export const kalyaniMotif = `Sa Re Ma Ga Pa Ma Ni Dha Pa Ma Dha Ni SA 2
+SA Ni Dha Pa Ma Re Ga Pa Re Sa 2`
+
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Kalyani' motif={kalyaniMotif} scale={kalyaniScale} />
+
+## Raga Hamsadhwani
+
+export const hamsadhwaniMotif = `Sa Re Ga Pa Ni SA 2
+SA Ni Pa Ga Pa Re Ga Sa Re Ga Re Sa 2`
+
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Hamsadhwani' motif={hamsadhwaniMotif} scale={kalyaniScale} />
+
+## Raga Hindol
+
+export const hindolMotif = `Sa Ga Ma Dha SA 2
+SA Ni Dha Ma Ga Ma Ga Sa 2`
+
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Hindol' motif={hindolMotif} scale={kalyaniScale} />
