@@ -18,7 +18,8 @@ const baseRatio = {
     dha: 128/81,
     Dha: 27/16,
     ni: 16/9,
-    Ni: 243/128
+    Ni: 243/128,
+    SA: 2
 }
 
 const noteNumber = {
@@ -166,13 +167,15 @@ const buildScale = (constraints) => {
             side: 'LHS'
         }
         const updateRules = (note,sign) => {
-            if(baseNote(note) !== 'Sa')
+            if(baseNote(note) !== 'Sa' && baseNote(note) !== 'SA')
                 ruleArray[noteNumber[`${baseNote(note)}`]] += sign
-            if(note.includes('"'))
+            if(note.includes('"') || baseNote(note) === 'SA')
+                ruleArray[11] -= OCTAVE*sign
+            if(note.includes('"') && baseNote(note) === 'SA')
                 ruleArray[11] -= OCTAVE*sign
             if(note.includes("'"))
                 ruleArray[11] += OCTAVE*sign
-        }    
+        }
         let tokens = tokenize(rule)
         tokens.forEach(token => {
             if(token === '+') {
@@ -183,6 +186,10 @@ const buildScale = (constraints) => {
                 state.side = 'RHS'
             } else if(token[0] === 'T') {
                 transposeRef = token.replace(/(\(|\)|T)/g,'')
+                if(baseRatio[transposeRef] === undefined) {
+                    badRules.push(token)
+                    return ruleArray
+                }
             } else if(token[0] === 'I') {
                 let interval = token.replace(/(\(|\)|I)/g,'')
                 let sign = state.side === 'LHS' ? -1 : 1
@@ -192,6 +199,10 @@ const buildScale = (constraints) => {
                     ruleArray[11] += FOURTH*sign
                 else if(interval === 'G')
                     ruleArray[11] += THIRD*sign
+                else {
+                    badRules.push(token)
+                    return ruleArray
+                }
             } else if(token[0] === 'S') {
                 let note = token.replace(/(\(|\)|S)/g,'')
                 let sign = state.side === 'LHS' ? -1 : 1
@@ -202,10 +213,14 @@ const buildScale = (constraints) => {
                 ruleArray[11] += toCents(baseRatio[note])*sign
             } else if(token[0] === 'D') {
                 let note = token.replace(/(\(|\)|S)/g,'')
+                if(baseRatio[note] === undefined) {
+                    badRules.push(token)
+                    return ruleArray
+                }
                 deletedNotes.push(note)
             } else {
                 let notes = token.replace(/(\(|\))/g,'').split(',')
-                if(notes.length > 2 || (notes.length === 1 && notes[0] === 'Sa')) {
+                if(notes.length > 2 || (notes.length === 2 && (baseRatio[baseNote(notes[0])] === undefined || baseRatio[baseNote(notes[1])] === undefined)) || (notes.length === 1 && (baseRatio[baseNote(notes[0])] === undefined || notes[0] === 'Sa'))) {
                     badRules.push(token)
                     return ruleArray
                 }
