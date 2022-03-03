@@ -386,7 +386,15 @@ const generateDSP = (sequencerState,scaleState) => {
         
         let tokens = tokenize(sequencerVoiceState['composition'])
         let octave = sequencerVoiceState['octave']
-        let noteOffsets = Object.entries(baseRatio).map(note => note[0] !== 'Q' ? Number.parseInt(scaleState[`/FaustDSP/Common_Parameters/12_Note_Scale/${note[0]}/Cent`])+0.01*Number.parseInt(scaleState[`/FaustDSP/Common_Parameters/12_Note_Scale/${note[0]}/0.01_Cent`]) : '0')
+        let noteOffsets = Object.entries(baseRatio).map(note => {
+            let cent = Number.parseInt(scaleState[`/FaustDSP/Common_Parameters/12_Note_Scale/${note[0]}/Cent`])
+            if(isNaN(cent))
+                cent = 0
+            let subCent = Number.parseInt(scaleState[`/FaustDSP/Common_Parameters/12_Note_Scale/${note[0]}/0.01_Cent`])
+            if(isNaN(subCent))
+                subCent = 0
+            return cent+0.01*subCent
+        })
         let toneName = toneNames[sequencerVoiceState['tone']]
         return getVoice(voiceName,tokens,octave,noteOffsets,toneName)
     }
