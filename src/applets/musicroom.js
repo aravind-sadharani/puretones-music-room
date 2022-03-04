@@ -112,11 +112,11 @@ const MusicRoom = () => {
     const saveSnapshot = (appname) => {
         switch(appname) {
             case 'drone':
-                return `data:text/plain,${dspSettingsFromState(appname,droneLocalState)}`
+                return `data:text/plain;charset=utf-8,${encodeURIComponent(dspSettingsFromState(appname,droneLocalState))}`
             case 'scale':
-                return `data:text/plain,${dspSettingsFromState(appname,scaleLocalState)}`
+                return `data:text/plain;charset=utf-8,${encodeURIComponent(dspSettingsFromState(appname,scaleLocalState))}`
             case 'sequencer':
-                return `data:text/plain,${JSON.stringify(sequencerLocalState)}`
+                return `data:text/plain;charset=utf-8,${encodeURIComponent(JSON.stringify(sequencerLocalState))}`
             default:
                 console.log(`Save: Incorrect appname ${appname}!`)
                 return null
