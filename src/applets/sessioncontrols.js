@@ -39,8 +39,9 @@ const SessionControls = ({appname,code,settings,reset,generate,save,restore}) =>
             dispatch({type: 'Init'})
     }
     React.useEffect(()=>{
-        if(title === 'Starting...' || title === 'Stopping...')
+        if(title === 'Starting...' || title === 'Stopping...') {
             dispatch({type: `${title === 'Starting...' ? 'Play' : 'Stop'}`, appname: appname, code: DSPCode, settings: settings, onJobComplete: jobCompleted})
+        }
     })
     return (
         <SessionControlsContainer>
