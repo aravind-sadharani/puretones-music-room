@@ -44,7 +44,7 @@ const PostGraphic = ({title}) => (
         <path d="M247.979 70.2142L261.432 107.175" stroke="#F76F8E" strokeWidth="3"/>
         <path d="M219.035 37.4723L226.56 58.1456" stroke="#F76F8E"/>
         <ellipse cx="227.358" cy="60.3382" rx="2" ry="3" transform="rotate(-20 227.358 60.3382)" fill="#F76F8E"/>
-        <text x="50%" y="40" textAnchor="middle">{title.length > 22 ? `${title.slice(0,14).trim()} ... ${title.slice(title.length-6,title.length).trim()}` : title}</text>
+        <text x="50%" y="40" textAnchor="middle">{title.length > 21 ? `${title.slice(0,12).trim()} ... ${title.slice(title.length-7,title.length).trim()}` : title}</text>
     </PostGraphicContainer>
 )
 

@@ -1,0 +1,80 @@
+---
+title: "Raga Comparison - Kambhoji and Bhoopali"
+date: 2022-03-12
+category: 'Comparison of Ragas'
+tags: [ 'Lakshya', 'Lakshana' ]
+---
+
+import kambhojiDrone from './Kambhoji.prt'
+import kambhojiScale from './Kambhoji.pkb'
+
+<Notice>
+
+**Note:**
+1.  This article is under development but it still contains useful and valid material.
+2.  It includes working demonstrations of the drone, scale and different phrases or compositions below.
+3.  The explanatory text needs development and would continue to undergo revisions. 
+
+</Notice>
+
+Let us discuss three related Ragas, namely, *Kambhoji* and *Bhoopali*.
+
+## Origin and History
+
+
+
+## Common Pitch
+
+Before we begin, let us start with the fundamental note **Sa**. In Indian Classical music, all musical notes are defined based on their relationship with **Sa**. You can use the settings below to set the **Sa** to any pitch you prefer. All the demos on this page would play according to this setting.
+
+<CommonPitch />
+
+## Scale for Raga Kambhoji
+
+The scale for Raga Kambhoji can be built using the [Scale Builder](/tools/scalebuilder/) tool with the following inter-note relationships.
+
+```
+(Sa,Pa) = I(P)
+(Sa,Ga) = I(G)
+(Dha',Ga) = I(P)
+(ni',Re) = I(G)
+(ma,Dha) = I(G)
+(Re,Pa) = I(m)
+```
+
+The above relationships result in the following scale. Click `Start` below to expand the scale controls. Then play each note one at a time. For each note, observe how it sounds in relation to other notes in the scale.
+
+export const noteSpecKambhoji = [
+    {white: "Sa", black: "fade"},
+    {white: "Re", black: "fade"},
+    {white: "Ga"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "fade"},
+    {white: "Dha", black: "ni"},
+    {white: "fade"},
+    {white: "SA"}
+]
+
+<ScalePlayer title='Scale for Raga Kambhoji' noteSpec={noteSpecKambhoji} scale={kambhojiScale} />
+
+## Drone for Raga Kambhoji
+
+Before we compare Raga Kambhoji with Raga Bhoopali, let us start with the drone track for Raga Kambhoji. Click `Start` below and listen to the drone track for some time.
+
+<DronePlayer title='Drone for Raga Kambhoji' settings={kambhojiDrone} />
+
+After you have spent some time and feel comfortable with the drone track, you can move to the subsequent sections. Let the drone track continue to play while you read and listen to the remainder of this article.
+
+## Raga Kambhoji
+
+export const kambhojiMotif = `Ga(G)(Dha',Ga,-10,0.5) 3 ni'(G)(Sa,ni',-5,0.5) Dha' ; ni' ; Dha' Pa' 
+Dha'(G)(Pa',Dha',-5,0.5) ma' Ga' Pa' Dha'(G)(-18,18,-6,0.5) Sa(G)(Dha',Sa,-8,0.5) 2
+Re . ni'(G)(Sa,ni',-5,0.5) Dha' Sa(G)(Dha',Sa,-8,0.5) 2`
+
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Kambhoji' motif={kambhojiMotif} scale={kambhojiScale} />
+
+## Raga Bhoopali
+
+export const bhoopaliMotif = `Ga Re(G)(Ga,Re,-5,0.5) Ga Pa Dha Pa Ga Re Sa Pa' Dha' Sa(G)(Dha',Sa,-5,0.5) 2`
+
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Bhoopali' motif={bhoopaliMotif} scale={kambhojiScale} />
