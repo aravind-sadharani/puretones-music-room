@@ -1,0 +1,79 @@
+---
+title: "Raga Comparison - Kaushiki and Malkauns"
+date: 2022-03-12
+category: 'Comparison of Ragas'
+tags: [ 'Lakshya', 'Lakshana' ]
+---
+
+import kaushikiDrone from './Kaushiki.prt'
+import kaushikiScale from './Kaushiki.pkb'
+
+<Notice>
+
+**Note:**
+1.  This article is under development but it still contains useful and valid material.
+2.  It includes working demonstrations of the drone, scale and different phrases or compositions below.
+3.  The explanatory text needs development and would continue to undergo revisions. 
+
+</Notice>
+
+Let us discuss two related Ragas, namely, *Kaushiki* and *Malkauns*.
+
+## Origin and History
+
+
+
+## Common Pitch
+
+Before we begin, let us start with the fundamental note **Sa**. In Indian Classical music, all musical notes are defined based on their relationship with **Sa**. You can use the settings below to set the **Sa** to any pitch you prefer. All the demos on this page would play according to this setting.
+
+<CommonPitch />
+
+## Scale for Raga Kaushiki
+
+The scale for Raga Kaushiki can be built using the [Scale Builder](/scalebuilder/) tool with the following inter-note relationships.
+
+```
+(Sa,ma) = I(m)
+(ma,ni) = I(m)
+(ni',Re) = I(G)
+(ni',ga) = I(m)
+(ga,Pa) = I(G)
+(ga,dha) = I(m)
+```
+
+The above relationships result in the following scale. Click `Start` below to expand the scale controls. Then play each note one at a time. For each note, observe how it sounds in relation to other notes in the scale.
+
+export const noteSpecKaushiki = [
+    {white: "Sa", black: "fade"},
+    {white: "Re", black: "ga"},
+    {white: "fade"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "dha"},
+    {white: "fade", black: "ni"},
+    {white: "fade"},
+    {white: "SA"}
+]
+
+<ScalePlayer title='Scale for Raga Kaushiki' noteSpec={noteSpecKaushiki} scale={kaushikiScale} />
+
+## Drone for Raga Kaushiki
+
+Before we compare Raga Kaushiki with Raga Malkauns, let us start with the drone track for Raga Kaushiki. Click `Start` below and listen to the drone track for some time.
+
+<DronePlayer title='Drone for Raga Kaushiki' settings={kaushikiDrone} />
+
+After you have spent some time and feel comfortable with the drone track, you can move to the subsequent sections. Let the drone track continue to play while you read and listen to the remainder of this article.
+
+## Raga Kaushiki
+
+export const kaushikiMotif = `Sa ga ma dha Pa(G)(-4,4,-4,0.40) ma ga Pa(G)(-4,4,-4,0.40) ma ga
+ma dha ni dha Pa(G)(-4,4,-4,0.40) ma ga Re Sa 2`
+
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Kaushiki' motif={kaushikiMotif} scale={kaushikiScale} />
+
+## Raga Malkauns
+
+export const malkaunsMotif = `ni' Sa ma ga ma dha ma dha ni dha ma ga Sa 2`
+
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Malkauns' motif={malkaunsMotif} scale={kaushikiScale} />
