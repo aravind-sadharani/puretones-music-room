@@ -212,7 +212,7 @@ const buildScale = (constraints) => {
                 }
                 ruleArray[11] += toCents(baseRatio[note])*sign
             } else if(token[0] === 'D') {
-                let note = token.replace(/(\(|\)|S)/g,'')
+                let note = token.replace(/(\(|\))/g,'').replace('D','')
                 if(baseRatio[note] === undefined) {
                     badRules.push(token)
                     return ruleArray
