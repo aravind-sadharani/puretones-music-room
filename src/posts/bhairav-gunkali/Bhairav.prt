@@ -1,5 +1,5 @@
 0 /puretones/Zita_Light/Dry/Wet_Mix
-1 /puretones/Zita_Light/Level
+0 /puretones/Zita_Light/Level
 3 /puretones/PureTones_v1.0/0x00/Common_Frequency
 0 /puretones/PureTones_v1.0/0x00/Octave_Selector
 0 /puretones/PureTones_v1.0/0x00/Fine_Tune
@@ -46,12 +46,12 @@
 1 /puretones/PureTones_v1.0/0x00/4th_String/Select_Note
 0 /puretones/PureTones_v1.0/0x00/4th_String/Play_String/Once
 1 /puretones/PureTones_v1.0/0x00/4th_String/Play_String/Loop
--6 /puretones/PureTones_v1.0/0x00/4th_String/Fine_Tune
-34 /puretones/PureTones_v1.0/0x00/4th_String/Ultrafine_Tune
-4.3 /puretones/PureTones_v1.0/0x00/4th_String/Variance
-1.2 /puretones/PureTones_v1.0/0x00/4th_String/Gain
+4 /puretones/PureTones_v1.0/0x00/4th_String/Fine_Tune
+40 /puretones/PureTones_v1.0/0x00/4th_String/Ultrafine_Tune
+5.3 /puretones/PureTones_v1.0/0x00/4th_String/Variance
+6 /puretones/PureTones_v1.0/0x00/4th_String/Gain
 5.2 /puretones/PureTones_v1.0/0x00/4th_String/Octave_1
-5.9 /puretones/PureTones_v1.0/0x00/4th_String/Octave_2
+7 /puretones/PureTones_v1.0/0x00/4th_String/Octave_2
 4.1 /puretones/PureTones_v1.0/0x00/4th_String/Octave_3
 0.3 /puretones/PureTones_v1.0/0x00/4th_String/Octave_4
 0.1 /puretones/PureTones_v1.0/0x00/4th_String/Octave_5
