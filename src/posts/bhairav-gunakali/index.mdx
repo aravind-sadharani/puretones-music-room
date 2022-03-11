@@ -34,12 +34,12 @@ Before we begin, let us start with the fundamental note **Sa**. In Indian Classi
 The scale for Raga Bhairav can be built using the [Scale Builder](/scalebuilder/) tool with the following inter-note relationships.
 
 ```
-(Sa,Ga) = I(G)
-(Sa,ma) = I(m)
 (Sa,Pa) = I(P)
-(Ga,dha) = I(G)
-(Pa,Ni) = I(G)
-(re,dha) = I(P)
+(Ga,Ni) = I(P)
+(Sa,ma) = I(m)
+(dha,re") = I(m)
+(Ga,dha) = (Sa,Ga)
+(dha,Sa") = (Sa,Ga)
 ```
 
 The above relationships result in the following scale. Click `Start` below to expand the scale controls. Then play each note one at a time. For each note, observe how it sounds in relation to other notes in the scale.
@@ -67,8 +67,10 @@ After you have spent some time and feel comfortable with the drone track, you ca
 
 ## Raga Bhairav
 
-export const bhairavMotif = `Sa re Ga ma re Ga ma dha Pa dha ma Pa dha Ni SA 2
-SA Ni dha Pa ma Ga dha Pa ma Ga re Sa 2`
+export const bhairavMotif = `Ni' Sa re Sa Ni' dha' Pa' 2
+ma' Pa' dha' Ni' Sa re Sa Ni' dha' Pa' 2
+Ga ma Pa ma Ga re Sa 2 Ni' dha' Pa' 2
+ma Pa dha Ni SA Ni dha Pa ma Ga re Sa 2`
 
 <MotifPlayer title='Aarohi and Avarohi phrases for Raga Bhairav' motif={bhairavMotif} scale={bhairavScale} />
 
