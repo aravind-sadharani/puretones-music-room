@@ -66,7 +66,7 @@ const ScaleBuilder = () => {
         return `Listen to the ${oldMsg.split('\n')[0].replace(/,/g,', ')}\n ${changes !== '' ? `(${changes})` : ''}` 
     }
 
-    const save = () => `data:text/plain,${scaleResult.settings}`
+    const save = () => `data:text/plain;charset=utf-8,${encodeURIComponent(scaleResult.settings)}`
 
     return (
         <>
