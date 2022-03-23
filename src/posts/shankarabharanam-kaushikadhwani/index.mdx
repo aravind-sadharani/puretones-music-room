@@ -1,0 +1,80 @@
+---
+title: "Raga Comparison - Shankarabharanam and Kaushika Dhwani"
+date: 2022-03-14
+category: 'Comparison of Ragas'
+tags: [ 'Lakshya', 'Lakshana' ]
+---
+
+import shankarabharanamDrone from './Shankarabharanam.prt'
+import shankarabharanamScale from './Shankarabharanam.pkb'
+
+<Notice>
+
+**Note:**
+1.  This article is under development but it still contains useful and valid material.
+2.  It includes working demonstrations of the drone, scale and different phrases or compositions below.
+3.  The explanatory text needs development and would continue to undergo revisions. 
+
+</Notice>
+
+Let us discuss two related Ragas, namely, *Shankarabharanam* and *Kaushika Dhwani*.
+
+## Origin and History
+
+
+
+## Common Pitch
+
+Before we begin, let us start with the fundamental note **Sa**. In Indian Classical music, all musical notes are defined based on their relationship with **Sa**. You can use the settings below to set the **Sa** to any pitch you prefer. All the demos on this page would play according to this setting.
+
+<CommonPitch />
+
+## Scale for Raga Shankarabharanam
+
+The scale for Raga Shankarabharanam can be built using the [Scale Builder](/scalebuilder/) tool with the following inter-note relationships.
+
+```
+(Sa,Ga) = I(G)
+(Sa,ma) = I(m)
+(Sa,Pa) = I(P)
+(ma,Dha) = I(G)
+(Re,Dha) = I(P)
+(Ni',Re) = (Ga,Pa)
+```
+
+The above relationships result in the following scale. Click `Start` below to expand the scale controls. Then play each note one at a time. For each note, observe how it sounds in relation to other notes in the scale.
+
+export const noteSpecShankarabharanam = [
+    {white: "Sa", black: "fade"},
+    {white: "Re", black: "fade"},
+    {white: "Ga"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "fade"},
+    {white: "Dha", black: "fade"},
+    {white: "Ni"},
+    {white: "SA"}
+]
+
+<ScalePlayer title='Scale for Raga Shankarabharanam' noteSpec={noteSpecShankarabharanam} scale={shankarabharanamScale} />
+
+## Drone for Raga Shankarabharanam
+
+Before we compare Raga Shankarabharanam with Raga Kaushika Dhwani, let us start with the drone track for Raga Shankarabharanam. Click `Start` below and listen to the drone track for some time.
+
+<DronePlayer title='Drone for Raga Shankarabharanam' settings={shankarabharanamDrone} />
+
+After you have spent some time and feel comfortable with the drone track, you can move to the subsequent sections. Let the drone track continue to play while you read and listen to the remainder of this article.
+
+## Raga Shankarabharanam
+
+export const shankarabharanamMotif = `Ni' Re Sa Ga Re Ga ma Ga Pa 2 Dha ma Ga ma Pa Dha Ni SA 2
+SA Ni Dha Pa Dha ma Pa Ga ma Ga Re Ni' Sa 2`
+
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Shankarabharanam' motif={shankarabharanamMotif} scale={shankarabharanamScale} />
+
+## Raga Kaushika Dhwani
+
+export const kaushikadhwaniMotif = `Ni' Dha' Ni' Sa Ga ma Dha Ni SA 2
+SA Ni Dha ma Ga ma Dha ma Ga Re Sa Ni' Sa 2`
+
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Kaushika Dhwani' motif={kaushikadhwaniMotif} scale={shankarabharanamScale} />
