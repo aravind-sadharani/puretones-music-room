@@ -8,26 +8,42 @@ tags: [ 'Lakshya', 'Lakshana' ]
 import kalyaniDrone from './kalyani.prt'
 import kalyaniScale from './kalyani.pkb'
 
-<Notice>
+## Background
 
-**Note:**
-1.  This article is under development but it still contains useful and valid material.
-2.  It includes working demonstrations of the drone, scale and different phrases or compositions below.
-3.  The explanatory text needs development and would continue to undergo revisions. 
+In an [earlier article](/learn/raga-classification/), we surveyed several systems of Raga classification which have been used in Indian Classical music. While these systems have their differences, the common thread in all classification systems is the concept of a *parent Raga* and a *derivative Raga*. The parent and derivative Ragas share a common tuning systems and note intervals.
 
-</Notice>
+In this series of articles, we would be selecting some popular Ragas, analyzing their scales and examining the parent-child relationship between them.
 
-Let us discuss three related Ragas, namely, *Kalyani*, *Hamsadhwani* and *Hindol*.
+## Introduction
 
-## Origin and History
+For this article, we have selected three Ragas, namely, *Kalyani*, *Hamsadhwani* and *Hindol*.
 
+*Raga Kalyani* is a very popular Raga which is performed all over India, in various traditions including Hindustani and Carnatic. *Raga Hamsadhwani* is also equally popular all throughout India. *Raga Hindol* is somewhat less commonly performed in South India.
 
+Through this article, we will see how these Ragas relate to each other and how they can be seen to share a common tuning system.
 
 ## Common Pitch
 
 Before we begin, let us start with the fundamental note **Sa**. In Indian Classical music, all musical notes are defined based on their relationship with **Sa**. You can use the settings below to set the **Sa** to any pitch you prefer. All the demos on this page would play according to this setting.
 
 <CommonPitch />
+
+## Constructing the scale of Raga Kalyani
+
+Let us start by examining some common phrases in Raga Kalyani. Here are a few fragments of phrases which are used to construct musical phrases in Raga Kalyani.
+
+```
+Re Ma Ga
+Ga Ma Dha Pa
+Ma Dha Ni Dha Pa
+Ma Ni Dha Pa
+```
+
+Based on these phrase fragments, we can deduce the note relationships required for the phrases to sound correct and aesthetically appealing.
+
+For example, `Re Ma Ga` would sound right if `(Re,Ma)` is an *Antara Gandhar* interval.
+
+Similarly, `Ga Ma Dha Pa` would sound right if `(Ga,Pa)` and `(Ma,Dha)` are identical intervals.
 
 ## Scale for Raga Kalyani
 
@@ -65,6 +81,8 @@ Before we compare Raga Kalyani with Raga Hamsadhwani and Raga Hindol, let us sta
 
 After you have spent some time and feel comfortable with the drone track, you can move to the subsequent sections. Let the drone track continue to play while you read and listen to the remainder of this article.
 
+Note that the drone has been tuned to support the Kalyani scale derived above and to emphasize the associated note relationships.
+
 ## Raga Kalyani
 
 export const kalyaniMotif = `Sa Re Ma Ga Pa Ma Ni Dha Pa Ma Dha Ni SA 2
@@ -72,12 +90,20 @@ SA Ni Dha Pa Ma Re Ga Pa Re Sa 2`
 
 <MotifPlayer title='Aarohi and Avarohi phrases for Raga Kalyani' motif={kalyaniMotif} scale={kalyaniScale} />
 
+## Relating Raga Hamsadhwani and Raga Kalyani
+
+Some remarks.
+
 ## Raga Hamsadhwani
 
 export const hamsadhwaniMotif = `Sa Re Ga Pa Ni SA 2
 SA Ni Pa Ga Pa Re Ga Sa Re Ga Re Sa 2`
 
 <MotifPlayer title='Aarohi and Avarohi phrases for Raga Hamsadhwani' motif={hamsadhwaniMotif} scale={kalyaniScale} />
+
+## Relating Raga Hindol and Raga Kalyani
+
+Some remarks.
 
 ## Raga Hindol
 
