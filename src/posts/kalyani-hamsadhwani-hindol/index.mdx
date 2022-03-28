@@ -37,17 +37,28 @@ Re Ma Ga
 Ga Ma Dha Pa
 Ma Dha Ni Dha Pa
 Ma Ni Dha Pa
+Ma Dha Ni Dha Pa
+Ni Re Ga Ma Pa Re Sa
 ```
 
-Based on these phrase fragments, we can deduce the note relationships required for the phrases to sound correct and aesthetically appealing.
+Based on these phrase fragments, we can deduce the note relationships required for the phrases to sound correct and aesthetically appealing. It is pertinent to mention here that 4 important natural intervals that appeal to human hearing are:
 
-For example, `Re Ma Ga` would sound right if `(Re,Ma)` is an *Antara Gandhar* interval.
+1. *Dviguna* or Octave
+2. *Pancham Bhav* or the Fifth
+3. *Madhyam Bhav* or the Fourth
+4. *Antara Gandhara Bhav* or the Major Third
 
-Similarly, `Ga Ma Dha Pa` would sound right if `(Ga,Pa)` and `(Ma,Dha)` are identical intervals.
+Based on these intervals, we can see that:
+
+In `Re Ma Ga` would sound pleasing if `(Re,Ma)` is an *Antara Gandhar* interval.
+
+Similarly, in `Ga Ma Dha Pa` would sound pleasing if `(Ga,Dha)` is an *Madhyam Bhav* interval. In addition if `(Ga,Pa)` and `(Ma,Dha)` are identical intervals, it brings symmetry to the phrase.
+
+If we look at two other common phrases in Kalyani `Ma Ni Dha Pa` and `Ma Dha Ni Dha Pa`, `(Ma,Ni)` being a *Madhyam Bhav* interval and `(Pa,Ni)` being an *Antara Gandhara* interval would be aesthetically most pleasing.
 
 ## Scale for Raga Kalyani
 
-The scale for Raga Kalyani can be built using the [Scale Builder](/scalebuilder/) tool with the following inter-note relationships.
+Using the above analysis of the phrases, the scale for Raga Kalyani can be built using the [Scale Builder](/scalebuilder/) tool with the following inter-note relationships.
 
 ```
 (Sa,Pa) = I(P)
@@ -96,6 +107,15 @@ Some remarks.
 
 ## Raga Hamsadhwani
 
+**Important Bhav**
+
+```
+(Sa,Pa) = I(P)
+(Pa',Re) = I(P)
+(Pa,Ni) = I(G)
+```
+By dropping Ma and Dha (Ma, Dha Varjit), we can arrive at the scale and the symmetry in Raga Hamsadhwani. Many of the Kalyani phrases can directly be rendered in Raga Hamsadhwani just by dropping the Varjit notes. For example, the Kalyani phrase `Ni Re Ga Ma Pa Re Sa` can be rendered in Hamsadhwani as `Ni Re Ga Pa Re Sa`. It also has its own characteristic phrases such as `Ga Re Ga Pa Ni Pa`, `Ga Re Ni' Pa' Re Sa`, where the important intervals of `(Pa,Ni)` and `(Pa',Re)` are used prominently.
+
 export const hamsadhwaniMotif = `Sa Re Ga Pa Ni SA 2
 SA Ni Pa Ga Pa Re Ga Sa Re Ga Re Sa 2`
 
@@ -106,6 +126,8 @@ SA Ni Pa Ga Pa Re Ga Sa Re Ga Re Sa 2`
 Some remarks.
 
 ## Raga Hindol
+
+Raga Hindol can be arrived at by dropping Re and Pa from Kalyani. This Raga uses the symmetry `(Ma,Dha) = (Dha,SA)` and `(Ma,Ni)` = *Madhyam Bhav* interval. Some characteristic phrases of Raga Hindol using these *Lakshanas* would be `Ma Ga Ma Dha SA`, `SA Ni Dha Ma'.
 
 export const hindolMotif = `Sa Ga Ma Dha SA 2
 SA Ni Dha Ma Ga Ma Ga Sa 2`
