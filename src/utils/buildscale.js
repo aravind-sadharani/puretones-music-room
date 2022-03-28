@@ -1,6 +1,10 @@
-const toCents = ratio => 1200*Math.log2(ratio)
-
 const OCTAVE = 1200
+const toCents = ratio => {
+    let baseCents = OCTAVE*Math.log2(ratio)
+    while(baseCents < 0)
+        baseCents += OCTAVE
+    return baseCents % OCTAVE
+}
 const FIFTH = toCents(3/2)
 const FOURTH = toCents(4/3)
 const THIRD = toCents(5/4)
