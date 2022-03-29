@@ -1,27 +1,19 @@
 ---
-title: "Raga Comparison - Kalyani, Hamsadhwani and Hindol"
+title: "Raga Comparison - Kalyani, Hamsadhwani and Hindol - 2"
 date: 2022-03-10
 category: 'Comparison of Ragas'
 tags: [ 'Lakshya', 'Lakshana' ]
 ---
 
 import scaleBasicIntervals from 'data/basicIntervals.pkb'
-import kalyaniDrone from './kalyani.prt'
-import kalyaniScale from './kalyani.pkb'
-
-## Background
-
-In an [earlier article](/learn/raga-classification/), we surveyed several systems of Raga classification which have been used in Indian Classical music. While these systems have their differences, the common thread in all classification systems is the concept of a *parent Raga* and a *derivative Raga*. The parent and derivative Ragas share a common tuning systems and note intervals.
-
-In this series of articles, we would be selecting some popular Ragas, analyzing their scales and examining the parent-child relationship between them.
+import kalyaniDrone2 from './kalyani-2.prt'
+import kalyaniScale2 from './kalyani-2.pkb'
 
 ## Introduction
 
-For this article, we have selected three Ragas, namely, *Kalyani*, *Hamsadhwani* and *Hindol*.
+In an [earlier article](/learn/kalyani-hamsadhwani-hindol/), we analyzed three Ragas: *Kalyani*, *Hamsadhwani* and *Hindol* and saw how they were related to one another. During the analysis, we made a choice to maintain the intervals `(Re,Ma)` and `(Pa,Ni)` as symmetrical. As a keen reader or listener would have observed, this resulted in the note `Ga` not being Antara Gandhar but slightly sharper in pitch. If you have not read the article and listened to the analysis and audio demos, then you may want to do so.
 
-*Raga Kalyani* is a very popular Raga which is performed all over India, in various traditions, including Hindustani and Carnatic. *Raga Hamsadhwani* is also equally popular all throughout India. *Raga Hindol* is less common overall, but is performed a bit more in North India than in South India. Note that *Raga Hindol* should not be confused with *Raga Hindolam* which is another name for *Raga Malkauns*.
-
-By means of this article, we will see how these Ragas relate to each other and how they can be seen to share a common tuning system.
+In this article, we analyze the same three Ragas and construct a common scale for them, by treating the intervals `(Sa,Ga)` and `(Pa,Ni)` as symmetrical. Read on, if you are keen to find out how the scale changes subtly because of this choice.
 
 ## Reference Pitch and Basic Intervals
 
@@ -51,30 +43,25 @@ As you can hear, Pancham, Madhyam and Gandhar are pleasant sounding intervals. F
 Let us start by examining some common phrases in Raga Kalyani. Here are a few fragments of phrases which are used to construct musical phrases in Raga Kalyani.
 
 ```
-Re Ma Ga
-Ga Ma Dha Pa
-Ma Dha Ni Dha Pa
-Ma Ni Dha Pa
-Ma Dha Ni Dha Pa
-Ni Re Ga Ma Pa Re Sa
+Updated phrases
 ```
 
 Based on these phrase fragments, we can deduce the note relationships required for the phrases to sound correct and aesthetically appealing. Using the basic intervals introduced above, we can see that:
 
-* `Re Ma Ga` would sound pleasing if `(Re,Ma)` is an *Antara Gandhar* interval.
+* Updated points
 
-* Similarly, `Ga Ma Dha Pa` would sound pleasing if `(Ga,Dha)` is a *Madhyam* interval. In addition, if `(Ga,Pa)` and `(Ma,Dha)` are identical intervals, it brings symmetry to the phrase.
+* Updated points
 
-* If we look at two other common phrases in Kalyani `Ma Ni Dha Pa` and `Ma Dha Ni Dha Pa`, `(Ma,Ni)` being a *Madhyam* interval and `(Pa,Ni)` being an *Antara Gandhara* interval makes the phrase aesthetically pleasing.
+* Updated points
 
 Using the above analysis of the phrases, the scale for Raga Kalyani can be built using the [Scale Builder](/scalebuilder/) tool with the following inter-note relationships.
 
 ```
 (Sa,Pa) = I(P)
 (Re,Pa) = I(m)
-(Re,Ma) = I(G)
+(Sa,Ga) = I(G)
 (Ga,Pa) = (Ma,Dha)
-(Ma,Ni) = I(m)
+(Ga,Ni) = I(P)
 (Ga,Dha) = I(m)
 ```
 
@@ -91,7 +78,7 @@ export const noteSpecKalyani = [
     {white: "SA"}
 ]
 
-<ScalePlayer title='Scale for Raga Kalyani' noteSpec={noteSpecKalyani} scale={kalyaniScale} />
+<ScalePlayer title='Scale for Raga Kalyani' noteSpec={noteSpecKalyani} scale={kalyaniScale2} />
 
 <Notice>
 
@@ -103,7 +90,7 @@ export const noteSpecKalyani = [
 
 Before we compare Raga Kalyani with Raga Hamsadhwani and Raga Hindol, let us start with the drone track for Raga Kalyani. Click `Start` below and listen to the drone track for some time.
 
-<DronePlayer title='Drone for Raga Kalyani' settings={kalyaniDrone} />
+<DronePlayer title='Drone for Raga Kalyani' settings={kalyaniDrone2} />
 
 After you have spent some time and feel comfortable with the drone track, you can move to the subsequent sections. Let the drone track continue to play while you read and listen to the remainder of this article.
 
@@ -116,7 +103,7 @@ Here are some simple phrases to understand the scale and structure of Raga Kalya
 export const kalyaniMotif = `Sa Re Ma Ga Pa Ma Ni Dha Pa Ma Dha Ni SA 2
 SA Ni Dha Pa Ma Re Ga Pa Re Sa 2`
 
-<MotifPlayer title='Aarohi and Avarohi phrases for Raga Kalyani' motif={kalyaniMotif} scale={kalyaniScale} />
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Kalyani' motif={kalyaniMotif} scale={kalyaniScale2} />
 
 ## Raga Hamsadhwani
 
@@ -141,7 +128,7 @@ Here are some simple phrases to understand the scale and structure of Raga Hamsa
 export const hamsadhwaniMotif = `Sa Re Ga Pa Ni SA 2
 SA Ni Pa Ga Pa Re Ga Sa Re Ga Re Sa 2`
 
-<MotifPlayer title='Aarohi and Avarohi phrases for Raga Hamsadhwani' motif={hamsadhwaniMotif} scale={kalyaniScale} />
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Hamsadhwani' motif={hamsadhwaniMotif} scale={kalyaniScale2} />
 
 ## Raga Hindol
 
@@ -156,10 +143,10 @@ Here are some simple phrases to understand the scale and structure of Raga Hindo
 export const hindolMotif = `Sa Ga Ma Dha SA 2
 SA Ni Dha Ma Ga Ma Ga Sa 2`
 
-<MotifPlayer title='Aarohi and Avarohi phrases for Raga Hindol' motif={hindolMotif} scale={kalyaniScale} />
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Hindol' motif={hindolMotif} scale={kalyaniScale2} />
 
 ## Concluding Remarks
 
-In this article, we looked at Ragas Kalyani, Hamsadhwani and Hindol. We examined a few of their signature phrases and applied the basic intervals of Pancham, Madhyam and Antara Gandhar to tune the scale for making it aesthetically appealing. We found that the note relationships and symmetry required for Raga Hamsadhwani and Raga Hindol are present in Raga Kalyani. Thus, Raga Kalyani can be considered a parent Raga, while Raga Hamsadhwani and Raga Hindol can be considered as derivative Ragas. They share a common tuning system and some common Lakshanas. Therefore, they can be performed with the same drone tuning which supports the complete scale of Raga Kalyani.
+Like in the previous article, here again we looked at Ragas Kalyani, Hamsadhwani and Hindol. We examined a few of their signature phrases and applied the basic intervals of Pancham, Madhyam and Antara Gandhar to tune the scale for making it aesthetically appealing. We found that the note relationships and symmetry required for Raga Hamsadhwani and Raga Hindol are present in Raga Kalyani. Thus, Raga Kalyani can be considered a parent Raga, while Raga Hamsadhwani and Raga Hindol can be considered as derivative Ragas. They share a common tuning system and some common Lakshanas. Therefore, they can be performed with the same drone tuning which supports the complete scale of Raga Kalyani.
 
-A keen reader or listener would have observed that the position of `Ga` in the scale has not received much attention. In fact, `Ga` in this scale is actually not Antara Gandhar. You can compare the `Ga` in `Basic Intervals` to the `Ga` in `Scale for Raga Kalyani` and hear it for yourself. The reason for this is that we have chosen to treat `(Re,Ma)` and `(Pa,Ni)` as symmetrical intervals with both `Ma` and `Ni` being Antara Gandhars of `Re` and `Pa` respectively. An alternative tuning for the three Ragas is possible by treating `(Sa,Ga)` and `(Pa,Ni)` as symmetrical with `Ga` and `Ni` being Antara Gandhars of `Sa` and `Pa` respectively. We will analyze this tuning in the [next article](/learn/kalyani-hamsadhwani-hindol-2/)
+The remarkable observation is that the mutual relationship between these three Ragas works regardless of whether `(Re,Ma)` is taken as symmetrical to `(Pa,Ni)` or whether `(Sa,Ga)` is taken as symmetrical to `(Pa,Ni)`.
