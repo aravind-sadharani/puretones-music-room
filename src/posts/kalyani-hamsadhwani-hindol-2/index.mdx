@@ -43,16 +43,24 @@ As you can hear, Pancham, Madhyam and Gandhar are pleasant sounding intervals. F
 Let us start by examining some common phrases in Raga Kalyani. Here are a few fragments of phrases which are used to construct musical phrases in Raga Kalyani.
 
 ```
-Updated phrases
+Ga Re Sa Ni' Re Ga
+Ma Ga Re Sa Ni' Re Pa Ma Ga
+Pa Ma Ga Re Ga Ma Dha Pa
+Ma Dha Ni Dha Pa
+Ga Ma Dha Ni Dha Pa
 ```
 
 Based on these phrase fragments, we can deduce the note relationships required for the phrases to sound correct and aesthetically appealing. Using the basic intervals introduced above, we can see that:
 
-* Updated points
+* In the first two phrases, one can see Ga, Ni' and Sa being prominently used. In phrases like `(Ni',Re,Ga)` and `(Ni',Re,Pa,Ma,Ga)` it would be aesthetically pleasing if Ni' and Ga have a consonant relationship. In phrases `(Sa,Ni',Re,Ga)` and `(Sa,Ni',Re,Pa,Ma,Ga)` it would be good to have a consonant relationship between Sa and Ga.
 
-* Updated points
+* In this version, since `(Re,Ma)` is not a consonant relationship, it would be best to avoid phrases which emphasise the pairing of these notes.
 
-* Updated points
+* Phrase 3 establishes a symmetric relationship between the intervals `(Ga,Pa)` and `(Ma,Dha)`. 
+
+* Phrases 4 and 5 establishes consonant relationship between `(Pa,Ni)` and `(Ga,Ni)`.
+
+It is important to note that in addition to the phrases, it is equally important to pay attention to the timing of notes in a phrase, and the *Alpatva* *Bahutva* *Hrasva* *Deergha* [characteristics](/posts/grammar-of-music) of the notes in the phrase to determine the appropriate pairings.
 
 Using the above analysis of the phrases, the scale for Raga Kalyani can be built using the [Scale Builder](/scalebuilder/) tool with the following inter-note relationships.
 
@@ -100,14 +108,14 @@ Note that the drone has been tuned to support the Kalyani scale derived above an
 
 Here are some simple phrases to understand the scale and structure of Raga Kalyani.
 
-export const kalyaniMotif = `Sa Re Ma Ga Pa Ma Ni Dha Pa Ma Dha Ni SA 2
-SA Ni Dha Pa Ma Re Ga Pa Re Sa 2`
+export const kalyaniMotif = `Ga Re Sa 2 Ni' Re Ga 2 Ma Ga Pa Ma Dha Pa 2 Ni 2 Dha Pa Ma Dha Ni SA 2
+SA Ni Dha Pa Ma Ga Pa Ma Ga 2 Re Ga Re Ni' Sa 2`
 
 <MotifPlayer title='Aarohi and Avarohi phrases for Raga Kalyani' motif={kalyaniMotif} scale={kalyaniScale2} />
 
 ## Raga Hamsadhwani
 
-Raga Hamsadhwani is a pentatonic Raga with the scale `Sa Re Ga Pa Ni`. Consequently, some experts believe it is a derivative of *Raga Shankarabharanam*, while others believe it is a derivative of *Raga Kalyani*. Here we present it as a derivative of *Raga Kalyani*.
+Raga Hamsadhwani is a pentatonic Raga with the scale `Sa Re Ga Pa Ni`. Here we present it as a derivative of *Raga Kalyani*.
 
 The important inter-note relationships in Raga Hamsadhwani are as follows:
 
@@ -121,27 +129,29 @@ If you observe closely, you can see that these relationships are already present
 
 Many of the Kalyani phrases can directly be rendered in Raga Hamsadhwani just by dropping the *Varjit* notes. For example, the Kalyani phrase `Ni Re Ga Ma Pa Re Sa` can be rendered in Hamsadhwani as `Ni Re Ga Pa Re Sa`. It also has its own characteristic phrases such as `Ga Re Ga Pa Ni Pa`, `Ga Re Ni' Pa' Re Sa`, where the important intervals of `(Pa,Ni)` and `(Pa',Re)` are used prominently.
 
+Note: Some musicians/musicologists classify Raga Hamsadhwani under Raga Shankarabharanam. The scale of Shankarabharanam is Sa Re Ga ma Pa Dha Ni. Hamsadhwani can be derived by ma Dha Varjit.
+
 ## Simple Phrases in Raga Hamsadhwani
 
 Here are some simple phrases to understand the scale and structure of Raga Hamsadhwani.
 
-export const hamsadhwaniMotif = `Sa Re Ga Pa Ni SA 2
-SA Ni Pa Ga Pa Re Ga Sa Re Ga Re Sa 2`
+export const hamsadhwaniMotif = `Ga Re Sa Re Ga 2 Ga Re Ga Pa Ni 2 SA 2
+SA Ni Pa Ga 2 Ni 2 Pa Ga Pa Ga Re Sa 2`
 
 <MotifPlayer title='Aarohi and Avarohi phrases for Raga Hamsadhwani' motif={hamsadhwaniMotif} scale={kalyaniScale2} />
 
 ## Raga Hindol
 
-Raga Hindol is widely accepted to be related to Raga Kalyani. Indeed, it can be arrived at by dropping Re and Pa from Kalyani. Raga Hindol uses the symmetry `(Ma,Dha) = (Dha,SA)` and `(Ma,Ni)` = *Madhyam Bhav* interval. Again, if you observe closely, you can see that these relationships are already present in Raga Kalyani.
+Raga Hindol is widely accepted to be related to Raga Kalyani. Indeed, it can be arrived at by dropping Re and Pa from Kalyani. Raga Hindol uses the symmetry `(Ma,Dha) = (Dha,SA)` and `(Sa,Ga)` = *Antara Gandhara Bhav* interval. Again, if you observe closely, you can see that these relationships are already present in Raga Kalyani.
 
-Some characteristic phrases of Raga Hindol using these *Lakshanas* would be `Ma Ga Ma Dha SA` and `SA Ni Dha Ma`.
+Some characteristic phrases of Raga Hindol using these *Lakshanas* would be `Sa Ga Ma Ga SA` and `SA Ni Dha Ma Ga`.
 
 ## Simple Phrases in Raga Hindol
 
 Here are some simple phrases to understand the scale and structure of Raga Hindol.
 
-export const hindolMotif = `Sa Ga Ma Dha SA 2
-SA Ni Dha Ma Ga Ma Ga Sa 2`
+export const hindolMotif = `Sa Ga Sa 2 Ni' Dha' Sa 2 Ga Ma Dha 2 Ma Dha SA 2
+SA Ni Dha Ma Ga 2 Ma Ga Sa 2`
 
 <MotifPlayer title='Aarohi and Avarohi phrases for Raga Hindol' motif={hindolMotif} scale={kalyaniScale2} />
 
