@@ -5,29 +5,44 @@ category: 'Comparison of Ragas'
 tags: [ 'Lakshya', 'Lakshana' ]
 ---
 
+import scaleBasicIntervals from 'data/basicIntervals.pkb'
 import shankarabharanamDrone from './Shankarabharanam.prt'
 import shankarabharanamScale from './Shankarabharanam.pkb'
 
-<Notice>
+## Introduction
 
-**Note:**
-1.  This article is under development but it still contains useful and valid material.
-2.  It includes working demonstrations of the drone, scale and different phrases or compositions below.
-3.  The explanatory text needs development and would continue to undergo revisions. 
+In an [earlier article](/learn/raga-classification/), we surveyed several systems of Raga classification used in Indian Classical music, with all of them sharing a common thread, namely, the concept of a *parent Raga* and a *derivative Raga*. The parent and derivative Ragas share a common tuning systems and note intervals.
 
-</Notice>
+In this series of articles, we would be selecting some popular Ragas, analyzing their scales and examining the parent-child relationship between them. We looked at Ragas *Kalyani*, *Hamsadhwani* and *Hindol* in these two articles ([part 1](/learn/kalyani-hamsadhwani-hindol/) and [part 2](/learn/kalyani-hamsadhwani-hindol-2/)).
 
-Let us discuss two related Ragas, namely, *Shankarabharanam* and *Kaushika Dhwani*.
+For this article, we have selected two Ragas, namely, *Shankarabharanam* and *Kaushika Dhwani*.
 
-## Origin and History
+*Raga Shankarabharanam* is a very popular Raga which is performed all over India, in various traditions, including Hindustani and Carnatic. It is popularly known as *Raga Bilawal* in North India. *Raga Kaushika Dhwani* is quite popular too. It is also known as *Raga Bhinna Shadaj*. 
 
+By means of this article, we will see how these Ragas relate to each other and how they can be seen to share a common tuning system.
 
+## Reference Pitch and Basic Intervals
 
-## Common Pitch
-
-Before we begin, let us start with the fundamental note **Sa**. In Indian Classical music, all musical notes are defined based on their relationship with **Sa**. You can use the settings below to set the **Sa** to any pitch you prefer. All the demos on this page would play according to this setting.
+Before we begin, let us start with the concept of the fundamental note **Sa**. In Indian Classical music, all musical notes are defined based on their relationship with **Sa**. You can use the settings below to set the **Sa** to any pitch you prefer. All the demos on this page would play according to this setting.
 
 <CommonPitch />
+
+Next, it is useful to familiarize ourselves with the four basic intervals of *Dviguna*  (octave), *Pancham* (fifth), *Madhyam* (fourth) and *Gandhar* (major third). You can play and check these intervals using the keyboard below (just click `Start` to activate and tap a key to play). Here **Sa** denotes the fundamental and **Ga, ma, Pa** and **SA** denote the Gandhar, Madhyam, Pancham and Dviguna respectively. Note that the notes here do not match up with today's standard [12 tone equally tempered scale](https://en.wikipedia.org/wiki/12_equal_temperament).
+
+export const notesBasicIntervals = [
+    {white: "Sa", black: "fade"},
+    {white: "fade", black: "fade"},
+    {white: "Ga"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "fade"},
+    {white: "fade", black: "fade"},
+    {white: "fade"},
+    {white: "SA"}
+]
+
+<ScalePlayer title='Basic Intervals' noteSpec={notesBasicIntervals} scale={scaleBasicIntervals} />
+
+As you can hear, Pancham, Madhyam and Gandhar are pleasant sounding intervals. For the musically inclined, they may be recognisable by ear. These are the most fundamental intervals in Indian Classical music which a trained musician is expected to recognize with a fine level of precision.
 
 ## Scale for Raga Shankarabharanam
 
@@ -65,7 +80,7 @@ Before we compare Raga Shankarabharanam with Raga Kaushika Dhwani, let us start 
 
 After you have spent some time and feel comfortable with the drone track, you can move to the subsequent sections. Let the drone track continue to play while you read and listen to the remainder of this article.
 
-## Raga Shankarabharanam
+## Simple phrases in Raga Shankarabharanam
 
 export const shankarabharanamMotif = `Ni' Re Sa Ga Re Ga ma Ga Pa 2 Dha ma Ga ma Pa Dha Ni SA 2
 SA Ni Dha Pa Dha ma Pa Ga ma Ga Re Ni' Sa 2`
@@ -78,3 +93,9 @@ export const kaushikadhwaniMotif = `Ni' Dha' Ni' Sa Ga ma Dha Ni SA 2
 SA Ni Dha ma Ga ma Dha ma Ga Re Sa Ni' Sa 2`
 
 <MotifPlayer title='Aarohi and Avarohi phrases for Raga Kaushika Dhwani' motif={kaushikadhwaniMotif} scale={shankarabharanamScale} />
+
+## Concluding Remarks
+
+In this article, we looked at Ragas Shankarabharanam and Kaushika Dhwani. We examined a few of their signature phrases and applied the basic intervals of Pancham, Madhyam and Antara Gandhar to tune the scale for making it aesthetically appealing. We found that the note relationships and symmetry required for Raga Kaushika Dhwani are present in Raga Shankarabharanam.
+
+Thus, Raga Shankarabharanam can be considered a parent Raga, while Raga Kaushika Dhwani can be considered a derivative Raga. They share a common tuning system and some common Lakshanas. Therefore, they can be performed with the same drone tuning which supports the complete scale of Raga Shankarabharanam.
