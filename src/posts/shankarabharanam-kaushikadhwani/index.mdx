@@ -1,6 +1,6 @@
 ---
 title: "Raga Comparison - Shankarabharanam and Kaushika Dhwani"
-date: 2022-03-14
+date: 2022-03-11
 category: 'Comparison of Ragas'
 tags: [ 'Lakshya', 'Lakshana' ]
 ---
@@ -55,7 +55,6 @@ Ga Pa Dha ma Ga
 Pa Ni Dha Ni SA
 Ni Dha Pa Dha ma Ga Re Ni' Sa
 SA Ni Dha Pa ma Ga Pa ma Ga Re Ni' Sa
-
 ```
 
 Based on these phrase fragments, we can deduce the note relationships required for the phrases to sound correct and aesthetically appealing. Using the basic intervals introduced above, we can see that:
@@ -66,8 +65,6 @@ Based on these phrase fragments, we can deduce the note relationships required f
  
 * For the phrase `Ni' Re Ga ma Ga Pa` if `(Ga,Pa)` and `(Ni',Re)` are identical intervals, it brings symmetry to the phrase.
 
-* It is important to note that here Ni does not have a direct consonant relationship with any of the other notes, and therefore must be handled with care. It is advisable to pair Ni with Re or use it in a phrase where there are other consonant pairs, for example, Ni Dha Pa Dha ma Ga (here we use the consonance of `(ma,Dha)`, and Ga as the *Nyasa* since its an *Antara Gandhara* interval).
-
 It is important to note that in addition to the phrases, it is equally important to pay attention to the timing of notes in a phrase, and the [usage characteristics](/learn/grammar-of-music) like *Alpatva*, *Bahutva*, *Hrasva* or *Deergha* of the notes in the phrase to determine the appropriate pairings.
 
 Using the above analysis of the phrases, the scale for Raga Shankarabharanam can be built using the [Scale Builder](/scalebuilder/) tool with the following inter-note relationships.
@@ -77,9 +74,8 @@ Using the above analysis of the phrases, the scale for Raga Shankarabharanam can
 (Sa,ma) = I(m)
 (Sa,Pa) = I(P)
 (ma,Dha) = I(G)
-(Re,Dha) = I(P)
 (Ni',Re) = (Ga,Pa)
-
+(Re,Pa) = I(m)
 ```
 
 The above relationships result in the following scale. Click `Start` below to expand the scale controls. Then play each note one at a time. For each note, observe how it sounds in relation to other notes in the scale.
@@ -107,8 +103,8 @@ After you have spent some time and feel comfortable with the drone track, you ca
 
 ## Simple phrases in Raga Shankarabharanam
 
-export const shankarabharanamMotif = `Ni' Re Sa Ga Re Ga ma Ga Pa 2 Dha ma Ga ma Pa Dha Ni Dha SA 2
-SA Ni Dha Pa Dha ma Ga Pa ma Ga Re Ni' Sa 2`
+export const shankarabharanamMotif = `Ga Re Ga Pa ma Ga Pa Ni Dha Ni SA 2
+SA Ni Dha Pa Dha ma Ga Pa ma Ga Re Sa 2`
 
 <MotifPlayer title='Aarohi and Avarohi phrases for Raga Shankarabharanam' motif={shankarabharanamMotif} scale={shankarabharanamScale} />
 
