@@ -1,25 +1,19 @@
 ---
-title: "Raga Comparison - Shankarabharanam and Kaushika Dhwani"
+title: "Raga Comparison - Shankarabharanam and Kaushika Dhwani - 2"
 date: 2022-03-11
 category: 'Comparison of Ragas'
 tags: [ 'Lakshya', 'Lakshana' ]
 ---
 
 import scaleBasicIntervals from 'data/basicIntervals.pkb'
-import shankarabharanamDrone from './Shankarabharanam.prt'
-import shankarabharanamScale from './Shankarabharanam.pkb'
+import shankarabharanamDrone2 from './Shankarabharanam-2.prt'
+import shankarabharanamScale2 from './Shankarabharanam-2.pkb'
 
 ## Introduction
 
-In an [earlier article](/learn/raga-classification/), we surveyed several systems of Raga classification used in Indian Classical music, with all of them sharing a common thread, namely, the concept of a *parent Raga* and a *derivative Raga*. The parent and derivative Ragas share a common tuning systems and note intervals.
+In an [earlier article](/learn/shankarabharanam-kaushikadhwani/), we analyzed two Ragas, namely, *Shankarabharanam* and *Kaushika Dhwani* and saw how they were related to each other. During the analysis, we assumed that `(Re,Pa)` was a Madhyam or perfect fourth interval. If you have not read the article and listened to the analysis and audio demos, then you may want to do so.
 
-In this series of articles, we would be selecting some popular Ragas, analyzing their scales and examining the parent-child relationship between them. We looked at Ragas *Kalyani*, *Hamsadhwani* and *Hindol* in these two articles ([part 1](/learn/kalyani-hamsadhwani-hindol/) and [part 2](/learn/kalyani-hamsadhwani-hindol-2/)).
-
-For this article, we have selected two Ragas, namely, *Shankarabharanam* and *Kaushika Dhwani*.
-
-*Raga Shankarabharanam* is a very popular Raga which is performed all over India, in various traditions, including Hindustani and Carnatic. It is popularly known as *Raga Bilawal* in North India. *Raga Kaushika Dhwani* is quite popular too. It is also known as *Raga Bhinna Shadaj*. 
-
-By means of this article, we will see how these Ragas relate to each other and how they can be seen to share a common tuning system.
+In this article, we analyze the same Ragas and construct a common scale for them. But we assume that `(Re,Dha)` is a Pancham or perfect fifth interval. Read on, if you are keen to find out how the scale changes subtly because of this choice.
 
 ## Reference Pitch and Basic Intervals
 
@@ -65,6 +59,8 @@ Based on these phrase fragments, we can deduce the note relationships required f
  
 * For the phrase `Ni' Re Ga ma Ga Pa` if `(Ga,Pa)` and `(Ni',Re)` are identical intervals, it brings symmetry to the phrase.
 
+* Note that `Ni` is not consonant with `Pa`.
+
 It is important to note that in addition to the phrases, it is equally important to pay attention to the timing of notes in a phrase, and the [usage characteristics](/learn/grammar-of-music) like *Alpatva*, *Bahutva*, *Hrasva* or *Deergha* of the notes in the phrase to determine the appropriate pairings.
 
 Using the above analysis of the phrases, the scale for Raga Shankarabharanam can be built using the [Scale Builder](/scalebuilder/) tool with the following inter-note relationships.
@@ -91,13 +87,13 @@ export const noteSpecShankarabharanam = [
     {white: "SA"}
 ]
 
-<ScalePlayer title='Scale for Raga Shankarabharanam' noteSpec={noteSpecShankarabharanam} scale={shankarabharanamScale} />
+<ScalePlayer title='Scale for Raga Shankarabharanam' noteSpec={noteSpecShankarabharanam} scale={shankarabharanamScale2} />
 
 ## Drone for Raga Shankarabharanam
 
 Before we compare Raga Shankarabharanam with Raga Kaushika Dhwani, let us start with the drone track for Raga Shankarabharanam. Click `Start` below and listen to the drone track for some time.
 
-<DronePlayer title='Drone for Raga Shankarabharanam' settings={shankarabharanamDrone} />
+<DronePlayer title='Drone for Raga Shankarabharanam' settings={shankarabharanamDrone2} />
 
 After you have spent some time and feel comfortable with the drone track, you can move to the subsequent sections. Let the drone track continue to play while you read and listen to the remainder of this article.
 
@@ -106,7 +102,7 @@ After you have spent some time and feel comfortable with the drone track, you ca
 export const shankarabharanamMotif = `Ga Re Ga Pa ma Ga Pa Ni Dha Ni SA 2
 SA Ni Dha Pa Dha ma Ga Pa ma Ga Re Sa 2`
 
-<MotifPlayer title='Aarohi and Avarohi phrases for Raga Shankarabharanam' motif={shankarabharanamMotif} scale={shankarabharanamScale} />
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Shankarabharanam' motif={shankarabharanamMotif} scale={shankarabharanamScale2} />
 
 ## Raga Kaushika Dhwani
 
@@ -129,13 +125,15 @@ Some Shankarabharanam phrases can directly be rendered in Raga Kaushika Dhwani j
 export const kaushikadhwaniMotif = `Ni' Dha' Ni' Sa Ga 2 Sa Ga ma Dha 2 ma Dha Ni SA 2
 SA Ni Dha ma Ga ma Dha ma Ga Re Sa Ni' Sa 2`
 
-<MotifPlayer title='Aarohi and Avarohi phrases for Raga Kaushika Dhwani' motif={kaushikadhwaniMotif} scale={shankarabharanamScale} />
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Kaushika Dhwani' motif={kaushikadhwaniMotif} scale={shankarabharanamScale2} />
 
-Note that we have also used Re in the phrase above. Re is to be used as an *ati-Alpatva* (very ocassionally) *Hrasva* note.
+Note that we have also used Re in the phrase above. Re is to be used as an *ati-Alpatva* (very occasional) *Hrasva* note.
 
 
 ## Concluding Remarks
 
-In this article, we looked at Ragas Shankarabharanam and Kaushika Dhwani. We examined a few of their signature phrases and applied the basic intervals of Pancham, Madhyam and Antara Gandhar to tune the scale for making it aesthetically appealing. We found that the note relationships and symmetry required for Raga Kaushika Dhwani are present in Raga Shankarabharanam.
+Like in the previous article, we looked at Ragas Shankarabharanam and Kaushika Dhwani. We examined a few of their signature phrases and applied the basic intervals of Pancham, Madhyam and Antara Gandhar to tune the scale for making it aesthetically appealing. We found that the note relationships and symmetry required for Raga Kaushika Dhwani are present in Raga Shankarabharanam.
 
 Thus, Raga Shankarabharanam can be considered a parent Raga, while Raga Kaushika Dhwani can be considered a derivative Raga. They share a common tuning system and some common Lakshanas. Therefore, they can be performed with the same drone tuning which supports the complete scale of Raga Shankarabharanam.
+
+This observation holds good regardless of whether `(Re,Pa)` is taken as *Madhyam* or `(Re,Dha)` is taken as *Pancham*.
