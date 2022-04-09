@@ -52,8 +52,8 @@ Let us start by examining some common phrases. Here are a few fragments of phras
 Ga Re Ga Pa ma Ga
 Ni' Re Ga ma Ga Pa
 Ga Pa Dha ma Ga 
+Sa Ga Re Pa ma Ga Re Sa
 Pa Ni Dha Ni SA
-Ni Dha Pa Dha ma Ga Re Ni' Sa
 SA Ni Dha Pa ma Ga Pa ma Ga Re Ni' Sa
 ```
 
@@ -62,8 +62,12 @@ Based on these phrase fragments, we can deduce the note relationships required f
 * `Ga Re Ga Pa ma Ga` which starts with Ga and has a prominent Ga, would sound pleasing if `(Sa,Ga)` is an *Antara Gandhar* interval. 
 
 * Similarly, `Ga Pa Dha ma Ga` would sound pleasing if `(ma,Dha)` is an *Antara Gandhar* interval. 
+
+* If consider the phrase `Sa Ga Re Pa ma Ga Re Sa`, setting `(Re,Pa)` to *Madhyam* would bring beauty to the phrase since `(Sa,Ga)` is already a consonant *Anatara Gandhara* interval.
  
-* For the phrase `Ni' Re Ga ma Ga Pa`, setting `(Pa,Ni)` to *Antara Gandhar* and `(Re,Pa)` to *Madhyam* ensures that `(Ga,Pa)` and `(Ni',Re)` are identical, and this brings symmetry to the phrase.
+* For the phrase `Pa Ni Dha Ni SA`, setting `(Pa,Ni)` to *Antara Gandhar* not only gives a consonant interval but also brings symmetery to the *Uttarang* (upper half of the octave) similar to the `(Sa,Ga)` interval in the *Poorvanga* (lower half of the octave).
+
+* A by-product of these consonant intervals is that `(Ga,Ni)` becomes a *Pancham* interval!
 
 * Note that setting `(Re,Pa)` to *Madhyam*, means that `Re` and `Dha` are not mutually consonant.
 
@@ -106,7 +110,7 @@ After you have spent some time and feel comfortable with the drone track, you ca
 ## Simple phrases in Raga Shankarabharanam
 
 export const shankarabharanamMotif = `Ga Re Ga Pa ma Ga Pa Ni Dha Ni SA 2
-SA Ni Dha Pa Dha ma Ga Pa ma Ga Re Sa 2`
+SA Ni Dha Pa Dha ma Ga Re Pa ma Ga Re Sa 2`
 
 <MotifPlayer title='Aarohi and Avarohi phrases for Raga Shankarabharanam' motif={shankarabharanamMotif} scale={shankarabharanamScale} />
 
@@ -120,9 +124,10 @@ The important inter-note relationships in Raga Kaushika Dhwani are as follows:
 (Sa,Ga) = I(G)
 (Sa,ma) = I(m)
 (ma,Dha) = I(G)
+(Ga,Ni) = I(P)
 ```
 
-If you observe closely, you can see that these relationships are already present among those listed for Raga Shankarabharanam. So, by dropping Pa and Re (Pa, Re are *Varjit* or prohibited), we can arrive at the required scale with the required symmetry for Raga Kaushika Dhwani.
+If you observe closely, you can see that these relationships are already present among those listed for Raga Shankarabharanam. So, by dropping Pa and Re (Pa, Re are *Varjit* or prohibited), we can arrive at the required scale with the required symmetry for Raga Kaushika Dhwani. All the notes have such wonderful consonance intervals!
 
 Some Shankarabharanam phrases can directly be rendered in Raga Kaushika Dhwani just by dropping the *Varjit* notes. For example, the Shankarabharanam phrase `Dha Pa Dha ma Ga` can be rendered in Kaushika Dhwani as `Dha ma Ga`. It also has its own characteristic phrases such as `Dha' Ni' Sa Ga ma Ga Sa`, `Ga ma Dha Ni Dha ma Ga`, where the important intervals of `(Sa,Ga)` and `(ma',Dha)` are used prominently.
 
