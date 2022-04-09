@@ -11,9 +11,9 @@ import shankarabharanamScale2 from './Shankarabharanam-2.pkb'
 
 ## Introduction
 
-In an [earlier article](/learn/shankarabharanam-kaushikadhwani/), we analyzed two Ragas, namely, *Shankarabharanam* and *Kaushika Dhwani* and saw how they were related to each other. During the analysis, we assumed that `(Re,Pa)` was a Madhyam or perfect fourth interval. If you have not read the article and listened to the analysis and audio demos, then you may want to do so.
+In an [earlier article](/learn/shankarabharanam-kaushikadhwani/), we analyzed two Ragas, namely, *Shankarabharanam* and *Kaushika Dhwani* and saw how they were related to each other. During the analysis, we assumed that `(Re,Pa)` was a *Madhyam* or perfect fourth interval. This meant that `Re` and `Dha` were not mutually consonant. If you have not read the article and listened to the analysis and audio demos, then you may want to do so.
 
-In this article, we analyze the same Ragas and construct a common scale for them. But we assume that `(Re,Dha)` is a Pancham or perfect fifth interval. Read on, if you are keen to find out how the scale changes subtly because of this choice.
+In this article, we analyze the same Ragas and construct a common scale for them. But we assume that `(Re,Dha)` is a *Pancham* or perfect fifth interval. As a consequence, `Re` and `Pa` are no longer mutually consonant. Read on, if you are keen to find out how the scale changes subtly because of this choice.
 
 ## Reference Pitch and Basic Intervals
 
@@ -57,9 +57,9 @@ Based on these phrase fragments, we can deduce the note relationships required f
 
 * Similarly, `Ga Pa Dha ma Ga` would sound pleasing if `(ma,Dha)` is an *Antara Gandhar* interval. 
  
-* For the phrase `Ni' Re Ga ma Ga Pa` if `(Ga,Pa)` and `(Ni',Re)` are identical intervals, it brings symmetry to the phrase.
+* 
 
-* Note that `Ni` is not consonant with `Pa`.
+* Note that `Re` is not consonant with `Pa`.
 
 It is important to note that in addition to the phrases, it is equally important to pay attention to the timing of notes in a phrase, and the [usage characteristics](/learn/grammar-of-music) like *Alpatva*, *Bahutva*, *Hrasva* or *Deergha* of the notes in the phrase to determine the appropriate pairings.
 
@@ -70,8 +70,8 @@ Using the above analysis of the phrases, the scale for Raga Shankarabharanam can
 (Sa,ma) = I(m)
 (Sa,Pa) = I(P)
 (ma,Dha) = I(G)
-(Ni',Re) = (Ga,Pa)
-(Re,Pa) = I(m)
+(Pa,Ni) = I(G)
+(Re,Dha) = I(P)
 ```
 
 The above relationships result in the following scale. Click `Start` below to expand the scale controls. Then play each note one at a time. For each note, observe how it sounds in relation to other notes in the scale.
@@ -99,8 +99,9 @@ After you have spent some time and feel comfortable with the drone track, you ca
 
 ## Simple phrases in Raga Shankarabharanam
 
-export const shankarabharanamMotif = `Ga Re Ga Pa ma Ga Pa Ni Dha Ni SA 2
-SA Ni Dha Pa Dha ma Ga Pa ma Ga Re Sa 2`
+export const shankarabharanamMotif = `Ga Re Ga ma Ga Pa Dha ma Ga Re Sa 2
+Pa Ni Dha Ni SA 2
+SA Ni Dha Pa Dha ma Ga Re Ni' Sa`
 
 <MotifPlayer title='Aarohi and Avarohi phrases for Raga Shankarabharanam' motif={shankarabharanamMotif} scale={shankarabharanamScale2} />
 
@@ -127,8 +128,7 @@ SA Ni Dha ma Ga ma Dha ma Ga Re Sa Ni' Sa 2`
 
 <MotifPlayer title='Aarohi and Avarohi phrases for Raga Kaushika Dhwani' motif={kaushikadhwaniMotif} scale={shankarabharanamScale2} />
 
-Note that we have also used Re in the phrase above. Re is to be used as an *ati-Alpatva* (very occasional) *Hrasva* note.
-
+Note that we have also used `Re` in the phrase above. `Re` is to be used as an *ati-Alpatva* (very occasional) *Hrasva* note.
 
 ## Concluding Remarks
 

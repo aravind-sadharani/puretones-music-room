@@ -10,5 +10,5 @@
 0 /musicscale/Common_Parameters/12_Note_Scale/Pa/0.01_Cent
 -22 /musicscale/Common_Parameters/12_Note_Scale/Dha/Cent
 49 /musicscale/Common_Parameters/12_Note_Scale/Dha/0.01_Cent
--43 /musicscale/Common_Parameters/12_Note_Scale/Ni/Cent
--1 /musicscale/Common_Parameters/12_Note_Scale/Ni/0.01_Cent
+-22 /musicscale/Common_Parameters/12_Note_Scale/Ni/Cent
+49 /musicscale/Common_Parameters/12_Note_Scale/Ni/0.01_Cent
