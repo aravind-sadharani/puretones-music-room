@@ -10,26 +10,73 @@ import kambhojiScale from './Kambhoji.pkb'
 
 <Notice>
 
-**Note:**
-1.  This article is under development but it still contains useful and valid material.
-2.  It includes working demonstrations of the drone, scale and different phrases or compositions below.
-3.  The explanatory text needs development and would continue to undergo revisions. 
+## Background
 
-</Notice>
+In an [earlier article](/learn/raga-classification/), we surveyed several systems of Raga classification which have been used in Indian Classical music. While these systems have their differences, the common thread in all classification systems is the concept of a *Janka* (parent Raga) and a *Janya* (derivative Raga). The parent and derivative Ragas share a common tuning systems and note intervals.
 
-Let us discuss two related Ragas, namely, *Kambhoji* and *Bhoopali*.
+In this series of articles, we would be selecting some popular Ragas, analyzing their scales and examining the parent-child relationship between them.
 
-## Origin and History
+## Introduction
 
+For this article, we have selected two related Ragas, namely, *Kambhoji* and *Bhoopali*. In the *Melakarta* system of Raga classification, Kambhoji is also known as *Harikambhoji*. Raga Bhoopali / Bhoop is also popularly known as *Mohanam* in the South of India.
 
+*Raga Kambhoji* is a very popular Raga performed in the South of India, and in the *Dhrupad* tradition. *Raga Bhoopali / Raga Mohanam* is a very popular Raga all throughout India. 
 
-## Common Pitch
+By means of this article, we will see how these Ragas relate to each other and how they can be seen to share a common tuning system.
 
-Before we begin, let us start with the fundamental note **Sa**. In Indian Classical music, all musical notes are defined based on their relationship with **Sa**. You can use the settings below to set the **Sa** to any pitch you prefer. All the demos on this page would play according to this setting.
+## Reference Pitch and Basic Intervals
+
+Before we begin, let us start with the concept of the fundamental note **Sa**. In Indian Classical music, all musical notes are defined based on their relationship with **Sa**. You can use the settings below to set the **Sa** to any pitch you prefer. All the demos on this page would play according to this setting.
 
 <CommonPitch />
 
+Next, it is useful to familiarize ourselves with the four basic intervals of *Dviguna*  (octave), *Pancham* (fifth), *Madhyam* (fourth) and *Gandhar* (major third). You can play and check these intervals using the keyboard below (just click `Start` to activate and tap a key to play). Here **Sa** denotes the fundamental and **Ga, ma, Pa** and **SA** denote the Gandhar, Madhyam, Pancham and Dviguna respectively. Note that the notes here do not match up with today's standard [12 tone equally tempered scale](https://en.wikipedia.org/wiki/12_equal_temperament).
+
+export const notesBasicIntervals = [
+    {white: "Sa", black: "fade"},
+    {white: "fade", black: "fade"},
+    {white: "Ga"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "fade"},
+    {white: "fade", black: "fade"},
+    {white: "fade"},
+    {white: "SA"}
+]
+
+<ScalePlayer title='Basic Intervals' noteSpec={notesBasicIntervals} scale={scaleBasicIntervals} />
+
+As you can hear, Pancham, Madhyam and Gandhar are pleasant sounding intervals. For the musically inclined, they may be recognisable by ear. These are the most fundamental intervals in Indian Classical music which a trained musician is expected to recognize with a fine level of precision.
+
+
 ## Scale for Raga Kambhoji
+    
+Let us start by examining some common phrases in Raga Kambhoji. Here are a few fragments of phrases which are used to construct musical phrases in Raga Kambhoji.
+
+```
+Dha' Ga Sa ni' Dha'
+Dha' Sa Re ni' Dha' Pa'
+Sa Re Ga Pa
+Pa Dha ni Dha Pa Dha ma Ga
+Dha ni Dha Pa Ga Pa Dha SA
+Re" ni Dha Pa Dha ma Ga Re Sa
+```
+
+Based on these phrase fragments, we can deduce the note relationships required for the phrases to sound correct and aesthetically appealing. Using the basic intervals introduced above, we can see that:
+
+* Ga being an achor point for this Raga, it would sound most pleasing if it is an *Antara Gandhar* interval. 
+
+* The phrase `Dha' Ga Sa ni' Dha'` would sound pleasing if `(Dha',Ga)` is a *Pancham* interval. 
+
+* If we look at the other common phrase in Kambhoji `Dha' Sa Re ni' Dha' Pa'`, then we can see that `(Re,ni')` being a *Antara Gandhara* interval and `(Pa',Re)` being an *Pancham* interval makes the phrase aesthetically pleasing.
+    
+* If we analyse the phrase `Pa Dha ni Dha Pa Dha ma Ga`, considering that `(Dha,Ga)` already has a consonant relationship, it would sound best if `(ma,Dha)` has an *Antara Gandhara* interval relationship.
+    
+* In this Raga, ma is of *Alpatva*, *Hrasva* nature.
+
+It is important to note that in addition to the phrases, it is equally important to pay attention to the timing of notes in a phrase, and the [usage characteristics](/learn/grammar-of-music) like *Alpatva*, *Bahutva*, *Hrasva* or *Deergha* of the notes in the phrase to determine the appropriate pairings.
+
+Using the above analysis of the phrases, the scale for Raga Kambhoji can be built using the [Scale Builder](/scalebuilder/) tool with the following inter-note relationships.
+
 
 The scale for Raga Kambhoji can be built using the [Scale Builder](/scalebuilder/) tool with the following inter-note relationships.
 
@@ -56,6 +103,13 @@ export const noteSpecKambhoji = [
 ]
 
 <ScalePlayer title='Scale for Raga Kambhoji' noteSpec={noteSpecKambhoji} scale={kambhojiScale} />
+    
+<Notice>
+
+**Note :** Being an artistic tradition, Indian Classical music uses both objective and subjective criteria to characterize Ragas. Bearing that in mind, there is an element of subjectivity involved in the process of selecting signature phrases in a Raga and then applying the basic intervals to those phrases to make the aesthetically appealing. However, once the inter-note relationships are fixed, the scale can be objectively and mathematically derived with microtonally accurate tuning.
+
+</Notice>
+
 
 ## Drone for Raga Kambhoji
 
@@ -64,8 +118,10 @@ Before we compare Raga Kambhoji with Raga Bhoopali, let us start with the drone 
 <DronePlayer title='Drone for Raga Kambhoji' settings={kambhojiDrone} />
 
 After you have spent some time and feel comfortable with the drone track, you can move to the subsequent sections. Let the drone track continue to play while you read and listen to the remainder of this article.
+    
+Note that the drone has been tuned to support the Kambhoji scale derived above and to emphasize the associated note relationships.
 
-## Raga Kambhoji
+## Sample phrases in Raga Kambhoji
 
 export const kambhojiMotif = `Ga(G)(Dha',Ga,-10,0.5) 3 ni'(G)(Sa,ni',-5,0.5) Dha' ; ni' ; Dha' Pa' 
 Dha'(G)(Pa',Dha',-5,0.5) ma' Ga' Pa' Dha'(G)(-18,18,-6,0.5) Sa(G)(Dha',Sa,-8,0.5) 2
@@ -75,6 +131,29 @@ Re . ni'(G)(Sa,ni',-5,0.5) Dha' Sa(G)(Dha',Sa,-8,0.5) 2`
 
 ## Raga Bhoopali
 
+Raga Bhoopali / Bhoop / Mohanam as it is variously known, is a pentatonic Raga with the scale `Sa Re Ga Pa Dha`. This scale is present in many ancient systems of music across the world including Chinese music for GuQin, African music, Greek music etc. Here we present it as a derivative of *Raga Kambhoji*.
+
+The important inter-note relationships in Raga Hamsadhwani are as follows:
+
+```
+(Sa,Pa) = I(P)
+(Sa,Ga) = I(G)
+(Dha',Ga) = I(P)
+(Re,Pa) = I(m)
+```
+
+If you observe closely, you can see that these relationships are already present among those listed for Raga Kambhoji. So, by dropping `ma` and `ni` (which are *Varjit* or prohibited), we can arrive at the required scale with the required symmetry for Raga Bhoopali.
+
+Many of the Kambhoji phrases can directly be rendered in Raga Bhoopali just by dropping the *Varjit* notes. For example, the phrase `Dha' Sa Re ni' Dha' Pa'` can be rendered in Bhoopali as `Dha' Sa Re Dha' Pa'`. It also has its own characteristic phrases such as `Pa Ga Re Ga Re Sa`, `Dha' Sa Re Pa Ga`, where the important intervals of `(Dha,Ga)` and `(Re,Pa)` are used prominently.
+
+## Simple Phrases in Raga Bhoopali
+
+Here are some simple phrases to understand the scale and structure of Raga Bhoopali.
+
 export const bhoopaliMotif = `Ga Re(G)(Ga,Re,-5,0.5) Ga Pa Dha Pa Ga Re Sa Pa' Dha' Sa(G)(Dha',Sa,-5,0.5) 2`
 
 <MotifPlayer title='Aarohi and Avarohi phrases for Raga Bhoopali' motif={bhoopaliMotif} scale={kambhojiScale} />
+ 
+## Concluding Remarks
+
+In this article, we looked at Ragas Kambhoji and Bhoopali. We examined a few of their signature phrases and applied the basic intervals of Pancham, Madhyam and Antara Gandhar to tune the scale for making it aesthetically appealing. We found that the note relationships and symmetry required for Raga Bhoopali is already present in Raga Kambhoji. Thus, Raga Kambhoji, as a *Sampoorna* (Heptatonic) Raga, can be considered a *Janaka* (parent) Raga, while Raga Bhoopali can be considered as a *Janya* (derivative) Raga. They share a common tuning system and some common Lakshanas. Therefore, they can be performed with the same drone tuning which supports the complete scale of Raga Kalyani.
