@@ -8,8 +8,6 @@ tags: [ 'Lakshya', 'Lakshana' ]
 import kambhojiDrone from './Kambhoji.prt'
 import kambhojiScale from './Kambhoji.pkb'
 
-<Notice>
-
 ## Background
 
 In an [earlier article](/learn/raga-classification/), we surveyed several systems of Raga classification which have been used in Indian Classical music. While these systems have their differences, the common thread in all classification systems is the concept of a *Janka* (parent Raga) and a *Janya* (derivative Raga). The parent and derivative Ragas share a common tuning systems and note intervals.
@@ -18,9 +16,11 @@ In this series of articles, we would be selecting some popular Ragas, analyzing 
 
 ## Introduction
 
-For this article, we have selected two related Ragas, namely, *Kambhoji* and *Bhoopali*. In the *Melakarta* system of Raga classification, Kambhoji is also known as *Harikambhoji*. Raga Bhoopali / Bhoop is also popularly known as *Mohanam* in the South of India.
+For this article, we have selected two related Ragas, namely, *Kambhoji* and *Bhoopali*.
 
-*Raga Kambhoji* is a very popular Raga performed in the South of India, and in the *Dhrupad* tradition. *Raga Bhoopali / Raga Mohanam* is a very popular Raga all throughout India. 
+*Raga Kambhoji* is a popular Raga which is often performed in the *Carnatic* and *Dhrupad* traditions of Indian Classical music. In the *Melakarta* system of Raga classification, Kambhoji is also known as *Harikambhoji*.
+
+*Raga Bhoopali* is also called Raga *Bhoop* and is popularly known as Raga *Mohanam* in south India. It is a popular Raga performed all throughout India. 
 
 By means of this article, we will see how these Ragas relate to each other and how they can be seen to share a common tuning system.
 
@@ -47,7 +47,6 @@ export const notesBasicIntervals = [
 
 As you can hear, Pancham, Madhyam and Gandhar are pleasant sounding intervals. For the musically inclined, they may be recognisable by ear. These are the most fundamental intervals in Indian Classical music which a trained musician is expected to recognize with a fine level of precision.
 
-
 ## Scale for Raga Kambhoji
     
 Let us start by examining some common phrases in Raga Kambhoji. Here are a few fragments of phrases which are used to construct musical phrases in Raga Kambhoji.
@@ -63,20 +62,19 @@ Re" ni Dha Pa Dha ma Ga Re Sa
 
 Based on these phrase fragments, we can deduce the note relationships required for the phrases to sound correct and aesthetically appealing. Using the basic intervals introduced above, we can see that:
 
-* Ga being an achor point for this Raga, it would sound most pleasing if it is an *Antara Gandhar* interval. 
+* `Ga` being an achor point for this Raga, it would sound most pleasing if it is an *Antara Gandhar* with respect to `Sa`.
 
 * The phrase `Dha' Ga Sa ni' Dha'` would sound pleasing if `(Dha',Ga)` is a *Pancham* interval. 
 
 * If we look at the other common phrase in Kambhoji `Dha' Sa Re ni' Dha' Pa'`, then we can see that `(Re,ni')` being a *Antara Gandhara* interval and `(Pa',Re)` being an *Pancham* interval makes the phrase aesthetically pleasing.
     
-* If we analyse the phrase `Pa Dha ni Dha Pa Dha ma Ga`, considering that `(Dha,Ga)` already has a consonant relationship, it would sound best if `(ma,Dha)` has an *Antara Gandhara* interval relationship.
+* If we analyse the phrase `Pa Dha ni Dha Pa Dha ma Ga`, considering that `(Dha,Ga)` already has a consonant relationship, it would sound best if `(ma,Dha)` is an *Antara Gandhara* interval.
     
-* In this Raga, ma is of *Alpatva*, *Hrasva* nature.
+* In this Raga, the usage of `ma` is considered *Alpatva* and *Hrasva* (less frequent and short duration, respectively).
 
 It is important to note that in addition to the phrases, it is equally important to pay attention to the timing of notes in a phrase, and the [usage characteristics](/learn/grammar-of-music) like *Alpatva*, *Bahutva*, *Hrasva* or *Deergha* of the notes in the phrase to determine the appropriate pairings.
 
 Using the above analysis of the phrases, the scale for Raga Kambhoji can be built using the [Scale Builder](/scalebuilder/) tool with the following inter-note relationships.
-
 
 The scale for Raga Kambhoji can be built using the [Scale Builder](/scalebuilder/) tool with the following inter-note relationships.
 
@@ -131,7 +129,7 @@ Re . ni'(G)(Sa,ni',-5,0.5) Dha' Sa(G)(Dha',Sa,-8,0.5) 2`
 
 ## Raga Bhoopali
 
-Raga Bhoopali / Bhoop / Mohanam as it is variously known, is a pentatonic Raga with the scale `Sa Re Ga Pa Dha`. This scale is present in many ancient systems of music across the world including Chinese music for GuQin, African music, Greek music etc. Here we present it as a derivative of *Raga Kambhoji*.
+Raga Bhoopali is a pentatonic Raga with the scale `Sa Re Ga Pa Dha`. This scale is present in many ancient systems of music across the world including Chinese music for GuQin, African music, Greek music and so on. Here we present it as a derivative of *Raga Kambhoji*.
 
 The important inter-note relationships in Raga Hamsadhwani are as follows:
 
@@ -153,7 +151,7 @@ Here are some simple phrases to understand the scale and structure of Raga Bhoop
 export const bhoopaliMotif = `Ga Re(G)(Ga,Re,-5,0.5) Ga Pa Dha Pa Ga Re Sa Pa' Dha' Sa(G)(Dha',Sa,-5,0.5) 2`
 
 <MotifPlayer title='Aarohi and Avarohi phrases for Raga Bhoopali' motif={bhoopaliMotif} scale={kambhojiScale} />
- 
+
 ## Concluding Remarks
 
-In this article, we looked at Ragas Kambhoji and Bhoopali. We examined a few of their signature phrases and applied the basic intervals of Pancham, Madhyam and Antara Gandhar to tune the scale for making it aesthetically appealing. We found that the note relationships and symmetry required for Raga Bhoopali is already present in Raga Kambhoji. Thus, Raga Kambhoji, as a *Sampoorna* (Heptatonic) Raga, can be considered a *Janaka* (parent) Raga, while Raga Bhoopali can be considered as a *Janya* (derivative) Raga. They share a common tuning system and some common Lakshanas. Therefore, they can be performed with the same drone tuning which supports the complete scale of Raga Kalyani.
+In this article, we looked at Ragas Kambhoji and Bhoopali. We examined a few of their signature phrases and applied the basic intervals of Pancham, Madhyam and Antara Gandhar to tune the scale for making it aesthetically appealing. We found that the note relationships and symmetry required for Raga Bhoopali is already present in Raga Kambhoji. Thus, Raga Kambhoji, as a *Sampoorna* (Heptatonic) Raga, can be considered a *Janaka* (parent) Raga, while Raga Bhoopali can be considered as a *Janya* (derivative) Raga. They share a common tuning system and some common Lakshanas. Therefore, they can be performed with the same drone tuning which supports the complete scale of Raga Kambhoji.
