@@ -8,6 +8,7 @@ const toCents = ratio => {
 const FIFTH = toCents(3/2)
 const FOURTH = toCents(4/3)
 const THIRD = toCents(5/4)
+const SEVENTH = toCents(7/4)
 const EPSILON = 1e-10
 
 const baseRatio = {
@@ -203,6 +204,8 @@ const buildScale = (constraints) => {
                     ruleArray[11] += FOURTH*sign
                 else if(interval === 'G')
                     ruleArray[11] += THIRD*sign
+                else if(interval === 'n')
+                    ruleArray[11] += SEVENTH*sign
                 else {
                     badRules.push(token)
                     return ruleArray
@@ -363,6 +366,8 @@ const centsReadable = (cents) => {
         return 'Madhyam'
     if(Math.abs(cents-THIRD) < EPSILON)
         return 'Ga (5/4)'
+    if(Math.abs(cents-SEVENTH) < EPSILON)
+        return 'ni (7/4)'
     if(Math.abs(cents - toCents(6/5)) < EPSILON)
         return 'ga (6/5)'
     if(Math.abs(cents - toCents(81/64)) < EPSILON)
