@@ -197,7 +197,7 @@ const buildScale = (constraints) => {
                 }
             } else if(token[0] === 'I') {
                 let interval = token.replace(/(\(|\)|I)/g,'')
-                let sign = state.side === 'LHS' ? -1 : 1
+                let sign = state.side === 'LHS' ? (-1)**(state.sign === '+') : -((-1)**(state.sign === '+'))
                 if(interval === 'P')
                     ruleArray[11] += FIFTH*sign
                 else if(interval === 'm')
@@ -212,7 +212,7 @@ const buildScale = (constraints) => {
                 }
             } else if(token[0] === 'S') {
                 let note = token.replace(/(\(|\)|S)/g,'')
-                let sign = state.side === 'LHS' ? -1 : 1
+                let sign = state.side === 'LHS' ? (-1)**(state.sign === '+') : -((-1)**(state.sign === '+'))
                 if(baseRatio[note] === undefined) {
                     badRules.push(token)
                     return ruleArray
