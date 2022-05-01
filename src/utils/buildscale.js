@@ -288,7 +288,7 @@ const buildScale = (constraints) => {
         unSolvedNotes = unSolvedNotes.map(note => transposeNumber(note,ref)).sort(compareNotes)
     }
 
-    let message = unSolvedNotes.length > 0 ? `Scale: ${scaleNotes.map(note => note[0]).join(',')}\n\tThe following notes cannot be solved with the given rules:\n\t${unSolvedNotes.map(note => note[0]).join(',')}\n\tPlease add some more rules and retry.\n` : `Scale: ${scaleNotes.map(note => note[0]).join(',')}\n\nScale tuning relative to Venkatamakhin-Ramamatya system\n${solvedNotes.map(note => `${note[0]}\t${' '.repeat(6-note[1].toFixed(2).length)}${note[1].toFixed(2)} ¢`).join('\n')}\n\nSymmetric intervals in the Scale\n${findSymmetry(solvedNotes)}`
+    let message = unSolvedNotes.length > 0 ? `Scale: ${scaleNotes.map(note => note[0]).join(',')}\n\tThe following notes cannot be solved with the given rules:\n\t${unSolvedNotes.map(note => note[0]).join(',')}\n\tPlease add some more rules and retry.\n` : `Scale: ${scaleNotes.map(note => note[0]).join(',')}\n\nScale tuning relative to Venkatamakhin-Ramamatya system\n${solvedNotes.map(note => `${note[0]}\t${' '.repeat(7-note[1].toFixed(2).length)}${note[1].toFixed(2)} ¢`).join('\n')}\n\nSymmetric intervals in the Scale\n${findSymmetry(solvedNotes)}`
 
     let result = {
         status: (unSolvedNotes.length === 0),
