@@ -89,6 +89,15 @@ const MusicRoom = () => {
         setSequencerLocalTempo(value)
     }
     const updateVoiceParameters = (index, value, path) => {
+        if(path === 'gain') {
+            let updateParams = {}
+            updateParams[`/FaustDSP/Motif/_voice_${index+1}/Gain`] = value
+            dispatch({type: 'Configure', appname: 'sequencer', settings: updateParams})
+        } else if (path === 'pan') {
+            let updateParams = {}
+            updateParams[`/FaustDSP/Motif/_voice_${index+1}/Pan`] = Number(value)/100
+            dispatch({type: 'Configure', appname: 'sequencer', settings: updateParams})
+        }
         if(sequencerName !== '' && sequencerName.includes('loaded')) {
             let newSequencerName = sequencerName.replace('loaded','modified')
             setSequencerName(newSequencerName)

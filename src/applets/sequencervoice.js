@@ -1,9 +1,10 @@
 import * as React from "react"
-import ShowHideControls from "components/showhidecontrols"
 import Selector from "components/selector"
 import Editor from "components/editor"
+import Toggle from 'components/toggle'
+import Slider from 'components/slider'
 
-const SequencerVoice = ({index,title,sequencerVoiceState,onVoiceParamUpdate}) => {
+const SequencerVoice = ({index,sequencerVoiceState,onVoiceParamUpdate}) => {
     let octaveList = {
         key: "Octave",
         default: sequencerVoiceState['octave'],
@@ -44,16 +45,29 @@ const SequencerVoice = ({index,title,sequencerVoiceState,onVoiceParamUpdate}) =>
             }
         ]
     }
-    const voiceLabel = {
-        inactive: "Disable",
-        active: "Enable"
+    const gainParams = {
+        key: "Level",
+        init: sequencerVoiceState['gain'] || -9,
+        max: 0,
+        min: -40,
+        step: 0.1
+    }
+    const panParams = {
+        key: "Pan",
+        init: sequencerVoiceState['pan'] || 50,
+        max: 100,
+        min: 0,
+        step: 1
     }
     return (
-        <ShowHideControls title={title} label={voiceLabel} visibility={sequencerVoiceState['enabled']} onShowHide={() => onVoiceParamUpdate(Number(index),!sequencerVoiceState['enabled'],'enabled')}>
+        <>
+            <Toggle title='Enable' status={sequencerVoiceState['enabled']} onParamUpdate={()=>onVoiceParamUpdate(Number(index),!sequencerVoiceState['enabled'],'enabled')} />
             <Selector params={octaveList} path='octave' onParamUpdate={(value,path) => onVoiceParamUpdate(Number(index),value,path)}></Selector>
             <Selector params={toneList} path='tone' onParamUpdate={(value,path) => onVoiceParamUpdate(Number(index),value,path)}></Selector>
+            <Slider params={gainParams} path='gain' onParamUpdate={(value,path) => onVoiceParamUpdate(Number(index),value,path)}></Slider>
+            <Slider params={panParams} path='pan' onParamUpdate={(value,path) => onVoiceParamUpdate(Number(index),value,path)}></Slider>
             <Editor expanded={sequencerVoiceState['editorExpanded']} onExpand={() => onVoiceParamUpdate(Number(index),!sequencerVoiceState['editorExpanded'],'editorExpanded')} composition={`${sequencerVoiceState['composition']}`} onCompositionChange={(composition) => onVoiceParamUpdate(Number(index),composition,'composition')} />
-        </ShowHideControls>
+        </>
     )
 }
 
