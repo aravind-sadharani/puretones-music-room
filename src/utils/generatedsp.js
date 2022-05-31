@@ -1,9 +1,8 @@
 const dspTemplateTop = `import("stdfaust.lib");
 
-commonPitch = hslider("[0][style:radio{'B':14;'A#':13;'A':12;'G#':11;'G':10;'F#':9;'F':8;'E':7;'D#':6;'D':5;'C#':4;'C':3}]Pitch",3,3,14,1);
-fineTune = hslider("Fine_Tune",0,-100,100,1);
+commonPitch = vslider("[0][style:radio{'B':14;'A#':13;'A':12;'G#':11;'G':10;'F#':9;'F':8;'E':7;'D#':6;'D':5;'C#':4;'C':3}]Pitch",3,3,14,1);
+fineTune = vslider("Fine_Tune",0,-100,100,1);
 cperiod = 2^(vslider("[01]Motif Tempo",1.0,-2,4,0.1) - 3);
-cgain = 10^(vslider("[02]Motif Gain",-9,-20,20,0.1) - 6 : /(20));
 delta = vslider("[04]Shake Variance", 10,0,120,1);  	
 rate = vslider("[05]Shake Rate",11.5,10,25,0.1);
 c2v(d) = 2^(d/1200)-1;
@@ -11,12 +10,12 @@ l2l(r) = 2^(r/10);
 number = vslider("[06]Shake Number",3.4,1,10,0.1);
 phasor(f) = ba.period(ma.SR/f) : *(f/ma.SR);
 ramp(x) = ba.time : *(x);
+adder(l1,r1,l2,r2,l3,r3) = l1+l2+l3,r1+r2+r3;
 `
 
 const dspTemplateBottom = `
-mix(a,b) = 0.7*a+0.3*b,0.3*a+0.7*b;
-concert = hgroup("[00]Motif",2*cgain*(0.7*_voice_1notes + 0.9*_voice_2notes),2*cgain*(0.7*_voice_1notes + 0.9*_voice_3notes));
-process = concert : mix : dm.zita_light;
+concert = hgroup("[00]Motif",(_voice_1notes,_voice_2notes,_voice_3notes : adder), (_voice_4notes,_voice_5notes,_voice_6notes : adder), _voice_7notes : adder) ;
+process = concert : dm.zita_light;
 `
 
 const dspToneTemplates = [
@@ -372,7 +371,12 @@ ${voiceName}motif = waveform{${noteTiming}};
 ${voiceName}motifnotes(p) = ${voiceName}motif,int(2*ba.period(${(gateWaveformLength+1)/4}*p*ma.SR)/(p*ma.SR)) : rdtable;
 ${voiceName}strokewaveform = waveform{${strokeTiming}};
 ${voiceName}stroke(p) = ${voiceName}strokewaveform,int(2*ba.period(${(gateWaveformLength+1)/4}*p*ma.SR)/(p*ma.SR)) : rdtable;
-${voiceName}notes = ${toneName}Tone(${voiceName}cpitch,${voiceName}noteratio,${voiceName}stroke(cperiod)) : @(ma.SR*0.1);
+${voiceName}gain = 10^(vslider("${voiceName}/Gain",-9,-40,0,0.1) : /(20));
+${voiceName}pan = _ <: *(1-pos),*(pos)
+with {
+    pos = vslider("${voiceName}/Pan",0.5,0,1,0.1) : si.smoo;
+};
+${voiceName}notes = ${toneName}Tone(${voiceName}cpitch,${voiceName}noteratio,${voiceName}stroke(cperiod)) : *(${voiceName}gain) : @(ma.SR*0.1) <: ${voiceName}pan;
 `
     return voiceComposition
 }
@@ -382,7 +386,7 @@ const generateDSP = (sequencerState,scaleState) => {
         let voiceName = sequencerVoiceState['voiceName']
 
         if(!sequencerVoiceState['enabled'])
-            return `${voiceName}notes = 0;\n`
+            return `${voiceName}notes = 0,0;\n`
         
         let tokens = tokenize(sequencerVoiceState['composition'])
         let octave = sequencerVoiceState['octave']
@@ -399,9 +403,9 @@ const generateDSP = (sequencerState,scaleState) => {
         return getVoice(voiceName,tokens,octave,noteOffsets,toneName)
     }
 
-    let voiceCode = [0, 1, 2].map((i) => generateVoiceCode(sequencerState[i])).join('\n')
+    let voiceCode = [0, 1, 2, 3, 4, 5, 6].map((i) => generateVoiceCode(sequencerState[i])).join('\n')
     let toneCode = dspToneTemplates.filter((template,index) => {
-        let present = [0, 1, 2].map((i) => sequencerState[i]['tone']).filter((toneIndex,index) => sequencerState[index]['enabled']).find(toneIndex => Number(toneIndex) === index)
+        let present = [0, 1, 2, 3, 4, 5, 6].map((i) => sequencerState[i]['tone']).filter((toneIndex,index) => sequencerState[index]['enabled']).find(toneIndex => Number(toneIndex) === index)
         return (present !== undefined)
     }).join('\n')
     

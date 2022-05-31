@@ -54,6 +54,7 @@ const AudioEnvProvider = ({children}) => {
         }
         const unableToStartDSPNode = (reason) => {
             console.log(reason)
+            state[`${action.appname}Playing`] = false
             action.onJobComplete('Error')
         }
         if(isSafari) {

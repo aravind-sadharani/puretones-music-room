@@ -130,6 +130,7 @@ exports.onCreateWebpackConfig = ({ actions }) => {
                 { test: /\.dsp$/, use: 'raw-loader' },
                 { test: /\.prt$/, use: 'raw-loader' },
                 { test: /\.pkb$/, use: 'raw-loader' },
+                { test: /\.psq$/, use: 'raw-loader' },
             ],
         }
     })

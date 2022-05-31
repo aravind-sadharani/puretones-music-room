@@ -1,9 +1,14 @@
-const toCents = ratio => 1200*Math.log2(ratio)
-
 const OCTAVE = 1200
+const toCents = ratio => {
+    let baseCents = OCTAVE*Math.log2(ratio)
+    while(baseCents < 0)
+        baseCents += OCTAVE
+    return baseCents % OCTAVE
+}
 const FIFTH = toCents(3/2)
 const FOURTH = toCents(4/3)
 const THIRD = toCents(5/4)
+const SEVENTH = toCents(7/4)
 const EPSILON = 1e-10
 
 const baseRatio = {
@@ -192,20 +197,22 @@ const buildScale = (constraints) => {
                 }
             } else if(token[0] === 'I') {
                 let interval = token.replace(/(\(|\)|I)/g,'')
-                let sign = state.side === 'LHS' ? -1 : 1
+                let sign = state.side === 'LHS' ? (-1)**(state.sign === '+') : -((-1)**(state.sign === '+'))
                 if(interval === 'P')
                     ruleArray[11] += FIFTH*sign
                 else if(interval === 'm')
                     ruleArray[11] += FOURTH*sign
                 else if(interval === 'G')
                     ruleArray[11] += THIRD*sign
+                else if(interval === 'n')
+                    ruleArray[11] += SEVENTH*sign
                 else {
                     badRules.push(token)
                     return ruleArray
                 }
             } else if(token[0] === 'S') {
                 let note = token.replace(/(\(|\)|S)/g,'')
-                let sign = state.side === 'LHS' ? -1 : 1
+                let sign = state.side === 'LHS' ? (-1)**(state.sign === '+') : -((-1)**(state.sign === '+'))
                 if(baseRatio[note] === undefined) {
                     badRules.push(token)
                     return ruleArray
@@ -281,7 +288,7 @@ const buildScale = (constraints) => {
         unSolvedNotes = unSolvedNotes.map(note => transposeNumber(note,ref)).sort(compareNotes)
     }
 
-    let message = unSolvedNotes.length > 0 ? `Scale: ${scaleNotes.map(note => note[0]).join(',')}\n\tThe following notes cannot be solved with the given rules:\n\t${unSolvedNotes.map(note => note[0]).join(',')}\n\tPlease add some more rules and retry.\n` : `Scale: ${scaleNotes.map(note => note[0]).join(',')}\n\nScale tuning relative to Venkatamakhin-Ramamatya system\n${solvedNotes.map(note => `${note[0]}\t${' '.repeat(6-note[1].toFixed(2).length)}${note[1].toFixed(2)} ¢`).join('\n')}\n\nSymmetric intervals in the Scale\n${findSymmetry(solvedNotes)}`
+    let message = unSolvedNotes.length > 0 ? `Scale: ${scaleNotes.map(note => note[0]).join(',')}\n\tThe following notes cannot be solved with the given rules:\n\t${unSolvedNotes.map(note => note[0]).join(',')}\n\tPlease add some more rules and retry.\n` : `Scale: ${scaleNotes.map(note => note[0]).join(',')}\n\nScale tuning relative to Venkatamakhin-Ramamatya system\n${solvedNotes.map(note => `${note[0]}\t${' '.repeat(7-note[1].toFixed(2).length)}${note[1].toFixed(2)} ¢`).join('\n')}\n\nSymmetric intervals in the Scale\n${findSymmetry(solvedNotes)}`
 
     let result = {
         status: (unSolvedNotes.length === 0),
@@ -359,6 +366,8 @@ const centsReadable = (cents) => {
         return 'Madhyam'
     if(Math.abs(cents-THIRD) < EPSILON)
         return 'Ga (5/4)'
+    if(Math.abs(cents-SEVENTH) < EPSILON)
+        return 'ni (7/4)'
     if(Math.abs(cents - toCents(6/5)) < EPSILON)
         return 'ga (6/5)'
     if(Math.abs(cents - toCents(81/64)) < EPSILON)
