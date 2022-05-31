@@ -1,0 +1,72 @@
+{
+    "0": {
+        "voiceName": "_voice_1",
+        "enabled": true,
+        "octave": 0,
+        "tone": 0,
+        "gain": -9,
+        "pan": 50,
+        "editorExpanded": true,
+        "composition": "Sa 2"
+    },
+    "1": {
+        "voiceName": "_voice_2",
+        "enabled": false,
+        "octave": 0,
+        "tone": 0,
+        "gain": -9,
+        "pan": 50,
+        "editorExpanded": true,
+        "composition": ""
+    },
+    "2": {
+        "voiceName": "_voice_3",
+        "enabled": false,
+        "octave": 0,
+        "tone": 0,
+        "gain": -9,
+        "pan": 50,
+        "editorExpanded": true,
+        "composition": ""
+    },
+    "3": {
+        "voiceName": "_voice_4",
+        "enabled": false,
+        "octave": 0,
+        "tone": 0,
+        "gain": -9,
+        "pan": 50,
+        "editorExpanded": true,
+        "composition": ""
+    },
+    "4": {
+        "voiceName": "_voice_5",
+        "enabled": false,
+        "octave": 0,
+        "tone": 0,
+        "gain": -9,
+        "pan": 50,
+        "editorExpanded": true,
+        "composition": ""
+    },
+    "5": {
+        "voiceName": "_voice_6",
+        "enabled": false,
+        "octave": 0,
+        "tone": 0,
+        "gain": -9,
+        "pan": 50,
+        "editorExpanded": true,
+        "composition": ""
+    },
+    "6": {
+        "voiceName": "_voice_7",
+        "enabled": false,
+        "octave": 0,
+        "tone": 0,
+        "gain": -9,
+        "pan": 50,
+        "editorExpanded": true,
+        "composition": ""
+    }
+}

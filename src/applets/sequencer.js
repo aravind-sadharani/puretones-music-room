@@ -4,16 +4,21 @@ import SessionControls from "applets/sessioncontrols"
 import SequencerVoice from "applets/sequencervoice"
 import Slider from "components/slider"
 import generateDSP from "utils/generatedsp"
+import sequencerPSQ from 'data/default.psq'
 
 const Sequencer = ({sequencerState,sequencerName,scaleState,onVoiceParamUpdate,reset,save,restore,tempo,updateTempo}) => {
-    const generate = () => generateDSP(sequencerState,scaleState)
+    let safeSequencerState = {...JSON.parse(sequencerPSQ),...sequencerState}
+    const generate = () => generateDSP(safeSequencerState,scaleState)
     let sequencerSettings = {}
     sequencerSettings['/FaustDSP/Motif/Pitch'] = scaleState['/FaustDSP/Common_Parameters/Pitch']
     sequencerSettings['/FaustDSP/Motif/Fine_Tune'] = scaleState['/FaustDSP/Common_Parameters/Fine_Tune']
     sequencerSettings['/FaustDSP/Motif/Motif_Tempo'] = Math.log2(240/tempo)
-    Object.entries(sequencerState).forEach((state) => {
-        sequencerSettings[`/FaustDSP/Motif/${state[1]['voiceName']}/Pan`] = Number(state[1]['pan'])/100 || 0.5
-        sequencerSettings[`/FaustDSP/Motif/${state[1]['voiceName']}/Gain`] = Number(state[1]['gain']) || -9
+    let indices = [0, 1, 2, 3, 4, 5, 6]
+    indices.forEach((i) => {
+        if(safeSequencerState[i]['enabled']) {
+            sequencerSettings[`/FaustDSP/Motif/_voice_${i+1}/Pan`] = Number(safeSequencerState[i]['pan'])/100 || 0.5
+            sequencerSettings[`/FaustDSP/Motif/_voice_${i+1}/Gain`] = Number(safeSequencerState[i]['gain']) || -9    
+        }
     })
     const tempoParams = {
         key: "Tempo (BPM)",
@@ -22,9 +27,9 @@ const Sequencer = ({sequencerState,sequencerName,scaleState,onVoiceParamUpdate,r
         min: 60,
         step: 1
     }
-    const voiceTabs = ['Voice 1', 'Voice 2', 'Voice 3']
+    const voiceTabs = ['Voice 1', 'Voice 2', 'Voice 3', 'Voice 4', 'Voice 5', 'Voice 6', 'Voice 7']
     const voicePages = voiceTabs.map((v,i) => {
-        return <SequencerVoice index={i} title={v} sequencerVoiceState={sequencerState[i]} onVoiceParamUpdate={onVoiceParamUpdate} />
+        return <SequencerVoice index={i} title={v} sequencerVoiceState={safeSequencerState[i]} onVoiceParamUpdate={onVoiceParamUpdate} />
     })
     return (
         <>

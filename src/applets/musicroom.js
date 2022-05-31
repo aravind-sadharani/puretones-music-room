@@ -10,6 +10,7 @@ import droneDSPCode from 'data/puretones.dsp'
 import dronePRT from 'data/default.prt'
 import scaleDSPCode from 'data/musicscale.dsp'
 import scalePKB from 'data/default.pkb'
+import sequencerPSQ from 'data/default.psq'
 import CommonPitch from "applets/commonpitch"
 import { CommonSettingsEnv } from 'services/commonsettings'
 
@@ -22,32 +23,7 @@ const MusicRoom = () => {
     defaultScaleState['/FaustDSP/Common_Parameters/Pitch'] = commonSettings['pitch']
     defaultScaleState['/FaustDSP/Common_Parameters/Fine_Tune'] = commonSettings['offSet']
     const {dispatch} = React.useContext(AudioEnv)
-    const defaultSequencerState = [
-        {
-            voiceName: '_voice_1',
-            enabled: true,
-            octave: 0,
-            tone: 0,
-            editorExpanded: true,
-            composition: 'Sa 2'
-        },
-        {
-            voiceName: '_voice_2',
-            enabled: false,
-            octave: 0,
-            tone: 0,
-            editorExpanded: false,
-            composition: ''
-        },
-        {
-            voiceName: '_voice_3',
-            enabled: false,
-            octave: 0,
-            tone: 0,
-            editorExpanded: false,
-            composition: ''
-        }
-    ]
+    const defaultSequencerState = JSON.parse(sequencerPSQ)
     const [sequencerName, setSequencerName] = useLocalStore('sequencername','')
     const [sequencerLocalState, setSequencerLocalState] = useLocalStore('sequencer', defaultSequencerState)
     const [sequencerLocalTempo, setSequencerLocalTempo] = useLocalStore('sequencertempo', 120)
@@ -165,7 +141,7 @@ const MusicRoom = () => {
                 break
             case 'sequencer':
                 setSequencerName(`(loaded ${filename.toString().replace('.psq','')})`)
-                setSequencerLocalState(JSON.parse(snapshot))
+                setSequencerLocalState({...defaultSequencerState,...JSON.parse(snapshot)})
                 break
             default:
                 console.log(`Restore: Incorrect appname ${appname}!`)

@@ -1,7 +1,7 @@
 const dspTemplateTop = `import("stdfaust.lib");
 
-commonPitch = hslider("[0][style:radio{'B':14;'A#':13;'A':12;'G#':11;'G':10;'F#':9;'F':8;'E':7;'D#':6;'D':5;'C#':4;'C':3}]Pitch",3,3,14,1);
-fineTune = hslider("Fine_Tune",0,-100,100,1);
+commonPitch = vslider("[0][style:radio{'B':14;'A#':13;'A':12;'G#':11;'G':10;'F#':9;'F':8;'E':7;'D#':6;'D':5;'C#':4;'C':3}]Pitch",3,3,14,1);
+fineTune = vslider("Fine_Tune",0,-100,100,1);
 cperiod = 2^(vslider("[01]Motif Tempo",1.0,-2,4,0.1) - 3);
 delta = vslider("[04]Shake Variance", 10,0,120,1);  	
 rate = vslider("[05]Shake Rate",11.5,10,25,0.1);
@@ -14,7 +14,7 @@ adder(l1,r1,l2,r2,l3,r3) = l1+l2+l3,r1+r2+r3;
 `
 
 const dspTemplateBottom = `
-concert = hgroup("[00]Motif",_voice_1notes,_voice_2notes,_voice_3notes : adder);
+concert = hgroup("[00]Motif",(_voice_1notes,_voice_2notes,_voice_3notes : adder), (_voice_4notes,_voice_5notes,_voice_6notes : adder), _voice_7notes : adder) ;
 process = concert : dm.zita_light;
 `
 
@@ -371,10 +371,10 @@ ${voiceName}motif = waveform{${noteTiming}};
 ${voiceName}motifnotes(p) = ${voiceName}motif,int(2*ba.period(${(gateWaveformLength+1)/4}*p*ma.SR)/(p*ma.SR)) : rdtable;
 ${voiceName}strokewaveform = waveform{${strokeTiming}};
 ${voiceName}stroke(p) = ${voiceName}strokewaveform,int(2*ba.period(${(gateWaveformLength+1)/4}*p*ma.SR)/(p*ma.SR)) : rdtable;
-${voiceName}gain = 10^(hslider("${voiceName}/Gain",-9,-40,0,0.1) : /(20));
+${voiceName}gain = 10^(vslider("${voiceName}/Gain",-9,-40,0,0.1) : /(20));
 ${voiceName}pan = _ <: *(1-pos),*(pos)
 with {
-    pos = hslider("${voiceName}/Pan",0.5,0,1,0.1) : si.smoo;
+    pos = vslider("${voiceName}/Pan",0.5,0,1,0.1) : si.smoo;
 };
 ${voiceName}notes = ${toneName}Tone(${voiceName}cpitch,${voiceName}noteratio,${voiceName}stroke(cperiod)) : *(${voiceName}gain) : @(ma.SR*0.1) <: ${voiceName}pan;
 `
@@ -403,9 +403,9 @@ const generateDSP = (sequencerState,scaleState) => {
         return getVoice(voiceName,tokens,octave,noteOffsets,toneName)
     }
 
-    let voiceCode = [0, 1, 2].map((i) => generateVoiceCode(sequencerState[i])).join('\n')
+    let voiceCode = [0, 1, 2, 3, 4, 5, 6].map((i) => generateVoiceCode(sequencerState[i])).join('\n')
     let toneCode = dspToneTemplates.filter((template,index) => {
-        let present = [0, 1, 2].map((i) => sequencerState[i]['tone']).filter((toneIndex,index) => sequencerState[index]['enabled']).find(toneIndex => Number(toneIndex) === index)
+        let present = [0, 1, 2, 3, 4, 5, 6].map((i) => sequencerState[i]['tone']).filter((toneIndex,index) => sequencerState[index]['enabled']).find(toneIndex => Number(toneIndex) === index)
         return (present !== undefined)
     }).join('\n')
     
