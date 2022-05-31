@@ -1,5 +1,5 @@
 ---
-title: "Raga Comparison - Bhairav and Gunkali"
+title: "Raga Comparison - Bhairav, Gunkali and Malahari"
 date: 2022-03-13
 category: 'Comparison of Ragas'
 tags: [ 'Lakshya', 'Lakshana' ]
@@ -16,11 +16,11 @@ In this series of articles, we select some popular Ragas, analyze their scales a
 
 ## Introduction
 
-For this article, we have selected two related Ragas, namely, *Bhairav* and *Gunkali*.
+For this article, we have selected three related Ragas, namely, *Bhairav*, *Gunkali* and *Malahari*.
 
 *Raga Bhairav* is a morning Raga which is often performed in the Hindustani tradition of Indian classical music. It is one of the six major Ragas in the Raga-Ragini system of Raga classification. It is also referred to as *Raga Mayamalavagowla* in the Carnatic tradition. It is the 15th Melakarta in the *Melakarta* classification of Ragas. Under both of its names, it is equally popular all throughout India.
 
-*Raga Gunkali* (or Gunakri) is also a popular morning Raga in North India. But it has no direct counterpart in the South. But *Raga Malahari* does closely resemble Raga Gunkali. In some documentations, the label of *Raga Gunkali* is used to refer to a derivative Raga of *Raga Bilawal* (*Shankarabharanam*) which is a different scale altogether. Here we present *Raga Gunkali* as a derivative of *Raga Bhairav*.
+*Raga Gunkali* (or Gunakri) is also a popular morning Raga in North India. But it has no direct counterpart in the South. But *Raga Malahari* does closely resemble Raga Gunkali. In some documentations, the label of *Raga Gunkali* is used to refer to a derivative Raga of *Raga Bilawal* (*Shankarabharanam*) which is a different scale altogether. Here we present *Raga Gunkali* and *Raga Malahari* as derivatives of *Raga Bhairav*.
 
 By means of this article, we will see how these Ragas relate to each other and how they can be seen to share a common tuning system.
 
@@ -107,7 +107,7 @@ export const noteSpecBhairav = [
 
 ## Drone for Raga Bhairav
 
-Before we compare Raga Bhairav with Raga Gunkali, let us start with the drone track for Raga Bhairav. Click `Start` below and listen to the drone track for some time.
+Before we compare Raga Bhairav with Raga Gunkali or Raga Malahari, let us start with the drone track for Raga Bhairav. Click `Start` below and listen to the drone track for some time.
 
 <DronePlayer title='Drone for Raga Bhairav' settings={bhairavDrone} />
 
@@ -124,7 +124,7 @@ ma Pa dha Ni SA Ni dha Pa ma Ga re Sa 2`
 
 <MotifPlayer title='Aarohi and Avarohi phrases for Raga Bhairav' motif={bhairavMotif} scale={bhairavScale} />
 
-## Raga Gunkali
+## Raga Gunkali and Raga Malahari
 
 Raga Gunkali is a pentatonic Raga with the scale `Sa re ma Pa dha`. Here we present it as a derivative of *Raga Bhairav*.
 
@@ -132,20 +132,29 @@ The important inter-note relationships in Raga Gunkali are as follows:
 
 ```
 (Sa,Pa) = I(P)
-(Sa,Ga) = I(G)
+(Sa,ma) = I(m)
 (re,dha) = I(P)
 ```
-If you observe closely, you can see that these relationships are already present among those listed for Raga Bhairav. So, by dropping `Ga` and `Ni` (which are *Varjit* or prohibited), we can arrive at the required scale with the required symmetry for Raga Gunkali.
+
+Raga Malahari imposes an additional relationship of `(Sa,Ga) = I(G)`.
+
+If you observe closely, you can see that these relationships are already present among those listed for Raga Bhairav. So, by dropping `Ga` and `Ni` (which are *Varjit* or prohibited), we can arrive at the scale with the required symmetry for Raga Gunkali.
+
+Similarly, by dropping `Ni`, we can arrive at the required scale for Raga Malahari.
+
+Here is a sample phrase in Raga Gunkali.
 
 export const gunkaliMotif = `dha(G)(ma,dha,-4,0.5) Pa ma re Sa dha' Sa re ma Pa dha SA 2
 SA dha Pa ma re Sa 2`
 
 <MotifPlayer title='Aarohi and Avarohi phrases for Raga Gunkali' motif={gunkaliMotif} scale={bhairavScale} />
 
-A sample phrase for Raga Malahari (which uses Ga in a *Vakra* pattern), for the purposes of comparison is:
+Here is a sample phrase in Raga Malahari (which uses Ga in a *Vakra* pattern):
 
-`Sa re ma Ga re Sa re Ga re Sa re ma Pa dha SA dha Pa ma Ga re Sa`.
+export const malahariMotif = `Sa re ma Ga re Sa re Ga re Sa 2 re ma Pa dha SA dha Pa ma Ga re Sa 2`
+
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Malahari' motif={malahariMotif} scale={bhairavScale} />
 
 ## Concluding Remarks
 
-In this article, we looked at Ragas Bhairav and Gunkali. We examined a few of their signature phrases and applied the basic intervals of Pancham, Madhyam and Antara Gandhar to tune the scale for making it aesthetically appealing. We found that the note relationships and symmetry required for Raga Gunkali is already present in Raga Bhairav. Thus, Raga Bhairav, as a *Sampoorna* (Heptatonic) Raga, can be considered a *Janaka* (parent) Raga, while Raga Gunkali can be considered as a *Janya* (derivative) Raga. They share a common tuning system and some common Lakshanas. Therefore, they can be performed with the same drone tuning which supports the complete scale of Raga Bhairav.
+In this article, we looked at Ragas Bhairav, Gunkali and Malahari. We examined a few of their signature phrases and applied the basic intervals of Pancham, Madhyam and Antara Gandhar to tune the scale for making it aesthetically appealing. We found that the note relationships and symmetry required for Raga Gunkali is already present in Raga Bhairav. Thus, Raga Bhairav, as a *Sampoorna* (Heptatonic) Raga, can be considered a *Janaka* (parent) Raga, while Raga Gunkali and Raga Malahari can be considered as a *Janya* (derivative) Raga. They share a common tuning system and some common Lakshanas. Therefore, they can be performed with the same drone tuning which supports the complete scale of Raga Bhairav.
