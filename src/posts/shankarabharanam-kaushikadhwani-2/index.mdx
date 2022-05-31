@@ -1,0 +1,147 @@
+---
+title: "Raga Comparison - Shankarabharanam and Kaushika Dhwani - 2"
+date: 2022-03-11
+category: 'Comparison of Ragas'
+tags: [ 'Lakshya', 'Lakshana', 'Shankarabharanam', 'Kaushika Dhwani', 'Bilawal' ]
+---
+
+import scaleBasicIntervals from 'data/basicIntervals.pkb'
+import shankarabharanamDrone2 from './Shankarabharanam-2.prt'
+import shankarabharanamScale2 from './Shankarabharanam-2.pkb'
+
+## Introduction
+
+In an [earlier article](/learn/shankarabharanam-kaushikadhwani/), we analyzed two Ragas, namely, *Shankarabharanam* and *Kaushika Dhwani* and saw how they were related to each other. During the analysis, we assumed that `(Re,Pa)` was a *Madhyam* or perfect fourth interval. This meant that `Re` and `Dha` were not mutually consonant. If you have not read the article and listened to the analysis and audio demos, then you may want to do so.
+
+In this article, we analyze the same Ragas and construct a common scale for them. But we assume that `(Re,Dha)` is a *Pancham* or perfect fifth interval. As a consequence, `Re` and `Pa` are no longer mutually consonant. Read on, if you are keen to find out how the scale changes subtly because of this choice.
+
+## Reference Pitch and Basic Intervals
+
+Before we begin, let us start with the concept of the fundamental note **Sa**. In Indian Classical music, all musical notes are defined based on their relationship with **Sa**. You can use the settings below to set the **Sa** to any pitch you prefer. All the demos on this page would play according to this setting.
+
+<CommonPitch />
+
+Next, it is useful to familiarize ourselves with the four basic intervals of *Dviguna*  (octave), *Pancham* (fifth), *Madhyam* (fourth) and *Gandhar* (major third). You can play and check these intervals using the keyboard below (just click `Start` to activate and tap a key to play). Here **Sa** denotes the fundamental and **Ga, ma, Pa** and **SA** denote the Gandhar, Madhyam, Pancham and Dviguna respectively. Note that the notes here do not match up with today's standard [12 tone equally tempered scale](https://en.wikipedia.org/wiki/12_equal_temperament).
+
+export const notesBasicIntervals = [
+    {white: "Sa", black: "fade"},
+    {white: "fade", black: "fade"},
+    {white: "Ga"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "fade"},
+    {white: "fade", black: "fade"},
+    {white: "fade"},
+    {white: "SA"}
+]
+
+<ScalePlayer title='Basic Intervals' noteSpec={notesBasicIntervals} scale={scaleBasicIntervals} />
+
+As you can hear, Pancham, Madhyam and Gandhar are pleasant sounding intervals. For the musically inclined, they may be recognisable by ear. These are the most fundamental intervals in Indian Classical music which a trained musician is expected to recognize with a fine level of precision.
+
+## Scale for Raga Shankarabharanam
+
+Let us start by examining some common phrases. Here are a few fragments of phrases which are used to construct musical phrases in Raga Shankarabharanam.
+
+```
+Ga Re Ga Pa ma Ga
+Ni' Dha' Ni' Sa Re Ga
+Ga Pa Dha ma Ga 
+Ga Re Ga Pa Dha ma Ga Re
+Pa Ni Dha Ni SA
+Ni Dha Pa Dha ma Ga Re Ni' Sa
+SA Ni Dha Pa ma Ga Pa ma Ga Re Ni' Sa
+```
+
+Based on these phrase fragments, we can deduce the note relationships required for the phrases to sound correct and aesthetically appealing. Using the basic intervals introduced above, we can see that:
+
+* `Ga Re Ga Pa ma Ga` starts with `Ga` and uses it prominently. So it would sound pleasing if `(Sa,Ga)` is an *Antara Gandhar* interval. 
+
+* Similarly, `Ga Pa Dha ma Ga` would sound pleasing if `(ma,Dha)` is an *Antara Gandhar* interval. 
+ 
+* If you consider the phrases `Ni' Dha' Ni' Sa Re Ga` and `Ga Re Ga Pa Dha ma Ga Re`, considering that  `(Sa,Ga)` and `(ma,Dha)` are already consonant intervals, it would bring added beauty to the phrases if `(Re,Dha)` is a *Pancham* interval.
+
+* For the phrase `Pa Ni Dha Ni SA`, setting `(Pa,Ni)` to *Antara Gandhar* not only gives a consonant interval but also brings symmetery to the *Uttarang* (upper half of the octave) similar to the `(Sa,Ga)` interval in the *Poorvanga* (lower half of the octave).
+
+* A by-product of these consonant intervals is that `(Ga,Ni)` becomes a *Pancham* interval!
+
+* Note that `Re` is not consonant with `Pa`. So, it is best to avoid phrases like `Re Pa ma Ga` or `Ga Re Pa ma Ga` or others, where the `(Re,Pa)` interval is prominently used.
+
+It is important to note that in addition to the phrases, it is equally important to pay attention to the timing of notes in a phrase, and the [usage characteristics](/learn/grammar-of-music) like *Alpatva*, *Bahutva*, *Hrasva* or *Deergha* of the notes in the phrase to determine the appropriate pairings.
+
+Using the above analysis of the phrases, the scale for Raga Shankarabharanam can be built using the [Scale Builder](/scalebuilder/) tool with the following inter-note relationships.
+
+```
+(Sa,Ga) = I(G)
+(Sa,ma) = I(m)
+(Sa,Pa) = I(P)
+(ma,Dha) = I(G)
+(Pa,Ni) = I(G)
+(Re,Dha) = I(P)
+```
+
+The above relationships result in the following scale. Click `Start` below to expand the scale controls. Then play each note one at a time. For each note, observe how it sounds in relation to other notes in the scale.
+
+export const noteSpecShankarabharanam = [
+    {white: "Sa", black: "fade"},
+    {white: "Re", black: "fade"},
+    {white: "Ga"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "fade"},
+    {white: "Dha", black: "fade"},
+    {white: "Ni"},
+    {white: "SA"}
+]
+
+<ScalePlayer title='Scale for Raga Shankarabharanam' noteSpec={noteSpecShankarabharanam} scale={shankarabharanamScale2} />
+
+## Drone for Raga Shankarabharanam
+
+Before we compare Raga Shankarabharanam with Raga Kaushika Dhwani, let us start with the drone track for Raga Shankarabharanam. Click `Start` below and listen to the drone track for some time.
+
+<DronePlayer title='Drone for Raga Shankarabharanam' settings={shankarabharanamDrone2} />
+
+After you have spent some time and feel comfortable with the drone track, you can move to the subsequent sections. Let the drone track continue to play while you read and listen to the remainder of this article.
+
+## Simple phrases in Raga Shankarabharanam
+
+export const shankarabharanamMotif = `Ga Re Ga ma Ga Pa Dha ma Ga Re Sa 2
+Pa Ni Dha Ni SA 2
+SA Ni Dha Pa Dha ma Ga Re Ni' Sa`
+
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Shankarabharanam' motif={shankarabharanamMotif} scale={shankarabharanamScale2} />
+
+## Raga Kaushika Dhwani
+
+Raga Kaushika Dhwani is a pentatonic Raga with the scale `Sa Ga ma Dha Ni`. Here we present it as a derivative of *Raga Shankarabharanam*.
+
+The important inter-note relationships in Raga Kaushika Dhwani are as follows:
+
+```
+(Sa,Ga) = I(G)
+(Sa,ma) = I(m)
+(ma,Dha) = I(G)
+(Ga,Ni) = I(P)
+```
+
+If you observe closely, you can see that these relationships are already present among those listed for Raga Shankarabharanam. So, by dropping `Pa` and `Re` (which are *Varjit* or prohibited), we can arrive at the required scale with the required symmetry for Raga Kaushika Dhwani. All the notes have such wonderful consonance intervals!
+
+Some Shankarabharanam phrases can directly be rendered in Raga Kaushika Dhwani just by dropping the *Varjit* notes. For example, the Shankarabharanam phrase `Dha Pa Dha ma Ga` can be rendered in Kaushika Dhwani as `Dha ma Ga`. It also has its own characteristic phrases such as `Dha' Ni' Sa Ga ma Ga Sa`, `Ga ma Dha Ni Dha ma Ga`, where the important intervals of `(Sa,Ga)`, `(ma',Dha)` and `(Ga,Ni)` are used prominently.
+
+## Simple phrases in Raga Kaushika Dhwani
+
+export const kaushikadhwaniMotif = `Ni' Dha' Ni' Sa Ga 2 Sa Ga ma Dha 2 ma Dha Ni SA 2
+SA Ni Dha ma Ga ma Dha ma Ga Re Sa Ni' Sa 2`
+
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Kaushika Dhwani' motif={kaushikadhwaniMotif} scale={shankarabharanamScale2} />
+
+Note that we have also used `Re` in the phrase above. Compared to the [earlier tuning](/learn/shankarabharanam-kaushikadhwani/) where `Re` was strictly not used, here, `Re` could used as an *ati-Alpatva* (very occasional) *Hrasva* (short) note. This is because `(Re,Dha)` was a non-consonant interval in the previous tuning whereas here it has a *Pancham* relationship with `Dha`.
+
+It is also to be noted that if we choose to keep `Re` *Varjit*, Raga Kaushika Dhwani has identical intervals in both the tuning systems and could be played with either of the supporting drone tracks.
+
+## Concluding Remarks
+
+Like in the previous article, we looked at Ragas Shankarabharanam and Kaushika Dhwani. We examined a few of their signature phrases and applied the basic intervals of Pancham, Madhyam and Antara Gandhar to tune the scale for making it aesthetically appealing. We found that the note relationships and symmetry required for Raga Kaushika Dhwani are present in Raga Shankarabharanam.
+
+Thus, Raga Shankarabharanam can be considered a parent Raga, while Raga Kaushika Dhwani can be considered a derivative Raga. They share a common tuning system and some common Lakshanas. Therefore, they can be performed with the same drone tuning which supports the complete scale of Raga Shankarabharanam. This observation holds good regardless of whether `(Re,Pa)` is taken as *Madhyam* or `(Re,Dha)` is taken as *Pancham*.
+
+However, Raga Hamsadhwani cannot be considered a derivative of Raga Shankarabharanam under this tuning because the consonance of `(Pa',Re)` being *Pancham* is not available in this tuning.

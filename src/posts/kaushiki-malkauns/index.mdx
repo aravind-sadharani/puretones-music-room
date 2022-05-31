@@ -1,0 +1,152 @@
+---
+title: "Raga Comparison - Kaushiki and Malkauns"
+date: 2022-03-14
+category: 'Comparison of Ragas'
+tags: [ 'Lakshya', 'Lakshana', 'Kaushiki', 'Kaishiki', 'Malkauns', 'Hindolam' ]
+---
+
+import kaushikiDrone from './Kaushiki.prt'
+import kaushikiScale from './Kaushiki.pkb'
+
+## Background
+
+In an [earlier article](/learn/raga-classification/), we surveyed several systems of Raga classification which have been used in Indian Classical music. While these systems have their differences, the common thread in all classification systems is the concept of a *Janaka* (parent Raga) and a *Janya* (derivative Raga). The parent and derivative Ragas share a common tuning system and note intervals.
+
+In this series of articles, we select some popular Ragas, analyze their scales and examine the parent-child relationship between them.
+
+## Introduction
+
+For this article, we have selected two related Ragas, namely, *Kaushiki*, also sometimes referred to as *Kaishiki*, and *Malkauns*.
+
+*Raga Kaushiki* is an ancient *Jati* scale mentioned in our scriptures. *Raga Malkauns* is ofcourse a very popular Raga, also called *Raga Hindolam* in the *Carnatic* tradition of Indian Classical music. It is believed that Malkauns or Malakosh is an abbreviation of *Malava Kaushiki*.
+
+By means of this article, we will see how these Ragas relate to each other and how they can be seen to share a common tuning system.
+
+## Reference Pitch and Basic Intervals
+
+Before we begin, let us start with the concept of the fundamental note **Sa**. In Indian Classical music, all musical notes are defined based on their relationship with **Sa**. You can use the settings below to set the **Sa** to any pitch you prefer. All the demos on this page would play according to this setting.
+
+<CommonPitch />
+
+Next, it is useful to familiarize ourselves with the four basic intervals of *Dviguna*  (octave), *Pancham* (fifth), *Madhyam* (fourth) and *Gandhar* (major third). You can play and check these intervals using the keyboard below (just click `Start` to activate and tap a key to play). Here **Sa** denotes the fundamental and **Ga, ma, Pa** and **SA** denote the Gandhar, Madhyam, Pancham and Dviguna respectively. Note that the notes here do not match up with today's standard [12 tone equally tempered scale](https://en.wikipedia.org/wiki/12_equal_temperament).
+
+export const notesBasicIntervals = [
+    {white: "Sa", black: "fade"},
+    {white: "fade", black: "fade"},
+    {white: "Ga"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "fade"},
+    {white: "fade", black: "fade"},
+    {white: "fade"},
+    {white: "SA"}
+]
+
+<ScalePlayer title='Basic Intervals' noteSpec={notesBasicIntervals} scale={scaleBasicIntervals} />
+
+As you can hear, Pancham, Madhyam and Gandhar are pleasant sounding intervals. For the musically inclined, they may be recognisable by ear. These are the most fundamental intervals in Indian Classical music which a trained musician is expected to recognize with a fine level of precision.
+
+## Scale for Raga Kaushiki
+
+Let us start by examining some common phrases in Raga Kaushiki. Here are a few fragments of phrases which are used to construct musical phrases in Raga Kaushiki.
+
+```
+ni' Re ni' Sa
+ni' Sa ga Sa
+Sa ma ga ma ga Re Sa
+ma dha ni ma ni dha ma
+ga ma dha ma ga dha ma
+ma ni dha ni SA ni dha Pa ga Pa ma ga Re SA
+```
+
+Based on these phrase fragments, we can deduce the note relationships required for the phrases to sound correct and aesthetically appealing. Using the basic intervals introduced above, we can see that:
+
+* `ma` being an achor point for this Raga, it would sound most pleasing if `Sa ma` is a consonant interval.
+
+* The phrase `ni' Re ni' Sa` would sound pleasing if `(ni',Re)` is a *Antara Gandhara* interval. Note however that the usage of `Re` is *Alpatva* and *Hrasva* (less frequent and short duration, respectively).
+
+* If we take the phrase `ni' Sa ga ni' ga Sa`, it would sound most pleasing if `(ni',ga)` is a consonant *Madhyam* interval.
+
+* If we analyse the phrase `ma dha ni ma ni dha ma`, it is like a play between `ma` and `ni`. A consonant `(ma,ni)` interval (i.e., *Madhyam*) would make the phrase aesthetically most pleasing.
+    
+* Similarly, if we analyse the phrase `ga ma dha ma ga dha ma`, it would sound best if `(ga,dha)` is a *Madhyam* interval.
+    
+* In this Raga, the usage of `Pa` (like with `Re`, as noted above) is considered *Alpatva* and *Hrasva*. Typically, it is used as `dha Pa dha ga Pa ma`, where `(ga,Pa)` forms an *Antara Gandhara* interval.
+
+It is important to note that in addition to the phrases, it is equally important to pay attention to the timing of notes in a phrase, and the [usage characteristics](/learn/grammar-of-music) like *Alpatva*, *Bahutva*, *Hrasva* or *Deergha* of the notes in the phrase to determine the appropriate pairings.
+
+Using the above analysis of the phrases, the scale for Raga Kaushiki can be built using the [Scale Builder](/scalebuilder/) tool with the following inter-note relationships.
+
+```
+(Sa,ma) = I(m)
+(ma,ni) = I(m)
+(ni',Re) = I(G)
+(ni',ga) = I(m)
+(ga,Pa) = I(G)
+(ga,dha) = I(m)
+```
+
+The above relationships result in the following scale. Click `Start` below to expand the scale controls. Then play each note one at a time. For each note, observe how it sounds in relation to other notes in the scale.
+
+export const noteSpecKaushiki = [
+    {white: "Sa", black: "fade"},
+    {white: "Re", black: "ga"},
+    {white: "fade"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "dha"},
+    {white: "fade", black: "ni"},
+    {white: "fade"},
+    {white: "SA"}
+]
+
+<ScalePlayer title='Scale for Raga Kaushiki' noteSpec={noteSpecKaushiki} scale={kaushikiScale} />
+
+<Notice>
+
+**Note 1:** Being an artistic tradition, Indian Classical music uses both objective and subjective criteria to characterize Ragas. Bearing that in mind, there is an element of subjectivity involved in the process of selecting signature phrases in a Raga and then applying the basic intervals to those phrases to make the aesthetically appealing. However, once the inter-note relationships are fixed, the scale can be objectively and mathematically derived with microtonally accurate tuning.
+
+**Note 2:** The scale of Raga Kaushiki has a reduced `Pa` which has been referred to in the scriptures as *Madhyam gram* Pancham. This scale also has a consonant `(Re,Pa)` interval equal to *Madhyam* which leads to a reduced `Re` (known as *Trisruti Rishabh*).
+
+</Notice>
+
+## Drone for Raga Kaushiki
+
+Before we compare Raga Kaushiki with Raga Malkauns, let us start with the drone track for Raga Kaushiki. Click `Start` below and listen to the drone track for some time.
+
+<DronePlayer title='Drone for Raga Kaushiki' settings={kaushikiDrone} />
+
+After you have spent some time and feel comfortable with the drone track, you can move to the subsequent sections. Let the drone track continue to play while you read and listen to the remainder of this article.
+
+## ## Sample phrases in Raga Kaushiki
+
+Here are some simple phrases to understand the scale and structure of Raga Kaushiki.
+
+export const kaushikiMotif = `Sa ga ma dha Pa(G)(-4,4,-4,2.5) ma ga Pa(G)(-4,4,-4,2.5) ma ga
+ma dha ni dha Pa(G)(-4,4,-4,2.5) ma ga Re Sa 2`
+
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Kaushiki' motif={kaushikiMotif} scale={kaushikiScale} />
+
+## Raga Malkauns
+
+Raga Malkauns is a pentatonic Raga with the scale `Sa ga ma dha ni`. This scale is very popular across India, and is called *Raga Hindolam* in the Carnatic tradtion. Here we present it as a derivative of *Raga Kaushiki*.
+
+The important inter-note relationships in Raga Malkauns are as follows:
+
+```
+(Sa,ma) = I(m)
+(ga,dha) = I(m)
+(ma,ni) = I(m)
+```
+
+If you observe closely, you can see that these relationships are already present Raga Kaushiki. So, by dropping `Re` and `Pa` (which are *Varjit* or prohibited), we can arrive at the required scale with the required symmetry for Raga Malkauns.
+
+Many of the Kaushiki phrases can directly be rendered in Raga Malkauns just by dropping the *Varjit* notes. For example, the phrase `Sa ma ga ma ga Re Sa` can be rendered in Raga Malkauns as `Sa ma ga ma ga Sa`. It also has its own characteristic phrases such as `ni' Sa ga Sa`, `Sa ma ga Sa`, where the important intervals of `(ni',ga)` and `(Sa,ma)` are used prominently.
+
+Here is a sample phrase in Raga Malkauns.
+
+export const malkaunsMotif = `ni' Sa ma ga ma dha ma dha ni dha ma ga Sa 2`
+
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Malkauns' motif={malkaunsMotif} scale={kaushikiScale} />
+
+## Concluding Remarks
+
+In this article, we looked at Ragas Kaushiki and Malkauns. We examined a few of their signature phrases and applied the basic intervals of Madhyam and Antara Gandhar to tune the scale for making it aesthetically appealing. We found that the note relationships and symmetry required for Raga Malkauns is already present in Raga Kaushiki. Thus, Raga Kaushiki, as a *Sampoorna* (Heptatonic) Raga, can be considered a *Janaka* (parent) Raga, while Raga Malkauns can be considered as a *Janya* (derivative) Raga. They share a common tuning system and some common Lakshanas. Therefore, they can be performed with the same drone tuning which supports the complete scale of Raga Kaushiki.

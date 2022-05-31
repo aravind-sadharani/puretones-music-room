@@ -27,12 +27,20 @@ const ContainerElement = styled.div`
     h1, h2, h3 {
         margin: 0 0 1rem 0;
     }
-    pre, code {
-        padding: 1px 4px;
+    pre {
+        padding: 1px 10px;
         overflow-x: scroll;
         border-radius: 5px;
         background-color: ${({theme}) => theme.light.codeBackground};
         ${({theme}) => theme.isDark`background-color: ${theme.dark.codeBackground};`}
+    }
+    p {
+        code {
+            padding: 1px 4px;
+            border-radius: 5px;
+            background-color: ${({theme}) => theme.light.codeBackground};
+            ${({theme}) => theme.isDark`background-color: ${theme.dark.codeBackground};`}
+        }
     }
     .katex {
         font: 100%/1.666 'Noto Sans', sans-serif !important;

@@ -1,0 +1,160 @@
+---
+title: "Raga Comparison - Bhairav, Gunkali and Malahari"
+date: 2022-03-13
+category: 'Comparison of Ragas'
+tags: [ 'Lakshya', 'Lakshana', 'Bhairav', 'Mayamalavagowla', 'Gunkali', 'Malahari' ]
+---
+
+import bhairavDrone from './Bhairav.prt'
+import bhairavScale from './Bhairav.pkb'
+
+## Background
+
+In an [earlier article](/learn/raga-classification/), we surveyed several systems of Raga classification which have been used in Indian Classical music. While these systems have their differences, the common thread in all classification systems is the concept of a *Janaka* (parent Raga) and a *Janya* (derivative Raga). The parent and derivative Ragas share a common tuning system and note intervals.
+
+In this series of articles, we select some popular Ragas, analyze their scales and examine the parent-child relationship between them.
+
+## Introduction
+
+For this article, we have selected three related Ragas, namely, *Bhairav*, *Gunkali* and *Malahari*.
+
+*Raga Bhairav* is a morning Raga which is often performed in the Hindustani tradition of Indian classical music. It is one of the six major Ragas in the Raga-Ragini system of Raga classification. It is also referred to as *Raga Mayamalavagowla* in the Carnatic tradition. It is the 15th Melakarta in the *Melakarta* classification of Ragas. Under both of its names, it is equally popular all throughout India.
+
+*Raga Gunkali* (or Gunakri) is also a popular morning Raga in North India. But it has no direct counterpart in the South. But *Raga Malahari* does closely resemble Raga Gunkali. In some documentations, the label of *Raga Gunkali* is used to refer to a derivative Raga of *Raga Bilawal* (*Shankarabharanam*) which is a different scale altogether. Here we present *Raga Gunkali* and *Raga Malahari* as derivatives of *Raga Bhairav*.
+
+By means of this article, we will see how these Ragas relate to each other and how they can be seen to share a common tuning system.
+
+## Reference Pitch and Basic Intervals
+
+Before we begin, let us start with the concept of the fundamental note **Sa**. In Indian Classical music, all musical notes are defined based on their relationship with **Sa**. You can use the settings below to set the **Sa** to any pitch you prefer. All the demos on this page would play according to this setting.
+
+<CommonPitch />
+
+Next, it is useful to familiarize ourselves with the four basic intervals of *Dviguna*  (octave), *Pancham* (fifth), *Madhyam* (fourth) and *Gandhar* (major third). You can play and check these intervals using the keyboard below (just click `Start` to activate and tap a key to play). Here **Sa** denotes the fundamental and **Ga, ma, Pa** and **SA** denote the Gandhar, Madhyam, Pancham and Dviguna respectively. Note that the notes here do not match up with today's standard [12 tone equally tempered scale](https://en.wikipedia.org/wiki/12_equal_temperament).
+
+export const notesBasicIntervals = [
+    {white: "Sa", black: "fade"},
+    {white: "fade", black: "fade"},
+    {white: "Ga"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "fade"},
+    {white: "fade", black: "fade"},
+    {white: "fade"},
+    {white: "SA"}
+]
+
+<ScalePlayer title='Basic Intervals' noteSpec={notesBasicIntervals} scale={scaleBasicIntervals} />
+
+As you can hear, Pancham, Madhyam and Gandhar are pleasant sounding intervals. For the musically inclined, they may be recognisable by ear. These are the most fundamental intervals in Indian Classical music which a trained musician is expected to recognize with a fine level of precision.
+
+## Scale for Raga Bhairav
+
+Let us start by examining some common phrases in Raga Bhairav. Here are a few fragments of phrases which are used to construct musical phrases in Raga Bhairav.
+
+```
+Ga ma re Sa
+Ga ma Pa ma Ga re Sa
+Ga ma Ga dha Pa
+Ga ma dha Pa ma Ga ma re Sa
+Ni' Sa re Sa Ni' dha Pa
+```
+
+Based on these phrase fragments, we can deduce the note relationships required for the phrases to sound correct and aesthetically appealing. Using the basic intervals introduced above, we can see that:
+
+* From the phrase `Ga ma re Sa` , it would sound most pleasing if `Ga` is an *Antara Gandhar* with respect to `Sa`, as they are the starting and the ending notes of the phrase.
+
+* The phrase `Ga ma Ga dha Pa'` would sound pleasing if `(Ga,dha)` is a *Antara Gandhar* interval. 
+
+* If we analyse the phrase `Ga ma dha Pa ma Ga ma re Sa`, considering that `Pa` , `ma` , and `Ga` already have a consonant relationship with Sa, it would sound best if `re` and `dha` have a consonant relationship of *Pancham* interval. Also, the scale of Bhairav `Sa re Ga ma Pa dha Ni` is symmteric around `Pa`, which also requires `Sa re` interval equal to `Pa dha` interval.
+    
+* If we analyse the phrase `Ni' Sa re Sa Ni' dha Pa`, it would sound best if the intervals `(Ni',Sa)` and `(Sa,re)` are equal.
+    
+It is important to note that in addition to the phrases, it is equally important to pay attention to the timing of notes in a phrase, and the [usage characteristics](/learn/grammar-of-music) like *Alpatva*, *Bahutva*, *Hrasva* or *Deergha* of the notes in the phrase to determine the appropriate pairings.
+
+The scale for Raga Bhairav can be built using the [Scale Builder](/scalebuilder/) tool with the following inter-note relationships.
+
+```
+(Sa,Pa) = I(P)
+(Sa,ma) = I(m)
+(Sa,Ga) = I(G)
+(Ga,dha) = I(G)
+(re,dha) = I(P)
+(Ni,Sa") = (Sa,re)
+```
+
+The above relationships result in the following scale. Click `Start` below to expand the scale controls. Then play each note one at a time. For each note, observe how it sounds in relation to other notes in the scale.
+
+export const noteSpecBhairav = [
+    {white: "Sa", black: "re"},
+    {white: "fade", black: "fade"},
+    {white: "Ga"},
+    {white: "ma", black: "fade"},
+    {white: "Pa", black: "dha"},
+    {white: "fade", black: "fade"},
+    {white: "Ni"},
+    {white: "SA"}
+]
+
+<ScalePlayer title='Scale for Raga Bhairav' noteSpec={noteSpecBhairav} scale={bhairavScale} />
+
+    
+<Notice>
+
+**Note :** Being an artistic tradition, Indian Classical music uses both objective and subjective criteria to characterize Ragas. Bearing that in mind, there is an element of subjectivity involved in the process of selecting signature phrases in a Raga and then applying the basic intervals to those phrases to make the aesthetically appealing. However, once the inter-note relationships are fixed, the scale can be objectively and mathematically derived with microtonally accurate tuning.
+
+</Notice>
+
+
+## Drone for Raga Bhairav
+
+Before we compare Raga Bhairav with Raga Gunkali or Raga Malahari, let us start with the drone track for Raga Bhairav. Click `Start` below and listen to the drone track for some time.
+
+<DronePlayer title='Drone for Raga Bhairav' settings={bhairavDrone} />
+
+After you have spent some time and feel comfortable with the drone track, you can move to the subsequent sections. Let the drone track continue to play while you read and listen to the remainder of this article.
+
+## Sample phrases in Raga Bhairav
+
+Here are some simple phrases to understand the scale and structure of Raga Bhairav.
+
+export const bhairavMotif = `Ni' Sa re Sa Ni' dha' Pa' 2
+ma' Pa' dha' Ni' Sa re Sa Ni' dha' Pa' 2
+Ga ma Pa ma Ga re Sa 2 Ni' dha' Pa' 2
+ma Pa dha Ni SA Ni dha Pa ma Ga re Sa 2`
+
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Bhairav' motif={bhairavMotif} scale={bhairavScale} />
+
+## Raga Gunkali and Raga Malahari
+
+Raga Gunkali is a pentatonic Raga with the scale `Sa re ma Pa dha`. Here we present it as a derivative of *Raga Bhairav*.
+
+The important inter-note relationships in Raga Gunkali are as follows:
+
+```
+(Sa,Pa) = I(P)
+(Sa,ma) = I(m)
+(re,dha) = I(P)
+```
+
+Raga Malahari imposes an additional relationship of `(Sa,Ga) = I(G)`.
+
+If you observe closely, you can see that these relationships are already present among those listed for Raga Bhairav. So, by dropping `Ga` and `Ni` (which are *Varjit* or prohibited), we can arrive at the scale with the required symmetry for Raga Gunkali.
+
+Similarly, by dropping `Ni`, we can arrive at the required scale for Raga Malahari.
+
+Here is a sample phrase in Raga Gunkali.
+
+export const gunkaliMotif = `dha(G)(ma,dha,-4,0.5) Pa ma re Sa dha' Sa re ma Pa dha SA 2
+SA dha Pa ma re Sa 2`
+
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Gunkali' motif={gunkaliMotif} scale={bhairavScale} />
+
+Here is a sample phrase in Raga Malahari (which uses Ga in a *Vakra* pattern):
+
+export const malahariMotif = `Sa re ma Ga re Sa re Ga re Sa 2 re ma Pa dha SA dha Pa ma Ga re Sa 2`
+
+<MotifPlayer title='Aarohi and Avarohi phrases for Raga Malahari' motif={malahariMotif} scale={bhairavScale} />
+
+## Concluding Remarks
+
+In this article, we looked at Ragas Bhairav, Gunkali and Malahari. We examined a few of their signature phrases and applied the basic intervals of Pancham, Madhyam and Antara Gandhar to tune the scale for making it aesthetically appealing. We found that the note relationships and symmetry required for Raga Gunkali is already present in Raga Bhairav. Thus, Raga Bhairav, as a *Sampoorna* (Heptatonic) Raga, can be considered a *Janaka* (parent) Raga, while Raga Gunkali and Raga Malahari can be considered as a *Janya* (derivative) Raga. They share a common tuning system and some common Lakshanas. Therefore, they can be performed with the same drone tuning which supports the complete scale of Raga Bhairav.
