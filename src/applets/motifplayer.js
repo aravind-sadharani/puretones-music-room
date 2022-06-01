@@ -5,6 +5,7 @@ import { dspStateFromSettings } from "utils/dspsettingsinterpreter"
 import { AudioEnv } from "services/audioenv"
 import { CommonSettingsEnv } from 'services/commonsettings'
 import ShowHideControls from "components/showhidecontrols"
+import sequencerPSQ from 'data/default.psq'
 
 const MotifPlayerContainer = styled.div`
     padding: 12px 12px 0 12px;
@@ -25,32 +26,7 @@ const MotifElement = styled.pre`
     overflow-x: scroll;
 `
 
-const defaultSequencerState = [
-    {
-        voiceName: '_voice_1',
-        enabled: true,
-        octave: 0,
-        tone: 0,
-        editorExpanded: true,
-        composition: 'Sa 2'
-    },
-    {
-        voiceName: '_voice_2',
-        enabled: false,
-        octave: 0,
-        tone: 0,
-        editorExpanded: false,
-        composition: ''
-    },
-    {
-        voiceName: '_voice_3',
-        enabled: false,
-        octave: 0,
-        tone: 0,
-        editorExpanded: false,
-        composition: ''
-    }
-]
+const defaultSequencerState = JSON.parse(sequencerPSQ)
 
 const MotifPlayer = ({title,motif,scale,staticCode}) => {
     const [playState, updatePlayState] = React.useState('stopped')
