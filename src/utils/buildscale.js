@@ -147,7 +147,7 @@ ${(100*(Number(note[1])-Number(note[1]).toFixed(0))).toFixed(0)} /musicscale/Com
 const transposeOffset = (note, ref) => {
     let transposedNoteNumber = (noteNumber[note[0]] - noteNumber[ref[0]] + noteNumber['Sa']) % 12
     let transposedNoteName = Object.entries(noteNumber).filter(testNote => testNote[1] === transposedNoteNumber)[0][0]
-    let transposedNoteOffset = toCents((baseRatio[note[0]]/baseRatio[ref[0]])/baseRatio[transposedNoteName]) % OCTAVE + Number(note[1]) - Number(ref[1])
+    let transposedNoteOffset = (toCents((baseRatio[note[0]]/baseRatio[ref[0]])/baseRatio[transposedNoteName]) + OCTAVE) % OCTAVE + Number(note[1]) - Number(ref[1])
     transposedNoteOffset = Math.abs(transposedNoteOffset) < EPSILON ? 0 : transposedNoteOffset
     return [transposedNoteName, transposedNoteOffset]
 }

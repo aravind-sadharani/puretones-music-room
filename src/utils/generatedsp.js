@@ -54,7 +54,7 @@ with {
 with {
     variance = vslider("[00]Variance",2,0,4,0.1)/10000;
     StringPluck = en.adsr(0.00001,cperiod*0.7,0.9,cperiod*0.3,g);
-    StringEnv = en.adsr(0.0001,cperiod*0.7,0.9,cperiod*0.4,g);
+    StringEnv = en.adsr(0.0001,cperiod*0.7,0.7,cperiod*0.4,g);
     
     StringModel(length,excitation) = 2*pm.endChain(egChain)
     with{
@@ -64,7 +64,7 @@ with {
         StringBody(stringL,excitation) = reflectance,transmittance,_
         with{
             c = (0.375*(stringL^(1/4)) - 0.0825);
-            transmittance = _ <: *(1-c),1*c*fi.resonbp(pm.l2f(stringL),2,1) :> _;
+            transmittance = _ <: *(1-c),1*c*fi.resonbp(pm.l2f(stringL),0.5,0.5) :> _;
             reflectance = _;
         };
         StringBridge(brightness) = pm.rTermination(pm.basicBlock,reflectance) : _,transmittance,_
