@@ -1,5 +1,17 @@
 {
   "name": "pure-tones-music-room",
+  "main": "electronApp.js",
+  "build": {
+    "icon": "src/images/puretones.png",
+    "productName": "PureTones Electron App",
+    "files": [
+      "public/**/*",
+      "electronApp.js"
+    ],
+    "win": {},
+    "linux": {},
+    "mac": {}
+  },
   "version": "1.0.0",
   "private": true,
   "description": "PureTones Music Room",
@@ -12,13 +24,19 @@
     "start": "gatsby develop",
     "build": "gatsby build",
     "serve": "gatsby serve",
-    "clean": "gatsby clean"
+    "clean": "gatsby clean",
+    "electron": "wait-on http://localhost:8000 && electron .",
+    "electron-dev": "concurrently \"npm run develop\" \"npm run electron\"",
+    "preelectron-pack": "npm run build",
+    "electron-pack": "electron-builder"
   },
   "dependencies": {
+    "@fontsource/noto-sans": "^4.5.10",
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
     "babel-plugin-styled-components": "^1.13.1",
     "chart.js": "^3.7.0",
+    "electron-serve": "^1.1.0",
     "gatsby": "^4.0.1",
     "gatsby-plugin-catch-links": "^4.0.0",
     "gatsby-plugin-google-analytics": "^4.0.0",
@@ -48,5 +66,11 @@
     "remark-math": "^3.0.1",
     "styled-components": "^5.3.0",
     "typography": "^0.16.21"
+  },
+  "devDependencies": {
+    "concurrently": "^7.2.2",
+    "electron": "^19.0.8",
+    "electron-builder": "^23.1.0",
+    "wait-on": "^6.0.1"
   }
 }

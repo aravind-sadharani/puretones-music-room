@@ -1,4 +1,5 @@
 import Typography from "typography"
+import "@fontsource/noto-sans"
 
 const typography = new Typography({
   baseFontSize: "16px",
@@ -28,6 +29,7 @@ const typography = new Typography({
           ]
       },
   ],
+  omitGoogleFonts: true,
   overrideStyles: () => ({
     code: {
       fontFamily: ['Roboto Mono', 'monospace'].join(','),
