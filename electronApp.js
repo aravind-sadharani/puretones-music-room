@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, dialog } = require('electron');
+const { app, BrowserWindow, shell, dialog } = require('electron');
 const path = require('path');
 const serve = require('electron-serve');
 const loadURL = serve({ directory: 'public' });
@@ -54,6 +54,12 @@ function createWindow() {
     // This helps in showing the window gracefully.
     mainWindow.once('ready-to-show', () => {
         mainWindow.show()
+    });
+
+    // For handling external links
+    mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+        shell.openExternal(url);
+        return { action: 'deny' };
     });
 }
 

@@ -23,7 +23,7 @@ const TagLayout = ({ data, pageContext, location }) => {
         <h2>Articles tagged〝{tag}〞</h2>
         {postList}
         <Footer>
-          Developed by <a href="https://www.sadharani.com">Sadharani</a>
+          Developed by <a target="_blank" rel="nofollow" href="https://www.sadharani.com">Sadharani</a>
         </Footer>
       </Container>
     )
