@@ -1,5 +1,5 @@
 {
-  "name": "PureTones",
+  "name": "puretones",
   "main": "electronApp.js",
   "build": {
     "icon": "src/images/puretones.png",
