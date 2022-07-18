@@ -16,27 +16,27 @@ function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
         width: 800,
-        height: 600,
+        height: 800,
         webPreferences: {
             nodeIntegration: true
         },
         // Use this in development mode.
-        icon: isDev() ? path.join(process.cwd(), 'src/images/puretones.png') : path.join(__dirname, 'public/icons/icon-512x512.png'),
+        //icon: isDev() ? path.join(process.cwd(), 'src/images/puretones.png') : path.join(__dirname, 'public/icons/icon-512x512.png'),
         // Use this in production mode.
-        // icon: path.join(__dirname, 'public/icons/icon-512x512.png'),
+        icon: path.join(__dirname, 'public/icons/icon-512x512.png'),
         show: false
     });
 
     // This block of code is intended for development purpose only.
     // Delete this entire block of code when you are ready to package the application.
-    if (isDev()) {
-        mainWindow.loadURL('http://localhost:8000/');
-    } else {
-        loadURL(mainWindow);
-    }
+    //if (isDev()) {
+    //    mainWindow.loadURL('http://localhost:8000/');
+    //} else {
+    //    loadURL(mainWindow);
+    //}
     
     // Uncomment the following line of code when app is ready to be packaged.
-    // loadURL(mainWindow);
+    loadURL(mainWindow);
 
     // Open the DevTools and also disable Electron Security Warning.
     // process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true;
