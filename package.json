@@ -10,7 +10,16 @@
     ],
     "win": {},
     "linux": {},
-    "mac": {}
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        }
+      ]
+    }
   },
   "version": "1.0.0",
   "private": true,
