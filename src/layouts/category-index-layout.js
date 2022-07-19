@@ -29,7 +29,7 @@ const CategoryIndexLayout = ({ pageContext, location }) => {
         <h2>Articles by Category</h2>
         <p>{categoryList}</p>
         <Footer>
-          Developed by <a href="https://www.sadharani.com">Sadharani</a>
+          Developed by <a target="_blank" rel="nofollow" href="https://www.sadharani.com">Sadharani</a>
         </Footer>
       </Container>
     )

@@ -11,23 +11,7 @@ const typography = new Typography({
     "Noto Sans",
     "sans-serif"
   ],
-  googleFonts: [
-      {
-          name: 'Noto Sans',
-          styles: [
-              '400',
-              '400i',
-              '700',
-              '700i',
-          ],
-      },
-      {
-          name: 'Roboto Mono',
-          styles: [
-              '400',
-          ]
-      },
-  ],
+  omitGoogleFonts: true,
   overrideStyles: () => ({
     code: {
       fontFamily: ['Roboto Mono', 'monospace'].join(','),
