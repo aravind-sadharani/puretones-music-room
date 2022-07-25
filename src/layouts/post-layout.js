@@ -54,7 +54,7 @@ const PostLayout = ({data: { mdx }, pageContext, location}) => {
       </p>
       <PostLinks prev={prevLink} next={nextLink} />
       <Footer>
-        Developed by <a target="_blank" rel="nofollow" href="https://www.sadharani.com">Sadharani</a>
+        Developed by <a target="_blank" rel="nofollow noreferrer" href="https://www.sadharani.com">Sadharani</a>
       </Footer>
     </Container>
   )
