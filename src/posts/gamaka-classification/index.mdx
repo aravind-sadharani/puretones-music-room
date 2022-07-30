@@ -1,0 +1,153 @@
+---
+title: "Classification of Gamakas"
+date: 2022-07-30
+category: 'Comparison of Ragas'
+tags: [ 'Lakshya', 'Lakshana', 'Gamakas' ]
+---
+
+import standardDrone from 'data/default.prt'
+import standardScale from 'data/default.pkb'
+
+## Introduction
+
+We have looked at the [historical evolution]((/learn/historical-milestones/)) of Indian Classical music, and seen how its [tuning systems](/learn/tuningsystems-1/) have developed based on the principles of consonance.
+
+But beyond the tuning of musical intervals, the concept of *Gamaka* occupies a position of pre-eminence in Indian Classical music. A *Gamaka* is a musical ornamentation carried out by modulating the pitch of a note or by moving continuously from one note to another.
+
+In this article, we interpret the different types of *Gamakas* described in *[Sangeet Ratnakar](https://en.wikipedia.org/wiki/Sangita_Ratnakara)* by [Sarang Dev](https://en.wikipedia.org/wiki/%C5%9A%C4%81r%E1%B9%85gadeva).
+
+## Reference Pitch and Basic Intervals
+
+Before we begin, let us start with the concept of the fundamental note **Sa**. In Indian Classical music, all musical notes are defined based on their relationship with **Sa**. You can use the settings below to set the **Sa** to any pitch you prefer. All the demos on this page would play according to this setting.
+
+<CommonPitch />
+
+## Standard Drone
+
+For the purposes of this article, we will use the *Standard* drone tuning. Click `Start` below and listen to the drone track for some time.
+
+<DronePlayer title='Standard Drone' settings={standardDrone} />
+
+After you have spent some time and feel comfortable with the drone track, you can move to the subsequent sections. Let the drone track continue to play while you read and listen to the remainder of this article.
+
+## Gamakas in Sangeet Ratnakar
+
+### Tiripa
+
+export const tiripaGamaka = `Sa re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) ,
+ga(G)(0,15,8,0.95) , ga(G)(0,15,8,0.95) ,
+re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) ,`
+
+<MotifPlayer title='Tiripa Gamaka' motif={tiripaGamaka} scale={standardScale} />
+
+Shake sounding like damaru speeding in quarter druta.
+
+### Sphurita
+
+$1 \over 3$ rd of druta - I couldn't synthesise this.
+
+### Kampita
+
+Half a druta
+
+export const kampitaGamaka = `Sa re(G)(0,15,8,0.95) ; re(G)(0,15,8,0.95) ;
+ga(G)(0,15,8,0.95) ; ga(G)(0,15,8,0.95) ;
+re(G)(0,15,8,0.95) ; re(G)(0,15,8,0.95) ;`
+
+<MotifPlayer title='Kampita Gamaka' motif={kampitaGamaka} scale={standardScale} />
+
+### Lina
+
+Speed of druta
+
+export const linaGamaka = `Sa re(G)(0,15,8,0.95) . re(G)(0,15,8,0.95) .
+ga(G)(0,15,8,0.95) . ga(G)(0,15,8,0.95) .
+re(G)(0,15,8,0.95) . re(G)(0,15,8,0.95) .`
+
+<MotifPlayer title='Lina Gamaka' motif={linaGamaka} scale={standardScale} />
+
+### Andolita
+
+Speed of laghu - it is not clear if it's once or can be multiple times.
+
+export const andolitaGamaka = `Sa re(G)(0,15,4,0.95) ga(G)(0,15,4,0.95)
+re(G)(0,15,4,0.95) re(G)(0,15,4,0.95)`
+
+<MotifPlayer title='Andolita Gamaka' motif={andolitaGamaka} scale={standardScale} />
+
+### Vali
+
+Vakra and different speeds
+
+export const valiGamaka = `Sa re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) ,
+Ma(G)(0,15,8,0.95) ;  Ma(G)(0,15,4,0.95) .
+re(G)(0,15,8,0.95)  , dha(G)(0,15,4,0.95)
+dha(G)(0,15,4,0.95) ; ga(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) ,
+Ma(G)(0,15,8,0.95) , dha(G)(0,15,4,0.95) .
+Ni(G)(0,15,4,0.95) . dha(G)(0,15,4,0.95) . SA`
+
+<MotifPlayer title='Vali Gamaka' motif={valiGamaka} scale={standardScale} />
+
+### Tribhinna
+
+Cover three registers without pause with Ghana voice
+
+### Kurula
+
+Like Vali but with soft voice
+
+### Ahata
+
+Touch the succeeding note and return
+
+export const ahataGamaka = `Sa re(G)(re,ga,4,0.95) ga(G)(ga,Ma,4,0.95)
+Ma(G)(Ma,dha,4,0.95) dha(G)(dha,Ni,4,0.95)
+Ma(G)(Ma,dha,4,0.95) ga(G)(ga,Ma,4,0.95)
+re(G)(re,ga,4,0.95)`
+
+<MotifPlayer title='Ahata Gamaka' motif={ahataGamaka} scale={standardScale} />
+
+Pratyahata is not mentioned here, but I think thats the descending Ahata like `ga(G)(ga,re,4.0.95)` etc.
+
+### Ullasita
+
+Reach succeeding notes in order
+
+export const ullasitaGamaka = `Sa re(G)(Sa,re,4,0.5) ga(G)(re,ga,4,0.5)
+Ma(G)(ga,Ma,4,0.5) dha(G)(Ma,dha,4,0.5)
+Ma(G)(dha,Ma,4,0.5) ga(G)(Ma,ga,4,0.5)
+re(G)(ga,re,4,0.5)`
+
+<MotifPlayer title='Ullasita Gamaka' motif={ullasitaGamaka} scale={standardScale} />
+
+### Plavita
+
+Shake in pluta 
+
+### Humphita
+
+Shake with sounding hum
+
+### Mudrita
+
+Shake with mouth closed
+
+### Namita
+
+Haven't been able to decode
+
+### Misra
+
+A combination of the above.
+
+### All Gamakas in Succession
+
+export const allGamakas = `Sa re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) , ga(G)(0,15,8,0.95) , ga(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) ,
+Sa re(G)(0,15,8,0.95) ; re(G)(0,15,8,0.95) ; ga(G)(0,15,8,0.95) ; ga(G)(0,15,8,0.95) ; re(G)(0,15,8,0.95) ; re(G)(0,15,8,0.95) ;
+Sa re(G)(0,15,8,0.95) . re(G)(0,15,8,0.95) . ga(G)(0,15,8,0.95) . ga(G)(0,15,8,0.95) . re(G)(0,15,8,0.95) . re(G)(0,15,8,0.95) .
+Sa re(G)(0,15,4,0.95) ga(G)(0,15,4,0.95) re(G)(0,15,4,0.95) re(G)(0,15,4,0.95)
+Sa re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) , Ma(G)(0,15,8,0.95) ;  Ma(G)(0,15,4,0.95) . re(G)(0,15,8,0.95)  , dha(G)(0,15,4,0.95)  dha(G)(0,15,4,0.95) ; ga(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) , Ma(G)(0,15,8,0.95) , dha(G)(0,15,4,0.95) . Ni(G)(0,15,4,0.95) . dha(G)(0,15,4,0.95) . SA
+Sa re(G)(re,ga,4,0.95) ga(G)(ga,Ma,4,0.95) Ma(G)(Ma,dha,4,0.95) dha(G)(dha,Ni,4,0.95) Ma(G)(Ma,dha,4,0.95) ga(G)(ga,Ma,4,0.95) re(G)(re,ga,4,0.95)
+Sa re(G)(Sa,re,4,0.5) ga(G)(re,ga,4,0.5) Ma(G)(ga,Ma,4,0.5) dha(G)(Ma,dha,4,0.5) Ma(G)(dha,Ma,4,0.5) ga(G)(Ma,ga,4,0.5) re(G)(ga,re,4,0.5)`
+
+<MotifPlayer title='All Gamakas' motif={allGamakas} scale={standardScale} />
