@@ -4,6 +4,8 @@ import { AudioEnv } from "services/audioenv"
 import { CommonSettingsEnv } from 'services/commonsettings'
 import { dspStateFromSettings } from "utils/dspsettingsinterpreter"
 import droneDSPCode from 'data/puretones.dsp'
+import NowPlaying from "components/nowplaying"
+import useIsInViewport from "services/viewport"
 
 const DronePlayerContainer = styled.div`
     padding: 12px;
@@ -92,10 +94,16 @@ const DronePlayer = ({title,settings}) => {
     })
     let buttonState = (active && (commonSettings['currentDrone'] === title)) ? "active" : ""
     let buttonText = (commonSettings['currentDrone'] === title) ? buttonTitle : 'Start'
+
+    const dronePlayerRef = React.useRef(null)
+    const inView = useIsInViewport(dronePlayerRef)
+
     return (
-        <DronePlayerContainer>
+        <DronePlayerContainer ref={dronePlayerRef}>
             <DroneTitleElement>{title}</DroneTitleElement>
             <DroneButtonElement className={buttonState} onClick={() => playStop()}>{buttonText}</DroneButtonElement>
+            {buttonState === 'active' && !inView &&
+            <NowPlaying align='left' title={title} active={(active && (commonSettings['currentDrone'] === title))} onClick={playStop} buttonText={buttonText}></NowPlaying>}
         </DronePlayerContainer>
     )
 }

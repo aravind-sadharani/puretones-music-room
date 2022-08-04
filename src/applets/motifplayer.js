@@ -6,6 +6,8 @@ import { AudioEnv } from "services/audioenv"
 import { CommonSettingsEnv } from 'services/commonsettings'
 import ShowHideControls from "components/showhidecontrols"
 import sequencerPSQ from 'data/default.psq'
+import NowPlaying from "components/nowplaying"
+import useIsInViewport from "services/viewport"
 
 const MotifPlayerContainer = styled.div`
     padding: 12px 12px 0 12px;
@@ -28,7 +30,7 @@ const MotifElement = styled.pre`
 
 const defaultSequencerState = JSON.parse(sequencerPSQ)
 
-const MotifPlayer = ({title,motif,scale,staticCode}) => {
+const MotifPlayer = ({title,motif,scale,staticCode,tempo}) => {
     const [playState, updatePlayState] = React.useState('stopped')
     const [DSPCode, setDSPCode] = React.useState('')
     const [DSPSettings, setDSPSettings] = React.useState({})
@@ -59,6 +61,9 @@ const MotifPlayer = ({title,motif,scale,staticCode}) => {
         let sequencerSettings = {}
         sequencerSettings['/FaustDSP/Motif/Pitch'] = commonSettings['pitch']
         sequencerSettings['/FaustDSP/Motif/Fine_Tune'] = commonSettings['offSet']
+        if(tempo) {
+            sequencerSettings['/FaustDSP/Motif/Motif_Tempo'] = Math.log2(240/tempo)
+        }
         setDSPSettings(sequencerSettings)
     }
     const play = () => {
@@ -92,11 +97,18 @@ const MotifPlayer = ({title,motif,scale,staticCode}) => {
         active: playState === 'starting...' ? 'Starting...' : 'Start',
         inactive: 'Stop'
     }
+    let visibility = motifVisibility && (commonSettings['currentMotif'] === title)
+
+    const motifPlayerRef = React.useRef(null)
+    const inView = useIsInViewport(motifPlayerRef)
+
     return (
-        <MotifPlayerContainer>
-            <ShowHideControls title={title} label={showHideLabel} visibility={motifVisibility && (commonSettings['currentMotif'] === title)} onShowHide={toggleMotifVisibility}>
-                { (!staticCode && <MotifElement><code>{motif}</code></MotifElement>) || (<p>{motif}</p>) }
+        <MotifPlayerContainer ref={motifPlayerRef}>
+            <ShowHideControls title={title} label={showHideLabel} visibility={visibility} onShowHide={toggleMotifVisibility}>
+                { (!staticCode && <MotifElement>{tempo && <p><code>Played at {Math.floor(tempo*100/120)}% speed</code></p>}<code>{motif}</code></MotifElement>) || (<p>{motif}</p>) }
             </ShowHideControls>
+            {visibility && !inView &&
+            <NowPlaying align='right' title={title} active={visibility} onClick={toggleMotifVisibility} buttonText={showHideLabel.inactive}></NowPlaying>}
         </MotifPlayerContainer>
     )
 }
