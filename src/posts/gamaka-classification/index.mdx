@@ -1,6 +1,6 @@
 ---
 title: "Classification of Gamakas"
-date: 2022-07-30
+date: 2021-09-03
 category: 'Comparison of Ragas'
 tags: [ 'Lakshya', 'Lakshana', 'Gamakas' ]
 ---
@@ -31,6 +31,23 @@ For the purposes of this article, we will use the *Standard* drone tuning. Click
 <DronePlayer title='Standard Drone' settings={standardDrone} />
 
 After you have spent some time and feel comfortable with the drone track, you can move to the subsequent sections. Let the drone track continue to play while you read and listen to the remainder of this article.
+
+## Scale
+
+For the purposes of this article, we will use the scale: `Sa re ga Ma dha Ni`. You may recognize this as the scale of Raga Todi or pancham-varjit Varali. However, note that this article is meant to illustrate different types of Gamakas, and should not be considered as a commentary on Todi.
+
+export const noteSpecTodi = [
+    {white: "Sa", black: "re"},
+    {white: "fade", black: "ga"},
+    {white: "fade"},
+    {white: "fade", black: "Ma"},
+    {white: "fade", black: "dha"},
+    {white: "fade", black: "fade"},
+    {white: "Ni"},
+    {white: "SA"}
+]
+
+<ScalePlayer title='Scale of Raga Todi' noteSpec={noteSpecTodi} scale={standardScale} />
 
 ## Panchadasha Gamakas in Sangeet Ratnakar
 
@@ -159,7 +176,7 @@ Sa re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) , Ma(G)(0,15,8,0.95) ;  Ma(G)(0,15,4,
 Sa re(G)(re,ga,4,0.95) ga(G)(ga,Ma,4,0.95) Ma(G)(Ma,dha,4,0.95) dha(G)(dha,Ni,4,0.95) Ma(G)(Ma,dha,4,0.95) ga(G)(ga,Ma,4,0.95) re(G)(re,ga,4,0.95)
 Sa re(G)(Sa,re,4,0.5) ga(G)(re,ga,4,0.5) Ma(G)(ga,Ma,4,0.5) dha(G)(Ma,dha,4,0.5) Ma(G)(dha,Ma,4,0.5) ga(G)(Ma,ga,4,0.5) re(G)(ga,re,4,0.5)`
 
-<MotifPlayer title='Misra Gamakas' motif={allGamakas} scale={standardScale} />
+<MotifPlayer title='Mishra Gamakas' motif={allGamakas} scale={standardScale} />
 
 ## Dasavidha Gamakas
 
@@ -203,14 +220,14 @@ ga ga(G)(Re,ga,20,0.5)^ , ga
 Ma Ma(G)(ma,Ma,20,0.5)^ , Ma
 dha dha(G)(Pa,dha,20,0.5)^ , dha`
 
-<MotifPlayer title='Sphuritam Gamaka1' motif={sphuritamGamaka1} scale={standardScale} />
+<MotifPlayer title='Sphuritam Gamaka 1' motif={sphuritamGamaka1} scale={standardScale} />
 
 An example of `Sa re re ga ga Ma`:
 
 export const sphuritamGamaka2 = `Sa re re(G)(Sa,re,20,0.5)^ , ga ga(G)(Re,ga,20,0.5)^ , Ma
 Ma(G)(ma,Ma,20,0.5)^ , dha`
 
-<MotifPlayer title='Sphuritam Gamaka2' motif={sphuritamGamaka2} scale={standardScale} />
+<MotifPlayer title='Sphuritam Gamaka 2' motif={sphuritamGamaka2} scale={standardScale} />
 
 It is important to note that the previous fret need not be a note belonging to the raga (like in the examples above), and therefore the playing technique should be such as to not sound the previous fret note.
 
