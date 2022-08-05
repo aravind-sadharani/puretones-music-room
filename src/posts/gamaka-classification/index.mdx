@@ -1,0 +1,290 @@
+---
+title: "Classification of Gamakas"
+date: 2022-07-30
+category: 'Comparison of Ragas'
+tags: [ 'Lakshya', 'Lakshana', 'Gamakas' ]
+---
+
+import standardDrone from 'data/default.prt'
+import standardScale from 'data/default.pkb'
+
+## Introduction
+
+We have looked at the [historical evolution]((/learn/historical-milestones/)) of Indian Classical music, and seen how its [tuning systems](/learn/tuningsystems-1/) have developed based on the principles of consonance.
+
+But beyond the tuning of musical intervals, the concept of *Gamaka* occupies a position of pre-eminence in Indian Classical music. A *Gamaka* is a musical ornamentation carried out by modulating the pitch of a single note or by moving continuously from one note to another.
+
+In this article, we interpret the different types of *Gamakas* described in *[Sangeet Ratnakar](https://en.wikipedia.org/wiki/Sangita_Ratnakara)* by [Sarang Dev](https://en.wikipedia.org/wiki/%C5%9A%C4%81r%E1%B9%85gadeva), as well as the *Dashavidha Gamakas* commonly practised in the tradition of *Carnatic music*.
+
+This article is closely linked to the article on [Lakshanas](/learn/grammar-of-music/) in Indian Classical music. In fact, the different classes of Gamakas is an important aspect of Lakshanas, in addition to the other aspects discussed in the linked article.
+
+## Reference Pitch and Basic Intervals
+
+Before we begin, let us start with the concept of the fundamental note **Sa**. In Indian Classical music, all musical notes are defined based on their relationship with **Sa**. You can use the settings below to set the **Sa** to any pitch you prefer. All the demos on this page would play according to this setting.
+
+<CommonPitch />
+
+## Standard Drone
+
+For the purposes of this article, we will use the *Standard* drone tuning. Click `Start` below and listen to the drone track for some time.
+
+<DronePlayer title='Standard Drone' settings={standardDrone} />
+
+After you have spent some time and feel comfortable with the drone track, you can move to the subsequent sections. Let the drone track continue to play while you read and listen to the remainder of this article.
+
+## Panchadasha Gamakas in Sangeet Ratnakar
+
+Sangeet Ratnakar (refer to [[1]](#references)) describes *Panchadasha Gamakas* or fifteen types of Gamakas. A number of them refer exclusively to vocal music which we cannot demonstrate using the PureTones tools. So, the following Gamakas should be considered out of the scope of this article: *Tribhinna*, *Kurula*, *Humphita* and *Mudrita*. The rest of the eleven Gamakas are described below.
+
+### A note on Tempo
+
+For the purposes of this article (and to align with the nomenclature of Sangeet Ratnakar), we use the following nomenclature for note durations or *matras*, with respect to a reference tempo:
+
+*  *Druta* is a $1 \over 2$ note
+*  *Laghu* is a whole note
+*  *Guru* is a double length note (2 matras long)
+*  *Pluta* is a triple length note (3 matras long)
+
+### Tiripa
+
+Tiripa is a fast movement of notes at $1 \over 4$th of Druta. It is supposed to sound like a [*damaru*](https://en.wikipedia.org/wiki/Damaru).
+
+export const tiripaGamaka = `Sa re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) ,
+ga(G)(0,15,8,0.95) , ga(G)(0,15,8,0.95) ,
+re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) ,`
+
+<MotifPlayer title='Tiripa Gamaka' motif={tiripaGamaka} scale={standardScale} />
+
+### Sphurita
+
+Sphurita is a fast movement of notes at $1 \over 3$rd of Druta.
+
+<MotifPlayer title='Sphurita Gamaka' motif={tiripaGamaka} scale={standardScale} tempo='80'/>
+
+### Kampita
+
+Kampita is a medium tempo movement of a note at $1 \over 2$ of Druta. It is noted that there should be no shade of an adjacent note suggested by the Kampita gamaka.
+
+export const kampitaGamaka = `Sa re(G)(0,15,8,0.95) ; re(G)(0,15,8,0.95) ;
+ga(G)(0,15,8,0.95) ; ga(G)(0,15,8,0.95) ;
+re(G)(0,15,8,0.95) ; re(G)(0,15,8,0.95) ;`
+
+<MotifPlayer title='Kampita Gamaka' motif={kampitaGamaka} scale={standardScale} />
+
+### Lina
+
+Lina is a medium tempo movement of notes at the speed of Druta.
+
+export const linaGamaka = `Sa re(G)(0,15,8,0.95) . re(G)(0,15,8,0.95) .
+ga(G)(0,15,8,0.95) . ga(G)(0,15,8,0.95) .
+re(G)(0,15,8,0.95) . re(G)(0,15,8,0.95) .`
+
+<MotifPlayer title='Lina Gamaka' motif={linaGamaka} scale={standardScale} />
+
+### Andolita
+
+Andolita is a slow movement of notes at the speed of Laghu. It is not clear if the note is shaken once or it can be shaken multiple times.
+
+export const andolitaGamaka = `Sa re(G)(0,15,4,0.95) ga(G)(0,15,4,0.95)
+re(G)(0,15,4,0.95) re(G)(0,15,4,0.95)`
+
+<MotifPlayer title='Andolita Gamaka' motif={andolitaGamaka} scale={standardScale} />
+
+### Vali
+
+Vali gamaka employs different speeds of gamakas and also uses a *vakra* (out of sequence) ordering of notes.
+
+export const valiGamaka = `Sa re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) ,
+Ma(G)(0,15,8,0.95) ;  Ma(G)(0,15,4,0.95) .
+re(G)(0,15,8,0.95)  , dha(G)(0,15,4,0.95)
+dha(G)(0,15,4,0.95) ; ga(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) ,
+Ma(G)(0,15,8,0.95) , dha(G)(0,15,4,0.95) .
+Ni(G)(0,15,4,0.95) . dha(G)(0,15,4,0.95) . SA`
+
+<MotifPlayer title='Vali Gamaka' motif={valiGamaka} scale={standardScale} />
+
+### Ahata
+
+Ahata gamaka is when you touch the succeeding note and return.
+
+export const ahataGamaka = `Sa re(G)(re,ga,4,0.95) ga(G)(ga,Ma,4,0.95)
+Ma(G)(Ma,dha,4,0.95) dha(G)(dha,Ni,4,0.95)
+Ma(G)(Ma,dha,4,0.95) ga(G)(ga,Ma,4,0.95)
+re(G)(re,ga,4,0.95)`
+
+<MotifPlayer title='Ahata Gamaka' motif={ahataGamaka} scale={standardScale} />
+
+Pratyahata is not mentioned but it is an analogous concept but includes touching the preceding notes and returning.
+
+### Ullasita
+
+Ullasita gamaka is when you slide into the succeeding or preceding notes in the order of the scale.
+
+export const ullasitaGamaka = `Sa re(G)(Sa,re,4,0.5) ga(G)(re,ga,4,0.5)
+Ma(G)(ga,Ma,4,0.5) dha(G)(Ma,dha,4,0.5)
+Ma(G)(dha,Ma,4,0.5) ga(G)(Ma,ga,4,0.5)
+re(G)(ga,re,4,0.5)`
+
+<MotifPlayer title='Ullasita Gamaka' motif={ullasitaGamaka} scale={standardScale} />
+
+### Namita
+
+Namita gamaka is a gentle and soft slide into the succeeding or preceding note of the scale.
+
+export const namitaGamaka = `Sa^ ;3 re(G)(Sa,re,4,0.5) . re^ ;3 ga(G)(re,ga,4,0.5) .
+ga^ ;3 Ma(G)(ga,Ma,4,0.5) . Ma^ ;3 dha(G)(Ma,dha,4,0.5) .
+dha^ ;3 Ma(G)(dha,Ma,4,0.5) . Ma^ ;3 ga(G)(Ma,ga,4,0.5) .
+ga^ ;3 re(G)(ga,re,4,0.5) . Sa`
+
+<MotifPlayer title='Namita Gamaka' motif={namitaGamaka} scale={standardScale} />
+
+### Plavita
+
+Plavita is a very slow movement of notes at the speed of Pluta.
+
+export const plavitaGamaka = `Sa 3 re(G)(0,15,4,2.95) 3 ga(G)(0,15,4,2.95) 3
+re(G)(0,15,4,2.95) 3 re(G)(0,15,4,2.95) 3`
+
+<MotifPlayer title='Plavita Gamaka' motif={plavitaGamaka} scale={standardScale} />
+
+### Mishra
+
+Mishra is a combination of the different types of gamakas. Here we have combined many of the Gamakas described earlier into a musical sequence. In practice, Mishra gamaka can be a combination of different Gamakas in any order, as per the Raga and aesthetic judgement of the artist.
+
+export const allGamakas = `Sa re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) , ga(G)(0,15,8,0.95) , ga(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) ,
+Sa re(G)(0,15,8,0.95) ; re(G)(0,15,8,0.95) ; ga(G)(0,15,8,0.95) ; ga(G)(0,15,8,0.95) ; re(G)(0,15,8,0.95) ; re(G)(0,15,8,0.95) ;
+Sa re(G)(0,15,8,0.95) . re(G)(0,15,8,0.95) . ga(G)(0,15,8,0.95) . ga(G)(0,15,8,0.95) . re(G)(0,15,8,0.95) . re(G)(0,15,8,0.95) .
+Sa re(G)(0,15,4,0.95) ga(G)(0,15,4,0.95) re(G)(0,15,4,0.95) re(G)(0,15,4,0.95)
+Sa re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) , Ma(G)(0,15,8,0.95) ;  Ma(G)(0,15,4,0.95) . re(G)(0,15,8,0.95)  , dha(G)(0,15,4,0.95)  dha(G)(0,15,4,0.95) ; ga(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) , Ma(G)(0,15,8,0.95) , dha(G)(0,15,4,0.95) . Ni(G)(0,15,4,0.95) . dha(G)(0,15,4,0.95) . SA
+Sa re(G)(re,ga,4,0.95) ga(G)(ga,Ma,4,0.95) Ma(G)(Ma,dha,4,0.95) dha(G)(dha,Ni,4,0.95) Ma(G)(Ma,dha,4,0.95) ga(G)(ga,Ma,4,0.95) re(G)(re,ga,4,0.95)
+Sa re(G)(Sa,re,4,0.5) ga(G)(re,ga,4,0.5) Ma(G)(ga,Ma,4,0.5) dha(G)(Ma,dha,4,0.5) Ma(G)(dha,Ma,4,0.5) ga(G)(Ma,ga,4,0.5) re(G)(ga,re,4,0.5)`
+
+<MotifPlayer title='Misra Gamakas' motif={allGamakas} scale={standardScale} />
+
+## Dasavidha Gamakas
+
+While Sangeet Ratnakar acts as a reference to many treatises written after Sarang Dev's time, the music of North and South India [diverged slowly but progressively](/learn/historical-milestones/#1200-ce-to-1800-ce-slow-and-progressive-divergence-of-hindustani-and-carnatic-classical-music) into two forms which are quite distinct at an aesthetic and stylistic level. We know them, of course, as Hindustani and Carnatic traditions. In the Carnatic tradition, musicians recognise *Dasavidha Gamakas* or ten forms of Gamakas. Though there are some variations and differences in their descriptions by different scholars, here we present a commonly understood form of these Gamakas (refer to [[2, 3 ,4]](#references)). 
+
+### Arohana
+
+Arohana is a graceful movement of notes in ascending order.
+
+export const arohanaGamaka = `Sa re(G)(re,ga,4,0.95) ga
+Ma(G)(Ma,dha,4,0.95) dha Ni SA`
+
+<MotifPlayer title='Arohana Gamaka' motif={arohanaGamaka} scale={standardScale} />
+
+### Avarohana
+
+Avarohana is a graceful movement of notes in descending order.
+
+export const avarohanaGamaka = `SA Ni(G)(Ni,SA,4,0.95) dha
+Ma(G)(Ma,dha,4,0.95) ga re Sa`
+
+<MotifPlayer title='Avarohana Gamaka' motif={avarohanaGamaka} scale={standardScale} />
+
+### Dhalu
+
+Dhalu involves starting on the fundamental note `Sa` and producing the higher notes in ascending order while keeping the raga bhava, and again in descending order to `Sa`.
+
+export const dhaluGamaka = `Sa dha Sa Ma Sa ga Sa re`
+
+<MotifPlayer title='Dhalu Gamaka' motif={dhaluGamaka} scale={standardScale} />
+
+### Sphuritam
+
+Although the name Sphuritam comes from Sangeet Ratnakar, it is understood differently in the Carnatic tradition. This gamaka takes its inspiration from Veena playing technique. Here we use the concept of what is called *Janta swaram*, or notes taken in pairs. For instance, `Sa Sa`, `re re` or `Sa re`, `re ga` and so on. The technique involves playing the second note with a slight touch of the previous fret without sounding the note at that fret position.
+
+An example of `Sa Sa re re ga ga`:
+
+export const sphuritamGamaka1 = `Sa Sa(G)(Ni',Sa,20,0.5)^ , Sa
+re re(G)(Sa,re,20,0.5)^ , re
+ga ga(G)(Re,ga,20,0.5)^ , ga
+Ma Ma(G)(ma,Ma,20,0.5)^ , Ma
+dha dha(G)(Pa,dha,20,0.5)^ , dha`
+
+<MotifPlayer title='Sphuritam Gamaka1' motif={sphuritamGamaka1} scale={standardScale} />
+
+An example of `Sa re re ga ga Ma`:
+
+export const sphuritamGamaka2 = `Sa re re(G)(Sa,re,20,0.5)^ , ga ga(G)(Re,ga,20,0.5)^ , Ma
+Ma(G)(ma,Ma,20,0.5)^ , dha`
+
+<MotifPlayer title='Sphuritam Gamaka2' motif={sphuritamGamaka2} scale={standardScale} />
+
+It is important to note that the previous fret need not be a note belonging to the raga (like in the examples above), and therefore the playing technique should be such as to not sound the previous fret note.
+
+### Kampita
+
+Kampita gamaka is understood in the same way as in Sangeet Ratnakar, i.e., at $1 \over 2$ of Druta without any shade of an adjacent note.
+
+export const kampitaGamaka1 = `Sa re(G)(0,15,8,0.95) ; re(G)(0,15,8,0.95) ;
+ga(G)(0,15,8,0.95) ; ga(G)(0,15,8,0.95) ;
+re(G)(0,15,8,0.95) ; re(G)(0,15,8,0.95) ;`
+
+<MotifPlayer title='Kampita Gamaka ' motif={kampitaGamaka1} scale={standardScale} />
+
+### Ahata
+
+Ahata is again similar to the style described in Sangeet Ratnakar but with a slight twist. It is played in pairs of notes. Unlike in Sangeet Ratnakar, here a straight unmodulated note is played in between touching the succeeding note and returning.
+
+export const ahataGamaka1 = `Sa re(G)(re,ga,4,0.95) ga ga(G)(ga,Ma,4,0.95) Ma
+Ma(G)(Ma,dha,4,0.95) dha`
+
+<MotifPlayer title='Ahata Gamaka ' motif={ahataGamaka1} scale={standardScale} />
+
+### Pratyahata
+
+Pratyahata is analogous to Ahata, but is done with preceding notes in the scale, rather than succeeding notes.
+
+export const pratyahataGamaka1 = `SA(G)(SA,Ni,4,0.95) Ni Ni(G)(Ni,dha,4,0.95) dha dha(G)(dha,Ma,4,0.95) Ma
+Ma(G)(Ma,ga,4,0.95) ga ga(G)(ga,re,4,0.95) re re(G)(re,Sa,4,0.95) Sa`
+
+<MotifPlayer title='Pratyahata Gamaka' motif={pratyahataGamaka1} scale={standardScale} />
+
+### Tripuscha
+
+Tripuscha is a fast movement of notes rendered as $1 \over 8$th notes but tripled up.
+
+export const tripuschaGamaka = `Sa re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) ,
+ga(G)(0,15,8,0.95) , ga(G)(0,15,8,0.95) , ga(G)(0,15,8,0.95) ,
+re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) , Sa`
+
+<MotifPlayer title='Tripuscha Gamaka' motif={tripuschaGamaka} scale={standardScale} />
+
+### Andola
+
+Andola employs a mixture of straight unmodulated notes and deergha (long duration) notes.
+
+export const andolaGamaka = `Sa re(G)(re,ga,4,0.95) ga 2 ga re(G)(re,ga,4,0.95) re 2 re Sa` 
+
+<MotifPlayer title='Andola Gamaka' motif={andolaGamaka} scale={standardScale} />
+
+### Murchhana
+
+Murchhana gamaka is a medium fast sequence of notes in ascending order, but with a different starting note (either the  succeeding note or the preceding note).
+
+export const murchhanaGamaka = `Sa . re . ga . Ma . dha . Ni
+Ni' . Sa . re . ga . Ma . dha
+dha' . Ni' . Sa . re . ga . Ma` 
+
+<MotifPlayer title='Murchhana Gamaka' motif={murchhanaGamaka} scale={standardScale} />
+
+## Concluding Remarks
+
+We have looked at the different classifications of Gamakas which are documented in the technical literature on Indian Classical music. In practice, these gamakas are combined in myriad ways by skilled artists. But at a technical level, these gamakas represent the rudiments of ornamentation in Indian Classical music.
+
+As mentioned earlier, the different classes of Gamakas is an important aspect of [Lakshanas](/learn/grammar-of-music/), in addition to the other aspects discussed in the linked article.
+
+Finally, it may be useful to listen to these Gamakas both with and without the drone playing to understand the subtlety of modulation and how it relates to the drone track.
+
+## References
+
+1.  Śārṅgadeva, Premlata Sharma, and R. K. Shringy. [Saṅgīta-ratnākara of Śārṅgadeva: Sanskrit Text And English Translation With Comments And Notes](https://catalog.hathitrust.org/Record/002189005). Delhi: Motilal Banarsidass, 1978.
+2.  P. Sambamoorthy. [South Indian Music](https://books.google.co.in/books?id=cYufAAAAMAAJ). Indian Music Publishing House, 1963.
+3.  G. N. Subramanyam. [Veena](https://books.google.co.in/books/about/Veena.html?id=PX8JAQAAMAAJ). Archives of the University of Michigan, 1989 (digitized 2010).
+4.  [S. Balachander](https://www.chandraveena.com/). Personal interpretation of scriptures on Indian Classical music.
+
+
+
+
