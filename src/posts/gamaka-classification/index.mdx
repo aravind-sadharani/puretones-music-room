@@ -34,7 +34,7 @@ After you have spent some time and feel comfortable with the drone track, you ca
 
 ## Panchadasha Gamakas in Sangeet Ratnakar
 
-Sangeet Ratnakar (refer to [[1]](#references)) describes *Panchadasha Gamakas* or fifteen types of Gamakas. A number of them refer exclusively to vocal music which we cannot demonstrate using the PureTones tools. So, the following Gamakas should be considered out of the scope of this article: *Tribhinna*, *Kurula*, *Humphita* and *Mudrita*. Further, we are unable to provide a clear interpretation of the *Namita* form of Gamaka. Hence, it is also out of scope. The rest of the 10 Gamakas are described below.
+Sangeet Ratnakar (refer to [[1]](#references)) describes *Panchadasha Gamakas* or fifteen types of Gamakas. A number of them refer exclusively to vocal music which we cannot demonstrate using the PureTones tools. So, the following Gamakas should be considered out of the scope of this article: *Tribhinna*, *Kurula*, *Humphita* and *Mudrita*. The rest of the eleven Gamakas are described below.
 
 ### A note on Tempo
 
@@ -118,7 +118,7 @@ Pratyahata is not mentioned but it is an analogous concept but includes touching
 
 ### Ullasita
 
-Ullasita gamaka is when you slide into the succeeding notes in the order of the scale.
+Ullasita gamaka is when you slide into the succeeding or preceding notes in the order of the scale.
 
 export const ullasitaGamaka = `Sa re(G)(Sa,re,4,0.5) ga(G)(re,ga,4,0.5)
 Ma(G)(ga,Ma,4,0.5) dha(G)(Ma,dha,4,0.5)
@@ -126,6 +126,17 @@ Ma(G)(dha,Ma,4,0.5) ga(G)(Ma,ga,4,0.5)
 re(G)(ga,re,4,0.5)`
 
 <MotifPlayer title='Ullasita Gamaka' motif={ullasitaGamaka} scale={standardScale} />
+
+### Namita
+
+Namita gamaka is a gentle and soft slide into the succeeding or preceding note of the scale.
+
+export const namitaGamaka = `Sa^ ;3 re(G)(Sa,re,4,0.5) . re^ ;3 ga(G)(re,ga,4,0.5) .
+ga^ ;3 Ma(G)(ga,Ma,4,0.5) . Ma^ ;3 dha(G)(Ma,dha,4,0.5) .
+dha^ ;3 Ma(G)(dha,Ma,4,0.5) . Ma^ ;3 ga(G)(Ma,ga,4,0.5) .
+ga^ ;3 re(G)(ga,re,4,0.5) . Sa`
+
+<MotifPlayer title='Namita Gamaka' motif={namitaGamaka} scale={standardScale} />
 
 ### Plavita
 
@@ -136,9 +147,9 @@ re(G)(0,15,4,2.95) 3 re(G)(0,15,4,2.95) 3`
 
 <MotifPlayer title='Plavita Gamaka' motif={plavitaGamaka} scale={standardScale} />
 
-### Misra
+### Mishra
 
-Misra is a combination of the different types of gamakas.
+Mishra is a combination of the different types of gamakas. Here we have combined many of the Gamakas described earlier into a musical sequence. In practice, Mishra gamaka can be a combination of different Gamakas in any order, as per the Raga and aesthetic judgement of the artist.
 
 export const allGamakas = `Sa re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) , ga(G)(0,15,8,0.95) , ga(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) , re(G)(0,15,8,0.95) ,
 Sa re(G)(0,15,8,0.95) ; re(G)(0,15,8,0.95) ; ga(G)(0,15,8,0.95) ; ga(G)(0,15,8,0.95) ; re(G)(0,15,8,0.95) ; re(G)(0,15,8,0.95) ;
@@ -201,6 +212,8 @@ Ma(G)(ma,Ma,20,0.5)^ , dha`
 
 <MotifPlayer title='Sphuritam Gamaka2' motif={sphuritamGamaka2} scale={standardScale} />
 
+It is important to note that the previous fret need not be a note belonging to the raga (like in the examples above), and therefore the playing technique should be such as to not sound the previous fret note.
+
 ### Kampita
 
 Kampita gamaka is understood in the same way as in Sangeet Ratnakar, i.e., at $1 \over 2$ of Druta without any shade of an adjacent note.
@@ -262,6 +275,8 @@ dha' . Ni' . Sa . re . ga . Ma`
 We have looked at the different classifications of Gamakas which are documented in the technical literature on Indian Classical music. In practice, these gamakas are combined in myriad ways by skilled artists. But at a technical level, these gamakas represent the rudiments of ornamentation in Indian Classical music.
 
 As mentioned earlier, the different classes of Gamakas is an important aspect of [Lakshanas](/learn/grammar-of-music/), in addition to the other aspects discussed in the linked article.
+
+Finally, it may be useful to listen to these Gamakas both with and without the drone playing to understand the subtlety of modulation and how it relates to the drone track.
 
 ## References
 

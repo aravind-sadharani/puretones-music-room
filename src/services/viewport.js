@@ -16,13 +16,9 @@ const useIsInViewport = (ref) => {
     [],)
 
     React.useEffect(() => {
-        if(isBrowser)
-            observer.observe(ref.current)
+        observer.observe(ref.current)
 
-        return () => {
-            if(isBrowser)
-                observer.disconnect()
-        }
+        return () => observer.disconnect()
     },[ref, observer])
 
     return isInView
