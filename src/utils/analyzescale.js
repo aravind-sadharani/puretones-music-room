@@ -29,8 +29,14 @@ const baseRatio = {
 const FIFTHWEIGHT = 100
 const FOURTHWEIGHT = 100
 const THIRDWEIGHT = 80
-const GOODWEIGHT = 50
-const DEFAULTWEIGHT = 10
+
+const ADJLINKWEIGHT = 100
+const SKIPLINKWEIGHT = 30
+const FIFTHLINKWEIGHT = 30
+const FOURTHLINKWEIGHT = 30
+const THIRDLINKWEIGHT = 30
+const OCTAVELINKWEIGHT = 3
+const DEFAULTLINKWEIGHT = 1
 
 const analyzeScale = (scale) => {
     let centScale = scale.map(note => [note[0], toCents(baseRatio[note[0]]) + Number(note[1])])
@@ -75,30 +81,26 @@ const analyzeScale = (scale) => {
         
         return weight
     })
-    for(let i=1; i<noteWeights.length; i++) {
-        noteWeights[i] += noteWeights[i-1]
-    }
 
-    let linkWeights = twoOctaveScale.map(origin => {
-        let originLinkWeights = twoOctaveScale.map(destination => {
+    let linkWeights = twoOctaveScale.map((origin,i) => {
+        let originLinkWeights = twoOctaveScale.map((destination,j) => {
+            if(Math.abs(i-j) === 1)
+                return ADJLINKWEIGHT
+            if(Math.abs(i-j) === 2)
+                return SKIPLINKWEIGHT
             let interval = Math.abs(origin[1] - destination[1])
             if(Math.abs(interval - FIFTH) < EPSILON)
-                return FIFTHWEIGHT
+                return FIFTHLINKWEIGHT
             if(Math.abs(interval - FOURTH) < EPSILON)
-                return FOURTHWEIGHT
+                return FOURTHLINKWEIGHT
             if(Math.abs(interval - THIRD) < EPSILON)
-                return THIRDWEIGHT
-            if(interval < THIRD)
-                return GOODWEIGHT
-            return DEFAULTWEIGHT
+                return THIRDLINKWEIGHT
+            if(Math.abs(interval - OCTAVE) < EPSILON)
+                return OCTAVELINKWEIGHT
+            return DEFAULTLINKWEIGHT
         })
         return originLinkWeights
     })
-    for(let i=0; i<linkWeights.length; i++) {
-        for(let j=1; j<linkWeights[i].length; j++) {
-            linkWeights[i][j] += linkWeights[i][j-1]
-        }
-    }
 
     return {
         noteWeights: noteWeights,
