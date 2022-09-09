@@ -30,20 +30,7 @@ const RagaWeightLabel = styled.span`
 
 const RagaWeights = ({scale,weights}) => {
     let {startWeights,linkWeights,endWeights} = weights
-    let localStartWeights = [...startWeights]
-    for(let i=localStartWeights.length-1; i>0; i--) {
-        localStartWeights[i] -= localStartWeights[i-1]
-    }
-    let localLinkWeights = [...linkWeights.map(originLinkWeights => [...originLinkWeights])]
-    for(let i=0; i<localLinkWeights.length; i++) {
-        for(let j=localLinkWeights[i].length-1; j>0; j--) {
-            localLinkWeights[i][j] -= localLinkWeights[i][j-1]
-        }
-    }
-    let localEndWeights = [...endWeights]
-    for(let i=localEndWeights.length-1; i>0; i--) {
-        localEndWeights[i] -= localEndWeights[i-1]
-    }
+
     const headerlabels = ['Notes', ...scale.map(note => note[0]), ...scale.map(note => `${note[0]}"`), 'SA"']
     const HeaderRow = () => (
         headerlabels.map((label,index) => <RagaWeightLabel key={index}>{label}</RagaWeightLabel>)
@@ -57,7 +44,7 @@ const RagaWeights = ({scale,weights}) => {
             </>
         )
     }
-    const linkRows = localLinkWeights.map((originLinkWeights,index) => {
+    const linkRows = linkWeights.map((originLinkWeights,index) => {
         let label
         if(index < scale.length)
             label = scale[index][0]
@@ -72,9 +59,9 @@ const RagaWeights = ({scale,weights}) => {
     return (
         <RagaWeightsContainer>
             <HeaderRow />
-            <Row label='Start' data={localStartWeights} />
+            <Row label='Start' data={startWeights} />
             {linkRows}
-            <Row label='End' data={localEndWeights} />
+            <Row label='End' data={endWeights} />
         </RagaWeightsContainer>
     )
 }

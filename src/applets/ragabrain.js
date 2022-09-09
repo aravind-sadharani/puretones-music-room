@@ -82,14 +82,6 @@ const RagaBrain = () => {
     const initializeWeights = () => {
         let {noteWeights,linkWeights} = analyzeScale(scaleResult.scale)
     
-        for(let i=1; i<noteWeights.length; i++) {
-            noteWeights[i] += noteWeights[i-1]
-        }
-        for(let i=0; i<linkWeights.length; i++) {
-            for(let j=1; j<linkWeights[i].length; j++) {
-                linkWeights[i][j] += linkWeights[i][j-1]
-            }
-        }
         setWeights({startWeights: [...noteWeights], linkWeights: [...linkWeights], endWeights: [...noteWeights]})
         setGenTitle('Generate Phrases from Scale')
     }
@@ -106,16 +98,19 @@ const RagaBrain = () => {
         for(let i=1; i<4; i++) {
             randomNoteIndices.push(randomIndex(linkWeights[randomNoteIndices[i-1]]))
         }
-        randomNoteIndices.push(randomIndex(combineDistribution(linkWeights[randomNoteIndices[3]],endWeights)))
+        randomNoteIndices.push(randomIndex(combineDensity(linkWeights[randomNoteIndices[3]],endWeights)))
         let randomNotes = randomNoteIndices.map(index => noteFromIndex(index))
         setPhrase(randomNotes.join(' '))
     }
 
-    const combineDistribution = (dist1, dist2) => {
-        return dist1.map((histogram, index) => histogram*dist2[index])
+    const combineDensity = (density1, density2) => {
+        return density1.map((density1Value, index) => density1Value*density2[index])
     }
 
-    const randomIndex = (distribution) => {
+    const randomIndex = (density) => {
+        let distribution = [...density]
+        for(let i=1; i<distribution.length; i++)
+            distribution[i] += distribution[i-1]
         let max = distribution[distribution.length-1]
         let randomInstance = Math.random()*max
         return distribution.findIndex(histogram => (randomInstance < histogram))
@@ -165,17 +160,6 @@ const RagaBrain = () => {
 
     const updateWeights = () => {
         let {startWeights, linkWeights, endWeights} = weights
-        for(let i=startWeights.length-1; i>0; i--) {
-            startWeights[i] -= startWeights[i-1]
-        }
-        for(let i=0; i<linkWeights.length; i++) {
-            for(let j=linkWeights[i].length-1; j>0; j--) {
-                linkWeights[i][j] -= linkWeights[i][j-1]
-            }
-        }
-        for(let i=endWeights.length-1; i>0; i--) {
-            endWeights[i] -= endWeights[i-1]
-        }
 
         let notes = phrase.split(' ')
         startWeights[indexFromNote(notes[0])] *= (1+0.1*feedback.start)
@@ -183,18 +167,6 @@ const RagaBrain = () => {
             linkWeights[indexFromNote(notes[i])][indexFromNote(notes[i+1])] *= (1+0.1*feedback.link)
         }
         endWeights[indexFromNote(notes[notes.length-1])] *= (1+0.1*feedback.end)
-
-        for(let i=1; i<startWeights.length; i++) {
-            startWeights[i] += startWeights[i-1]
-        }
-        for(let i=0; i<linkWeights.length; i++) {
-            for(let j=1; j<linkWeights[i].length; j++) {
-                linkWeights[i][j] += linkWeights[i][j-1]
-            }
-        }
-        for(let i=1; i<endWeights.length; i++) {
-            endWeights[i] += endWeights[i-1]
-        }
 
         setWeights({startWeights: [...startWeights], linkWeights: [...linkWeights], endWeights: [...endWeights]})
         setPhrase('')
