@@ -45,6 +45,7 @@ const RagaBrain = () => {
     const [scaleResult, setScaleResult] = React.useState({status: false, message: "", scale: [], title: "", notespec: [], settings: ""})
     const [weights, setWeights] = React.useState({})
     const [phrase, setPhrase] = React.useState("")
+    const [phraseLength, setPhraseLength] = React.useState(2)
     const [genTitle, setGenTitle] = React.useState('Initialize Weights')
     const [feedback, setFeedback] = React.useState({start: 0, end: 0, link: 0})
     const onRulesChange = (rules) => {
@@ -95,10 +96,10 @@ const RagaBrain = () => {
     const generatePhrase = () => {
         let {startWeights,linkWeights,endWeights} = weights
         let randomNoteIndices = [randomIndex(startWeights)]
-        for(let i=1; i<4; i++) {
+        for(let i=1; i<phraseLength-1; i++) {
             randomNoteIndices.push(randomIndex(linkWeights[randomNoteIndices[i-1]]))
         }
-        randomNoteIndices.push(randomIndex(combineDensity(linkWeights[randomNoteIndices[3]],endWeights)))
+        randomNoteIndices.push(randomIndex(combineDensity(linkWeights[randomNoteIndices[phraseLength-2]],endWeights)))
         let randomNotes = randomNoteIndices.map(index => noteFromIndex(index))
         setPhrase(randomNotes.join(' '))
     }
@@ -132,6 +133,14 @@ const RagaBrain = () => {
             return index + scaleResult.scale.length
         else
             return index
+    }
+
+    let phraseLengthParams = {
+        key: "Phrase Length",
+        init: phraseLength,
+        max: 5,
+        min: 2,
+        step: 1
     }
 
     let startFeedbackParams = {
@@ -197,8 +206,11 @@ const RagaBrain = () => {
                 <p><strong>{genTitle}</strong></p>
                 <center>
                     {genTitle === 'Initialize Weights' && <Button onClick={()=>initializeWeights()}>Initialize</Button>}
-                    {genTitle !== 'Initialize Weights' && <Button onClick={()=>generatePhrase()}>Generate</Button>}
-                    <SaveRestore extn='JSON' save={saveWeights} restore={restoreWeights}/>
+                    {genTitle !== 'Initialize Weights' && <>
+                        <Slider params={phraseLengthParams} path='phraselength' onParamUpdate={(value,path) => setPhraseLength(value)}></Slider>
+                        <Button onClick={()=>generatePhrase()}>Generate</Button>
+                        <SaveRestore extn='JSON' save={saveWeights} restore={restoreWeights}/>
+                    </>}
                     <p></p>
                 </center>
             </RagaBrainContainer>}

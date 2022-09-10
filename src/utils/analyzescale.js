@@ -31,11 +31,12 @@ const FOURTHWEIGHT = 100
 const THIRDWEIGHT = 80
 
 const ADJLINKWEIGHT = 100
-const SKIPLINKWEIGHT = 30
+const SKIPLINKWEIGHT = 100
 const FIFTHLINKWEIGHT = 30
 const FOURTHLINKWEIGHT = 30
 const THIRDLINKWEIGHT = 30
-const OCTAVELINKWEIGHT = 3
+const OCTAVELINKWEIGHT = 5
+const SUBOCTAVELINKWEIGHT = 3
 const DEFAULTLINKWEIGHT = 1
 
 const analyzeScale = (scale) => {
@@ -97,6 +98,8 @@ const analyzeScale = (scale) => {
                 return THIRDLINKWEIGHT
             if(Math.abs(interval - OCTAVE) < EPSILON)
                 return OCTAVELINKWEIGHT
+            if(interval < OCTAVE+EPSILON)
+                return SUBOCTAVELINKWEIGHT
             return DEFAULTLINKWEIGHT
         })
         return originLinkWeights
