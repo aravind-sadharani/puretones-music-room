@@ -44,7 +44,7 @@ const noteNumber = {
 
 const splitbyline = str => str.split('\n').filter(s => s.length)
 
-const tokenize = str => str.replace(/(\n|\t)/g,' ').split(' ').map(s => s.trim()).filter(s => s.length)
+const tokenize = str => str.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"').replace(/(\n|\t)/g,' ').split(' ').map(s => s.trim()).filter(s => s.length)
 
 const baseNote = note => note.replace(/('|")/g,'')
 

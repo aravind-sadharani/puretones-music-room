@@ -138,7 +138,7 @@ const RagaBrain = () => {
     let phraseLengthParams = {
         key: "Phrase Length",
         init: phraseLength,
-        max: 5,
+        max: 20,
         min: 2,
         step: 1
     }
@@ -182,6 +182,20 @@ const RagaBrain = () => {
         setFeedback({start: 0, end: 0, link: 0})
     }
 
+    const editWeights = (value,rowID,colID) => {
+        console.log(value,rowID,colID)
+        let {startWeights, linkWeights, endWeights} = weights
+        if(rowID === '-1') {
+            startWeights[colID] = value
+        } else if(rowID === '-2') {
+            endWeights[colID] = value
+        } else {
+            console.log(linkWeights[rowID][colID], value)
+            linkWeights[rowID][colID] = Number(value)
+        }
+        setWeights({startWeights: [...startWeights], linkWeights: [...linkWeights], endWeights: [...endWeights]})
+    }
+
     return (
         <>
             <RagaBrainContainer>
@@ -223,7 +237,7 @@ const RagaBrain = () => {
                 <center><Button onClick={() => updateWeights()}>Update</Button></center>
                 <p></p>
             </RagaBrainContainer>}
-            {scaleResult.status && genTitle !== 'Initialize Weights' && <RagaWeights scale={scaleResult.scale} weights={weights} />}
+            {scaleResult.status && genTitle !== 'Initialize Weights' && <RagaWeights scale={scaleResult.scale} weights={weights} onWeightChanged={(value,rowID,colID) => editWeights(value,rowID,colID)} />}
         </>
     )
 }
