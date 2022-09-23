@@ -4,19 +4,33 @@ import styled from 'styled-components'
 const RagaWeightsContainer = styled.div`
     margin: 0 0 1em 0;
     display: grid;
-    grid-template-columns: repeat(16,1fr);
+    grid-template-columns: ${({grid}) => `repeat(${grid},1fr);`}
     font-size: 0.8em;
     border: 0.5px solid;
     border-color: ${({theme}) => theme.light.borderColor};
     ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
     border-radius: 5px;
+    input, span {
+        width: ${({grid}) => `calc(696px / ${grid});`}
+    }
+    input:last-child {
+        border-radius: 0 0 5px 0;
+    }
+    span:first-child {
+        border-radius: 5px 0 0 0;
+    }
+    span:nth-child(${({grid}) => `${grid}`}) {
+        border-radius: 0 5px 0 0;
+    }
+    span:nth-child(${({grid}) => `${grid*(grid+1)+1}`}) {
+        border-radius: 0 0 0 5px;
+    }
 `
 
 const RagaWeightCell = styled.input`
     -webkit-appearance: none;
     appearance: none;
     padding: 0 0 0 3px;
-    max-width: 43.5px;
     font-weight: ${({highlight}) => highlight === true ? 700 : 400};
     border: 0.5px solid;
     border-color: ${({theme}) => theme.light.borderColor};
@@ -27,14 +41,10 @@ const RagaWeightCell = styled.input`
     ${({highlight,theme}) => highlight === true ? theme.isDark`color: ${theme.light.textColor};` : theme.isDark`color: ${theme.dark.textColor};`}
     border-radius: 0px;
     grid-column: auto / span 1;
-    :last-child {
-        border-radius: 0 0 5px 0;
-    }
 `
 
 const RagaWeightLabel = styled.span`
     padding: 0 0 0 3px;
-    max-width: 43.5px;
     font-weight: ${({highlight}) => highlight === true ? 700 : 400};
     border: 0.5px solid;
     border-color: ${({theme}) => theme.light.borderColor};
@@ -45,15 +55,6 @@ const RagaWeightLabel = styled.span`
     ${({highlight,theme}) => highlight === true ? theme.isDark`color: ${theme.light.textColor};` : theme.isDark`color: ${theme.dark.textColor};`}
     border-radius: 0px;
     grid-column: auto / span 1;
-    :first-child {
-        border-radius: 5px 0 0 0;
-    }
-    :nth-child(16) {
-        border-radius: 0 5px 0 0;
-    }
-    :nth-child(273) {
-        border-radius: 0 0 0 5px;
-    }
 `
 
 const Row = ({label,data,rowID,highlight,highlightIndex,onWeightChanged}) => {
@@ -89,7 +90,7 @@ const RagaWeights = ({scale,weights,phrase,onWeightChanged}) => {
         )
     })
     return (
-        <RagaWeightsContainer>
+        <RagaWeightsContainer grid={2*scale.length+2}>
             <HeaderRow labels={headerlabels} start={phrase[0]} end={phrase[phrase.length-1]} />
             <Row label='Start' data={startWeights} rowID="-1" highlightIndex={phrase[0]} onWeightChanged={onWeightChanged} />
             {linkRows}
