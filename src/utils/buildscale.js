@@ -44,7 +44,7 @@ const noteNumber = {
 
 const splitbyline = str => str.split('\n').filter(s => s.length)
 
-const tokenize = str => str.replace(/(\n|\t)/g,' ').split(' ').map(s => s.trim()).filter(s => s.length)
+const tokenize = str => str.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"').replace(/(\n|\t)/g,' ').split(' ').map(s => s.trim()).filter(s => s.length)
 
 const baseNote = note => note.replace(/('|")/g,'')
 
@@ -149,7 +149,6 @@ const transposeOffset = (note, ref) => {
     let transposedNoteName = Object.entries(noteNumber).filter(testNote => testNote[1] === transposedNoteNumber)[0][0]
     let transposedNoteOffset = (toCents((baseRatio[note[0]]/baseRatio[ref[0]])/baseRatio[transposedNoteName]) + Number(note[1]) - Number(ref[1]) + OCTAVE/2) % OCTAVE - OCTAVE/2
     transposedNoteOffset = Math.abs(transposedNoteOffset) < EPSILON ? 0 : transposedNoteOffset
-    console.log(transposedNoteName, transposedNoteOffset)
     return [transposedNoteName, transposedNoteOffset]
 }
 
