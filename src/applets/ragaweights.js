@@ -11,7 +11,7 @@ const RagaWeightsContainer = styled.div`
     ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
     border-radius: 5px;
     input, span {
-        width: ${({grid}) => `calc(696px / ${grid});`}
+        width: 100%;
     }
     input:last-child {
         border-radius: 0 0 5px 0;
@@ -40,7 +40,6 @@ const RagaWeightCell = styled.input`
     color: ${({theme}) => theme.light.textColor};
     ${({highlight,theme}) => highlight === true ? theme.isDark`color: ${theme.light.textColor};` : theme.isDark`color: ${theme.dark.textColor};`}
     border-radius: 0px;
-    grid-column: auto / span 1;
 `
 
 const RagaWeightLabel = styled.span`
@@ -54,7 +53,6 @@ const RagaWeightLabel = styled.span`
     color: ${({theme}) => theme.light.textColor};
     ${({highlight,theme}) => highlight === true ? theme.isDark`color: ${theme.light.textColor};` : theme.isDark`color: ${theme.dark.textColor};`}
     border-radius: 0px;
-    grid-column: auto / span 1;
 `
 
 const Row = ({label,data,rowID,highlight,highlightIndex,onWeightChanged}) => {

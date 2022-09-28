@@ -7,10 +7,13 @@ import { analyzeScale } from 'utils/analyzescale'
 import ScalePlayer from 'applets/scaleplayer'
 import MotifPlayer from 'applets/motifplayer'
 import Slider from "components/slider"
+import TabNav from "components/tabs"
 import RagaWeights from 'applets/ragaweights'
 
 const SCALE=300
 const START=0.5
+const RANDOM=0
+const GOOD=1
 
 const RagaBrainContainer = styled.div`
     padding: 12px 12px 0 12px;
@@ -51,9 +54,9 @@ const RagaBrain = () => {
     const [phraseIndices, setPhraseIndices] = React.useState([])
     const [confidence, setConfidence] = React.useState(0)
     const [phraseLength, setPhraseLength] = React.useState(2)
-    const [genTitle, setGenTitle] = React.useState('Initialize Weights')
     const [feedback, setFeedback] = React.useState({start: 0, end: 0, link: 0})
-    const [threshold, setThreshold] = React.useState(0)
+    const [threshold, setThreshold] = React.useState(20)
+    const [mode, setMode] = React.useState(RANDOM)
     const onRulesChange = (rules) => {
         setScaleRules({rules: rules})
     }
@@ -65,12 +68,14 @@ const RagaBrain = () => {
             let keyboard = prepareKeyboard(result.scale)
             let title = newTitle(scaleResult.message,result.message)
             setScaleResult({status: result.status, message: result.message, scale: result.scale, title: title, notespec: keyboard.notespec, settings: keyboard.settings})
+
+            let {noteWeights,linkWeights} = analyzeScale(result.scale)
+            let initialWeights = {startWeights: [...noteWeights], linkWeights: [...linkWeights], endWeights: [...noteWeights]}
+            setWeights(initialWeights)
+            setPhrase('')
+            setPhraseIndices([])
         } else
             setScaleResult({status: result.status, message: result.message, scale: result.scale, title: "", notespec: [], settings: ""})
-        
-        setGenTitle('Initialize Weights')
-        setPhrase('')
-        setPhraseIndices([])
     }
 
     const newTitle = (oldMsg, newMsg) => {
@@ -87,11 +92,12 @@ const RagaBrain = () => {
 
     const save = () => `data:text/plain;charset=utf-8,${encodeURIComponent(scaleResult.settings)}`
 
-    const initializeWeights = () => {
+    const resetWeights = () => {
         let {noteWeights,linkWeights} = analyzeScale(scaleResult.scale)
-    
-        setWeights({startWeights: [...noteWeights], linkWeights: [...linkWeights], endWeights: [...noteWeights]})
-        setGenTitle('Generate Phrases from Scale')
+        let initialWeights = {startWeights: [...noteWeights], linkWeights: [...linkWeights], endWeights: [...noteWeights]}
+        setWeights(initialWeights)
+        setPhrase('')
+        setPhraseIndices([])
     }
 
     const restoreWeights = (snapshot,filename) => {
@@ -100,18 +106,19 @@ const RagaBrain = () => {
 
     const saveWeights = () => `data:text/plain;charset=utf-8,${encodeURIComponent(JSON.stringify(weights))}`
 
-    const generatePhrase = () => {
+    const generatePhrase = (mode) => {
+        setMode(mode)
         let {startWeights,linkWeights,endWeights} = weights
         let randomNoteIndices = []
-        let startInstance = goodIndex(startWeights,threshold*START)
+        let startInstance = mode === RANDOM ? uniformIndex(startWeights) : goodIndex(startWeights,threshold*START)
         randomNoteIndices.push(startInstance.index)
         let phraseConfidence = startInstance.confidence
         for(let i=1; i<phraseLength-1; i++) {
-            let linkInstance = goodIndex(linkWeights[randomNoteIndices[i-1]],threshold)
+            let linkInstance = mode === RANDOM ? uniformIndex(linkWeights[randomNoteIndices[i-1]]) : goodIndex(linkWeights[randomNoteIndices[i-1]],threshold)
             randomNoteIndices.push(linkInstance.index)
             phraseConfidence *= linkInstance.confidence
         }
-        let endInstance = goodIndex(combineDensity(linkWeights[randomNoteIndices[phraseLength-2]],endWeights),threshold)
+        let endInstance = mode === RANDOM ? uniformIndex(combineDensity(linkWeights[randomNoteIndices[phraseLength-2]],endWeights)) : goodIndex(combineDensity(linkWeights[randomNoteIndices[phraseLength-2]],endWeights),threshold)
         randomNoteIndices.push(endInstance.index)
         phraseConfidence *= endInstance.confidence
         let randomNotes = randomNoteIndices.map(index => noteFromIndex(index))
@@ -124,6 +131,18 @@ const RagaBrain = () => {
         return density1.map((density1Value, index) => density1Value*density2[index])
     }
 
+    const uniformIndex = (density) => {
+        let distribution = [...density]
+        for(let i=1; i<distribution.length; i++)
+            distribution[i] += distribution[i-1]
+        let max = distribution[distribution.length-1]
+        let instanceIndex = Math.floor(Math.random()*distribution.length)
+        return {
+            index: instanceIndex,
+            confidence: density[instanceIndex]/max
+        }
+    }
+
     const randomIndex = (density) => {
         let distribution = [...density]
         for(let i=1; i<distribution.length; i++)
@@ -133,7 +152,7 @@ const RagaBrain = () => {
         let instanceIndex = distribution.findIndex(histogram => (randomInstance < histogram))
         return {
             index: instanceIndex,
-            confidence: density[instanceIndex]/distribution[distribution.length-1]
+            confidence: density[instanceIndex]/max
         }
     }
 
@@ -216,6 +235,11 @@ const RagaBrain = () => {
         startWeights[indexFromNote(notes[0])] *= (1+0.1*feedback.start)
         for(let i=0;i<notes.length-1;i++) {
             linkWeights[indexFromNote(notes[i])][indexFromNote(notes[i+1])] *= (1+0.1*feedback.link)
+            if(notes[i].includes('"') && notes[i+1].includes('"')) {
+                linkWeights[indexFromNote(notes[i])-scaleResult.scale.length][indexFromNote(notes[i+1])-scaleResult.scale.length] = linkWeights[indexFromNote(notes[i])][indexFromNote(notes[i+1])]
+            } else if(!(notes[i].replace('Sa"','SA').includes('"')) && !(notes[i+1].replace('Sa"','SA').includes('"'))) {
+                linkWeights[indexFromNote(notes[i])+scaleResult.scale.length][indexFromNote(notes[i+1])+scaleResult.scale.length] = linkWeights[indexFromNote(notes[i])][indexFromNote(notes[i+1])]
+            }
         }
         endWeights[indexFromNote(notes[notes.length-1])] *= (1+0.1*feedback.end)
 
@@ -239,6 +263,46 @@ const RagaBrain = () => {
         }
     }
 
+    const tabList = ['Parameters', 'Train', 'Generate']
+    const pageList = [
+        <>
+            <p><strong>Model Parameters</strong></p>
+            <center>
+                <Button onClick={()=>resetWeights()}>Reset</Button>
+                <SaveRestore extn='JSON' save={saveWeights} restore={restoreWeights}/>
+            </center>
+            <p></p>
+            <RagaWeights scale={scaleResult.scale} weights={weights} phrase={phraseIndices} onWeightChanged={(value,rowID,colID) => editWeights(value,rowID,colID)} />
+        </>,
+        <>
+            <p><strong>Random Phrases for Training</strong></p>
+            <Slider params={phraseLengthParams} path='phraselength' onParamUpdate={(value,path) => setPhraseLength(value)}></Slider>
+            <center>
+                <Button onClick={()=>generatePhrase(RANDOM)}>Generate</Button>
+            </center>
+            <p></p>
+            {phrase !== '' && mode === RANDOM && <MotifPlayer title={`${phrase} (Score: ${confidence.toFixed(0)})`} motif={phrase} scale={scaleResult.settings} />}
+            {phrase !== '' && mode === RANDOM && <>
+                <p><strong>Provide Feedback for the phrase</strong></p>
+                <Slider params={startFeedbackParams} path='feedback' onParamUpdate={(value,path) => setFeedback({...feedback, start: value})}></Slider>
+                <Slider params={endFeedbackParams} path='feedback' onParamUpdate={(value,path) => setFeedback({...feedback, end: value})}></Slider>
+                <Slider params={linkFeedbackParams} path='feedback' onParamUpdate={(value,path) => setFeedback({...feedback, link: value})}></Slider>
+                <center><Button onClick={() => updateWeights()}>Update</Button></center>
+                <p></p>
+            </>}
+        </>,
+        <>
+            <p><strong>Generate Phrases from Threshold</strong></p>
+            <Slider params={phraseLengthParams} path='phraselength' onParamUpdate={(value,path) => setPhraseLength(value)}></Slider>
+            <Slider params={thresholdParams} path='threshold' onParamUpdate={(value,path) => setThreshold(value)}></Slider>
+            <center>
+                <Button onClick={()=>generatePhrase(GOOD)}>Generate</Button>
+            </center>
+            <p></p>
+            {phrase !== '' && mode === GOOD && <MotifPlayer title={`${phrase} (Score: ${confidence.toFixed(0)})`} motif={phrase} scale={scaleResult.settings} />}
+        </>
+    ]
+
     return (
         <>
             <RagaBrainContainer>
@@ -259,31 +323,7 @@ const RagaBrain = () => {
                     </code>
                 </ScaleBuilderResultElement>
             </RagaBrainContainer>}
-            {scaleResult.status && <RagaBrainContainer>
-                <p><strong>{genTitle}</strong></p>
-                <center>
-                    {genTitle === 'Initialize Weights' && <Button onClick={()=>initializeWeights()}>Initialize</Button>}
-                </center>
-                {genTitle !== 'Initialize Weights' && <>
-                    <Slider params={phraseLengthParams} path='phraselength' onParamUpdate={(value,path) => setPhraseLength(value)}></Slider>
-                    <Slider params={thresholdParams} path='threshold' onParamUpdate={(value,path) => setThreshold(value)}></Slider>
-                    <center>
-                        <Button onClick={()=>generatePhrase()}>Generate</Button>
-                        <SaveRestore extn='JSON' save={saveWeights} restore={restoreWeights}/>
-                    </center>
-                </>}
-                <p></p>
-            </RagaBrainContainer>}
-            {phrase !== '' && <MotifPlayer title={`${confidence.toFixed(0)} - ${phrase}`} motif={phrase} scale={scaleResult.settings} />}
-            {phrase !== '' && <RagaBrainContainer>
-                <p><strong>Provide feedback for the phrase</strong></p>
-                <Slider params={startFeedbackParams} path='feedback' onParamUpdate={(value,path) => setFeedback({...feedback, start: value})}></Slider>
-                <Slider params={endFeedbackParams} path='feedback' onParamUpdate={(value,path) => setFeedback({...feedback, end: value})}></Slider>
-                <Slider params={linkFeedbackParams} path='feedback' onParamUpdate={(value,path) => setFeedback({...feedback, link: value})}></Slider>
-                <center><Button onClick={() => updateWeights()}>Update</Button></center>
-                <p></p>
-            </RagaBrainContainer>}
-            {scaleResult.status && genTitle !== 'Initialize Weights' && <RagaWeights scale={scaleResult.scale} weights={weights} phrase={phraseIndices} onWeightChanged={(value,rowID,colID) => editWeights(value,rowID,colID)} />}
+            {scaleResult.status && <TabNav tablist={tabList} pagelist={pageList} />}
         </>
     )
 }
