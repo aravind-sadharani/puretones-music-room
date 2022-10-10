@@ -53,7 +53,8 @@ const RagaBrain = () => {
     const [phrase, setPhrase] = React.useState("")
     const [phraseIndices, setPhraseIndices] = React.useState([])
     const [confidence, setConfidence] = React.useState(0)
-    const [phraseLength, setPhraseLength] = React.useState(2)
+    const [trainingPhraseLength, setTrainingPhraseLength] = React.useState(2)
+    const [generatedPhraseLength, setGeneratedPhraseLength] = React.useState(20)
     const [feedback, setFeedback] = React.useState({start: 0, end: 0, link: 0})
     const [threshold, setThreshold] = React.useState(20)
     const [mode, setMode] = React.useState(RANDOM)
@@ -106,25 +107,93 @@ const RagaBrain = () => {
 
     const saveWeights = () => `data:text/plain;charset=utf-8,${encodeURIComponent(JSON.stringify(weights))}`
 
-    const generatePhrase = (mode) => {
-        setMode(mode)
+    const generatePhrase = (mode,length,startNote) => {
         let {startWeights,linkWeights,endWeights} = weights
         let randomNoteIndices = []
-        let startInstance = mode === RANDOM ? uniformIndex(startWeights) : goodIndex(startWeights,threshold*START)
+        let startInstance = startNote
+        if(!startNote)
+            startInstance = mode === RANDOM ? uniformIndex(startWeights) : goodIndex(startWeights,threshold*START)
         randomNoteIndices.push(startInstance.index)
         let phraseConfidence = startInstance.confidence
-        for(let i=1; i<phraseLength-1; i++) {
+        for(let i=1; i<length-1; i++) {
             let linkInstance = mode === RANDOM ? uniformIndex(linkWeights[randomNoteIndices[i-1]]) : goodIndex(linkWeights[randomNoteIndices[i-1]],threshold)
             randomNoteIndices.push(linkInstance.index)
             phraseConfidence *= linkInstance.confidence
         }
-        let endInstance = mode === RANDOM ? uniformIndex(combineDensity(linkWeights[randomNoteIndices[phraseLength-2]],endWeights)) : goodIndex(combineDensity(linkWeights[randomNoteIndices[phraseLength-2]],endWeights),threshold)
+        let endInstance = mode === RANDOM ? uniformIndex(combineDensity(linkWeights[randomNoteIndices[length-2]],endWeights)) : goodIndex(combineDensity(linkWeights[randomNoteIndices[length-2]],endWeights),threshold)
         randomNoteIndices.push(endInstance.index)
         phraseConfidence *= endInstance.confidence
-        let randomNotes = randomNoteIndices.map(index => noteFromIndex(index))
-        setPhrase(randomNotes.join(' '))
-        setPhraseIndices(randomNoteIndices)
-        setConfidence(SCALE*Math.pow(phraseConfidence, 1/phraseLength))
+        if(startNote)
+            phraseConfidence = 0
+
+        return {
+            phraseIndices: randomNoteIndices,
+            confidence: SCALE*Math.pow(phraseConfidence, 1/length),
+            startNoteConfidence: startInstance.confidence,
+            endNoteConfidence: endInstance.confidence
+        }
+    }
+
+    const generateBasicPhrase = () => {
+        let {phraseIndices,confidence} = generatePhrase(RANDOM,trainingPhraseLength)
+
+        let phraseNotes = phraseIndices.map(index => noteFromIndex(index))
+        setMode(RANDOM)
+        setPhrase(phraseNotes.join(' '))
+        setPhraseIndices(phraseIndices)
+        setConfidence(confidence)
+    }
+
+    const generateThemedPhrases = () => {
+        let splits = []
+        let remaining = Number(generatedPhraseLength)
+        while(remaining >= 6) {
+            let split = Math.floor(Math.random()*3) + 2
+            splits.push(split)
+            remaining -= split
+        }
+        splits.push(remaining)
+
+        let firstPhraseInstance = generatePhrase(GOOD,splits[0])
+        let themedPhrase = firstPhraseInstance.phraseIndices
+        let themedPhraseNotes = themedPhrase.map(index => noteFromIndex(index))
+        themedPhraseNotes.push(`\n`)
+        let phraseConfidence = firstPhraseInstance.confidence
+        let connectorNote = {index: themedPhrase[0], confidence: firstPhraseInstance.startNoteConfidence}
+        let connector = Math.floor(Math.random()*2)
+        if(connector === 1) {
+            connectorNote = {index: themedPhrase[themedPhrase.length-1], confidence: firstPhraseInstance.endNoteConfidence}
+        }
+        for(let i=1; i<splits.length; i++) {
+            let newStartNote = selectStartNote(connectorNote)
+            let newPhraseInstance = generatePhrase(GOOD,splits[i],newStartNote)
+            themedPhrase = [...themedPhrase, ...newPhraseInstance.phraseIndices]
+            themedPhraseNotes = [...themedPhraseNotes, ...newPhraseInstance.phraseIndices.map(index => noteFromIndex(index)),`\n`]
+            phraseConfidence *= newPhraseInstance.confidence
+            connectorNote = {...newStartNote}
+            connector = Math.floor(Math.random()*2)
+            if(connector === 1) {
+                connectorNote = {index: newPhraseInstance.phraseIndices[newPhraseInstance.phraseIndices.length-1], confidence: newPhraseInstance.endNoteConfidence}
+            }
+        }
+
+        setMode(GOOD)
+        setPhrase(themedPhraseNotes.join(' '))
+        setPhraseIndices(themedPhrase)
+        setConfidence(phraseConfidence)
+    }
+
+    const selectStartNote = (oldStartNote) => {
+        let option = Math.floor(Math.random()*3)
+        let newStartNoteIndex = oldStartNote.index
+        if(option !== 1) {
+            let linkInstance = goodIndex(weights.linkWeights[oldStartNote.index],threshold/2)
+            newStartNoteIndex = linkInstance.index
+        }
+        return {
+            index: newStartNoteIndex,
+            confidence: weights.startWeights[newStartNoteIndex] * oldStartNote.confidence / weights.startWeights[oldStartNote.index]
+        }
     }
 
     const combineDensity = (density1, density2) => {
@@ -188,10 +257,18 @@ const RagaBrain = () => {
             return index
     }
 
-    let phraseLengthParams = {
+    let trainingPhraseLengthParams = {
         key: "Phrase Length",
-        init: phraseLength,
-        max: 10,
+        init: trainingPhraseLength,
+        max: 100,
+        min: 2,
+        step: 1
+    }
+
+    let generatedPhraseLengthParams = {
+        key: "Phrase Length",
+        init: generatedPhraseLength,
+        max: 100,
         min: 2,
         step: 1
     }
@@ -276,9 +353,9 @@ const RagaBrain = () => {
         </>,
         <>
             <p><strong>Random Phrases for Training</strong></p>
-            <Slider params={phraseLengthParams} path='phraselength' onParamUpdate={(value,path) => setPhraseLength(value)}></Slider>
+            <Slider params={trainingPhraseLengthParams} path='phraselength' onParamUpdate={(value,path) => setTrainingPhraseLength(value)}></Slider>
             <center>
-                <Button onClick={()=>generatePhrase(RANDOM)}>Generate</Button>
+                <Button onClick={()=>generateBasicPhrase()}>Generate</Button>
             </center>
             <p></p>
             {phrase !== '' && mode === RANDOM && <MotifPlayer title={`${phrase} (Score: ${confidence.toFixed(0)})`} motif={phrase} scale={scaleResult.settings} />}
@@ -293,13 +370,13 @@ const RagaBrain = () => {
         </>,
         <>
             <p><strong>Generate Phrases from Threshold</strong></p>
-            <Slider params={phraseLengthParams} path='phraselength' onParamUpdate={(value,path) => setPhraseLength(value)}></Slider>
+            <Slider params={generatedPhraseLengthParams} path='phraselength' onParamUpdate={(value,path) => setGeneratedPhraseLength(value)}></Slider>
             <Slider params={thresholdParams} path='threshold' onParamUpdate={(value,path) => setThreshold(value)}></Slider>
             <center>
-                <Button onClick={()=>generatePhrase(GOOD)}>Generate</Button>
+                <Button onClick={()=>generateThemedPhrases()}>Generate</Button>
             </center>
             <p></p>
-            {phrase !== '' && mode === GOOD && <MotifPlayer title={`${phrase} (Score: ${confidence.toFixed(0)})`} motif={phrase} scale={scaleResult.settings} />}
+            {phrase !== '' && mode === GOOD && <MotifPlayer title={`Generated Phrase beginning ${phrase.substring(0,20)}...`} motif={phrase} scale={scaleResult.settings} />}
         </>
     ]
 
