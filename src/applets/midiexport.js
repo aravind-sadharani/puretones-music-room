@@ -20,6 +20,102 @@ const songJSON = {
                 "delta": 0
             },
             {
+                "controlChange": {
+                    "type": 100,
+                    "value": 0,
+                },
+                "channel": 0,
+                "delta": 0,
+            },
+            {
+                "controlChange": {
+                    "type": 101,
+                    "value": 0,
+                },
+                "channel": 0,
+                "delta": 0,
+            },
+            {
+                "controlChange": {
+                    "type": 6,
+                    "value": 12,
+                },
+                "channel": 0,
+                "delta": 0,
+            },
+            {
+                "controlChange": {
+                    "type": 38,
+                    "value": 0,
+                },
+                "channel": 0,
+                "delta": 0,
+            },
+            {
+                "controlChange": {
+                    "type": 100,
+                    "value": 127,
+                },
+                "channel": 0,
+                "delta": 0,
+            },
+            {
+                "controlChange": {
+                    "type": 101,
+                    "value": 127,
+                },
+                "channel": 0,
+                "delta": 0,
+            },
+            {
+                "controlChange": {
+                    "type": 100,
+                    "value": 1,
+                },
+                "channel": 0,
+                "delta": 0,
+            },
+            {
+                "controlChange": {
+                    "type": 101,
+                    "value": 0,
+                },
+                "channel": 0,
+                "delta": 0,
+            },
+            {
+                "controlChange": {
+                    "type": 6,
+                    "value": 43,
+                },
+                "channel": 0,
+                "delta": 0,
+            },
+            {
+                "controlChange": {
+                    "type": 38,
+                    "value": 0,
+                },
+                "channel": 0,
+                "delta": 0,
+            },
+            {
+                "controlChange": {
+                    "type": 100,
+                    "value": 127,
+                },
+                "channel": 0,
+                "delta": 0,
+            },
+            {
+                "controlChange": {
+                    "type": 101,
+                    "value": 127,
+                },
+                "channel": 0,
+                "delta": 0,
+            },
+            {
                 "noteOn": {
                     "noteNumber": 68,
                     "velocity": 100,
