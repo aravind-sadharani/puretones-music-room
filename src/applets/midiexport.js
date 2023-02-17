@@ -1,287 +1,42 @@
 import * as React from 'react'
+import styled from 'styled-components'
 import Button from 'components/button'
+import Editor from 'components/editor'
 import SaveRestore from 'components/saverestore'
+import generateJsonMidi from 'utils/generateJsonMidi'
 
 const isBrowser = typeof window !== "undefined"
 
-const songJSON = {
-    "division": 480,
-    "format": 1,
-    "tracks": [
-        [
-            {
-                "trackName": "Clarinet",
-                "delta": 0
-            },
-            {
-                "programChange": {
-                    "programNumber": 72,
-                },
-                "delta": 0
-            },
-            {
-                "controlChange": {
-                    "type": 100,
-                    "value": 0,
-                },
-                "channel": 0,
-                "delta": 0,
-            },
-            {
-                "controlChange": {
-                    "type": 101,
-                    "value": 0,
-                },
-                "channel": 0,
-                "delta": 0,
-            },
-            {
-                "controlChange": {
-                    "type": 6,
-                    "value": 12,
-                },
-                "channel": 0,
-                "delta": 0,
-            },
-            {
-                "controlChange": {
-                    "type": 38,
-                    "value": 0,
-                },
-                "channel": 0,
-                "delta": 0,
-            },
-            {
-                "controlChange": {
-                    "type": 100,
-                    "value": 127,
-                },
-                "channel": 0,
-                "delta": 0,
-            },
-            {
-                "controlChange": {
-                    "type": 101,
-                    "value": 127,
-                },
-                "channel": 0,
-                "delta": 0,
-            },
-            {
-                "controlChange": {
-                    "type": 100,
-                    "value": 1,
-                },
-                "channel": 0,
-                "delta": 0,
-            },
-            {
-                "controlChange": {
-                    "type": 101,
-                    "value": 0,
-                },
-                "channel": 0,
-                "delta": 0,
-            },
-            {
-                "controlChange": {
-                    "type": 6,
-                    "value": 43,
-                },
-                "channel": 0,
-                "delta": 0,
-            },
-            {
-                "controlChange": {
-                    "type": 38,
-                    "value": 0,
-                },
-                "channel": 0,
-                "delta": 0,
-            },
-            {
-                "controlChange": {
-                    "type": 100,
-                    "value": 127,
-                },
-                "channel": 0,
-                "delta": 0,
-            },
-            {
-                "controlChange": {
-                    "type": 101,
-                    "value": 127,
-                },
-                "channel": 0,
-                "delta": 0,
-            },
-            {
-                "noteOn": {
-                    "noteNumber": 68,
-                    "velocity": 100,
-                },
-                "channel": 0,
-                "delta": 480
-            },
-            {
-                "noteOff": {
-                    "noteNumber": 68,
-                    "velocity": 100,
-                },
-                "channel": 0,
-                "delta": 480
-            },
-            {
-                "noteOn": {
-                    "noteNumber": 70,
-                    "velocity": 100,
-                },
-                "channel": 0,
-                "delta": 0
-            },
-            {
-                "noteOff": {
-                    "noteNumber": 70,
-                    "velocity": 100,
-                },
-                "channel": 0,
-                "delta": 480
-            },
-            {
-                "noteOn": {
-                    "noteNumber": 70,
-                    "velocity": 100,
-                },
-                "channel": 0,
-                "delta": 0
-            },
-            {
-                "pitchBend" : 10240,
-                "channel": 0,
-                "delta" : 60
-            },
-            {
-                "pitchBend" : 12288,
-                "channel": 0,
-                "delta" : 60
-            },
-            {
-                "pitchBend" : 14336,
-                "channel": 0,
-                "delta" : 60
-            },
-            {
-                "pitchBend" : 16384,
-                "channel": 0,
-                "delta" : 60
-            },
-            {
-                "noteOff": {
-                    "noteNumber": 72,
-                    "velocity": 100,
-                },
-                "channel": 0,
-                "delta": 480
-            },
-            {
-                "endOfTrack": true,
-                "delta": 0
-            }
-        ],
-                [
-            {
-                "trackName": "Bass",
-                "delta": 0
-            },
-            {
-                "programChange": {
-                    "programNumber": 34,
-                },
-                "delta": 0
-            },
-            {
-                "noteOn": {
-                    "noteNumber": 42,
-                    "velocity": 100,
-                },
-                "channel": 1,
-                "delta": 480
-            },
-            {
-                "noteOff": {
-                    "noteNumber": 42,
-                    "velocity": 100,
-                },
-                "channel": 1,
-                "delta": 480
-            },
-            {
-                "noteOn": {
-                    "noteNumber": 44,
-                    "velocity": 100,
-                },
-                "channel": 1,
-                "delta": 0
-            },
-            {
-                "noteOff": {
-                    "noteNumber": 44,
-                    "velocity": 100,
-                },
-                "channel": 1,
-                "delta": 480
-            },
-            {
-                "noteOn": {
-                    "noteNumber": 44,
-                    "velocity": 100,
-                },
-                "channel": 1,
-                "delta": 0
-            },
-            {
-                "pitchBend" : 10240,
-                "channel": 1,
-                "delta" : 60
-            },
-            {
-                "pitchBend" : 12288,
-                "channel": 1,
-                "delta" : 60
-            },
-            {
-                "pitchBend" : 14336,
-                "channel": 1,
-                "delta" : 60
-            },
-            {
-                "pitchBend" : 16384,
-                "channel": 1,
-                "delta" : 60
-            },
-            {
-                "noteOff": {
-                    "noteNumber": 46,
-                    "velocity": 100,
-                },
-                "channel": 1,
-                "delta": 480
-            },
-            {
-                "endOfTrack": true,
-                "delta": 0
-            }
-        ]
-    ]
-}
+const MidiJsonContainer = styled.div`
+    padding: 12px 0 8px 0;
+    margin: 0 0 1em 0;
+    border: 1px solid;
+    border-color: ${({theme}) => theme.light.borderColor};
+    ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
+    border-radius: 5px;
+`
+
+const MidiJsonElement = styled.pre`
+    margin: 0 12px 1em 12px;
+    overflow-x: scroll;
+    height: 300px;
+    overflow-y: scroll;
+`
 
 const MIDIExport = () => {
     const [midiData,setMidiData] = React.useState([])
     const [ready,setReady] = React.useState(false)
+    const [composition,updateComposition] = React.useState("Sa 2")
+    const [expanded,toggleExpanded] = React.useState(true)
+    const [JsonMidi,setJsonMidi] = React.useState('')
+    const prepareJSON = () => {
+        setReady(false)
+        setJsonMidi(generateJsonMidi(composition))
+    }
     const prepareMIDI = () => {
         if(isBrowser) {
             import('json-midi-encoder').then((encoder) => {
-                encoder.encode(songJSON).then((midiFile) => {
+                encoder.encode(JsonMidi).then((midiFile) => {
                     let newMidiData = new Blob([midiFile])
                     setMidiData(newMidiData)
                     setReady(true)
@@ -292,8 +47,22 @@ const MIDIExport = () => {
     const saveMIDI = () => (URL.createObjectURL(midiData))
     return (
         <>
-            {!ready && <Button onClick={prepareMIDI}>Prepare MIDI</Button>}
-            {ready && <SaveRestore extn='mid' save={saveMIDI} savetitle='Save MIDI' />}
+            <Editor composition={composition} onCompositionChange={updateComposition} expanded={expanded} onExpand={() => toggleExpanded(!expanded)} />
+            <center><Button onClick={prepareJSON}>Prepare JSON</Button></center>
+            <br />
+            {JsonMidi !== '' &&
+                <MidiJsonContainer>
+                    <MidiJsonElement>
+                        <code>
+                            {JSON.stringify(JsonMidi, undefined, 2)}
+                        </code>
+                    </MidiJsonElement>
+                    <center>
+                        <Button onClick={prepareMIDI}>Encode MIDI</Button>
+                        {ready && <SaveRestore extn='mid' save={saveMIDI} savetitle='Save MIDI' />}
+                    </center>
+                </MidiJsonContainer>
+            }
         </>
     )
 }
