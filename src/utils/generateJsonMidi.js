@@ -93,7 +93,6 @@ const basicPitchBend = (centre,cents,time,direction) => {
 }
 
 const getGamakaMessages = (centre,start,end,number,time) => {
-    console.log(centre,start,end,number,time)
     let messages = []
 
     let basicTime = time/number
@@ -120,7 +119,6 @@ const intervalCents = (note1, note2) => {
 }
 
 const parseGamaka = (note,timing) => {
-    console.log(note,timing)
     let paramsMatch = /\(G\)\(.*\)/
     let params = note.match(paramsMatch)
     params = `${params[0].replace("(G)","").replace("(","").replace(")","")}`
@@ -138,7 +136,7 @@ const generateJsonMidi = (composition) => {
 
     let track = [
         { "trackName": "Clean Guitar", "delta": 0 },
-        { "programChange": { "programNumber": 27 }, "delta": 0 },
+        { "programChange": { "programNumber": 27 }, "channel": 0, "delta": 0 },
         { "controlChange": { "type": 100, "value": 0 }, "channel": 0, "delta": 0 },
         { "controlChange": { "type": 101, "value": 0 }, "channel": 0, "delta": 0 },
         { "controlChange": { "type": 6, "value": 12 }, "channel": 0, "delta": 0 },
@@ -147,7 +145,7 @@ const generateJsonMidi = (composition) => {
         { "controlChange": { "type": 101, "value": 127 }, "channel": 0, "delta": 0 },
         { "controlChange": { "type": 100, "value": 1 }, "channel": 0, "delta": 0 },
         { "controlChange": { "type": 101, "value": 0 }, "channel": 0, "delta": 0 },
-        { "controlChange": { "type": 6, "value": 32 }, "channel": 0, "delta": 0 },
+        { "controlChange": { "type": 6, "value": 64 }, "channel": 0, "delta": 0 },
         { "controlChange": { "type": 38, "value": 0 }, "channel": 0, "delta": 0 },
         { "controlChange": { "type": 100, "value": 127 }, "channel": 0, "delta": 0 },
         { "controlChange": { "type": 101, "value": 127 }, "channel": 0, "delta": 0 }
@@ -191,6 +189,8 @@ const generateJsonMidi = (composition) => {
         track.push({ "noteOff": { "noteNumber": previousNoteNumber, "velocity": 127 }, "channel": 0, "delta": WHOLENOTE})
         track.push({ "pitchBend": MIDIPITCHCENTRE, "channel": 0, "delta": 0 })
     }
+
+    track.push({ "endOfTrack": true, "delta": 0 })
 
     let songJSON = {
         "division": QUARTERNOTE,
