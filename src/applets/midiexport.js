@@ -4,7 +4,7 @@ import Button from 'components/button'
 import Editor from 'components/editor'
 import SaveRestore from 'components/saverestore'
 import ShowHideControls from "components/showhidecontrols"
-import generateJsonMidi from 'utils/generateJsonMidi'
+import {generateJsonMidi, psq2JsonMidi} from 'utils/generateJsonMidi'
 
 const isBrowser = typeof window !== "undefined"
 
@@ -32,6 +32,7 @@ const MIDIExport = () => {
     const [jsonMidi,setJsonMidi] = React.useState('')
     const [midiEncoder,setMidiEncoder] = React.useState(null)
     const [jsonVisibility,setJsonVisibility] = React.useState(false)
+    const [metaData,setMetaData] = React.useState('')
     if(isBrowser) {
         if(midiEncoder === null) {
             import('json-midi-encoder').then((encoder) => {
@@ -42,6 +43,7 @@ const MIDIExport = () => {
     const prepareMIDI = () => {
         setReady(false)
         let newJsonData = generateJsonMidi(composition)
+        setMetaData('')
         setJsonMidi(newJsonData)
         if(midiEncoder !== null) {
             midiEncoder.encode(newJsonData).then((midiFile) => {
@@ -52,19 +54,33 @@ const MIDIExport = () => {
         }
     }
     const saveMIDI = () => (URL.createObjectURL(midiData))
+    const loadPSQ = (psqString,psqName) => {
+        let newJsonData = psq2JsonMidi(psqString)
+        setMetaData(` - ${psqName.replace('.psq','')}`)
+        setJsonMidi(newJsonData)
+        if(midiEncoder !== null) {
+            midiEncoder.encode(newJsonData).then((midiFile) => {
+                let newMidiData = new Blob([midiFile])
+                setMidiData(newMidiData)
+                setReady(true)
+            },(err) => console.log(err))
+        }
+    }
     return (
         <MidiJsonContainer>
             <strong>Sequencer Parameters</strong>
             <p />
             <Editor composition={composition} onCompositionChange={updateComposition} expanded={expanded} onExpand={() => toggleExpanded(!expanded)} />
             <center>
-                <Button onClick={prepareMIDI}>Prepare MIDI</Button>
-                {ready && <SaveRestore extn='mid' save={saveMIDI} savetitle='Save MIDI' />}
+                <Button onClick={prepareMIDI}>Editor to MIDI</Button>
+                <SaveRestore extn='psq' restore={loadPSQ} restoretitle='PSQ to MIDI' />
+                {ready && <SaveRestore extn='mid' save={saveMIDI} savetitle='Save MIDI File' />}
             </center>
+            {jsonMidi === '' && <p />}
             {jsonMidi !== '' &&
                 <>
-                    <br />
-                    <strong>MIDI Sequence</strong>
+                    <p />
+                    <strong>MIDI Sequence{metaData}</strong>
                     <p />            
                     <ShowHideControls title='JSON Representation' visibility={jsonVisibility} onShowHide={() => setJsonVisibility(!jsonVisibility)}>
                         <MidiJsonElement>

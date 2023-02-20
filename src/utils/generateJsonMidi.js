@@ -94,9 +94,11 @@ const basicPitchBend = (centre,cents,duration,direction) => {
     for(let i=1; (i-1)*MICROTONE < cents; i++) {
         let pitchBendCents = direction*(i*MICROTONE > cents ? cents : i*MICROTONE)
         let pitchBend = Math.round(centre + pitchBendCents*MIDIPITCHRANGE/OCTAVE)
-        let deltaTime = Math.round(duration*MICROTONE/cents)
+        let deltaTime = Math.floor(duration*MICROTONE/cents)
         if(i*deltaTime > duration)
             deltaTime = duration - (i-1)*deltaTime
+        if(deltaTime < 0)
+            console.log(i,centre,cents,duration,direction)
         messages.push({ "pitchBend": pitchBend, "channel": 0, "delta": deltaTime.toFixed(0) })
     }
     return messages
@@ -128,7 +130,7 @@ const getGamakaMessages = (startingCentre,start,end,number,duration) => {
     return messages
 }
 
-const generateJsonMidi = (composition) => {
+const generateJsonMidiTrack = (composition) => {
     let tokens = tokenize(composition)
     let key = C3
 
@@ -236,15 +238,32 @@ const generateJsonMidi = (composition) => {
 
     track.push({ "endOfTrack": true, "delta": 0 })
 
+    return track
+}
+
+const generateJsonMidi = (composition) => {
     let songJSON = {
         "division": QUARTERNOTE,
         "format": 1,
         "tracks": [
-            track
+            generateJsonMidiTrack(composition)
         ]
     }
 
     return songJSON
 }
 
-export default generateJsonMidi
+const psq2JsonMidi = (psqString) => {
+    let sequencerState = JSON.parse(psqString)
+    let tracks = [0, 1, 2, 3, 4, 5, 6].map((i) => sequencerState[i]).filter((sequencerVoiceState) => sequencerVoiceState['enabled']).map((sequencerVoiceState) => generateJsonMidiTrack(sequencerVoiceState['composition']))
+
+    let songJSON = {
+        "division": QUARTERNOTE,
+        "format": 1,
+        "tracks": tracks
+    }
+
+    return songJSON
+}
+
+export {generateJsonMidi, psq2JsonMidi}
