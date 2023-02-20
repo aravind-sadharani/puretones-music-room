@@ -21,6 +21,7 @@ const baseRatio = {
     ni: 16/9,
     Ni: 243/128,
     SA: 2,
+    Q: 3,
 }
 
 const trackStateConstants = {
@@ -42,6 +43,8 @@ const baseOffset = (noteStr) => {
 }
 
 const isNote = (token) => (baseOffset(token) !== -1)
+
+const isQ = (token) => (token.substring(0,3).includes('Q'))
 
 const octaveOffset = (noteStr) => {
     let octStr = noteStr.substring(2,4)
@@ -155,7 +158,11 @@ const generateJsonMidi = (composition) => {
         if(trackState === trackStateConstants.TIMING) {
             let delta = isNote(token) ? WHOLENOTE : getNoteLength(token)
             delta = isGamaka(currentNote) ? delta/2 : delta
-            if(strokeState === strokeStateConstants.STROKE) {
+            if(isQ(currentNote)) {
+                currentNote = ''
+                currentPitchBend = MIDIPITCHCENTRE
+                track.push({ "pitchBend": currentPitchBend, "channel": 0, "delta": delta })
+            } else if(strokeState === strokeStateConstants.STROKE) {
                 track.push({ "noteOff": { "noteNumber": getNoteNumber(currentNote,key) }, "channel": 0, "delta": delta})
                 currentNote = ''
                 track.push({ "pitchBend": MIDIPITCHCENTRE, "channel": 0, "delta": 0 })
@@ -166,7 +173,14 @@ const generateJsonMidi = (composition) => {
             trackState = trackStateConstants.PITCH
         }
         if(isNote(token)) {
-            if(isGamaka(token)) {
+            if(isQ(token)) {
+                if(strokeState === strokeStateConstants.CONTINUE && !isQ(currentNote)) {
+                    track.push({ "noteOff": { "noteNumber": getNoteNumber(currentNote,key) }, "channel": 0, "delta": 0})
+                    strokeState = strokeStateConstants.STROKE
+                }
+                currentNote = token
+                currentPitchBend = MIDIPITCHCENTRE
+            } else if(isGamaka(token)) {
                 let timing = index+1 >= tokens.length || isNote(tokens[index+1]) ? '1' : tokens[index+1]
                 let duration = getNoteLength(timing)/2
 
