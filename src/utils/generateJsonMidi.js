@@ -78,14 +78,14 @@ const getNoteLength = (timeStr) => WHOLENOTE*jatiValue(timeStr)*repeatValue(time
 
 const ratioToCents = (ratio) => OCTAVE*Math.log2(ratio)
 
-const getFineTune = (note) => {
+const getFineTune = (note,noteOffsets) => {
     let swaraNumber = baseOffset(note) + octaveOffset(note)
     while(swaraNumber < 0)
         swaraNumber += 12
     swaraNumber = swaraNumber % 12
     let ratio = Object.entries(baseRatio)[swaraNumber][1]
     let centRatio = ratioToCents(ratio)
-    let fineTune = (SEMITONE*swaraNumber % OCTAVE) - centRatio
+    let fineTune = (SEMITONE*swaraNumber % OCTAVE) - centRatio + noteOffsets[swaraNumber]
     return fineTune
 }
 
@@ -113,10 +113,10 @@ const getStrokeState = (note) => (note.includes("^") ? strokeStateConstants.CONT
 
 const getNoteNumber = (note,key) => (baseOffset(note) + octaveOffset(note) + key)
 
-const getInterval = (note1, note2) => {
+const getInterval = (note1, note2, noteOffsets) => {
     let swara1 = baseOffset(note1) + octaveOffset(note1)
     let swara2 = baseOffset(note2) + octaveOffset(note2)
-    return SEMITONE*(swara1 - swara2) + getFineTune(note1) - getFineTune(note2)
+    return SEMITONE*(swara1 - swara2) + getFineTune(note1,noteOffsets) - getFineTune(note2,noteOffsets)
 }
 
 const getGamakaMessages = (channel,startingCentre,start,end,number,duration) => {
@@ -143,7 +143,7 @@ const getGamakaMessages = (channel,startingCentre,start,end,number,duration) => 
     return messages
 }
 
-const generateJsonMidiTrack = (composition,metadata) => {
+const generateJsonMidiTrack = (composition,metadata,noteOffsets) => {
     let trackMetadata = metadata || {
         "trackName": 'Clean Guitar',
         "programNumber": 27,
@@ -214,8 +214,8 @@ const generateJsonMidiTrack = (composition,metadata) => {
                 let params = token.match(paramsMatch)
                 params = `${params[0].replace("(G)","").replace("(","").replace(")","")}`
                 let paramList = params.split(',')
-                let start = isNote(paramList[0]) ? getInterval(paramList[0],token) : Number(paramList[0])
-                let end = isNote(paramList[1]) ? getInterval(paramList[1],token) : Number(paramList[1])
+                let start = isNote(paramList[0]) ? getInterval(paramList[0],token,noteOffsets) : Number(paramList[0])
+                let end = isNote(paramList[1]) ? getInterval(paramList[1],token,noteOffsets) : Number(paramList[1])
                 let number = Number(paramList[3])*2
 
                 let startingPitchBendOffset = 0
@@ -227,11 +227,11 @@ const generateJsonMidiTrack = (composition,metadata) => {
 
                 if(strokeState === strokeStateConstants.STROKE) {
                     currentNote = token
-                    currentPitchBend = Math.round(MIDIPITCHCENTRE + getFineTune(currentNote)*MIDIPITCHRANGE/OCTAVE)
+                    currentPitchBend = Math.round(MIDIPITCHCENTRE + getFineTune(currentNote,noteOffsets)*MIDIPITCHRANGE/OCTAVE)
                     track.push({ "pitchBend": currentPitchBend+startingPitchBendOffset, "channel": channel, "delta": 0 })
                     track.push({ "noteOn": { "noteNumber": getNoteNumber(currentNote,key), "velocity": 127 }, "channel": channel, "delta": 0})
                 } else {
-                    currentPitchBend = MIDIPITCHCENTRE + Math.round(getInterval(token,currentNote)*MIDIPITCHRANGE/OCTAVE)
+                    currentPitchBend = MIDIPITCHCENTRE + Math.round(getInterval(token,currentNote,noteOffsets)*MIDIPITCHRANGE/OCTAVE)
                     track.push({ "pitchBend": currentPitchBend+startingPitchBendOffset, "channel": channel, "delta": 0 })
                 }
 
@@ -239,11 +239,11 @@ const generateJsonMidiTrack = (composition,metadata) => {
             } else {
                 if(strokeState === strokeStateConstants.STROKE) {
                     currentNote = token
-                    currentPitchBend = Math.round(MIDIPITCHCENTRE + getFineTune(currentNote)*MIDIPITCHRANGE/OCTAVE)
+                    currentPitchBend = Math.round(MIDIPITCHCENTRE + getFineTune(currentNote,noteOffsets)*MIDIPITCHRANGE/OCTAVE)
                     track.push({ "pitchBend": currentPitchBend, "channel": channel, "delta": 0 })
                     track.push({ "noteOn": { "noteNumber": getNoteNumber(currentNote,key), "velocity": 127 }, "channel": channel, "delta": 0})
                 } else {
-                    currentPitchBend += Math.round(getInterval(token,currentNote)*MIDIPITCHRANGE/OCTAVE)
+                    currentPitchBend += Math.round(getInterval(token,currentNote,noteOffsets)*MIDIPITCHRANGE/OCTAVE)
                     track.push({ "pitchBend": currentPitchBend, "channel": channel, "delta": 0 })
                 }
             }
@@ -305,4 +305,36 @@ const psq2JsonMidi = (psqString) => {
     return songJSON
 }
 
-export {generateJsonMidi, psq2JsonMidi}
+const sequencer2MIDI = (sequencerState,sequencerSettings,scaleState) => {
+    let noteOffsets = Object.entries(baseRatio).map(note => {
+        let cent = Number.parseInt(scaleState[`/FaustDSP/Common_Parameters/12_Note_Scale/${note[0]}/Cent`])
+        if(isNaN(cent))
+            cent = 0
+        let subCent = Number.parseInt(scaleState[`/FaustDSP/Common_Parameters/12_Note_Scale/${note[0]}/0.01_Cent`])
+        if(isNaN(subCent))
+            subCent = 0
+        return cent+0.01*subCent
+    })
+    let tracks = [0, 1, 2, 3, 4, 5, 6].map((i) => sequencerState[i]).filter((sequencerVoiceState) => sequencerVoiceState['enabled']).map((sequencerVoiceState,index) => {
+        let metadata = {
+            "trackName": `${sequencerVoiceState['voiceName']}_${toneName[sequencerVoiceState['tone']]}_`,
+            "programNumber": programNumber[sequencerVoiceState['tone']],
+            "channel": index,
+            "octave": sequencerVoiceState['octave'],
+            "key": sequencerSettings['/FaustDSP/Motif/Pitch'] - 3,
+            "offset": sequencerSettings['/FaustDSP/Motif/Fine_Tune'],
+            "tempo": 240/(2**(sequencerSettings['/FaustDSP/Motif/Motif_Tempo']))
+        }
+        return generateJsonMidiTrack(sequencerVoiceState['composition'],metadata,noteOffsets)
+    })
+
+    let songJSON = {
+        "division": QUARTERNOTE,
+        "format": 1,
+        "tracks": tracks
+    }
+
+    return songJSON
+}
+
+export {generateJsonMidi, psq2JsonMidi, sequencer2MIDI}

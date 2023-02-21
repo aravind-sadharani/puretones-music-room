@@ -3,6 +3,7 @@ import TabNav from "components/tabs"
 import SessionControls from "applets/sessioncontrols"
 import SequencerVoice from "applets/sequencervoice"
 import Slider from "components/slider"
+import MIDIExport from "applets/midiexport"
 import generateDSP from "utils/generatedsp"
 import sequencerPSQ from 'data/default.psq'
 
@@ -38,6 +39,7 @@ const Sequencer = ({sequencerState,sequencerName,scaleState,onVoiceParamUpdate,r
             <p><strong>Sequencer Parameters</strong></p>
             <Slider params={tempoParams} path='/FaustDSP/Motif/Motif_Tempo' onParamUpdate={updateTempo}></Slider>
             <TabNav tablist={voiceTabs} pagelist={voicePages} />
+            <MIDIExport sequencerState={sequencerState} sequencerSettings={sequencerSettings} scaleState={scaleState} sequencerName={sequencerName} />
         </>
     )
 }

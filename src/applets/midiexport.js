@@ -1,38 +1,26 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import Button from 'components/button'
-import Editor from 'components/editor'
 import SaveRestore from 'components/saverestore'
 import ShowHideControls from "components/showhidecontrols"
-import {generateJsonMidi, psq2JsonMidi} from 'utils/generateJsonMidi'
+import {sequencer2MIDI} from 'utils/generateJsonMidi'
 
-const isBrowser = typeof window !== "undefined"
-
-const MidiJsonContainer = styled.div`
-    padding: 12px 12px 0 12px;
-    margin: 0 0 1em 0;
-    border: 1px solid;
-    border-color: ${({theme}) => theme.light.borderColor};
-    ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
-    border-radius: 5px;
-`
-
-const MidiJsonElement = styled.pre`
+const JsonMidiElement = styled.pre`
     margin: 0 0 1em 0;
     overflow-x: scroll;
     height: 300px;
     overflow-y: scroll;
 `
 
-const MIDIExport = () => {
-    const [midiData,setMidiData] = React.useState([])
+const isBrowser = typeof window !== "undefined"
+
+const MIDIExport = ({sequencerState, sequencerSettings, scaleState, sequencerName}) => {
     const [ready,setReady] = React.useState(false)
-    const [composition,updateComposition] = React.useState("Sa 2")
-    const [expanded,toggleExpanded] = React.useState(true)
     const [jsonMidi,setJsonMidi] = React.useState('')
     const [midiEncoder,setMidiEncoder] = React.useState(null)
+    const [midiData,setMidiData] = React.useState([])
     const [jsonVisibility,setJsonVisibility] = React.useState(false)
-    const [metaData,setMetaData] = React.useState('')
+
     if(isBrowser) {
         if(midiEncoder === null) {
             import('json-midi-encoder').then((encoder) => {
@@ -40,10 +28,9 @@ const MIDIExport = () => {
             },(err) => console.log(err))
         }
     }
+
     const prepareMIDI = () => {
-        setReady(false)
-        let newJsonData = generateJsonMidi(composition)
-        setMetaData('')
+        let newJsonData = sequencer2MIDI(sequencerState,sequencerSettings,scaleState)
         setJsonMidi(newJsonData)
         if(midiEncoder !== null) {
             midiEncoder.encode(newJsonData).then((midiFile) => {
@@ -53,45 +40,37 @@ const MIDIExport = () => {
             },(err) => console.log(err))
         }
     }
+
     const saveMIDI = () => (URL.createObjectURL(midiData))
-    const loadPSQ = (psqString,psqName) => {
-        let newJsonData = psq2JsonMidi(psqString)
-        setMetaData(` - ${psqName.replace('.psq','')}`)
-        setJsonMidi(newJsonData)
-        if(midiEncoder !== null) {
-            midiEncoder.encode(newJsonData).then((midiFile) => {
-                let newMidiData = new Blob([midiFile])
-                setMidiData(newMidiData)
-                setReady(true)
-            },(err) => console.log(err))
-        }
-    }
+
+    React.useEffect(() => {
+        setReady(false)
+        setMidiData([])
+        setJsonMidi('')
+    },[sequencerState,sequencerSettings,scaleState])
+
     return (
-        <MidiJsonContainer>
-            <strong>Sequencer Parameters</strong>
-            <p />
-            <Editor composition={composition} onCompositionChange={updateComposition} expanded={expanded} onExpand={() => toggleExpanded(!expanded)} />
+        <>
+            <p><strong>Convert to MIDI</strong></p>
             <center>
-                <Button onClick={prepareMIDI}>Editor to MIDI</Button>
-                <SaveRestore extn='psq' restore={loadPSQ} restoretitle='PSQ to MIDI' />
-                {ready && <SaveRestore extn='mid' save={saveMIDI} savetitle='Save MIDI File' />}
+                <Button onClick={prepareMIDI}>Prepare MIDI</Button>
+                {ready && <SaveRestore extn='mid' save={saveMIDI} savetitle='Save MIDI' />}
             </center>
+            <p />
             {jsonMidi === '' && <p />}
             {jsonMidi !== '' &&
                 <>
-                    <p />
-                    <strong>MIDI Sequence{metaData}</strong>
-                    <p />            
+                    <p><strong>MIDI Sequence {sequencerName.replace('loaded ','')}</strong></p> 
                     <ShowHideControls title='JSON Representation' visibility={jsonVisibility} onShowHide={() => setJsonVisibility(!jsonVisibility)}>
-                        <MidiJsonElement>
+                        <JsonMidiElement>
                             <code>
                                 {JSON.stringify(jsonMidi, undefined, 2)}
                             </code>
-                        </MidiJsonElement>
+                        </JsonMidiElement>
                     </ShowHideControls>
                 </>
             }
-        </MidiJsonContainer>
+        </>
     )
 }
 
