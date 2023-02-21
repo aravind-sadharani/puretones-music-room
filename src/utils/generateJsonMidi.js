@@ -89,18 +89,21 @@ const getFineTune = (note) => {
     return fineTune
 }
 
-const basicPitchBend = (centre,cents,duration,direction) => {
+const basicPitchBend = (channel,centre,cents,duration,direction) => {
     let messages = []
-    for(let i=1; (i-1)*MICROTONE < cents; i++) {
-        let pitchBendCents = direction*(i*MICROTONE > cents ? cents : i*MICROTONE)
+    let i=0
+    for(i=1; i*MICROTONE < cents; i++) {
+        let pitchBendCents = direction*i*MICROTONE
         let pitchBend = Math.round(centre + pitchBendCents*MIDIPITCHRANGE/OCTAVE)
         let deltaTime = Math.floor(duration*MICROTONE/cents)
-        if(i*deltaTime > duration)
-            deltaTime = duration - (i-1)*deltaTime
-        if(deltaTime < 0)
-            console.log(i,centre,cents,duration,direction)
-        messages.push({ "pitchBend": pitchBend, "channel": 0, "delta": deltaTime.toFixed(0) })
+        messages.push({ "pitchBend": pitchBend, "channel": channel, "delta": deltaTime })
     }
+
+    let pitchBendCents = direction*cents
+    let pitchBend = Math.round(centre + pitchBendCents*MIDIPITCHRANGE/OCTAVE)
+    let deltaTime = duration - (i-1)*Math.floor(duration*MICROTONE/cents)
+    messages.push({ "pitchBend": pitchBend, "channel": channel, "delta": deltaTime })
+
     return messages
 }
 
@@ -116,39 +119,60 @@ const getInterval = (note1, note2) => {
     return SEMITONE*(swara1 - swara2) + getFineTune(note1) - getFineTune(note2)
 }
 
-const getGamakaMessages = (startingCentre,start,end,number,duration) => {
+const getGamakaMessages = (channel,startingCentre,start,end,number,duration) => {
     let messages = []
-    let basicDuration = duration/number
+    let basicDuration = Math.floor(duration/number)
     let basicCents = Math.abs(start - end)
     let direction = start < end ? 1 : -1
+    let floorNumber = Math.floor(number)
 
-    for(let i=0; i<number; i++) {
+    for(let i=0; i<floorNumber; i++) {
         let basicCentre = !(i % 2) ? startingCentre : startingCentre + direction*basicCents*MIDIPITCHRANGE/OCTAVE
         let basicDirection = !(i % 2) ? direction : (-1)*direction
-        messages.push(...basicPitchBend(basicCentre,basicCents,basicDuration,basicDirection))
+        messages.push(...basicPitchBend(channel,basicCentre,basicCents,basicDuration,basicDirection))
     }
+
+    if(number > floorNumber) {
+        let basicCentre = !(floorNumber % 2) ? startingCentre : startingCentre + direction*basicCents*MIDIPITCHRANGE/OCTAVE
+        let basicDirection = !(floorNumber % 2) ? direction : (-1)*direction
+        messages.push(...basicPitchBend(channel,basicCentre,basicCents*(number-floorNumber),duration - floorNumber*basicDuration-1,basicDirection))
+        let pitchBend = start === 0 ? startingCentre : startingCentre + direction*basicCents*MIDIPITCHRANGE/OCTAVE
+        messages.push({ "pitchBend": pitchBend, "channel": channel, "delta": 1 })
+    }
+
     return messages
 }
 
-const generateJsonMidiTrack = (composition) => {
+const generateJsonMidiTrack = (composition,metadata) => {
+    let trackMetadata = metadata || {
+        "trackName": 'Clean Guitar',
+        "programNumber": 27,
+        "channel": 0,
+        "octave": 0,
+        "key": 0,
+        "offset": 0,
+        "tempo": 120
+    }
     let tokens = tokenize(composition)
-    let key = C3
+    let key = C3 + trackMetadata.key + 12*trackMetadata.octave
+    let channel = trackMetadata.channel
 
     let track = [
-        { "trackName": "Clean Guitar", "delta": 0 },
-        { "programChange": { "programNumber": 27 }, "channel": 0, "delta": 0 },
-        { "controlChange": { "type": 100, "value": 0 }, "channel": 0, "delta": 0 },
-        { "controlChange": { "type": 101, "value": 0 }, "channel": 0, "delta": 0 },
-        { "controlChange": { "type": 6, "value": 12 }, "channel": 0, "delta": 0 },
-        { "controlChange": { "type": 38, "value": 0 }, "channel": 0, "delta": 0 },
-        { "controlChange": { "type": 100, "value": 127 }, "channel": 0, "delta": 0 },
-        { "controlChange": { "type": 101, "value": 127 }, "channel": 0, "delta": 0 },
-        { "controlChange": { "type": 100, "value": 1 }, "channel": 0, "delta": 0 },
-        { "controlChange": { "type": 101, "value": 0 }, "channel": 0, "delta": 0 },
-        { "controlChange": { "type": 6, "value": 64 }, "channel": 0, "delta": 0 },
-        { "controlChange": { "type": 38, "value": 0 }, "channel": 0, "delta": 0 },
-        { "controlChange": { "type": 100, "value": 127 }, "channel": 0, "delta": 0 },
-        { "controlChange": { "type": 101, "value": 127 }, "channel": 0, "delta": 0 }
+        { "trackName": `${trackMetadata.trackName}`, "delta": 0 },
+        { "programChange": { "programNumber": `${trackMetadata.programNumber}` }, "channel": channel, "delta": 0 },
+        { "setTempo": { "microsecondsPerQuarter": Math.round(500000*120/trackMetadata.tempo) }, "channel": channel, "delta": 0 },
+        { "controlChange": { "type": 100, "value": 0 }, "channel": channel, "delta": 0 },
+        { "controlChange": { "type": 101, "value": 0 }, "channel": channel, "delta": 0 },
+        { "controlChange": { "type": 6, "value": 12 }, "channel": channel, "delta": 0 },
+        { "controlChange": { "type": 38, "value": 0 }, "channel": channel, "delta": 0 },
+        { "controlChange": { "type": 100, "value": 127 }, "channel": channel, "delta": 0 },
+        { "controlChange": { "type": 101, "value": 127 }, "channel": channel, "delta": 0 },
+        { "controlChange": { "type": 100, "value": 1 }, "channel": channel, "delta": 0 },
+        { "controlChange": { "type": 101, "value": 0 }, "channel": channel, "delta": 0 },
+        { "controlChange": { "type": 6, "value": Math.floor(64+64*trackMetadata.offset/100) }, "channel": channel, "delta": 0 },
+        { "controlChange": { "type": 38, "value": 0 }, "channel": channel, "delta": 0 },
+        { "controlChange": { "type": 100, "value": 127 }, "channel": channel, "delta": 0 },
+        { "controlChange": { "type": 101, "value": 127 }, "channel": channel, "delta": 0 }
     ]
 
     let trackState = trackStateConstants.PITCH
@@ -163,21 +187,21 @@ const generateJsonMidiTrack = (composition) => {
             if(isQ(currentNote)) {
                 currentNote = ''
                 currentPitchBend = MIDIPITCHCENTRE
-                track.push({ "pitchBend": currentPitchBend, "channel": 0, "delta": delta })
+                track.push({ "pitchBend": currentPitchBend, "channel": channel, "delta": delta })
             } else if(strokeState === strokeStateConstants.STROKE) {
-                track.push({ "noteOff": { "noteNumber": getNoteNumber(currentNote,key) }, "channel": 0, "delta": delta})
+                track.push({ "noteOff": { "noteNumber": getNoteNumber(currentNote,key) }, "channel": channel, "delta": delta})
                 currentNote = ''
-                track.push({ "pitchBend": MIDIPITCHCENTRE, "channel": 0, "delta": 0 })
+                track.push({ "pitchBend": MIDIPITCHCENTRE, "channel": channel, "delta": 0 })
                 currentPitchBend = MIDIPITCHCENTRE
             } else {
-                track.push({ "pitchBend": currentPitchBend, "channel": 0, "delta": delta })
+                track.push({ "pitchBend": currentPitchBend, "channel": channel, "delta": delta })
             }
             trackState = trackStateConstants.PITCH
         }
         if(isNote(token)) {
             if(isQ(token)) {
                 if(strokeState === strokeStateConstants.CONTINUE && !isQ(currentNote)) {
-                    track.push({ "noteOff": { "noteNumber": getNoteNumber(currentNote,key) }, "channel": 0, "delta": 0})
+                    track.push({ "noteOff": { "noteNumber": getNoteNumber(currentNote,key) }, "channel": channel, "delta": 0})
                     strokeState = strokeStateConstants.STROKE
                 }
                 currentNote = token
@@ -204,23 +228,23 @@ const generateJsonMidiTrack = (composition) => {
                 if(strokeState === strokeStateConstants.STROKE) {
                     currentNote = token
                     currentPitchBend = Math.round(MIDIPITCHCENTRE + getFineTune(currentNote)*MIDIPITCHRANGE/OCTAVE)
-                    track.push({ "pitchBend": currentPitchBend+startingPitchBendOffset, "channel": 0, "delta": 0 })
-                    track.push({ "noteOn": { "noteNumber": getNoteNumber(currentNote,key), "velocity": 127 }, "channel": 0, "delta": 0})
+                    track.push({ "pitchBend": currentPitchBend+startingPitchBendOffset, "channel": channel, "delta": 0 })
+                    track.push({ "noteOn": { "noteNumber": getNoteNumber(currentNote,key), "velocity": 127 }, "channel": channel, "delta": 0})
                 } else {
                     currentPitchBend = MIDIPITCHCENTRE + Math.round(getInterval(token,currentNote)*MIDIPITCHRANGE/OCTAVE)
-                    track.push({ "pitchBend": currentPitchBend+startingPitchBendOffset, "channel": 0, "delta": 0 })
+                    track.push({ "pitchBend": currentPitchBend+startingPitchBendOffset, "channel": channel, "delta": 0 })
                 }
 
-                track.push(...getGamakaMessages(currentPitchBend+startingPitchBendOffset,start,end,number,duration))
+                track.push(...getGamakaMessages(channel,currentPitchBend+startingPitchBendOffset,start,end,number,duration))
             } else {
                 if(strokeState === strokeStateConstants.STROKE) {
                     currentNote = token
                     currentPitchBend = Math.round(MIDIPITCHCENTRE + getFineTune(currentNote)*MIDIPITCHRANGE/OCTAVE)
-                    track.push({ "pitchBend": currentPitchBend, "channel": 0, "delta": 0 })
-                    track.push({ "noteOn": { "noteNumber": getNoteNumber(currentNote,key), "velocity": 127 }, "channel": 0, "delta": 0})
+                    track.push({ "pitchBend": currentPitchBend, "channel": channel, "delta": 0 })
+                    track.push({ "noteOn": { "noteNumber": getNoteNumber(currentNote,key), "velocity": 127 }, "channel": channel, "delta": 0})
                 } else {
                     currentPitchBend += Math.round(getInterval(token,currentNote)*MIDIPITCHRANGE/OCTAVE)
-                    track.push({ "pitchBend": currentPitchBend, "channel": 0, "delta": 0 })
+                    track.push({ "pitchBend": currentPitchBend, "channel": channel, "delta": 0 })
                 }
             }
             trackState = trackStateConstants.TIMING
@@ -230,9 +254,9 @@ const generateJsonMidiTrack = (composition) => {
     if(trackState === trackStateConstants.TIMING || strokeState === strokeStateConstants.CONTINUE){
         let delta = isGamaka(tokens[tokens.length-1]) ? WHOLENOTE/2 : WHOLENOTE
         delta = trackState === trackStateConstants.TIMING ? delta : 0
-        track.push({ "noteOff": { "noteNumber": getNoteNumber(currentNote,key) }, "channel": 0, "delta": delta})
+        track.push({ "noteOff": { "noteNumber": getNoteNumber(currentNote,key) }, "channel": channel, "delta": delta})
         currentNote = ''
-        track.push({ "pitchBend": MIDIPITCHCENTRE, "channel": 0, "delta": 0 })
+        track.push({ "pitchBend": MIDIPITCHCENTRE, "channel": channel, "delta": 0 })
         currentPitchBend = MIDIPITCHCENTRE
     }
 
@@ -253,9 +277,24 @@ const generateJsonMidi = (composition) => {
     return songJSON
 }
 
+const toneName = ["String_1", "String_2", "Bow", "Reed"]
+
+const programNumber = [27, 25, 40, 71]
+
 const psq2JsonMidi = (psqString) => {
     let sequencerState = JSON.parse(psqString)
-    let tracks = [0, 1, 2, 3, 4, 5, 6].map((i) => sequencerState[i]).filter((sequencerVoiceState) => sequencerVoiceState['enabled']).map((sequencerVoiceState) => generateJsonMidiTrack(sequencerVoiceState['composition']))
+    let tracks = [0, 1, 2, 3, 4, 5, 6].map((i) => sequencerState[i]).filter((sequencerVoiceState) => sequencerVoiceState['enabled']).map((sequencerVoiceState,index) => {
+        let metadata = {
+            "trackName": `${sequencerVoiceState['voiceName']}_${toneName[sequencerVoiceState['tone']]}_`,
+            "programNumber": programNumber[sequencerVoiceState['tone']],
+            "channel": index,
+            "octave": sequencerVoiceState['octave'],
+            "key": 0,
+            "offset": 0,
+            "tempo": 120
+        }
+        return generateJsonMidiTrack(sequencerVoiceState['composition'],metadata)
+    })
 
     let songJSON = {
         "division": QUARTERNOTE,
