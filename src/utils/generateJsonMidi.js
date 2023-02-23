@@ -91,18 +91,23 @@ const getFineTune = (note,noteOffsets) => {
 
 const basicPitchBend = (channel,centre,cents,duration,direction) => {
     let messages = []
+
+    messages.push({ "pitchBend": centre, "channel": channel, "delta": Math.floor(duration/8) })
+
     let i=0
     for(i=1; i*MICROTONE < cents; i++) {
         let pitchBendCents = direction*i*MICROTONE
         let pitchBend = Math.round(centre + pitchBendCents*MIDIPITCHRANGE/OCTAVE)
-        let deltaTime = Math.floor(duration*MICROTONE/cents)
+        let deltaTime = Math.floor((duration*MICROTONE/cents)*(3/4))
         messages.push({ "pitchBend": pitchBend, "channel": channel, "delta": deltaTime })
     }
 
     let pitchBendCents = direction*cents
     let pitchBend = Math.round(centre + pitchBendCents*MIDIPITCHRANGE/OCTAVE)
-    let deltaTime = duration - (i-1)*Math.floor(duration*MICROTONE/cents)
+    let deltaTime = duration - (i-1)*Math.floor((duration*MICROTONE/cents)*(3/4)) - 2*Math.floor(duration/8)
     messages.push({ "pitchBend": pitchBend, "channel": channel, "delta": deltaTime })
+
+    messages.push({ "pitchBend": pitchBend, "channel": channel, "delta": Math.floor(duration/8) })
 
     return messages
 }
@@ -179,11 +184,12 @@ const generateJsonMidiTrack = (composition,metadata,noteOffsets) => {
     let strokeState = strokeStateConstants.STROKE
     let currentNote = ''
     let currentPitchBend = MIDIPITCHCENTRE
+    let currentGamakaDuration = 0
 
     tokens.forEach((token,index) => {
         if(trackState === trackStateConstants.TIMING) {
             let delta = isNote(token) ? WHOLENOTE : getNoteLength(token)
-            delta = isGamaka(currentNote) ? delta/2 : delta
+            delta -= currentGamakaDuration
             if(isQ(currentNote)) {
                 currentNote = ''
                 currentPitchBend = MIDIPITCHCENTRE
@@ -207,9 +213,6 @@ const generateJsonMidiTrack = (composition,metadata,noteOffsets) => {
                 currentNote = token
                 currentPitchBend = MIDIPITCHCENTRE
             } else if(isGamaka(token)) {
-                let timing = index+1 >= tokens.length || isNote(tokens[index+1]) ? '1' : tokens[index+1]
-                let duration = getNoteLength(timing)/2
-
                 let paramsMatch = /\(G\)\(.*\)/
                 let params = token.match(paramsMatch)
                 params = `${params[0].replace("(G)","").replace("(","").replace(")","")}`
@@ -217,6 +220,12 @@ const generateJsonMidiTrack = (composition,metadata,noteOffsets) => {
                 let start = isNote(paramList[0]) ? getInterval(paramList[0],token,noteOffsets) : Number(paramList[0])
                 let end = isNote(paramList[1]) ? getInterval(paramList[1],token,noteOffsets) : Number(paramList[1])
                 let number = Number(paramList[3])*2
+
+                let timing = index+1 >= tokens.length || isNote(tokens[index+1]) ? '1' : tokens[index+1]
+                let rate = 2**(Number(paramList[2])/10)
+                let gamakaDuration = QUARTERNOTE*number/rate
+                let noteDuration = getNoteLength(timing)/2
+                currentGamakaDuration = gamakaDuration < noteDuration ? gamakaDuration : noteDuration
 
                 let startingPitchBendOffset = 0
                 let basicCents = Math.abs(start-end)
@@ -235,8 +244,9 @@ const generateJsonMidiTrack = (composition,metadata,noteOffsets) => {
                     track.push({ "pitchBend": currentPitchBend+startingPitchBendOffset, "channel": channel, "delta": 0 })
                 }
 
-                track.push(...getGamakaMessages(channel,currentPitchBend+startingPitchBendOffset,start,end,number,duration))
+                track.push(...getGamakaMessages(channel,currentPitchBend+startingPitchBendOffset,start,end,number,currentGamakaDuration))
             } else {
+                currentGamakaDuration = 0
                 if(strokeState === strokeStateConstants.STROKE) {
                     currentNote = token
                     currentPitchBend = Math.round(MIDIPITCHCENTRE + getFineTune(currentNote,noteOffsets)*MIDIPITCHRANGE/OCTAVE)
@@ -252,7 +262,7 @@ const generateJsonMidiTrack = (composition,metadata,noteOffsets) => {
         }
     })
     if(trackState === trackStateConstants.TIMING || strokeState === strokeStateConstants.CONTINUE){
-        let delta = isGamaka(tokens[tokens.length-1]) ? WHOLENOTE/2 : WHOLENOTE
+        let delta = WHOLENOTE - currentGamakaDuration
         delta = trackState === trackStateConstants.TIMING ? delta : 0
         track.push({ "noteOff": { "noteNumber": getNoteNumber(currentNote,key) }, "channel": channel, "delta": delta})
         currentNote = ''
