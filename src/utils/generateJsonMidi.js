@@ -195,9 +195,9 @@ const generateJsonMidiTrack = (composition,metadata,noteOffsets) => {
                 currentPitchBend = MIDIPITCHCENTRE
                 track.push({ "pitchBend": currentPitchBend, "channel": channel, "delta": delta })
             } else if(strokeState === strokeStateConstants.STROKE) {
-                track.push({ "noteOff": { "noteNumber": getNoteNumber(currentNote,key) }, "channel": channel, "delta": delta})
+                track.push({ "noteOff": { "noteNumber": getNoteNumber(currentNote,key) }, "channel": channel, "delta": delta - WHOLENOTE/32})
                 currentNote = ''
-                track.push({ "pitchBend": MIDIPITCHCENTRE, "channel": channel, "delta": 0 })
+                track.push({ "pitchBend": MIDIPITCHCENTRE, "channel": channel, "delta": WHOLENOTE/32 })
                 currentPitchBend = MIDIPITCHCENTRE
             } else {
                 track.push({ "pitchBend": currentPitchBend, "channel": channel, "delta": delta })
