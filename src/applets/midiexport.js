@@ -14,20 +14,12 @@ const JsonMidiElement = styled.pre`
 
 const isBrowser = typeof window !== "undefined"
 
-const MIDIExport = ({sequencerState, sequencerSettings, scaleState, sequencerName}) => {
+const MIDIExport = ({sequencerState, sequencerSettings, scaleState, sequencerName,location}) => {
     const [ready,setReady] = React.useState(false)
     const [jsonMidi,setJsonMidi] = React.useState('')
     const [midiEncoder,setMidiEncoder] = React.useState(null)
     const [midiData,setMidiData] = React.useState([])
     const [jsonVisibility,setJsonVisibility] = React.useState(false)
-
-    if(isBrowser) {
-        if(midiEncoder === null) {
-            import('json-midi-encoder').then((encoder) => {
-                setMidiEncoder(encoder)
-            },(err) => console.log(err))
-        }
-    }
 
     const prepareMIDI = () => {
         let newJsonData = sequencer2MIDI(sequencerState,sequencerSettings,scaleState)
@@ -48,6 +40,14 @@ const MIDIExport = ({sequencerState, sequencerSettings, scaleState, sequencerNam
         setMidiData([])
         setJsonMidi('')
     },[sequencerState,sequencerSettings,scaleState])
+
+    React.useEffect(() => {
+        if(isBrowser) {
+            import('json-midi-encoder').then((encoder) => {
+                setMidiEncoder(encoder)
+            },(err) => console.log(err))
+        }
+    },[location])
 
     return (
         <>
