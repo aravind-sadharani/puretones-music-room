@@ -21,20 +21,20 @@ const SelectElement = styled.select`
     border-radius: 5px;
     margin: 0 0 0 auto;
     width: 120px;
-    background-image: ${({theme}) => `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 4,6 8,0" style="fill:${theme.light.textColor.replace('#','%23')}"/></svg>')`};
-    ${({theme}) => theme.isDark`background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 4,6 8,0" style="fill:${theme.dark.textColor.replace('#','%23')}"/></svg>')`};
+    background-image: ${({theme}) => `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="8"><polygon points="0,0 4,6 8,0" style="fill:${theme.light.textColor.replace('#','%23')}"/></svg>')`};
+    ${({theme}) => theme.isDark`background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="8"><polygon points="0,0 4,6 8,0" style="fill:${theme.dark.textColor.replace('#','%23')}"/></svg>')`};
     background-position-x: 120%;
     background-position-y: 55%;
     background-repeat: no-repeat;
     background-size: 2em;
     &:hover {
         background-color: ${({theme}) => theme.light.buttonBackground};
-        background-image: ${({theme}) => `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 4,6 8,0" style="fill:${theme.light.buttonText.replace('#','%23')}"/></svg>')`};
+        background-image: ${({theme}) => `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="8"><polygon points="0,0 4,6 8,0" style="fill:${theme.light.buttonText.replace('#','%23')}"/></svg>')`};
         color: ${({theme}) => theme.light.buttonText};
     }
     ${({theme}) => theme.isDark`&:hover {
         background-color: ${theme.dark.buttonBackground};
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 4,6 8,0" style="fill:${theme.dark.buttonText.replace('#','%23')}"/></svg>');
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="8"><polygon points="0,0 4,6 8,0" style="fill:${theme.dark.buttonText.replace('#','%23')}"/></svg>');
         color: ${theme.dark.buttonText};
     }`}
 `
