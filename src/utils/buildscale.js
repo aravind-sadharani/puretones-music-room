@@ -300,6 +300,33 @@ const buildScale = (constraints) => {
     return result
 }
 
+const noteOffsets = {'Sa': 0, 're': 1, 'Re': 2, 'ga': 3, 'Ga': 4, 'ma': 5, 'Ma': 6, 'Pa': 7, 'dha': 8, 'Dha': 9, 'ni': 10, 'Ni': 11, 'SA': 12, 'Sa"': 12, 're"': 13, 'Re"': 14, 'ga"': 15, 'Ga"': 16, 'ma"': 17, 'Ma"': 18, 'Pa"': 19, 'dha"': 20, 'Dha"': 21, 'ni"': 22, 'Ni"': 23, 'SA"': 24}
+
+const noteNames = ['Sa', 're', 'Re', 'ga', 'Ga', 'ma', 'Ma', 'Pa', 'dha', 'Dha', 'ni', 'Ni', 'Sa"', 're"', 'Re"', 'ga"', 'Ga"', 'ma"', 'Ma"', 'Pa"', 'dha"', 'Dha"', 'ni"', 'Ni"', 'SA"']
+
+const chordClasses = [
+    {name: 'Maj', harmony: 4, fifth: 7},
+    {name: 'Min', harmony: 3, fifth: 7},
+    {name: 'Sus2', harmony: 2, fifth: 7},
+    {name: 'Sus4', harmony: 5, fifth: 7},
+    {name: 'Dim', harmony: 3, fifth: 6},
+    {name: 'Aug', harmony: 4, fifth: 8},
+]
+
+const findChordNote = (note,scale,interval) => {
+    let intervalNote = noteNames[(noteOffsets[`${note}`]+interval)]
+    return scale.includes(noteNames[(noteOffsets[`${note}`]+interval) % 12]) ? intervalNote : 'fade'
+}
+
+const findChord = (note,scale,chordClass) => {
+    let root = note
+    let harmony = findChordNote(note,scale,chordClass.harmony)
+    let fifth = findChordNote(note,scale,chordClass.fifth)
+    if(harmony === 'fade' || fifth === 'fade')
+        return {name: 'fade'}
+    return {name: `${note}-${chordClass.name}`, root: root, harmony: harmony, fifth: fifth}
+}
+
 const prepareKeyboard = (scale) => {
     let settings = scale.map(note => noteToSettings(note)).join('\n')
     let scaleNotesList = scale.map(note => note[0]).join(',')
@@ -314,9 +341,14 @@ const prepareKeyboard = (scale) => {
         {white: `${noteLabel('Ni')}`},
         {white: "SA"}
     ]
+    let chordspec = chordClasses.map((chordClass) => {
+        let scaleNotesList = scale.map(note => note[0]).join(',')
+        return scale.map(note => findChord(note[0],scaleNotesList,chordClass))
+    })
     return {
         settings: settings,
-        notespec: notespec
+        notespec: notespec,
+        chordspec: chordspec
     }
 }
 

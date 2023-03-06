@@ -1,6 +1,7 @@
 import * as React from "react"
 import styled from "styled-components"
 import Keyboard from 'applets/keyboard'
+import ChordPlayer from "applets/chordplayer"
 import ShowHideControls from 'components/showhidecontrols'
 import { dspStateFromSettings } from "utils/dspsettingsinterpreter"
 import { AudioEnv } from "services/audioenv"
@@ -18,8 +19,8 @@ const ScalePlayerContainer = styled.div`
     border-radius: 5px;
 `
 
-const ScalePlayer = ({title,noteSpec,keySpec,scale}) => {
-    const note2Offset = keySpec || {'Sa': 0, 're': 1, 'Re': 2, 'ga': 3, 'Ga': 4, 'ma': 5, 'Ma': 6, 'Pa': 7, 'dha': 8, 'Dha': 9, 'ni': 10, 'Ni': 11, 'SA': 12}
+const ScalePlayer = ({title,noteSpec,keySpec,scale,chordSpec}) => {
+    const note2Offset = keySpec || {'Sa': 0, 're': 1, 'Re': 2, 'ga': 3, 'Ga': 4, 'ma': 5, 'Ma': 6, 'Pa': 7, 'dha': 8, 'Dha': 9, 'ni': 10, 'Ni': 11, 'SA': 12, 'Sa"': 12, 're"': 13, 'Re"': 14, 'ga"': 15, 'Ga"': 16, 'ma"': 17, 'Ma"': 18, 'Pa"': 19, 'dha"': 20, 'Dha"': 21, 'ni"': 22, 'Ni"': 23, 'SA"': 24}
     const key2Midi = (keyName) => (Number(commonSettings['pitch']) - 3 + note2Offset[`${keyName}`] + 48)
     const [keyState,setKeyState] = React.useState(Array(13).fill(0))
     const keyOn = (keyName) => {
@@ -111,6 +112,7 @@ const ScalePlayer = ({title,noteSpec,keySpec,scale}) => {
         <ScalePlayerContainer>
             <ShowHideControls title={title.split('\n')[0]} label={showHideLabel} visibility={visibility && (commonSettings['currentScale'] === title)} onShowHide={toggleScaleVisibility}>
                 <Keyboard keyOn={keyOn} keyOff={keyOff} noteSpec={noteSpec} />
+                {chordSpec && <ChordPlayer keyOn={keyOn} keyOff={keyOff} chordSpec={chordSpec} />}
             </ShowHideControls>
         </ScalePlayerContainer>
     )
