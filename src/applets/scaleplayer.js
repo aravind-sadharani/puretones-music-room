@@ -28,7 +28,7 @@ const ScalePlayer = ({title,noteSpec,keySpec,scale,chordSpec}) => {
             let newKeyState = keyState
             newKeyState[note2Offset[`${keyName}`]] = 1
             setKeyState([...newKeyState])
-            let msg = [144,`${key2Midi(keyName)}`,50]
+            let msg = [144,`${key2Midi(keyName)}`,25]
             dispatch({type: 'MIDI', appname: 'scale', message: msg})
         }
     }
