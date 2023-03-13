@@ -241,8 +241,7 @@ const generateJsonMidiTrack = (composition,metadata,noteOffsets) => {
                 }
 
                 track.push(...getGamakaMessages(channel,currentPitchBend+startingPitchBendOffset,start,end,number,currentGamakaDuration))
-                track.push({ "pitchBend": currentPitchBend, "channel": channel, "delta": 1 })
-                currentGamakaDuration += 1
+                track.push({ "pitchBend": currentPitchBend, "channel": channel, "delta": 0 })
             } else {
                 currentGamakaDuration = 0
                 if(strokeState === strokeStateConstants.STROKE) {
