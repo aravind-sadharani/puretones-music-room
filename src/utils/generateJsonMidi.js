@@ -124,9 +124,9 @@ const getInterval = (note1, note2, noteOffsets) => {
     return SEMITONE*(swara1 - swara2) + getFineTune(note1,noteOffsets) - getFineTune(note2,noteOffsets)
 }
 
-const getGamakaMessages = (channel,startingCentre,start,end,number,duration) => {
+const getGamakaMessages = (channel,centre,startingCentre,start,end,number,duration) => {
     let messages = []
-    let basicDuration = Math.floor(duration/number)
+    let basicDuration = Math.floor((duration-1)/number)
     let basicCents = Math.abs(start - end)
     if(basicCents === 0)
         return [{ "pitchBend": startingCentre, "channel": channel, "delta": duration }]
@@ -134,16 +134,18 @@ const getGamakaMessages = (channel,startingCentre,start,end,number,duration) => 
     let floorNumber = Math.floor(number)
 
     for(let i=0; i<floorNumber; i++) {
-        let basicCentre = !(i % 2) ? startingCentre : startingCentre + direction*basicCents*MIDIPITCHRANGE/OCTAVE
+        let basicCentre = !(i % 2) ? startingCentre : Math.round(startingCentre + direction*basicCents*MIDIPITCHRANGE/OCTAVE)
         let basicDirection = !(i % 2) ? direction : (-1)*direction
         messages.push(...basicPitchBend(channel,basicCentre,basicCents,basicDuration,basicDirection))
     }
 
     if(number > floorNumber) {
-        let basicCentre = !(floorNumber % 2) ? startingCentre : startingCentre + direction*basicCents*MIDIPITCHRANGE/OCTAVE
+        let basicCentre = !(floorNumber % 2) ? startingCentre : Math.round(startingCentre + direction*basicCents*MIDIPITCHRANGE/OCTAVE)
         let basicDirection = !(floorNumber % 2) ? direction : (-1)*direction
-        messages.push(...basicPitchBend(channel,basicCentre,basicCents*(number-floorNumber),duration - floorNumber*basicDuration,basicDirection))
+        messages.push(...basicPitchBend(channel,basicCentre,basicCents*(number-floorNumber),duration - floorNumber*basicDuration - 1,basicDirection))
     }
+
+    messages.push({ "pitchBend": centre, "channel": channel, "delta": 1 })
 
     return messages
 }
@@ -223,7 +225,7 @@ const generateJsonMidiTrack = (composition,metadata,noteOffsets) => {
 
                 let timing = index+1 >= tokens.length || isNote(tokens[index+1]) ? '1' : tokens[index+1]
                 let rate = 2**(Number(paramList[2])/10)
-                let gamakaDuration = QUARTERNOTE*number/rate
+                let gamakaDuration = Math.round(QUARTERNOTE*number/rate)
                 let noteDuration = getNoteLength(timing)
                 currentGamakaDuration = gamakaDuration < noteDuration ? gamakaDuration : noteDuration
 
@@ -240,8 +242,7 @@ const generateJsonMidiTrack = (composition,metadata,noteOffsets) => {
                     track.push({ "pitchBend": currentPitchBend+startingPitchBendOffset, "channel": channel, "delta": 0 })
                 }
 
-                track.push(...getGamakaMessages(channel,currentPitchBend+startingPitchBendOffset,start,end,number,currentGamakaDuration))
-                track.push({ "pitchBend": currentPitchBend, "channel": channel, "delta": 0 })
+                track.push(...getGamakaMessages(channel,currentPitchBend,currentPitchBend+startingPitchBendOffset,start,end,number,currentGamakaDuration))
             } else {
                 currentGamakaDuration = 0
                 if(strokeState === strokeStateConstants.STROKE) {
