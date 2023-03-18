@@ -214,6 +214,7 @@ const generateJsonMidiTrack = (composition,metadata,noteOffsets) => {
                 }
                 currentNote = token
                 currentPitchBend = MIDIPITCHCENTRE
+                currentGamakaDuration = 0
             } else if(isGamaka(token)) {
                 let paramsMatch = /\(G\)\(.*\)/
                 let params = token.match(paramsMatch)
