@@ -229,6 +229,7 @@ const generateJsonMidiTrack = (composition,metadata,noteOffsets) => {
                 let gamakaDuration = Math.round(QUARTERNOTE*number/rate)
                 let noteDuration = getNoteLength(timing)
                 currentGamakaDuration = gamakaDuration < noteDuration ? gamakaDuration : noteDuration
+                number = parseFloat((currentGamakaDuration*rate/QUARTERNOTE).toFixed(1))
 
                 let startingPitchBendOffset = Math.round(start*MIDIPITCHRANGE/OCTAVE)
 
