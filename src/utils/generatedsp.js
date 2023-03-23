@@ -183,44 +183,47 @@ with {
     SynthModel(f) = ((brightness^(nharmonics+1))*os.osc(f*nharmonics) - (brightness^nharmonics)*os.osc(f*(nharmonics+1)) + os.osc(f))/((1-brightness)^2+4*brightness*os.osc(f/2)*os.osc(f/2)) + 0.1*os.osc(f/2) : *(amplitude);
 };`,
     `BrassTone(f,r,g) = BrassModel(pm.f2l(f*r),BrassLipsTension,BrassBlow) : *(BrassEnv)
-with {
-    BrassLongBlowDynamics(x) = phasor(x) - (phasor(x) : ba.latch(g)) : *(2*ma.PI) : cos;
-    BrassBlow = 0.5;//en.adsr(0.01,cperiod*0.7,0.9,cperiod*0.3,g)*(1+0.25*BrassLongBlowDynamics(1/(16*cperiod)));
-    BrassLongBlowRamp(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
-    BrassEnv = 1;//en.adsr(0.1,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*BrassLongBlowRamp(2*cperiod/ma.SR));
-    BrassLipsTension = 0.5;
-
-    brassLipsTable(length,tension) = *(0.03) : lipFilter <: * : clipping
-    with{
-        clipping = min(1) : max(-1);
-        freq = (length : pm.l2f)*pow(4,(2*tension)-1);
-        filterR = 0.997;
-        a1 = -2*filterR*cos(ma.PI*2*freq/ma.SR);
-        lipFilter = fi.tf2(1,0,0,a1,pow(filterR,2));
-    };
-    BrassLips(length,tension,pressure) = pm.lTermination(mouthPieceInteraction,pm.basicBlock)
     with {
-        absorption = *(0.85);
-        p = pressure*0.3;
-        mouthPieceInteraction = absorption <: (p-_ : brassLipsTable(length,tension) <: *(p),1-_),_ : _,* : + : fi.dcblocker;
-    };
-    wBell(length) = pm.rTermination(pm.basicBlock,bellFilter)
-    with {
-      opening = 0.5;//(length^(1/3))/(length^(1/3)+1);
-      bellFilter = si.smooth(opening);
-    };
-    BrassModel(tubeLength,lipsTension,blowPressure) = pm.endChain(modelChain)
-    with {
-        maxTubeLength = 3;
-        lengthTuning = 7*pm.speedOfSound/ma.SR;
-        tunedLength = tubeLength - lengthTuning;
-        modelChain = pm.chain(
-                        BrassLips(tunedLength,lipsTension,blowPressure) :
-                        pm.openTube(maxTubeLength,tunedLength) :
-                        wBell(tubeLength) : pm.out
-        );
-    };
-};`
+        BrassBlow = 10^((12*ma.log2(f*r) - 50)/27 - 3) : si.smoo;
+        BrassLongBlowRamp(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
+        BrassEnv = 20*en.adsr(0.1,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*BrassLongBlowRamp(2*cperiod/ma.SR))/(BrassBlow);
+        BrassLipsTension = 0.5;
+    
+        brassLipsTable(length,tension) = *(0.03) : lipFilter <: * : clipping
+        with{
+            clipping = min(1) : max(-1);
+            freq = (length : pm.l2f)*pow(4,(2*tension)-1);
+            filterR = 0.997;
+            a1 = -2*filterR*cos(ma.PI*2*freq/ma.SR);
+            lipFilter = fi.tf2(1,0,0,a1,pow(filterR,2));
+        };
+        BrassLips(length,tension,pressure) = pm.lTermination(mouthPieceInteraction,pm.basicBlock)
+        with {
+            absorption = *(0.85);
+            p = pressure*0.3;
+            mouthPieceInteraction = absorption <: (p-_ : brassLipsTable(length,tension) <: *(p),1-_),_ : _,* : + : fi.dcblocker;
+        };
+        BrassBell(length) = bellChain
+        with {
+          maxTubeLength = 12;
+          lengthTuning = ((length^(1/3) - 0.325^(1/3))*3.2)*length/10;
+          opening = 0.5;
+          bellFilter = si.smooth(opening);
+          bellChain = pm.chain(
+            pm.openTube(maxTubeLength,lengthTuning) :
+            pm.rTermination(pm.basicBlock,bellFilter)
+          );
+        };
+        BrassModel(tubeLength,lipsTension,blowPressure) = pm.endChain(modelChain)
+        with {
+            maxTubeLength = 12;
+            modelChain = pm.chain(
+                            BrassLips(tubeLength,lipsTension,blowPressure) :
+                            pm.openTube(maxTubeLength,tubeLength) :
+                            BrassBell(tubeLength) : pm.out
+            );
+        };
+    };`
 ]
 
 const baseRatio = {
@@ -462,7 +465,6 @@ const generateDSP = (sequencerState,scaleState) => {
     ${voiceCode}
     ${dspTemplateBottom}
     `
-    console.log(fullDSPCode)
     return fullDSPCode
 }
 
