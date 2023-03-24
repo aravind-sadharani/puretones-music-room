@@ -184,9 +184,9 @@ with {
 };`,
     `BrassTone(f,r,g) = BrassModel(pm.f2l(f*r),BrassLipsTension,BrassBlow) : *(BrassEnv)
     with {
-        BrassBlow = 10^((12*ma.log2(f*r) - 50)/27 - 3)*(1 + (no.noise : fi.lowpass(2,500) : *(0.1))) : si.smooth(0.9);
+        BrassBlow = 10^((12*ma.log2(f*r) - 48)/26 - 3)*(1 + (no.noise : fi.lowpass(2,500) : *(0.1))) : si.smooth(0.9);
         BrassLongBlowRamp(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
-        BrassEnv = 20*en.adsr(0.2,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*BrassLongBlowRamp(2*cperiod/ma.SR))/(BrassBlow);
+        BrassEnv = 5*en.adsr(0.2,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*BrassLongBlowRamp(2*cperiod/ma.SR))/(BrassBlow^1.4);
         BrassLipsTension = 0.5;
     
         brassLipsTable(length,tension) = *(0.03) : lipFilter <: * : clipping
