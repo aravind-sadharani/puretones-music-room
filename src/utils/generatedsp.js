@@ -140,7 +140,6 @@ with {
 };`,
     `ReedTone(f,r,g) = ReedModel(pm.f2l(f*r),0.56*(1+ReedBlow),-0.104) : *(ReedEnv)
 with {
-
     ReedLongBlowDynamics(x) = phasor(x) - (phasor(x) : ba.latch(g)) : *(2*ma.PI) : cos;
     ReedBlow = 3*en.adsr(0.01,cperiod*0.7,0.9,cperiod*0.3,g)*(1+0.25*ReedLongBlowDynamics(1/(16*cperiod)));
     ReedLongBlowRamp(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
@@ -206,7 +205,7 @@ with {
         BrassBell(length) = bellChain
         with {
           maxTubeLength = 12;
-          lengthTuning = ((length^(1/3) - 0.325^(1/3))*3.2)*length/10;
+          lengthTuning = (ma.log2(length) + ma.log2(880/340) + 0.21)*8*length/100;
           opening = 0.5;
           bellFilter = si.smooth(opening);
           bellChain = pm.chain(
@@ -221,6 +220,43 @@ with {
                             BrassLips(tubeLength,lipsTension,blowPressure) :
                             pm.openTube(maxTubeLength,tubeLength) :
                             BrassBell(tubeLength) : pm.out
+            );
+        };
+    };`,
+    `FluteTone(f,r,g) = FluteModel(pm.f2l(f*r),0.5,0.56*(1+FluteBlow)) : *(FluteEnv)
+    with {
+        FluteLongBlowDynamics(x) = phasor(x) - (phasor(x) : ba.latch(g)) : *(2*ma.PI) : cos;
+        FluteBlow = 0.3*en.adsr(0.2,cperiod*0.7,0.9,cperiod*0.3,g)*(1+0.25*FluteLongBlowDynamics(1/(16*cperiod)));
+        FluteLongBlowRamp(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
+        FluteEnv = 5*en.adsr(0.1,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*FluteLongBlowRamp(2*cperiod/ma.SR));
+        fluteJetTable = _ <: *(* : -(1)) : clipping
+        with{
+            clipping = min(1) : max(-1);
+        };
+        fluteEmbouchure(pressure) = (_ <: _,_),_,_ : _,*(0.5)+(pressure-_*0.5 : fluteJetTable),_;
+        fluteHead = pm.lTermination(*(absorption),pm.basicBlock)
+        with{
+            absorption = 0.95;
+        };
+        fluteFoot = pm.rTermination(pm.basicBlock,*(absorption) : dispersion)
+        with{
+            dispersion = si.smooth(0.7);
+            absorption = 0.95;
+        };
+        FluteModel(tubeLength,mouthPosition,pressure) = pm.endChain(fluteChain) : fi.dcblocker
+        with{
+            maxTubeLength = 3;
+            tubeTuning = 0;//0.27;
+            tLength = tubeLength+tubeTuning;
+            embouchurePos = 0.27 + (mouthPosition-0.5)*0.4;
+            tted = tLength*embouchurePos;
+            eted = tLength*(1-embouchurePos);
+            fluteChain = pm.chain(
+                            fluteHead :
+                            pm.openTube(maxTubeLength,tted) :
+                            fluteEmbouchure(pressure) :
+                            pm.openTube(maxTubeLength,eted) :
+                            fluteFoot : pm.out
             );
         };
     };`
@@ -243,7 +279,7 @@ const baseRatio = {
     Q: 3
 }
 
-const toneNames = ["String1", "String2", "Violin", "Reed", "Synth", "Brass"]
+const toneNames = ["String1", "String2", "Violin", "Reed", "Synth", "Brass", "Flute"]
 
 const tokenize = str => str.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"').replace(/(\n|\t)/g,' ').split(' ').map(s => s.trim()).filter(s => s.length)
 

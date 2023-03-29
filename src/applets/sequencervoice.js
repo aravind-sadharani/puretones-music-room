@@ -50,6 +50,10 @@ const SequencerVoice = ({index,sequencerVoiceState,onVoiceParamUpdate}) => {
             {
                 value: 5,
                 text: "Brass"
+            },
+            {
+                value: 6,
+                text: "Flute"
             }
         ]
     }

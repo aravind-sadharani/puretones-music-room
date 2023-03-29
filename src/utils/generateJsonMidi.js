@@ -287,9 +287,9 @@ const generateJsonMidi = (composition) => {
     return songJSON
 }
 
-const toneName = ["String_1", "String_2", "Bow", "Reed", "Synth", "Brass"]
+const toneName = ["String_1", "String_2", "Bow", "Reed", "Synth", "Brass", "Flute"]
 
-const programNumber = [27, 25, 40, 71, 4, 60]
+const programNumber = [27, 25, 40, 71, 4, 60, 73]
 
 const psq2JsonMidi = (psqString) => {
     let sequencerState = JSON.parse(psqString)
