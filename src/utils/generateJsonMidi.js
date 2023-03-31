@@ -275,45 +275,9 @@ const generateJsonMidiTrack = (composition,metadata,noteOffsets) => {
     return track
 }
 
-const generateJsonMidi = (composition) => {
-    let songJSON = {
-        "division": QUARTERNOTE,
-        "format": 1,
-        "tracks": [
-            generateJsonMidiTrack(composition)
-        ]
-    }
-
-    return songJSON
-}
-
 const toneName = ["String_1", "String_2", "Bow", "Reed", "Synth", "Brass", "Flute"]
 
 const programNumber = [27, 25, 40, 71, 4, 60, 73]
-
-const psq2JsonMidi = (psqString) => {
-    let sequencerState = JSON.parse(psqString)
-    let tracks = [0, 1, 2, 3, 4, 5, 6].map((i) => sequencerState[i]).filter((sequencerVoiceState) => sequencerVoiceState['enabled']).map((sequencerVoiceState,index) => {
-        let metadata = {
-            "trackName": `${sequencerVoiceState['voiceName']}_${toneName[sequencerVoiceState['tone']]}_`,
-            "programNumber": programNumber[sequencerVoiceState['tone']],
-            "channel": index,
-            "octave": sequencerVoiceState['octave'],
-            "key": 0,
-            "offset": 0,
-            "tempo": 120
-        }
-        return generateJsonMidiTrack(sequencerVoiceState['composition'],metadata)
-    })
-
-    let songJSON = {
-        "division": QUARTERNOTE,
-        "format": 1,
-        "tracks": tracks
-    }
-
-    return songJSON
-}
 
 const sequencer2MIDI = (sequencerState,sequencerSettings,scaleState) => {
     let noteOffsets = Object.entries(baseRatio).map(note => {
@@ -347,4 +311,4 @@ const sequencer2MIDI = (sequencerState,sequencerSettings,scaleState) => {
     return songJSON
 }
 
-export {generateJsonMidi, psq2JsonMidi, sequencer2MIDI}
+export {sequencer2MIDI}
