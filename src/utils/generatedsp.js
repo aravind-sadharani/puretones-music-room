@@ -140,7 +140,6 @@ with {
 };`,
     `ReedTone(f,r,g) = ReedModel(pm.f2l(f*r),0.56*(1+ReedBlow),-0.104) : *(ReedEnv)
 with {
-
     ReedLongBlowDynamics(x) = phasor(x) - (phasor(x) : ba.latch(g)) : *(2*ma.PI) : cos;
     ReedBlow = 3*en.adsr(0.01,cperiod*0.7,0.9,cperiod*0.3,g)*(1+0.25*ReedLongBlowDynamics(1/(16*cperiod)));
     ReedLongBlowRamp(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
@@ -172,6 +171,93 @@ with {
                     wBell(tubeLength/2) : pm.out
                 );
         };
+    };`,
+    `SynthTone(f,r,g) = (SynthModel(f*r*(1+variance)) + SynthModel(f*r*(1-variance))) : *(SynthEnv)
+with {
+    SynthEnv = en.adsr(0.001,cperiod*0.6,0.8,cperiod*0.5,g);
+    nharmonics = 32;
+    brightness = 0.6;
+    amplitude = 20*(1-brightness)/(1-brightness^(nharmonics+1))/sqrt(f);
+    variance = 2/10000;
+    SynthModel(f) = ((brightness^(nharmonics+1))*os.osc(f*nharmonics) - (brightness^nharmonics)*os.osc(f*(nharmonics+1)) + os.osc(f))/((1-brightness)^2+4*brightness*os.osc(f/2)*os.osc(f/2)) + 0.1*os.osc(f/2) : *(amplitude);
+};`,
+    `BrassTone(f,r,g) = BrassModel(pm.f2l(f*r),BrassLipsTension,BrassBlow) : *(BrassEnv)
+    with {
+        BrassBlow = 10^((12*ma.log2((f*r : pm.f2l) - 10*pm.speedOfSound/ma.SR : pm.l2f) - 48)/26 - 3)*(1+0.1*os.osc(f*r)+(no.noise : fi.lowpass(2,700) : *(0.1)));
+        BrassLongBlowRamp(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
+        BrassEnv = 5*en.adsr(0.2,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*BrassLongBlowRamp(2*cperiod/ma.SR))/(BrassBlow^1.4);
+        BrassLipsTension = 0.5;
+    
+        brassLipsTable(length,tension) = *(0.03) : lipFilter <: * : clipping
+        with{
+            clipping = min(1) : max(-1);
+            freq = (length : pm.l2f)*pow(4,(2*tension)-1);
+            filterR = 0.997;
+            a1 = -2*filterR*cos(ma.PI*2*freq/ma.SR);
+            lipFilter = fi.tf2(1,0,0,a1,pow(filterR,2)); 
+        };
+        BrassLips(length,tension,pressure) = pm.lTermination(mouthPieceInteraction,pm.basicBlock)
+        with {
+            absorption = *(0.85);
+            p = pressure*0.3;
+            mouthPieceInteraction = absorption <: (p-_ : brassLipsTable(length,tension) <: *(p),1-_),_ : _,* : + : fi.dcblocker;
+        };
+        BrassBell(length) = bellChain
+        with {
+          maxTubeLength = 12;
+          lengthTuning = 0.29*length;
+          opening = 0.5;
+          bellFilter = si.smooth(opening);
+          bellChain = pm.chain(
+            pm.openTube(maxTubeLength,lengthTuning) :
+            pm.rTermination(pm.basicBlock,bellFilter)
+          );
+        };
+        BrassModel(tubeLength,lipsTension,blowPressure) = pm.endChain(modelChain)
+        with {
+            maxTubeLength = 12;
+		    tunedLength = tubeLength - 11*pm.speedOfSound/ma.SR;
+            modelChain = pm.chain(
+                            BrassLips(tubeLength,lipsTension,blowPressure) :
+                            pm.openTube(maxTubeLength,tunedLength) :
+                            BrassBell(tunedLength) : pm.out
+            );
+        };
+    };`,
+    `FluteTone(f,r,g) = FluteModel(pm.f2l(f*r),FluteBlow) : *(FluteEnv)
+    with {
+        FluteBlow = (0.9+0.2*(no.noise : fi.lowpass(2,500)))*en.adsr(0.01,cperiod*0.7,0.9,cperiod*0.3,g);
+        FluteLongBlowRamp(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
+        FluteEnv = 3*en.adsr(0.1,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*FluteLongBlowRamp(2*cperiod/ma.SR));
+        fluteJetTable = _ <: *(* : -(1)) : clipping
+        with{
+            clipping = min(1) : max(-1);
+        };
+        fluteEmbouchure(pressure) = (_ <: _,_),_,_ : _,*(0.5)+(pressure-_*0.5 : fluteJetTable),_;
+        fluteHead = pm.lTermination(*(absorption),pm.basicBlock)
+        with{
+            absorption = 0.95;
+        };
+        fluteFoot = pm.rTermination(pm.basicBlock,*(absorption) : dispersion)
+        with{
+            dispersion = si.smooth(0.7);
+            absorption = 0.95;
+        };
+        FluteModel(tubeLength,pressure) = pm.endChain(fluteChain) : fi.dcblocker
+        with{
+            maxTubeLength = 12;
+            tLength = tubeLength/(1-embouchurePos);
+            embouchurePos = 1/3;
+            tted = tLength*embouchurePos - 5*pm.speedOfSound/ma.SR;
+            eted = tLength*(1-embouchurePos) - 8*pm.speedOfSound/ma.SR;
+            fluteChain = pm.chain(
+                            fluteHead :
+                            pm.openTube(maxTubeLength,tted) :
+                            fluteEmbouchure(pressure) :
+                            pm.openTube(maxTubeLength,eted) :
+                            fluteFoot : pm.out
+            );
+        };
     };`
 ]
 
@@ -192,7 +278,7 @@ const baseRatio = {
     Q: 3
 }
 
-const toneNames = ["String1", "String2", "Violin", "Reed"]
+const toneNames = ["String1", "String2", "Violin", "Reed", "Synth", "Brass", "Flute"]
 
 const tokenize = str => str.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"').replace(/(\n|\t)/g,' ').split(' ').map(s => s.trim()).filter(s => s.length)
 
