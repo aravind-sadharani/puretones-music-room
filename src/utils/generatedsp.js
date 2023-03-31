@@ -183,7 +183,7 @@ with {
 };`,
     `BrassTone(f,r,g) = BrassModel(pm.f2l(f*r),BrassLipsTension,BrassBlow) : *(BrassEnv)
     with {
-        BrassBlow = 10^((12*ma.log2(f*r) - 48)/26 - 3)*(1 + (no.noise : fi.lowpass(2,500) : *(0.1))) : si.smooth(0.9);
+        BrassBlow = 10^((12*ma.log2((f*r : pm.f2l) - 10*pm.speedOfSound/ma.SR : pm.l2f) - 48)/26 - 3)*(1+0.1*os.osc(f*r)+(no.noise : fi.lowpass(2,700) : *(0.1)));
         BrassLongBlowRamp(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
         BrassEnv = 5*en.adsr(0.2,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*BrassLongBlowRamp(2*cperiod/ma.SR))/(BrassBlow^1.4);
         BrassLipsTension = 0.5;
@@ -194,7 +194,7 @@ with {
             freq = (length : pm.l2f)*pow(4,(2*tension)-1);
             filterR = 0.997;
             a1 = -2*filterR*cos(ma.PI*2*freq/ma.SR);
-            lipFilter = fi.tf2(1,0,0,a1,pow(filterR,2));
+            lipFilter = fi.tf2(1,0,0,a1,pow(filterR,2)); 
         };
         BrassLips(length,tension,pressure) = pm.lTermination(mouthPieceInteraction,pm.basicBlock)
         with {
@@ -205,7 +205,7 @@ with {
         BrassBell(length) = bellChain
         with {
           maxTubeLength = 12;
-          lengthTuning = (ma.log2(length) + ma.log2(880/340) + 0.21)*8*length/100;
+          lengthTuning = 0.29*length;
           opening = 0.5;
           bellFilter = si.smooth(opening);
           bellChain = pm.chain(
@@ -216,19 +216,19 @@ with {
         BrassModel(tubeLength,lipsTension,blowPressure) = pm.endChain(modelChain)
         with {
             maxTubeLength = 12;
+		    tunedLength = tubeLength - 11*pm.speedOfSound/ma.SR;
             modelChain = pm.chain(
                             BrassLips(tubeLength,lipsTension,blowPressure) :
-                            pm.openTube(maxTubeLength,tubeLength) :
-                            BrassBell(tubeLength) : pm.out
+                            pm.openTube(maxTubeLength,tunedLength) :
+                            BrassBell(tunedLength) : pm.out
             );
         };
     };`,
-    `FluteTone(f,r,g) = FluteModel(pm.f2l(f*r),0.5,0.56*(1+FluteBlow)) : *(FluteEnv)
+    `FluteTone(f,r,g) = FluteModel(pm.f2l(f*r),FluteBlow) : *(FluteEnv)
     with {
-        FluteLongBlowDynamics(x) = phasor(x) - (phasor(x) : ba.latch(g)) : *(2*ma.PI) : cos;
-        FluteBlow = 0.3*en.adsr(0.2,cperiod*0.7,0.9,cperiod*0.3,g)*(1+0.25*FluteLongBlowDynamics(1/(16*cperiod)));
+        FluteBlow = (0.9+0.2*(no.noise : fi.lowpass(2,500)))*en.adsr(0.01,cperiod*0.7,0.9,cperiod*0.3,g);
         FluteLongBlowRamp(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
-        FluteEnv = 5*en.adsr(0.1,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*FluteLongBlowRamp(2*cperiod/ma.SR));
+        FluteEnv = 3*en.adsr(0.1,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*FluteLongBlowRamp(2*cperiod/ma.SR));
         fluteJetTable = _ <: *(* : -(1)) : clipping
         with{
             clipping = min(1) : max(-1);
@@ -243,14 +243,13 @@ with {
             dispersion = si.smooth(0.7);
             absorption = 0.95;
         };
-        FluteModel(tubeLength,mouthPosition,pressure) = pm.endChain(fluteChain) : fi.dcblocker
+        FluteModel(tubeLength,pressure) = pm.endChain(fluteChain) : fi.dcblocker
         with{
-            maxTubeLength = 3;
-            tubeTuning = 0;//0.27;
-            tLength = tubeLength+tubeTuning;
-            embouchurePos = 0.27 + (mouthPosition-0.5)*0.4;
-            tted = tLength*embouchurePos;
-            eted = tLength*(1-embouchurePos);
+            maxTubeLength = 12;
+            tLength = tubeLength/(1-embouchurePos);
+            embouchurePos = 1/3;
+            tted = tLength*embouchurePos - 5*pm.speedOfSound/ma.SR;
+            eted = tLength*(1-embouchurePos) - 8*pm.speedOfSound/ma.SR;
             fluteChain = pm.chain(
                             fluteHead :
                             pm.openTube(maxTubeLength,tted) :
