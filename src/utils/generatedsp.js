@@ -183,9 +183,9 @@ with {
 };`,
     `BrassTone(f,r,g) = BrassModel(pm.f2l(f*r),BrassLipsTension,BrassBlow) : *(BrassEnv)
     with {
-        BrassBlow = 10^((12*ma.log2((f*r : pm.f2l) - 10*pm.speedOfSound/ma.SR : pm.l2f) - 48)/26 - 3)*(1+0.1*os.osc(f*r)+(no.noise : fi.lowpass(2,700) : *(0.1)));
+        BrassBlow = 10^(pow((12*ma.log2(f*r) - 47)/26,0.95) - 3)*(1+0.1*os.osc(f*r)+(no.noise : fi.lowpass(2,700) : *(0.1)));
         BrassLongBlowRamp(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
-        BrassEnv = 5*en.adsr(0.2,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*BrassLongBlowRamp(2*cperiod/ma.SR))/(BrassBlow^1.4);
+        BrassEnv = 4*en.adsr(0.2,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*BrassLongBlowRamp(2*cperiod/ma.SR))/(BrassBlow^1.4);
         BrassLipsTension = 0.5;
     
         brassLipsTable(length,tension) = *(0.03) : lipFilter <: * : clipping
@@ -202,25 +202,17 @@ with {
             p = pressure*0.3;
             mouthPieceInteraction = absorption <: (p-_ : brassLipsTable(length,tension) <: *(p),1-_),_ : _,* : + : fi.dcblocker;
         };
-        BrassBell(length) = bellChain
-        with {
-          maxTubeLength = 12;
-          lengthTuning = 0.29*length;
-          opening = 0.5;
-          bellFilter = si.smooth(opening);
-          bellChain = pm.chain(
-            pm.openTube(maxTubeLength,lengthTuning) :
-            pm.rTermination(pm.basicBlock,bellFilter)
-          );
-        };
+        BrassBell(bellOpening) = pm.rTermination(pm.basicBlock,si.smooth(bellOpening));
         BrassModel(tubeLength,lipsTension,blowPressure) = pm.endChain(modelChain)
         with {
             maxTubeLength = 12;
-		    tunedLength = tubeLength - 11*pm.speedOfSound/ma.SR;
+		    bellOpening = 0.5;
+		    lengthFactor = 1.29;
+		    tunedLength = tubeLength*lengthFactor - 11*pm.speedOfSound/ma.SR;
             modelChain = pm.chain(
                             BrassLips(tubeLength,lipsTension,blowPressure) :
                             pm.openTube(maxTubeLength,tunedLength) :
-                            BrassBell(tunedLength) : pm.out
+                            BrassBell(bellOpening) : pm.out
             );
         };
     };`,
