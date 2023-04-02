@@ -218,7 +218,7 @@ with {
     };`,
     `FluteTone(f,r,g) = FluteModel(pm.f2l(f*r),FluteBlow) : *(FluteEnv)
     with {
-        FluteBlow = (0.9+0.2*(no.noise : fi.lowpass(2,500)))*en.adsr(0.01,cperiod*0.7,0.9,cperiod*0.3,g);
+        FluteBlow = (0.9+0.2*(no.noise : fi.lowpass(2,500)))*en.adsr(0.03,cperiod*0.7,0.9,cperiod*0.3,g);
         FluteLongBlowRamp(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
         FluteEnv = 3*en.adsr(0.1,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*FluteLongBlowRamp(2*cperiod/ma.SR));
         fluteJetTable = _ <: *(* : -(1)) : clipping
