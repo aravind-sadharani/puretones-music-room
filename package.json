@@ -1,5 +1,6 @@
 {
   "name": "puretones",
+  "homepage": "https://puretones.sadharani.com",
   "main": "electronApp.js",
   "build": {
     "icon": "src/images/puretones.png",
@@ -9,7 +10,17 @@
       "electronApp.js"
     ],
     "win": {},
-    "linux": {},
+    "linux": {
+      "maintainer": "Aravind Iyer <aravind.iyer@sadharani.com>",
+      "target": [
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
     "mac": {
       "target": [
         {
@@ -21,10 +32,10 @@
       ]
     }
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "PureTones Music Room",
-  "author": "Aravind Iyer",
+  "author": "Aravind Iyer <aravind.iyer@sadharani.com>",
   "keywords": [
     "gatsby"
   ],
