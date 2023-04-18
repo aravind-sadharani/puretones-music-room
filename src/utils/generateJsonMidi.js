@@ -216,16 +216,18 @@ const generateJsonMidiTrack = (composition,metadata,noteOffsets) => {
                 currentPitchBend = MIDIPITCHCENTRE
                 currentGamakaDuration = 0
             } else if(isGamaka(token)) {
+                let start = 10, end = -10, rate = 2.22, number = 6.8
                 let paramsMatch = /\(G\)\(.*\)/
-                let params = token.match(paramsMatch)
-                params = `${params[0].replace("(G)","").replace("(","").replace(")","")}`
-                let paramList = params.split(',')
-                let start = isNote(paramList[0]) ? getInterval(paramList[0],token,noteOffsets) : Number(paramList[0])
-                let end = isNote(paramList[1]) ? getInterval(paramList[1],token,noteOffsets) : Number(paramList[1])
-                let number = Number(paramList[3])*2
-
+                let isParams = token.match(paramsMatch)
+                if(!!isParams) {
+                    let params = `${isParams[0].replace("(G)","").replace("(","").replace(")","")}`
+                    let paramList = params.split(',')
+                    start = isNote(paramList[0]) ? getInterval(paramList[0],token,noteOffsets) : Number(paramList[0])
+                    end = isNote(paramList[1]) ? getInterval(paramList[1],token,noteOffsets) : Number(paramList[1])
+                    number = Number(paramList[3])*2
+                    rate = 2**(Number(paramList[2])/10)
+                }
                 let timing = index+1 >= tokens.length || isNote(tokens[index+1]) ? '1' : tokens[index+1]
-                let rate = 2**(Number(paramList[2])/10)
                 let gamakaDuration = Math.round(QUARTERNOTE*number/rate)
                 let noteDuration = getNoteLength(timing)
                 currentGamakaDuration = gamakaDuration < noteDuration ? gamakaDuration : noteDuration
