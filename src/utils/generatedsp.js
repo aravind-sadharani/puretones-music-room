@@ -183,9 +183,11 @@ with {
 };`,
     `BrassTone(f,r,g) = BrassModel(pm.f2l(f*r),BrassLipsTension,BrassBlow) : *(BrassEnv)
     with {
-        BrassBlow = 10^(pow((12*ma.log2(f*r) - 47)/26,0.95) - 3)*(1+0.1*os.osc(f*r)+(no.noise : fi.lowpass(2,700) : *(0.1)));
+        brassPressureCoarse(f) = f : ma.log2 : *(12) : -(60) : *(0.038) : +(0.42);
+        brassPressureFine(f) = f : ma.log2 : *(12) : -(60) : /(50) : +(0.1) : *(2*ma.PI) : sin : *(0.09);
+  		BrassBlow = 10^(brassPressureCoarse(f*r) - brassPressureFine(f*r) - 3)*(1+0.1*os.osc(f*r));
         BrassLongBlowRamp(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
-        BrassEnv = 4*en.adsr(0.2,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*BrassLongBlowRamp(2*cperiod/ma.SR))/(BrassBlow^1.4);
+        BrassEnv = 6*en.adsr(0.2,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*BrassLongBlowRamp(2*cperiod/ma.SR))/(BrassBlow^1.4);
         BrassLipsTension = 0.5;
     
         brassLipsTable(length,tension) = *(0.03) : lipFilter <: * : clipping
@@ -207,8 +209,8 @@ with {
         with {
             maxTubeLength = 12;
 		    bellOpening = 0.5;
-		    lengthFactor = 1.29;
-		    tunedLength = tubeLength*lengthFactor - 11*pm.speedOfSound/ma.SR;
+		    lengthFactor = 1.25;
+		    tunedLength = tubeLength*lengthFactor - 8*pm.speedOfSound/ma.SR;
             modelChain = pm.chain(
                             BrassLips(tubeLength,lipsTension,blowPressure) :
                             pm.openTube(maxTubeLength,tunedLength) :
