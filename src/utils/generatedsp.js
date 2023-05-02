@@ -232,9 +232,9 @@ with {
         with{
             absorption = 0.95;
         };
-        fluteFoot = pm.rTermination(pm.basicBlock,*(absorption) : dispersion)
+        fluteFoot(smoothing) = pm.rTermination(pm.basicBlock,*(absorption) : dispersion)
         with{
-            dispersion = si.smooth(0.7);
+            dispersion = si.smooth(smoothing);
             absorption = 0.95;
         };
         fluteBody(length,brightness) = _ <: _,fi.resonbp(length : pm.l2f,2,1) : *(brightness),*(1-brightness) :> _;
@@ -245,14 +245,16 @@ with {
             embouchurePos = 1/3;
             tted = tLength*embouchurePos - 5*pm.speedOfSound/ma.SR;
             eted = tLength*(1-embouchurePos) - 8*pm.speedOfSound/ma.SR;
+            brightness = tubeLength : pm.l2f : ma.log2 : *(12) : -(60) : /(70) : pow(1.2) : +(0.1);
+            tuning = tubeLength : pm.l2f : ma.log2 : *(12) : -(60) : pow(4) : /(1730000) : +(59);
+            smoothing = 0.7 + tuning/1000;
             fluteChain = pm.chain(
                             fluteHead :
                             pm.openTube(maxTubeLength,tted) :
                             fluteEmbouchure(pressure) :
                             pm.openTube(maxTubeLength,eted) :
-                            fluteFoot : pm.out
+                            fluteFoot(smoothing) : pm.out
             );
-            brightness = tubeLength : pm.l2f : ma.log2 : *(12) : -(60) : /(70) : pow(1.2) : +(0.1);
         };
     };`
 ]
