@@ -127,7 +127,7 @@ with {
         };
         ViolinModel(length,bowPressure,bowVelocity,bowPosition) = 15*pm.endChain(egChain)
         with{
-          lengthTuning = 11*pm.speedOfSound/ma.SR;
+          lengthTuning = 12*pm.speedOfSound/ma.SR;
           stringL = length-lengthTuning;
           egChain = pm.chain(
             pm.lTermination((-1)*pm.bridgeFilter(0.3,0.1),pm.basicBlock) :
