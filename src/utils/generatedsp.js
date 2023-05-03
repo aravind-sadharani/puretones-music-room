@@ -156,7 +156,7 @@ with {
         };
         wBell(length) = pm.rTermination(pm.basicBlock,bellFilter)
         with {
-          opening = (length^(1/3))/(length^(1/3)+1);
+          opening = length : pm.l2f : ma.log2 : *(12) : -(120) : pow(2) : *(22/3500) : +(51.12) : /(100);
           bellFilter = si.smooth(opening);
         };
         ReedModel(tubeLength,pressure,reedStiffness) = 0.75*pm.endChain(modelChain)
