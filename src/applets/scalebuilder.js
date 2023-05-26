@@ -49,7 +49,7 @@ const ScaleBuilder = () => {
         if(result.status) {
             let keyboard = prepareKeyboard(result.scale)
             let title = newTitle(scaleResult.message,result.message)
-            setScaleResult({status: result.status, message: result.message, scale: result.scale, title: title, notespec: keyboard.notespec, settings: keyboard.settings})
+            setScaleResult({status: result.status, message: result.message, scale: result.scale, title: title, notespec: keyboard.notespec, chordspec: keyboard.chordspec, settings: keyboard.settings})
         } else
             setScaleResult({status: result.status, message: result.message, scale: result.scale, title: "", notespec: [], settings: ""})
     }
@@ -79,7 +79,7 @@ const ScaleBuilder = () => {
                     <p></p>
                 </center>
             </ScaleBuilderContainer>
-            {scaleResult.settings !== '' && <ScalePlayer title={scaleResult.title} noteSpec={scaleResult.notespec} scale={scaleResult.settings} />}
+            {scaleResult.settings !== '' && <ScalePlayer title={scaleResult.title} noteSpec={scaleResult.notespec} scale={scaleResult.settings} chordSpec={scaleResult.chordspec} />}
             {scaleResult.message !== '' && <ScaleBuilderContainer>
                 <p><strong>Notes about the Scale</strong></p>
                 <ScaleBuilderResultElement>

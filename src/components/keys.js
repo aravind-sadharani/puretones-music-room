@@ -48,6 +48,29 @@ const BlackKeyElement = styled.div`
     }
 `
 
+const ChordKeyElement = styled.div`
+    position: relative;
+    width: calc(14.286vw - 10px);
+    max-width: calc(640px/7);
+    height: calc(14.286vw - 10px);
+    max-height: calc(640px/7);
+    border: 1px solid;
+    border-radius: 5px;
+    background-color: ${({theme}) => theme.ivory};
+    box-shadow: 0px 1px 3px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 20%;
+    color: ${({theme}) => theme.light.textColor};
+    &.fade {
+        opacity: 0.7;
+        border: none;
+        z-index: -1;
+    }
+`
+
 const WhiteKey = ({keyOn,keyOff,children}) => (
     <WhiteKeyElement className={`${children === 'fade' ? 'fade' : ''}`} onTouchStart={keyOn} onTouchEnd={keyOff} onMouseDown={keyOn} onMouseUp={keyOff}>{children !== 'fade' && children}</WhiteKeyElement>
 )
@@ -56,4 +79,8 @@ const BlackKey = ({keyOn,keyOff,children}) => (
     <BlackKeyElement className={`${children === 'fade' ? 'fade' : ''}`} onTouchStart={keyOn} onTouchEnd={keyOff} onMouseDown={keyOn} onMouseUp={keyOff}>{children !== 'fade' && children}</BlackKeyElement>
 )
 
-export {WhiteKey, BlackKey}
+const ChordKey = ({keyOn,keyOff,fade,children}) => (
+    <ChordKeyElement className={`${fade ? 'fade' : ''}`} onTouchStart={keyOn} onTouchEnd={keyOff} onMouseDown={keyOn} onMouseUp={keyOff}>{!fade && children}</ChordKeyElement>
+)
+
+export {WhiteKey, BlackKey, ChordKey}
