@@ -277,9 +277,9 @@ const generateJsonMidiTrack = (composition,metadata,noteOffsets) => {
     return track
 }
 
-const toneName = ["String_1", "String_2", "Bow", "Reed", "Synth", "Brass", "Flute"]
+const toneName = ["String_1", "String_2", "Bow", "Reed", "Synth", "Brass", "Flute", "Marimba"]
 
-const programNumber = [27, 25, 40, 71, 4, 60, 73]
+const programNumber = [27, 25, 40, 71, 4, 60, 73, 12]
 
 const sequencer2MIDI = (sequencerState,sequencerSettings,scaleState) => {
     let noteOffsets = Object.entries(baseRatio).map(note => {
