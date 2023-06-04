@@ -57,7 +57,7 @@ const SequencerVoice = ({index,sequencerVoiceState,onVoiceParamUpdate}) => {
             },
             {
                 value: 7,
-                text: "Marimba"
+                text: "Gong"
             }
         ]
     }

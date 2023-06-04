@@ -257,25 +257,24 @@ with {
             );
         };
     };`,
-    `MarimbaTone(f,r,g) = MarimbaModel(f*r) : *(MarimbaBarEnv) : MarimbaTube(f*r) : *(MarimbaTubeEnv)
+    `GongTone(f,r,g) = GongModel(f*r) : *(GongStrike) : *(GongDecay)
     with {
-        MarimbaModel(f) = MarimbaSignal
+        GongModel(f) = GongSignal
         with {
-            semiToneCorrection = vslider("[00]Semitone Correction",-2,-12,12,1);
-            centCorrection = vslider("[01]Cent Correction",-7,-100,100,1);
-            subCentCorrection = vslider("[02]Subcent Correction",-79,-100,100,1);
-            correctedPitch = f*2^(semiToneCorrection/12)*2^(centCorrection/1200)*2^(subCentCorrection/120000);
-            harmonicity = vslider("[04]Harmonicity",0.5,0,1,0.01);
-            exponent = vslider("[05]Exponent",2,1,3,0.1);
+            semiToneCorrection = -7;
+            centCorrection = vslider("[01]Cent Correction",0,-100,100,1);
+            subCentCorrection = vslider("[02]Subcent Correction",0,-100,100,1);
+            correctedPitch = f*2^(semiToneCorrection/12)*2^(centCorrection/1200)*2^(subCentCorrection/120000)/2;
+            harmonicity = 0.5;
+            exponent = 2;
             overtoneRatio(n) = (n+harmonicity)^exponent;
-            decayRate = vslider("[03]Brightness",0.5,0.1,1,0.01);
+            decayRate = vslider("[03]Brightness",0.8,0,1,0.01);
             amplitude(n) = decayRate^n;
-            MarimbaSignal = par(i,10,os.osc(overtoneRatio(i+1)*correctedPitch)*amplitude(i)) :> _;
+            GongSignal = par(i,3,os.osc(overtoneRatio(i+1)*correctedPitch)*amplitude(i)) :> _;
         };
-        MarimbaBarEnv = 2*en.adsr(0.003,cperiod*0.9,0.01,cperiod*0.1,g);
-        MarimbaTube(f) = pm.marimbaResTube(2*f : pm.f2l);
-        MarimbaDecay(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
-        MarimbaTubeEnv = MarimbaDecay(3/ma.SR);
+        GongStrike = 0.5*en.adsr(0.001,cperiod*0.5,0.9,cperiod*0.3,g);
+        decay(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
+        GongDecay = decay(1/ma.SR);
     };`
 ]
 
@@ -296,7 +295,7 @@ const baseRatio = {
     Q: 3
 }
 
-const toneNames = ["String1", "String2", "Violin", "Reed", "Synth", "Brass", "Flute", "Marimba"]
+const toneNames = ["String1", "String2", "Violin", "Reed", "Synth", "Brass", "Flute", "Gong"]
 
 const tokenize = str => str.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"').replace(/(\n|\t)/g,' ').split(' ').map(s => s.trim()).filter(s => s.length)
 
