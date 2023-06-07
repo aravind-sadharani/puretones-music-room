@@ -257,14 +257,14 @@ with {
             );
         };
     };`,
-    `GongTone(f,r,g) = GongModel(f*r) : *(GongStrike) : *(GongDecay)
+    `GongTone(f,r,g) = GongModel(f*r) : *(GongStrike) : *(GongDecay(f*r))
     with {
         GongModel(f) = GongSignal
         with {
             semiToneCorrection = -7;
-            centCorrection = vslider("[01]Cent Correction",0,-100,100,1);
-            subCentCorrection = vslider("[02]Subcent Correction",0,-100,100,1);
-            correctedPitch = f*2^(semiToneCorrection/12)*2^(centCorrection/1200)*2^(subCentCorrection/120000)/2;
+            logF = f : ma.log2 : *(12) ;
+            centCorrection = -0.00023*(logF-95)^3-0.8*(logF-60)-48.5;
+            correctedPitch = f*2^(semiToneCorrection/12)*2^(centCorrection/1200)/2;
             harmonicity = 0.5;
             exponent = 2;
             overtoneRatio(n) = (n+harmonicity)^exponent;
@@ -274,7 +274,7 @@ with {
         };
         GongStrike = 0.5*en.adsr(0.001,cperiod*0.5,0.9,cperiod*0.3,g);
         decay(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
-        GongDecay = decay(1/ma.SR);
+        GongDecay(f) = decay(f/(220*ma.SR));
     };`
 ]
 
