@@ -187,7 +187,7 @@ with {
         brassPressureFine(f) = f : ma.log2 : *(12) : -(60) : /(50) : +(0.1) : *(2*ma.PI) : sin : *(0.09);
   		BrassBlow = 10^(brassPressureCoarse(f*r) - brassPressureFine(f*r) - 3)*(1+0.1*os.osc(f*r));
         BrassLongBlowRamp(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
-        BrassEnv = 6*en.adsr(0.2,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*BrassLongBlowRamp(2*cperiod/ma.SR))/(BrassBlow^1.4);
+        BrassEnv = 18*en.adsr(0.2,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*BrassLongBlowRamp(2*cperiod/ma.SR))/(BrassBlow^1.0);
         BrassLipsTension = 0.5;
     
         brassLipsTable(length,tension) = *(0.03) : lipFilter <: * : clipping
