@@ -5,3 +5,6 @@ public
 .DS_STORE
 */.DS_STORE
 
+
+# Local Netlify folder
+.netlify
