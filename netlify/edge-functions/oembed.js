@@ -35,4 +35,4 @@ export default async (request) => {
     }
 }
 
-export const config = { path: "/oembed"}
+export const config = { path: "/discover/"}
