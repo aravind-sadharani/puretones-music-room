@@ -6,6 +6,7 @@ import { dspStateFromSettings } from "utils/dspsettingsinterpreter"
 import droneDSPCode from 'data/puretones.dsp'
 import NowPlaying from "components/nowplaying"
 import useIsInViewport from "services/viewport"
+import Button from "components/button"
 
 const DronePlayerContainer = styled.div`
     padding: 12px;
@@ -21,35 +22,6 @@ const DronePlayerContainer = styled.div`
 const DroneTitleElement = styled.blockquote`
     font-size: 1em;
     margin: 0;
-`
-
-const DroneButtonElement = styled.button`
-    padding: 0 6px;
-    background-color: ${({theme}) => theme.light.borderColor};
-    ${({theme}) => theme.isDark`background-color: ${theme.dark.borderColor};`}
-    color: ${({theme}) => theme.light.textColor};
-    ${({theme}) => theme.isDark`color: ${theme.dark.textColor};`}
-    -webkit-appearance: none;
-    appearance: none;
-    border: 0;
-    border-radius: 5px;
-    margin: auto 0 0 auto;
-    width: 120px;
-    &:hover {
-        background-color: ${({theme}) => theme.light.buttonBackground};
-        ${({theme}) => theme.isDark`background-color: ${theme.dark.buttonBackground};`}
-        color: ${({theme}) => theme.light.buttonText};
-        ${({theme}) => theme.isDark`color: ${theme.dark.buttonText};`}
-        font-weight: 700;
-        opacity: 0.8;
-    }
-    &.active {
-        background-color: ${({theme}) => theme.light.buttonBackground};
-        ${({theme}) => theme.isDark`background-color: ${theme.dark.buttonBackground};`}
-        color: ${({theme}) => theme.light.buttonText};
-        ${({theme}) => theme.isDark`color: ${theme.dark.buttonText};`}
-        font-weight: 700;
-    }
 `
 
 const DronePlayer = ({title,settings}) => {
@@ -101,7 +73,7 @@ const DronePlayer = ({title,settings}) => {
     return (
         <DronePlayerContainer ref={dronePlayerRef}>
             <DroneTitleElement>{title}</DroneTitleElement>
-            <DroneButtonElement className={buttonState} onClick={() => playStop()}>{buttonText}</DroneButtonElement>
+            <Button player active={buttonState} onClick={() => playStop()}>{buttonText}</Button>
             {buttonState === 'active' && !inView &&
             <NowPlaying align='left' title={title} active={(active && (commonSettings['currentDrone'] === title))} onClick={playStop} buttonText={buttonText}></NowPlaying>}
         </DronePlayerContainer>

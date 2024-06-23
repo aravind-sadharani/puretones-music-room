@@ -11,7 +11,7 @@ const ButtonElement = styled.button`
     appearance: none;
     border: 0;
     border-radius: 5px;
-    margin: 6px;
+    margin: ${props => props.player === 'true' ? 'auto 0 0 auto' : '6px'};
     width: 120px;
     &:hover {
         background-color: ${({theme}) => theme.light.buttonBackground};
@@ -30,10 +30,10 @@ const ButtonElement = styled.button`
     }
 `
 
-const Button = ({active,onClick,children}) => {
+const Button = ({active,onClick,children,player}) => {
     let buttonState = active ? "active" : ""
     return (
-        <ButtonElement className={buttonState} onClick={()=>{
+        <ButtonElement player={`${player}`} className={buttonState} onClick={()=>{
             if(onClick)
                 onClick()
         }}>{children}</ButtonElement>

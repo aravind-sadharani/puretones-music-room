@@ -6,19 +6,31 @@ import { dspStateFromSettings } from "utils/dspsettingsinterpreter"
 import { AudioEnv } from "services/audioenv"
 import { CommonSettingsEnv } from 'services/commonsettings'
 import scaleDSPCode from 'data/musicscale.dsp'
+import Button from 'components/button'
 
 const isBrowser = typeof window !== "undefined"
 
 const ScalePlayerContainer = styled.div`
     padding: 12px 12px 0 12px;
-    margin: 0 0 1em 0;
+    margin: 0 0 12px 0;
     border: 1px solid;
     border-color: ${({theme}) => theme.light.borderColor};
     ${({theme}) => theme.isDark`border-color: ${theme.dark.borderColor};`}
     border-radius: 5px;
 `
 
-const ScalePlayer = ({title,noteSpec,keySpec,scale}) => {
+const ScalePlayerEmbedContainer = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 120px;
+    margin: 0 0 12px 0;
+`
+
+const ScaleTitleElement = styled.blockquote`
+    font-size: 1em;
+    margin: 0;
+`
+
+const ScalePlayer = ({title,noteSpec,keySpec,scale,embed}) => {
     const note2Offset = keySpec || {'Sa': 0, 're': 1, 'Re': 2, 'ga': 3, 'Ga': 4, 'ma': 5, 'Ma': 6, 'Pa': 7, 'dha': 8, 'Dha': 9, 'ni': 10, 'Ni': 11, 'SA': 12}
     const key2Midi = (keyName) => (Number(commonSettings['pitch']) - 3 + note2Offset[`${keyName}`] + 48)
     const [keyState,setKeyState] = React.useState(Array(13).fill(0))
@@ -108,10 +120,17 @@ const ScalePlayer = ({title,noteSpec,keySpec,scale}) => {
         inactive: 'Stop'
     }
     return (
-        <ScalePlayerContainer>
-            <ShowHideControls title={title.split('\n')[0]} label={showHideLabel} visibility={visibility && (commonSettings['currentScale'] === title)} onShowHide={toggleScaleVisibility}>
+        <ScalePlayerContainer embed={`${embed}`}>
+            {embed && <>
+                <ScalePlayerEmbedContainer>
+                    <ScaleTitleElement>{title.split('\n')[0]}</ScaleTitleElement>
+                    <Button player active={visibility} onClick={() => toggleScaleVisibility()}>{`${visibility ? 'Stop' : 'Start'}`}</Button>
+                </ScalePlayerEmbedContainer>
                 <Keyboard keyOn={keyOn} keyOff={keyOff} noteSpec={noteSpec} />
-            </ShowHideControls>
+            </>}
+            {!embed && <ShowHideControls title={title.split('\n')[0]} label={showHideLabel} visibility={visibility && (commonSettings['currentScale'] === title)} onShowHide={toggleScaleVisibility}>
+                <Keyboard keyOn={keyOn} keyOff={keyOff} noteSpec={noteSpec} />
+            </ShowHideControls>}
         </ScalePlayerContainer>
     )
 }
