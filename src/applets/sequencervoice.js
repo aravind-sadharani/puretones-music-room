@@ -57,6 +57,32 @@ const SequencerVoice = ({index,sequencerVoiceState,onVoiceParamUpdate}) => {
             }
         ]
     }
+    let subdivisionsList = {
+        key: "Subdivisions",
+        default: sequencerVoiceState['subdivisions'] || 4,
+        options: [
+            {
+                value: 3,
+                text: "Tishra 3",
+            },
+            {
+                value: 4,
+                text: "Chatushra 4",
+            },
+            {
+                value: 5,
+                text: "Khanda 5",
+            },
+            {
+                value: 7,
+                text: "Mishra 7",
+            },
+            {
+                value: 9,
+                text: "Sankeerna 9",
+            }
+        ]
+    }
     const gainParams = {
         key: "Level",
         init: sequencerVoiceState['gain'] || -9,
@@ -76,6 +102,7 @@ const SequencerVoice = ({index,sequencerVoiceState,onVoiceParamUpdate}) => {
             <Toggle title='Enable' status={sequencerVoiceState['enabled']} onParamUpdate={()=>onVoiceParamUpdate(Number(index),!sequencerVoiceState['enabled'],'enabled')} />
             <Selector params={octaveList} path='octave' onParamUpdate={(value,path) => onVoiceParamUpdate(Number(index),value,path)}></Selector>
             <Selector params={toneList} path='tone' onParamUpdate={(value,path) => onVoiceParamUpdate(Number(index),value,path)}></Selector>
+            <Selector params={subdivisionsList} path='subdivisions' onParamUpdate={(value,path) => onVoiceParamUpdate(Number(index),value,path)}></Selector>
             <Slider params={gainParams} path='gain' onParamUpdate={(value,path) => onVoiceParamUpdate(Number(index),value,path)}></Slider>
             <Slider params={panParams} path='pan' onParamUpdate={(value,path) => onVoiceParamUpdate(Number(index),value,path)}></Slider>
             <Editor expanded={sequencerVoiceState['editorExpanded']} onExpand={() => onVoiceParamUpdate(Number(index),!sequencerVoiceState['editorExpanded'],'editorExpanded')} composition={`${sequencerVoiceState['composition']}`} onCompositionChange={(composition) => onVoiceParamUpdate(Number(index),composition,'composition')} />
