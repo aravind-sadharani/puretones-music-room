@@ -19,11 +19,11 @@ process = concert : dm.zita_light;
 `
 
 const dspToneTemplates = [
-    `String1Tone(f,r,g) = StringModel(pm.f2l(f*r*(1+variance)),0.63,10*StringPluck,min(0.95,0.5*(r^0.75)),0,60/(r^2)) + StringModel(pm.f2l(f*r*(1-variance)),0.63,10*StringPluck,min(0.95,0.5*(r^0.75)),0,60/(r^2)) : *(StringEnv)
+    `String1Tone(f,r,g,p) = StringModel(pm.f2l(f*r*(1+variance)),0.63,10*StringPluck,min(0.95,0.5*(r^0.75)),0,60/(r^2)) + StringModel(pm.f2l(f*r*(1-variance)),0.63,10*StringPluck,min(0.95,0.5*(r^0.75)),0,60/(r^2)) : *(StringEnv)
 with {
     variance = vslider("[00]Variance",2,0,4,0.1)/10000;
-    StringPluck = en.adsr(0.00001,cperiod*0.7,0.9,cperiod*0.3,g);
-    StringEnv = en.adsr(0.0001,cperiod*0.6,0.8,cperiod*0.5,g);
+    StringPluck = en.adsr(0.00001,p*0.7,0.9,p*0.3,g);
+    StringEnv = en.adsr(0.0001,p*0.6,0.8,p*0.5,g);
     
     StringModel(length,pluckPosition,excitation,brightness,damping,stiffness) = 0.1*pm.endChain(egChain)
     with{
@@ -50,11 +50,11 @@ with {
         );
     };
 };`,
-    `String2Tone(f,r,g) = StringModel(pm.f2l(f*r*(1+variance)),StringPluck) + StringModel(pm.f2l(f*r*(1-variance)),StringPluck) : *(StringEnv)
+    `String2Tone(f,r,g,p) = StringModel(pm.f2l(f*r*(1+variance)),StringPluck) + StringModel(pm.f2l(f*r*(1-variance)),StringPluck) : *(StringEnv)
 with {
     variance = vslider("[00]Variance",2,0,4,0.1)/10000;
-    StringPluck = en.adsr(0.00001,cperiod*0.7,0.9,cperiod*0.3,g);
-    StringEnv = en.adsr(0.0001,cperiod*0.7,0.7,cperiod*0.4,g);
+    StringPluck = en.adsr(0.00001,p*0.7,0.9,p*0.3,g);
+    StringEnv = en.adsr(0.0001,p*0.7,0.7,p*0.4,g);
     
     StringModel(length,excitation) = 2*pm.endChain(egChain)
     with{
@@ -96,13 +96,13 @@ with {
         );
     };
 };`,
-    `ViolinTone(f,r,g) = ((pm.f2l(f*r)/6))*ViolinModel(pm.f2l(f*r),0.2*ViolinBow,0.2*ViolinBow,0.79) : *(ViolinEnv)
+    `ViolinTone(f,r,g,p) = ((pm.f2l(f*r)/6))*ViolinModel(pm.f2l(f*r),0.2*ViolinBow,0.2*ViolinBow,0.79) : *(ViolinEnv)
 with {
 
     ViolinLongBowRamp(x) = ramp(x) - (ramp(x) : ba.latch(g)) : *(-1) : exp;
     ViolinLongBowDynamics(x) = phasor(x) - (phasor(x) : ba.latch(g)) : *(2*ma.PI) : cos;
-    ViolinBow = en.adsr(0.1,cperiod*0.7,0.6,cperiod*0.3,g)*(1+0.35*ViolinLongBowDynamics(1/(16*cperiod)))*(0.15+ViolinLongBowRamp(2.5*cperiod/ma.SR));
-    ViolinEnv = en.adsr(0.1,cperiod*0.6,0.6,cperiod*0.5,g);
+    ViolinBow = en.adsr(0.1,p*0.7,0.6,p*0.3,g)*(1+0.35*ViolinLongBowDynamics(1/(16*p)))*(0.15+ViolinLongBowRamp(2.5*p/ma.SR));
+    ViolinEnv = en.adsr(0.1,p*0.6,0.6,p*0.5,g);
     
     violinBowedString(length,bowPressure,bowVelocity,bowPosition) = strChain
           with{
@@ -138,12 +138,12 @@ with {
           );
         };
 };`,
-    `ReedTone(f,r,g) = ReedModel(pm.f2l(f*r),0.56*(1+ReedBlow),-0.104) : *(ReedEnv)
+    `ReedTone(f,r,g,p) = ReedModel(pm.f2l(f*r),0.56*(1+ReedBlow),-0.104) : *(ReedEnv)
 with {
     ReedLongBlowDynamics(x) = phasor(x) - (phasor(x) : ba.latch(g)) : *(2*ma.PI) : cos;
-    ReedBlow = 3*en.adsr(0.01,cperiod*0.7,0.9,cperiod*0.3,g)*(1+0.25*ReedLongBlowDynamics(1/(16*cperiod)));
+    ReedBlow = 3*en.adsr(0.01,p*0.7,0.9,p*0.3,g)*(1+0.25*ReedLongBlowDynamics(1/(16*p)));
     ReedLongBlowRamp(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
-    ReedEnv = en.adsr(0.1,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*ReedLongBlowRamp(2*cperiod/ma.SR));
+    ReedEnv = en.adsr(0.1,p*0.6,0.8,p*0.5,g)*(0.3+0.7*ReedLongBlowRamp(2*p/ma.SR));
     
     reedTable(offset,slope) = reedTable : min(1) : max(-1)
         with {
@@ -172,22 +172,22 @@ with {
                 );
         };
     };`,
-    `SynthTone(f,r,g) = (SynthModel(f*r*(1+variance)) + SynthModel(f*r*(1-variance))) : *(SynthEnv)
+    `SynthTone(f,r,g,p) = (SynthModel(f*r*(1+variance)) + SynthModel(f*r*(1-variance))) : *(SynthEnv)
 with {
-    SynthEnv = en.adsr(0.001,cperiod*0.6,0.8,cperiod*0.5,g);
+    SynthEnv = en.adsr(0.001,p*0.6,0.8,p*0.5,g);
     nharmonics = 32;
     brightness = 0.6;
     amplitude = 20*(1-brightness)/(1-brightness^(nharmonics+1))/sqrt(f);
     variance = 2/10000;
     SynthModel(f) = ((brightness^(nharmonics+1))*os.osc(f*nharmonics) - (brightness^nharmonics)*os.osc(f*(nharmonics+1)) + os.osc(f))/((1-brightness)^2+4*brightness*os.osc(f/2)*os.osc(f/2)) + 0.1*os.osc(f/2) : *(amplitude);
 };`,
-    `BrassTone(f,r,g) = BrassModel(pm.f2l(f*r),BrassLipsTension,BrassBlow) : *(BrassEnv)
+    `BrassTone(f,r,g,p) = BrassModel(pm.f2l(f*r),BrassLipsTension,BrassBlow) : *(BrassEnv)
     with {
         brassPressureCoarse(f) = f : ma.log2 : *(12) : -(60) : *(0.038) : +(0.42);
         brassPressureFine(f) = f : ma.log2 : *(12) : -(60) : /(50) : +(0.1) : *(2*ma.PI) : sin : *(0.09);
   		BrassBlow = 10^(brassPressureCoarse(f*r) - brassPressureFine(f*r) - 3)*(1+0.1*os.osc(f*r));
         BrassLongBlowRamp(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
-        BrassEnv = 18*en.adsr(0.2,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*BrassLongBlowRamp(2*cperiod/ma.SR))/(BrassBlow^1.0);
+        BrassEnv = 18*en.adsr(0.2,p*0.6,0.8,p*0.5,g)*(0.3+0.7*BrassLongBlowRamp(2*p/ma.SR))/(BrassBlow^1.0);
         BrassLipsTension = 0.5;
     
         brassLipsTable(length,tension) = *(0.03) : lipFilter <: * : clipping
@@ -218,11 +218,11 @@ with {
             );
         };
     };`,
-    `FluteTone(f,r,g) = FluteModel(pm.f2l(f*r),FluteBlow) : *(FluteEnv)
+    `FluteTone(f,r,g,p) = FluteModel(pm.f2l(f*r),FluteBlow) : *(FluteEnv)
     with {
-        FluteBlow = (0.9+0.1*(no.noise : fi.lowpass(2,500)))*en.adsr(0.001,cperiod*0.7,0.9,cperiod*0.3,g);
+        FluteBlow = (0.9+0.1*(no.noise : fi.lowpass(2,500)))*en.adsr(0.001,p*0.7,0.9,p*0.3,g);
         FluteLongBlowRamp(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
-        FluteEnv = 4*en.adsr(0.1,cperiod*0.6,0.8,cperiod*0.5,g)*(0.3+0.7*FluteLongBlowRamp(2*cperiod/ma.SR));
+        FluteEnv = 4*en.adsr(0.1,p*0.6,0.8,p*0.5,g)*(0.3+0.7*FluteLongBlowRamp(2*p/ma.SR));
         fluteJetTable = _ <: *(* : -(1)) : clipping
         with{
             clipping = min(1) : max(-1);
@@ -384,14 +384,14 @@ const printNoteId = (voiceName, id) => `${voiceName}ratio_${id}`
 
 const printPitch = (voiceName,octave) => `${voiceName}cpitch = 110*(2^(commonPitch/12))*(2^(fineTune/1200))*(2^(${octave}));\n`
 
-const printNoteSpec = (voiceName, noteStr, id, noteOffsets) => `${voiceName}ratio_${id} = (${baseValue(noteStr)}) * (${octaveValue(noteStr)}) * (2^(${getFineTune(noteStr,noteOffsets)}/1200))${printGamaka(voiceName, noteStr, noteOffsets)}  //${noteStr}\n`
+const printNoteSpec = (voiceName, noteStr, id, noteOffsets,subdivisions) => `${voiceName}ratio_${id} = (${baseValue(noteStr)}) * (${octaveValue(noteStr)}) * (2^(${getFineTune(noteStr,noteOffsets)}/1200))${printGamaka(voiceName, noteStr, noteOffsets, subdivisions)}  //${noteStr}\n`
 
-const printGamaka = (voiceName, noteStr, noteOffsets) => {
+const printGamaka = (voiceName, noteStr, noteOffsets, subdivisions) => {
     let params = gamakaParams(noteStr)
     if(params !== 'none') {
         params = evaluateGamakaParams(params, noteStr, noteOffsets)
     }
-    return (params === "none" ? `${(gamakaValue(noteStr) ? ` * (delta,(-1)*delta,rate,number,8*cperiod : ${voiceName}shake);` : ";")}` : ` * (${params},8*cperiod : ${voiceName}shake);`)
+    return (params === "none" ? `${(gamakaValue(noteStr) ? ` * (delta,(-1)*delta,rate,number,32*cperiod/${subdivisions} : ${voiceName}shake);` : ";")}` : ` * (${params},32*cperiod/${subdivisions} : ${voiceName}shake);`)
 }
 
 const evaluateGamakaParams = (params, noteStr, noteOffsets) => {
@@ -426,12 +426,12 @@ const printStrokeTiming = (id, repeats) => {
 
 const printNoteTiming = (id, repeats) => `${id},`.repeat(2*repeats-1).concat(`${id}`)
 
-const getVoice = (voiceName,tokens,octave,noteOffsets,toneName) => {
+const getVoice = (voiceName,tokens,octave,noteOffsets,toneName,subdivisions) => {
     let uniqueNotes = findUniqueNotes(tokens)
     let gateTimes = getGateTiming(tokens)
     let noteIds = tokens.filter(isNote).map(n => uniqueNotes.findIndex(t => isEqual(t,n)))
 
-    let noteSpec = `${uniqueNotes.map((str,id) => printNoteSpec(voiceName,str,id,noteOffsets)).join("")}
+    let noteSpec = `${uniqueNotes.map((str,id) => printNoteSpec(voiceName,str,id,noteOffsets,subdivisions)).join("")}
 ${voiceName}noteratio = ${uniqueNotes.map((str,id) => printNoteId(voiceName,id)).join()} : ba.selectn(${uniqueNotes.length},${voiceName}noteindex);`
 
     let gateTiming = `${noteIds.map((id, index) => printGateTiming(uniqueNotes[id],gateTimes[index])).join()}`
@@ -440,10 +440,11 @@ ${voiceName}noteratio = ${uniqueNotes.map((str,id) => printNoteId(voiceName,id))
     let noteTiming = `${noteIds.map((id, index) => printNoteTiming(id,gateTimes[index])).join()}`
 
     let dspVoiceTop = `
-${voiceName}phasedcos(x) = phasor(x) - (phasor(x) : ba.latch(${voiceName}gate(cperiod))) : *(2*ma.PI) : cos;
-${voiceName}lockedramp(x) = ramp(x) - (ramp(x) : ba.latch(${voiceName}gate(cperiod)));
+${voiceName}period = cperiod*4/${subdivisions};
+${voiceName}phasedcos(x) = phasor(x) - (phasor(x) : ba.latch(${voiceName}gate(${voiceName}period))) : *(2*ma.PI) : cos;
+${voiceName}lockedramp(x) = ramp(x) - (ramp(x) : ba.latch(${voiceName}gate(${voiceName}period)));
 ${voiceName}shake(d1,d2,r,n,p) = 1+((c2v(d1)+c2v(d2))/2+(c2v(d1)-c2v(d2))*${voiceName}phasedcos(l2l(r))/2)*(${voiceName}lockedramp(l2l(r)) < n*ma.SR);
-${voiceName}noteindex = cperiod : ${voiceName}motifnotes;
+${voiceName}noteindex = ${voiceName}period : ${voiceName}motifnotes;
 `
 
     let voiceComposition = `${dspVoiceTop}
@@ -460,7 +461,7 @@ ${voiceName}pan = _ <: *(1-pos),*(pos)
 with {
     pos = vslider("${voiceName}/Pan",0.5,0,1,0.1) : si.smoo;
 };
-${voiceName}notes = ${toneName}Tone(${voiceName}cpitch,${voiceName}noteratio,${voiceName}stroke(cperiod)) : *(${voiceName}gain) : @(ma.SR*0.1) <: ${voiceName}pan;
+${voiceName}notes = ${toneName}Tone(${voiceName}cpitch,${voiceName}noteratio,${voiceName}stroke(${voiceName}period),${voiceName}period) : *(${voiceName}gain) : @(ma.SR*0.1) <: ${voiceName}pan;
 `
     return voiceComposition
 }
@@ -484,7 +485,8 @@ const generateDSP = (sequencerState,scaleState) => {
             return cent+0.01*subCent
         })
         let toneName = toneNames[sequencerVoiceState['tone']]
-        return getVoice(voiceName,tokens,octave,noteOffsets,toneName)
+        let subdivisions = sequencerVoiceState['subdivisions'] || 4
+        return getVoice(voiceName,tokens,octave,noteOffsets,toneName,subdivisions)
     }
 
     let voiceCode = [0, 1, 2, 3, 4, 5, 6].map((i) => generateVoiceCode(sequencerState[i])).join('\n')
