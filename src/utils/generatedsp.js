@@ -256,6 +256,25 @@ with {
                             fluteFoot(smoothing) : pm.out
             );
         };
+    };`,
+    `GongTone(f,r,g) = GongModel(f*r) : *(GongStrike) : *(GongDecay(f*r))
+    with {
+        GongModel(f) = GongSignal
+        with {
+            semiToneCorrection = -7;
+            logF = f : ma.log2 : *(12) ;
+            centCorrection = -0.00023*(logF-95)^3-0.8*(logF-60)-48.5;
+            correctedPitch = f*2^(semiToneCorrection/12)*2^(centCorrection/1200)/2;
+            harmonicity = 0.5;
+            exponent = 2;
+            overtoneRatio(n) = (n+harmonicity)^exponent;
+            decayRate = vslider("[03]Brightness",0.8,0,1,0.01);
+            amplitude(n) = decayRate^n;
+            GongSignal = par(i,3,os.osc(overtoneRatio(i+1)*correctedPitch)*amplitude(i)) :> _;
+        };
+        GongStrike = 0.5*en.adsr(0.001,cperiod*0.5,0.9,cperiod*0.3,g);
+        decay(x) = (ramp(x) - (ramp(x) : ba.latch(g))) : *(-1) : exp;
+        GongDecay(f) = decay(f/(220*ma.SR));
     };`
 ]
 
@@ -276,7 +295,7 @@ const baseRatio = {
     Q: 3
 }
 
-const toneNames = ["String1", "String2", "Violin", "Reed", "Synth", "Brass", "Flute"]
+const toneNames = ["String1", "String2", "Violin", "Reed", "Synth", "Brass", "Flute", "Gong"]
 
 const tokenize = str => str.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"').replace(/(\n|\t)/g,' ').split(' ').map(s => s.trim()).filter(s => s.length)
 
