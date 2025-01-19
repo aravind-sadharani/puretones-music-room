@@ -4,7 +4,7 @@ date: 2021-09-01
 category: 'Tuning Systems'
 tags: [ 'Sama Gana', 'Shadaj Gram', 'Pancham (Fifth)', 'Madhyam (Fourth)', 'Gandhar (Major Third)', 'Pramana Shruti (81/80)' ]
 ---
-import scaleShadajGram from './shadajGram.pkb'
+import scaleShadajGramAlt from './shadajGram.pkb'
 
 export const notesShadajGram = [
     {white: "Sa", black: "Re♭"},
@@ -56,7 +56,7 @@ Before we analyse this any further, hear for yourself what this scale sounds lik
 
 export const keysShadajGram = {'Sa': 0, 'Re♭': 1, 'Re': 2, 'ga': 3, 'ma': 5, 'Pa': 7, 'Dha♭': 8, 'Dha': 9, 'ni': 10, 'SA': 12}
 
-<ScalePlayer title='Demo 1. Shadaj Gram Scale' keySpec={keysShadajGram} noteSpec={notesShadajGram} scale={scaleShadajGram} />
+<ScalePlayer title='Demo 1. Shadaj Gram Scale' keySpec={keysShadajGram} noteSpec={notesShadajGram} scale={scaleShadajGramAlt} />
 
 Note that although Re♭ has been depicted as a *black* key, it is not a full semitone lower than Re. The Re♭-Re gap is an interval smaller than a semitone. Such intervals are often referred to as [microtones](https://en.wikipedia.org/wiki/Microtonal_music). Let us calculate the precise amount by which Re and Dha were reduced in pitch to obtain Re♭ and Dha♭ respectively. The ma-Dha interval consists of the ma-Pa interval applied twice, which is $(9/8)^2 = 81/64$. Since the Gandhar interval is 5/4, the gap between the Gandhar and the ma-Dha interval can be calculated to be $81/64 ÷ 5/4 = 81/80$. This interval $\frac{81}{80}$ (21.5 cents) was recognized and known as **Pramana Shruti**.
 
